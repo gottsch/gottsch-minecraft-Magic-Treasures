@@ -34,6 +34,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -208,7 +209,7 @@ public class JewelryGenerator {
         destHandler.setMana(handler.getMana());
         destHandler.setRecharges(handler.getRecharges());
         destHandler.setRepairs(handler.getRepairs());
-        destHandler.getSpells().addAll(handler.getSpells());
+        destHandler.setSpells(new ArrayList<>(handler.getSpells()));
         destHandler.setUses(handler.getUses());
     }
 

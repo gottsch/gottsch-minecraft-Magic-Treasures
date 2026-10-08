@@ -44,7 +44,9 @@ public class MagicTreasuresCreativeModeTabs {
 			.displayItems((displayParams, output) -> {
 				// add all items
 				Registration.ITEMS.getEntries().forEach(item -> {
-					if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB)) {
+					// NOTE skull belt (mana well) is hidden until the mana well feature is implemented
+				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB)
+						&& !item.equals(MagicTreasuresItems.SKULL_BELT)) {
 						output.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
 					}
 				});

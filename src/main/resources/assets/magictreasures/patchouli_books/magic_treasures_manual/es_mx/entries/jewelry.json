@@ -1,0 +1,78 @@
+{
+  "name": "Joyería",
+  "icon": "magictreasures:gold_ring",
+  "category": "magictreasures:guide",
+  "sortnum": 2,
+  "pages": [
+    "Hay tres tipos de joyas que se pueden llevar puestas: anillos, collares y brazaletes. Las joyas tienen distintos tamaños y materiales. Cada joya tiene su propio n.º de usos, maná y n.º de reparaciones, que dependen del material y del tamaño. Las joyas se pueden mejorar engarzándoles gemas con un yunque. También se les pueden imbuir hechizos con un yunque. Solo se puede añadir un hechizo a cada joya, aunque existen algunas piezas especiales que contienen más.",
+    {
+      "type": "patchouli:text",
+      "title": "Tamaños de joyas",
+      "text":"Las joyas tienen tres tamaños distintos: normal (sin nombre), Gran y Señorial, y cada uno otorga distintas mejoras al objeto.$(br)Normal es el tamaño por defecto y no lleva prefijo.$(br2)$(l)$(n)Gran$():$(br)$(l)Usos: $()$(3)+100%$()$(br)$(l)Maná: $()$(3)+50%$()$(br)$(l)Reparaciones: $()$(3)+1$()$(br2)$(l)$(n)Señorial$():$(br)$(l)Usos: $()$(3)+200%$()$(br)$(l)Maná: $()$(3)+100%$()$(br)$(l)Reparaciones: $()$(3)+2$()",
+      "anchor": "jewelry_size"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de madera",
+      "item": {
+        "item": "magictreasures:wood_ring"
+      },
+      "text": "La madera es el material menos poderoso.$(br2)$(l)Nivel máx.:$() $(4)2$()$(br)$(l)Usos:$() $(1)40$()$(br)$(l)Maná:$() $(1)20$()$(br)$(l)Reparaciones:$() $(6)0$()$(br)",
+      "anchor": "wood_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de hierro",
+      "item": {
+        "item": "magictreasures:iron_ring"
+      },
+      "text": "Las joyas de hierro son muy duraderas: tienen muchos usos y se pueden reparar bastantes veces.$(br2)$(l)Nivel máx.:$() $(4)3$()$(br)$(l)Usos:$() $(1)200$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)3$()$(br)$(l)Duración de hechizo:$() $(3)+25%$()$(br)",
+      "anchor": "iron_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de cobre",
+      "item": {
+        "item": "magictreasures:great_copper_necklace"
+      },
+      "text": "Las joyas de cobre tienen un nivel mayor que las de hierro, pero no son tan duraderas.$(br2)$(l)Nivel máx.:$() $(4)4$()$(br)$(l)Usos:$() $(1)75$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)1$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-5%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+5%$()$(br)",
+      "anchor": "copper_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de plata",
+      "item": {
+        "item": "magictreasures:silver_bracelet"
+      },
+      "text": "Con las joyas de plata, lanzar hechizos cuesta menos maná.$(br2)$(l)Nivel máx.:$() $(4)5$()$(br)$(l)Usos:$() $(1)150$()$(br)$(l)Maná:$() $(1)75$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-5%$()$(br)",
+      "anchor": "silver_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de oro",
+      "item": {
+        "item": "magictreasures:great_gold_ring"
+      },
+      "text": "Las joyas de oro son las mejores de los metales comunes.$(br2)$(l)Nivel máx.:$() $(4)6$()$(br)$(l)Usos:$() $(1)150$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-7.5%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-4%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+4%$()$(br)",
+      "anchor": "gold_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de hueso",
+      "item": {
+        "item": "magictreasures:great_bone_necklace"
+      },
+      "text": "Los efectos de las joyas de hueso son un 25% más potentes, pero no se pueden reparar.$(br2)$(l)Nivel máx.:$() $(4)7$()$(br)$(l)Usos:$() $(1)200$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)0$()$(br)$(l)Coste de hechizo:$() $(3)+5%$()$(br)$(l)Efecto de hechizo:$() $(3)+25%$()$(br)",
+      "anchor": "bone_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de sangre",
+      "item": {
+        "item": "magictreasures:ring_of_life_death"
+      },
+      "text": "Las joyas de sangre (o HemalSteel) son muy raras.$(br)Por ahora solo existe un anillo de este material.$(br2)$(l)Nivel máx.:$() $(4)8$()$(br)$(l)Usos:$() $(1)250$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)+5%$()$(br)$(l)Efecto de hechizo:$() $(3)+25%$()$(br)",
+      "anchor": "blood_jewelry"
+    }
+  ]
+}

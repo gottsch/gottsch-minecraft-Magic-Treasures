@@ -1,4 +1,0 @@
-// 1.20.1	2024-09-01T14:18:53.3190464	Tags for minecraft:block mod id magictreasures
-6ee563fad80ed21095fa7c97c4098806ee1e25e4 data/minecraft/tags/blocks/mineable/pickaxe.json
-fb2c49c175a2e2e6a15aca80d12c8e612864b709 data/minecraft/tags/blocks/needs_iron_tool.json
-23078445930cd8a8eee7c96113f7c3f7897096ca data/minecraft/tags/blocks/needs_stone_tool.json

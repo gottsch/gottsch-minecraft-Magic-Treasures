@@ -24,6 +24,7 @@ import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilit
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -39,6 +40,9 @@ import java.util.List;
  * Created by Mark Gottschling on 5/29/2023
  */
 public class Jewelry extends Item implements IJewelry{
+    // key for the capability data in the network share tag
+    private static final String JEWELRY_SHARE_TAG = "magictreasures_jewelry";
+
     private String loreKey;
 
     /**
@@ -118,13 +122,15 @@ public class Jewelry extends Item implements IJewelry{
     /**
      * NOTE getNBTShareTag() and readNBTShareTag() are required to sync item capabilities server -> client. I needed this when holding charms in hands and then swapping hands
      * or having the client update when the Anvil GUI is open.
+     * The capability data is nested under its own key so that the rest of the stack's tag
+     * (custom name, enchantments, etc.) is preserved.
      */
     @Override
     public CompoundTag getShareTag(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = stack.hasTag() ? stack.getTag().copy() : new CompoundTag();
         IJewelryHandler handler = stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(() -> new IllegalArgumentException("LazyOptional must not be empty!"));
         try {
-            tag = (CompoundTag) handler.serializeNBT();
+            tag.put(JEWELRY_SHARE_TAG, handler.serializeNBT());
         } catch (Exception e) {
             MagicTreasures.LOGGER.error("Unable to write state to NBT:", e);
         }
@@ -133,11 +139,17 @@ public class Jewelry extends Item implements IJewelry{
 
     @Override
     public void readShareTag(ItemStack stack, @Nullable CompoundTag tag) {
-        super.readShareTag(stack, tag);
+        if (tag != null && tag.contains(JEWELRY_SHARE_TAG, Tag.TAG_COMPOUND)) {
+            CompoundTag stackTag = tag.copy();
+            CompoundTag jewelryTag = stackTag.getCompound(JEWELRY_SHARE_TAG);
+            stackTag.remove(JEWELRY_SHARE_TAG);
+            super.readShareTag(stack, stackTag.isEmpty() ? null : stackTag);
 
-        if (tag instanceof CompoundTag) {
             IJewelryHandler handler = stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(() -> new IllegalArgumentException("LazyOptional must not be empty!"));
-            handler.deserializeNBT((CompoundTag) tag);
+            handler.deserializeNBT(jewelryTag);
+        }
+        else {
+            super.readShareTag(stack, tag);
         }
     }
 

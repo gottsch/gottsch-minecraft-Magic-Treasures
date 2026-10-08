@@ -20,7 +20,7 @@ import static net.minecraftforge.network.NetworkDirection.PLAY_TO_CLIENT;
  *
  */
 public class MagicTreasuresNetworking {
-	public static final String PROTOCOL_VERSION = "1.0";
+	public static final String PROTOCOL_VERSION = "1.1";
 	public static final int SPELL_MESSAGE_ID = 14;
 
 	public static final ResourceLocation CHANNEL_NAME = new ResourceLocation(MagicTreasures.MOD_ID, "magic_treasures_channel");

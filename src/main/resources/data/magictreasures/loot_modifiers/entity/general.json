@@ -45,10 +45,6 @@
         },
         {
           "condition": "forge:loot_table_id",
-          "loot_table_id": "minecraft:entities/vex"
-        },
-        {
-          "condition": "forge:loot_table_id",
           "loot_table_id": "minecraft:entities/witch"
         },
         {

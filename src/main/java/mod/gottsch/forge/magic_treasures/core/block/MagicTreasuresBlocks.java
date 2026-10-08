@@ -35,7 +35,6 @@ public class MagicTreasuresBlocks {
     public static final Supplier<BlockBehaviour.Properties> ORE_PROPS = () -> BlockBehaviour.Properties.copy(Blocks.STONE);
     public static final Supplier<BlockBehaviour.Properties> DEEPSLATE_ORE_PROPS = () -> BlockBehaviour.Properties.copy(Blocks.DEEPSLATE);
 
-    // TODO look up deepslate hardness
     public static final RegistryObject<Block> TOPAZ_ORE = Registration.BLOCKS.register("topaz_ore", () -> new Block(ORE_PROPS.get()));
     public static final RegistryObject<Block> DEEPSLATE_TOPAZ_ORE = Registration.BLOCKS.register("deepslate_topaz_ore", () -> new Block(DEEPSLATE_ORE_PROPS.get()));
 

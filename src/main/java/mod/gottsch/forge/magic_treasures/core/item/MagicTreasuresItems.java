@@ -108,7 +108,6 @@ public class MagicTreasuresItems {
 	// belts
 	public static RegistryObject<Item> SKULL_BELT = Registration.ITEMS.register("skull_belt", () -> new ManaWell(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
-
 	/*
      * a list of all mod generated items.
      */

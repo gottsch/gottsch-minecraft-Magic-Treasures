@@ -12,3 +12,5 @@ gradle.log
 !*.json
 !*.gradlew
 !/models/
+# datagen cache (rebuilt by runData)
+/src/generated/resources/.cache/
