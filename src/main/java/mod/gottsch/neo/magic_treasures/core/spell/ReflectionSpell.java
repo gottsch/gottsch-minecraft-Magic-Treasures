@@ -6,7 +6,7 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -18,14 +18,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.List;
 import java.util.Random;
 
 /**
- * Fired on LivingHurtEvent, so the original amount of damage INTENDED (ie not actual Damage) to be
+ * Fired on LivingIncomingDamageEvent, so the original amount of damage INTENDED (ie not actual Damage) to be
  * inflicted on Player is reflected back on mob.
  * reflection: value = # of uses, duration = range, percent = % of damage reflected
  * @author Mark Gottschling on Apr 30, 2020
@@ -34,7 +34,7 @@ import java.util.Random;
 public class ReflectionSpell extends CooldownSpell {
 	public static String REFLECTION_TYPE = "reflection";
 
-	private static final Class<?> REGISTERED_EVENT = LivingHurtEvent.class;
+	private static final Class<?> REGISTERED_EVENT = LivingIncomingDamageEvent.class;
 
 	/**
 	 *
@@ -53,17 +53,17 @@ public class ReflectionSpell extends CooldownSpell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (handler.getMana() > 0 && player.isAlive()) {
-			if (((LivingHurtEvent)event).getEntity() instanceof Player) {
+			if (((LivingIncomingDamageEvent)event).getEntity() instanceof Player) {
 				// get player position
 				double px = player.getX();
 				double py = player.getY();
 				double pz = player.getZ();
 
 				// get the source and amount
-				double amount = ((LivingHurtEvent)event).getAmount();
+				double amount = ((LivingIncomingDamageEvent)event).getAmount();
 				// calculate the new amount
 				double reflectedAmount = amount * modifyEffectAmount(jewelry);
 				double range = modifyRange(jewelry);

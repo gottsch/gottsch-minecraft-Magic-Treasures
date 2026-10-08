@@ -17,6 +17,10 @@
  */
 package mod.gottsch.neo.magic_treasures.core.loot.function;
 
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import com.google.gson.*;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
@@ -37,7 +41,9 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +56,7 @@ import java.util.Random;
  *
  */
 public class RandomSpell extends LootItemConditionalFunction {
-//	private static final ResourceLocation LOCATION = new ResourceLocation("gealdorcraft:random_spell");
+//	private static final ResourceLocation LOCATION = ResourceLocation.parse("gealdorcraft:random_spell");
 	private static final String LEVELS = "levels";
 	private static final String RARITY = "rarity";
 	private static final String RARITIES = "rarities";
@@ -65,7 +71,7 @@ public class RandomSpell extends LootItemConditionalFunction {
 	 * @param levels
 	 * @param rarity
 	 */
-	public RandomSpell(LootItemCondition[] conditions, NumberProvider levels, IRarity rarity, List<IRarity> rarities) {
+	public RandomSpell(List<LootItemCondition> conditions, NumberProvider levels, IRarity rarity, List<IRarity> rarities) {
 		super(conditions);
 		this.levels = levels;
 		this.rarity = rarity;
@@ -74,8 +80,8 @@ public class RandomSpell extends LootItemConditionalFunction {
 	}
 
 	@Override
-	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.RANDOM_SPELL;
+	public LootItemFunctionType<RandomSpell> getType() {
+		return MagicTreasuresLootFunctions.RANDOM_SPELL.get();
 	}
 
 	@Override
@@ -112,52 +118,17 @@ public class RandomSpell extends LootItemConditionalFunction {
 		MagicTreasures.LOGGER.debug("selected spell -> {}", spell.getName());
 
 		ResourceLocation scrollName = ModUtil.asLocation(spell.getName() + "_scroll");
-		Optional<RegistryObject<Item>> spellScroll = MagicTreasuresItems.ALL_SPELL_SCROLLS.stream()
+		Optional<DeferredItem<Item>> spellScroll = MagicTreasuresItems.ALL_SPELL_SCROLLS.stream()
 				.filter(scroll -> scroll.getId().equals(scrollName))
 				.findFirst();
 
         return spellScroll.map(itemRegistryObject -> new ItemStack(itemRegistryObject.get())).orElse(stack);
     }
 
-	/*
-	 *
-	 */
-	public static class Serializer extends LootItemConditionalFunction.Serializer<RandomSpell> {
-		public void serialize(JsonObject json, RandomSpell randomSpell, JsonSerializationContext context) {
-			super.serialize(json, randomSpell, context);
-			json.add(LEVELS, context.serialize(randomSpell.levels));
-			json.addProperty(RARITY, randomSpell.rarity.getName());
-			if (!randomSpell.rarities.isEmpty()) {
-				final JsonArray jsonArray = new JsonArray();
-				randomSpell.rarities.forEach(r -> {
-					jsonArray.add(new JsonPrimitive(r.getName().toString()));
-				});
-				json.add(RARITIES, jsonArray);
-			}
-		}
-
-		public RandomSpell deserialize(JsonObject jsonObject, JsonDeserializationContext context, LootItemCondition[] conditions) {
-			NumberProvider numberProvider = null;
-			if (jsonObject.has(LEVELS)) {
-				numberProvider = GsonHelper.getAsObject(jsonObject, LEVELS, context, NumberProvider.class);
-			}
-			String rarityStr = "";
-			if(jsonObject.has(RARITY)) {
-				rarityStr = GsonHelper.getAsString(jsonObject, RARITY);
-			}
-			IRarity rarity = MagicTreasuresApi.getRarity(rarityStr).orElse(MagicTreasuresRarity.NONE);
-
-			List<IRarity> rarities = new ArrayList<>();
-			if (jsonObject.has(RARITIES)) {
-				GsonHelper.getAsJsonArray(jsonObject, RARITIES).forEach(element -> {
-					String rarityName = GsonHelper.convertToString(element, RARITY);
-					IRarity r = MagicTreasuresApi.getRarity(rarityName).orElse(MagicTreasuresRarity.NONE);
-					if (r != MagicTreasuresRarity.NONE) {
-						rarities.add(r);
-					}
-				});
-			}
-			return new RandomSpell(conditions, numberProvider, rarity, rarities);
-		}
-	}
+	public static final MapCodec<RandomSpell> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance)
+			.and(NumberProviders.CODEC.optionalFieldOf(LEVELS).forGetter(f -> Optional.ofNullable(f.levels)))
+			.and(Codec.STRING.optionalFieldOf(RARITY, "").forGetter(f -> f.rarity.getName()))
+			.and(Codec.STRING.listOf().optionalFieldOf(RARITIES, List.of()).forGetter(f -> LootFunctionHelper.rarityNames(f.rarities)))
+			.apply(instance, (conditions, levels, rarity, rarities) -> new RandomSpell(conditions, levels.orElse(null),
+					LootFunctionHelper.rarity(rarity, MagicTreasuresRarity.NONE), LootFunctionHelper.rarities(rarities))));
 }

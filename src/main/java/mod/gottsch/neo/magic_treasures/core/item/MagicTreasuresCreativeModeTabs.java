@@ -23,21 +23,24 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTab.TabVisibility;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 /**
  * 
  * @author Mark Gottschling Jul 11, 2024
  *
  */
-@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+// NOTE no @EventBusSubscriber: this class has no @SubscribeEvent methods, and NeoForge throws at launch if it is registered anyway
+// @EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class MagicTreasuresCreativeModeTabs {
 
 	public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MagicTreasures.MOD_ID);
 	
-	public static final RegistryObject<CreativeModeTab> MOD_TAB = TABS.register("magic_treasures_tab",
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> MOD_TAB = TABS.register("magic_treasures_tab",
 			() -> CreativeModeTab.builder()
 			.title(Component.translatable("itemGroup.magictreasures"))
 			.icon(MagicTreasuresItems.MAGIC_TREASURES_TAB.get()::getDefaultInstance)

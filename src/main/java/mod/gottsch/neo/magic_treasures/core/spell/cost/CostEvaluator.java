@@ -3,7 +3,7 @@ package mod.gottsch.neo.magic_treasures.core.spell.cost;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
 import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
@@ -25,7 +25,7 @@ import java.util.Random;
 public class CostEvaluator implements ICostEvaluator {
 	@Override
 	public double apply(Level level, Random random, ICoords coords, ICastSpellContext context, double amount) {
-		IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		Optional<Item> stone = StoneRegistry.get(handler.getStone());
 		JewelryStoneTier stoneTier = StoneRegistry.getStoneTier(stone.orElseGet(() -> Items.AIR)).orElse(JewelryStoneTiers.NONE);

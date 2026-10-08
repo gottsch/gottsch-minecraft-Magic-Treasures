@@ -1,8 +1,7 @@
 package mod.gottsch.neo.magic_treasures.core.jewelry;
 
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.JewelryCapability;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 //import mod.gottsch.neo.magic_treasures.core.item.JewelryMaterialTier;
 
 @Deprecated
@@ -13,7 +12,7 @@ public class JewelryStoneHandlers {
     // POC
     public static final JewelryStoneHandler IRON_ONLY = new JewelryStoneHandler()
             .setCanAffix(p -> {
-                IJewelryHandler handler = p.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+                IJewelryHandler handler = JewelryHandler.get(p).orElseThrow(IllegalStateException::new);
                 return handler.getMaterial() == JewelryMaterials.IRON;
             });
 }

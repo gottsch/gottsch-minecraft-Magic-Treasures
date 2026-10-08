@@ -4,19 +4,19 @@
       "condition": "minecraft:any_of",
       "terms": [
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/zombie"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/zombie_villager"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/husk"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/drowned"
         }
       ]

@@ -22,16 +22,16 @@ import mod.gottsch.neo.magic_treasures.datagen.loot.MagicTreasuresBlockLootTable
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.concurrent.CompletableFuture;
 
 /**
  * Created by Mark Gottschling on 6/1/2023
  */
-@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
     @SubscribeEvent
@@ -41,12 +41,12 @@ public class DataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         if (event.includeServer()) {
-            generator.addProvider(true, new Recipes(output));
+            generator.addProvider(true, new Recipes(output, lookupProvider));
         	MagicTreasuresBlockTagsProvider blockTags = new MagicTreasuresBlockTagsProvider(output, lookupProvider, event.getExistingFileHelper());
             generator.addProvider(true, blockTags);
             generator.addProvider(true, new MagicTreasuresItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), event.getExistingFileHelper()));
             generator.addProvider(true, new MagicTreasuresBiomeTagsProvider(output, lookupProvider, event.getExistingFileHelper()));
-            generator.addProvider(true, MagicTreasuresLootTableProvider.create(output));
+            generator.addProvider(true, MagicTreasuresLootTableProvider.create(output, lookupProvider));
         }
         if (event.includeClient()) {
             generator.addProvider(true, new MagicTreasuresBlockStateProvider(output, event.getExistingFileHelper()));

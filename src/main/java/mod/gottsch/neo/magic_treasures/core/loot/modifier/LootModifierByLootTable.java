@@ -3,6 +3,7 @@ package mod.gottsch.neo.magic_treasures.core.loot.modifier;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
@@ -13,6 +14,8 @@ import mod.gottsch.neo.magic_treasures.core.config.Config;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.setup.CommonSetup;
 import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -23,9 +26,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,8 +47,8 @@ public class LootModifierByLootTable extends LootModifier {
 	private final double chance;
 	private final String lootTable;
 
-	public static final Supplier<Codec<LootModifierByLootTable>> CODEC = Suppliers.memoize(()
-			-> RecordCodecBuilder.create(inst -> codecStart(inst)
+	public static final Supplier<MapCodec<LootModifierByLootTable>> CODEC = Suppliers.memoize(()
+			-> RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
 			.and(Codec.INT.fieldOf("count").forGetter(m -> m.count))
 			.and(Codec.STRING.fieldOf("rarity").forGetter(m -> m.rarity))
 			.and(Codec.DOUBLE.fieldOf("chance").forGetter(m -> m.chance))
@@ -61,7 +64,7 @@ public class LootModifierByLootTable extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 
@@ -74,7 +77,7 @@ public class LootModifierByLootTable extends LootModifier {
 
 		// determine if specific loot modifier is enabled
 		boolean isEnabled = Optional.ofNullable(Config.enableLootModifiers.get(lootTable.toLowerCase())).
-				map(ForgeConfigSpec.ConfigValue::get).orElse(false);
+				map(ModConfigSpec.ConfigValue::get).orElse(false);
 		MagicTreasures.LOGGER.debug("isEnabled for {} -> {}", lootTable, isEnabled);
 
 		if (Config.SERVER.loot.enableVanillaLootModifiers.get()
@@ -86,7 +89,7 @@ public class LootModifierByLootTable extends LootModifier {
 			// TODO rarity is not implemented. if rarity is present lookup all loot tables and then select one.
 			// TODO maybe by lootTable is default route, then rarity.
 			// get the loot table
-			LootTable table = context.getLevel().getServer().getLootData().getLootTable(lootTable);
+			LootTable table = context.getLevel().getServer().reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, lootTable));
 
 			// setup params
 			LootParams.Builder lootParamsBuilder = (new LootParams.Builder(context.getLevel()));

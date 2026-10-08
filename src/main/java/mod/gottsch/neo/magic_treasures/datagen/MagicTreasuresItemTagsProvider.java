@@ -17,10 +17,12 @@
  */
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
+import java.util.Optional;
 import com.google.common.collect.Maps;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.*;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterials;
@@ -30,7 +32,7 @@ import mod.gottsch.neo.magic_treasures.core.setup.Registration;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
 import mod.gottsch.neoforge.treasure2.core.item.TreasureItems;
-import mod.gottsch.neoforge.treasure2.core.tags.TreasureTags;
+import mod.gottsch.neoforge.treasure2.core.tag.TreasureTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -40,9 +42,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -134,7 +136,7 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 
 		// jewelry tools
 		tag(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)
-				.addTag(Tags.Items.SHEARS)
+				.addTag(Tags.Items.TOOLS_SHEAR)
 				.add(Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE, Items.NETHERITE_AXE);
 
 		/*
@@ -142,8 +144,9 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		 *  if item has Jewelry capability, then categorize it into the different tags
 		 */
 		Registration.ITEMS.getEntries().forEach(registryItem -> {
-			ItemStack stack = new ItemStack(registryItem.get());
-			stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
+			// NOTE read the item's defaults builder, not a stack's component: data runs don't fire FMLCommonSetupEvent,
+			// so the API registries the component's names resolve through are empty
+			Optional.of(registryItem.get()).filter(i -> i instanceof Jewelry).map(i -> ((Jewelry) i).jewelryDefaults()).ifPresent(handler -> {
 				// add to the type tag
 				tag(TYPE_TAG_MAP.get(handler.getJewelryType())).add(registryItem.get());
 				// -- curios integration
@@ -157,7 +160,7 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 				
 				// add to the stone tag
 //				if (c.hasStone()) {
-//					Item stoneItem = ForgeRegistries.ITEMS.getValue(c.getStone());
+//					Item stoneItem = BuiltInRegistries.ITEM.get(c.getStone());
 //					tag(STONE_TAG_MAP.get(stoneItem)).add(item.get());
 //				}
 
@@ -189,7 +192,7 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 				IRarity rarity = materialRarity;
 				if (handler.getStone() != null && !handler.getStone().equals(ModUtil.getName(Items.AIR))) {
 //				if (handler.hasStone()) { // can't use hasStone here as it uses tag which aren't loaded yet
-					Item stoneItem = ForgeRegistries.ITEMS.getValue(handler.getStone());
+					Item stoneItem = BuiltInRegistries.ITEM.get(handler.getStone());
 					IRarity stoneRarity = STONE_RARITY_MAP.get(stoneItem);
 
 					if (stoneRarity != null) {
@@ -375,7 +378,7 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		// diamethysts integration
 		// //////////////////
 
-		tag(MagicTreasuresTags.Items.RECHARGERS).addOptional(new ResourceLocation("diamethysts:diamethyst_shard"));
-		tag(MagicTreasuresTags.Items.RECHARGERS).addOptional(new ResourceLocation("diamethysts:diamethyst_crystal"));
+		tag(MagicTreasuresTags.Items.RECHARGERS).addOptional(ResourceLocation.parse("diamethysts:diamethyst_shard"));
+		tag(MagicTreasuresTags.Items.RECHARGERS).addOptional(ResourceLocation.parse("diamethysts:diamethyst_crystal"));
 	}
 }

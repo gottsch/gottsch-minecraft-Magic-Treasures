@@ -17,13 +17,13 @@
  */
 package mod.gottsch.neo.magic_treasures.core.event;
 
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellContext;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +46,8 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			hotbarSlotStr.set(String.valueOf(hotbarSlot));
 			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
 			if (inventoryStack != player.getItemInHand(InteractionHand.MAIN_HAND)
-					&& inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
-				inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
+					&& JewelryHandler.get(inventoryStack).isPresent()) {
+				JewelryHandler.get(inventoryStack).ifPresent(cap -> {
 
 					AtomicInteger index = new AtomicInteger();
 					// requires indexed for-loop

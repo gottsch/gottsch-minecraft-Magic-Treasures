@@ -22,7 +22,7 @@ package mod.gottsch.neo.magic_treasures.core.spell;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -31,8 +31,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 
@@ -45,7 +45,7 @@ public class SatietySpell extends Spell {
 	public static final int MAX_FOOD_LEVEL = 20;
 	public static final String SATIETY_TYPE = "satiety";
 
-	private static final Class<?> REGISTERED_EVENT = LivingEvent.LivingTickEvent.class;
+	private static final Class<?> REGISTERED_EVENT = PlayerTickEvent.Post.class;
 
 	/**
 	 *
@@ -65,7 +65,7 @@ public class SatietySpell extends Spell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (world.getGameTime() % modifyFrequency(jewelry) == 0) {
 			if (player.isAlive() && handler.getMana() > 0 && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {

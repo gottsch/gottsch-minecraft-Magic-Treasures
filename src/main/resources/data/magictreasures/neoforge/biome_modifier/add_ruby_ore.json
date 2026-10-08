@@ -1,0 +1,6 @@
+{
+  "type" : "neoforge:add_features",
+  "biomes" : "#magictreasures:all_overworld",
+  "features" : "magictreasures:ruby_placed",
+  "step" : "underground_ores"
+}

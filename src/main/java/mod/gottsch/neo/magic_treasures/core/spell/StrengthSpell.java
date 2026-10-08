@@ -4,7 +4,7 @@ package mod.gottsch.neo.magic_treasures.core.spell;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -14,8 +14,8 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 
@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public class StrengthSpell extends CooldownSpell {
 	public static final String TYPE = "strength";
-	private static final Class<?> REGISTERED_EVENT = LivingEvent.LivingTickEvent.class;
+	private static final Class<?> REGISTERED_EVENT = PlayerTickEvent.Post.class;
 
 	// amount to amplify strength effect by
 	private int amplifier = 0;
@@ -51,7 +51,7 @@ public class StrengthSpell extends CooldownSpell {
 	public boolean execute(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 
-		IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.DAMAGE_BOOST)) {

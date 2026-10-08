@@ -17,32 +17,25 @@
  */
 package mod.gottsch.neo.magic_treasures.core.loot.modifier;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 /**
- * 
+ *
  * @author Mark Gottschling on Jul 9, 2024
  *
  */
 public class MagicTreasuresLootModifiers {
-	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> LOOT_MODIFIER_SERIALIZERS = 
-			DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MagicTreasures.MOD_ID);
-	
-	public static final RegistryObject<Codec<? extends IGlobalLootModifier>> MAGIC_TREASUREs_LOOT_MODIFIER =
+	public static final DeferredRegister<MapCodec<? extends IGlobalLootModifier>> LOOT_MODIFIER_SERIALIZERS =
+			DeferredRegister.create(NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, MagicTreasures.MOD_ID);
+
+	public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<LootModifierByRarity>> MAGIC_TREASURES_LOOT_MODIFIER =
 			LOOT_MODIFIER_SERIALIZERS.register("default", LootModifierByRarity.CODEC);
 
-	public static final RegistryObject<Codec<? extends IGlobalLootModifier>> MAGIC_TREASURES_LOOT_MODIFIER_BY_LOOT_TABLE =
+	public static final DeferredHolder<MapCodec<? extends IGlobalLootModifier>, MapCodec<LootModifierByLootTable>> MAGIC_TREASURES_LOOT_MODIFIER_BY_LOOT_TABLE =
 			LOOT_MODIFIER_SERIALIZERS.register("loot_modifier_by_loot_table", LootModifierByLootTable.CODEC);
-
-	public static void register() {
-		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		LOOT_MODIFIER_SERIALIZERS.register(bus);
-	}
 }

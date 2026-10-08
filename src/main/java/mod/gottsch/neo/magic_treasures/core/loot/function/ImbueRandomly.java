@@ -17,12 +17,16 @@
  */
 package mod.gottsch.neo.magic_treasures.core.loot.function;
 
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import com.google.gson.*;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
@@ -40,7 +44,9 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +59,7 @@ import java.util.Random;
  *
  */
 public class ImbueRandomly extends LootItemConditionalFunction {
-//	private static final ResourceLocation LOCATION = new ResourceLocation("gealdorcraft:random_spell");
+//	private static final ResourceLocation LOCATION = ResourceLocation.parse("gealdorcraft:random_spell");
 	private static final String LEVELS = "levels";
 	private static final String RARITY = "rarity";
 	private static final String RARITIES = "rarities";
@@ -68,7 +74,7 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 	 * @param levels
 	 * @param rarity
 	 */
-	public ImbueRandomly(LootItemCondition[] conditions, NumberProvider levels, IRarity rarity, List<IRarity> rarities) {
+	public ImbueRandomly(List<LootItemCondition> conditions, NumberProvider levels, IRarity rarity, List<IRarity> rarities) {
 		super(conditions);
 		this.levels = levels;
 		this.rarity = rarity;
@@ -76,8 +82,8 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 	}
 
 	@Override
-	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.IMBUE_RANDOMLY;
+	public LootItemFunctionType<ImbueRandomly> getType() {
+		return MagicTreasuresLootFunctions.IMBUE_RANDOMLY.get();
 	}
 
 	@Override
@@ -89,7 +95,7 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 
 		MagicTreasures.LOGGER.debug("rarity -> {}", rarity);
 
-		int stackMaxLevel = stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).map(IJewelryHandler::getMaxLevel).orElse(0);
+		int stackMaxLevel = JewelryHandler.get(stack).map(IJewelryHandler::getMaxLevel).orElse(0);
 
 		spell = MagicTreasuresSpells.DEFAULT_HEALING;
 		if (rarity != null && rarity != MagicTreasuresRarity.NONE) {
@@ -123,52 +129,17 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 		MagicTreasures.LOGGER.debug("selected spell -> {}", spell.getName());
 
 		SpellEntity spellEntity = spell.entity();
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
+		JewelryHandler.get(stack).ifPresent(handler -> {
 			handler.getSpells().add(spellEntity);
 		});
 
 		return stack;
 	}
 
-	/*
-	 *
-	 */
-	public static class Serializer extends LootItemConditionalFunction.Serializer<ImbueRandomly> {
-		public void serialize(JsonObject json, ImbueRandomly function, JsonSerializationContext context) {
-			super.serialize(json, function, context);
-			json.add(LEVELS, context.serialize(function.levels));
-			json.addProperty(RARITY, function.rarity.getName());
-			if (!function.rarities.isEmpty()) {
-				final JsonArray jsonArray = new JsonArray();
-				function.rarities.forEach(r -> {
-					jsonArray.add(new JsonPrimitive(r.getName().toString()));
-				});
-				json.add(RARITIES, jsonArray);
-			}
-		}
-
-		public ImbueRandomly deserialize(JsonObject jsonObject, JsonDeserializationContext context, LootItemCondition[] conditions) {
-			NumberProvider levels = null;
-			if (jsonObject.has(LEVELS)) {
-				levels = GsonHelper.getAsObject(jsonObject, LEVELS, context, NumberProvider.class);
-			}
-			String rarityStr = "";
-			if(jsonObject.has(RARITY)) {
-				rarityStr = GsonHelper.getAsString(jsonObject, RARITY);
-            }
-			IRarity rarity = MagicTreasuresApi.getRarity(rarityStr).orElse(MagicTreasuresRarity.NONE);
-
-			List<IRarity> rarities = new ArrayList<>();
-			if (jsonObject.has(RARITIES)) {
-				GsonHelper.getAsJsonArray(jsonObject, RARITIES).forEach(element -> {
-					String rarityName = GsonHelper.convertToString(element, RARITY);
-					IRarity r = MagicTreasuresApi.getRarity(rarityName).orElse(MagicTreasuresRarity.NONE);
-					if (r != MagicTreasuresRarity.NONE) {
-						rarities.add(r);
-					}
-                });
-            }
-			return new ImbueRandomly(conditions, levels, rarity, rarities);
-		}
-	}
+	public static final MapCodec<ImbueRandomly> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance)
+			.and(NumberProviders.CODEC.optionalFieldOf(LEVELS).forGetter(f -> Optional.ofNullable(f.levels)))
+			.and(Codec.STRING.optionalFieldOf(RARITY, "").forGetter(f -> f.rarity.getName()))
+			.and(Codec.STRING.listOf().optionalFieldOf(RARITIES, List.of()).forGetter(f -> LootFunctionHelper.rarityNames(f.rarities)))
+			.apply(instance, (conditions, levels, rarity, rarities) -> new ImbueRandomly(conditions, levels.orElse(null),
+					LootFunctionHelper.rarity(rarity, MagicTreasuresRarity.NONE), LootFunctionHelper.rarities(rarities))));
 }

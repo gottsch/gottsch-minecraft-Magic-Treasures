@@ -23,8 +23,8 @@ import mod.gottsch.neo.magic_treasures.core.event.HotbarEquipmentSpellHandler;
 import mod.gottsch.neo.magic_treasures.core.event.IEquipmentSpellHandler;
 import mod.gottsch.neo.magic_treasures.core.event.SpellEventHandler;
 import mod.gottsch.neoforge.treasure2.api.TreasureApi;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.fml.ModList;
 
 /**
  * 
@@ -50,7 +50,7 @@ public class MagicTreasuresIntegrations {
 			equipmentSpellHandler = new HotbarEquipmentSpellHandler();
 		}
 		// TODO might have to register this earlier and set the spell handler here
-		MinecraftForge.EVENT_BUS.register(new SpellEventHandler(equipmentSpellHandler));
+		NeoForge.EVENT_BUS.register(new SpellEventHandler(equipmentSpellHandler));
 	}
 
 	public static void registerTreasure2Integration() {

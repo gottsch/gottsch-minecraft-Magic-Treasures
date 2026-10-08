@@ -22,25 +22,34 @@ import mod.gottsch.neo.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 /**
+ * A view of a jewelry stack's JewelryData component. Getters read the stack's current component and
+ * setters write a new one back to the stack, so the stack is the only source of truth.
+ * Obtain one with JewelryHandler.get(stack).
+ *
  * Created by Mark Gottschling on 6/1/2023
  */
 public interface IJewelryHandler {
+    /**
+     * the jewelry stack this handler views
+     */
+    ItemStack getStack();
+
     JewelryMaterial getMaterial();
 
     public IJewelrySizeTier getJewelrySizeTier();
+
     public IJewelryType getJewelryType();
 
-    void appendSpecialHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag);
+    void appendSpecialHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag);
 
     double modifySpellCost(double cost);
 
@@ -56,32 +65,33 @@ public interface IJewelryHandler {
 
     double modifyRange(double range);
 
-    public Tag serializeNBT();
-    public void deserializeNBT(Tag tag);
-
     int getMaxUses();
 
     void setMaxUses(int maxUses);
 
     public int getUses();
+
     public void setUses(int uses);
 
     public double getMaxMana();
+
     public void setMaxMana(double maxMana);
 
     public double getMana();
+
     public void setMana(double mana);
 
     public int getMaxRepairs();
+
     public void setMaxRepairs(int repairs);
 
     public int getRepairs();
+
     public void setRepairs(int repairs);
 
     public int getMaxLevel();
 
     // TODO maxStones
-
     void setMaxLevel(int maxLevel);
 
     ResourceLocation getStone();
@@ -90,9 +100,14 @@ public interface IJewelryHandler {
 
     boolean hasStone();
 
+    /**
+     * @return an unmodifiable list of spell entities bound to this stack. Use addSpell/setSpells to change it.
+     */
     List<SpellEntity> getSpells();
 
     void setSpells(List<SpellEntity> spells);
+
+    void addSpell(SpellEntity spell);
 
     void setInfinite();
 
@@ -103,7 +118,7 @@ public interface IJewelryHandler {
 
     boolean isUpgradable();
 
-    void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag);
+    void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag);
 
     int getRecharges();
 

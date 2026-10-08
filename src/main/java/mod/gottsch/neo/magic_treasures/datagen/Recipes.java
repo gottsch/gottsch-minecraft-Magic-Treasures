@@ -1,6 +1,9 @@
 
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import net.minecraft.resources.ResourceLocation;
+import java.util.concurrent.CompletableFuture;
+import net.minecraft.core.HolderLookup;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
@@ -10,7 +13,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
-import net.minecraftforge.common.Tags;
+import net.neoforged.neoforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -22,12 +25,12 @@ import java.util.function.Consumer;
 public class Recipes extends RecipeProvider {
 		private static String CRITERIA = "criteria";
 
-	public Recipes(PackOutput output) {
-		super(output);
+	public Recipes(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+		super(output, registries);
 	}
 
 		@Override
-		protected void buildRecipes(Consumer<FinishedRecipe> recipe) {
+		protected void buildRecipes(RecipeOutput recipe) {
 			MagicTreasures.LOGGER.debug("build recipes is running...");
 
 			// recipe scrolls
@@ -127,6 +130,14 @@ public class Recipes extends RecipeProvider {
 					.group("silver_ingot")
 					.unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(MagicTreasuresItems.RAW_SILVER.get()).build()))
 					.save(recipe);
+
+			// NOTE in 1.20.1 this recipe was only a leftover file in src/generated (no datagen code produced it)
+			SimpleCookingRecipeBuilder.blasting(Ingredient.of(MagicTreasuresTags.Items.RAW_SILVER),
+							RecipeCategory.MISC,
+							MagicTreasuresItems.SILVER_INGOT.get(), 1.0f, 100)
+					.group("silver_ingot")
+					.unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(MagicTreasuresItems.RAW_SILVER.get()).build()))
+					.save(recipe, ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, "silver_ingot_from_blasting"));
 
 			// TODO Treasure2 doesn't use Tags for key recipes (ruby, sapphire)
 			// so need to add the recipes individually

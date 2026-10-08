@@ -5,7 +5,7 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -18,8 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.List;
 import java.util.Random;
@@ -29,7 +29,7 @@ import java.util.Random;
  */
 public class HarmSpell extends CooldownSpell {
     public static final String TYPE = "harm";
-    private static final Class<?> REGISTERED_EVENT = LivingEvent.LivingTickEvent.class;
+    private static final Class<?> REGISTERED_EVENT = PlayerTickEvent.Post.class;
 
     /**
      * @param builder
@@ -50,7 +50,7 @@ public class HarmSpell extends CooldownSpell {
     public boolean execute(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
         boolean result = false;
 
-        IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
         Player player = context.getPlayer();
         if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
             // get player position

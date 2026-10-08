@@ -24,8 +24,7 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
-import mod.gottsch.neo.magic_treasures.core.network.SpellUpdateS2C;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -39,8 +38,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.event.entity.living.LivingEvent. LivingTickEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.List;
 import java.util.Random;
@@ -52,7 +51,7 @@ import java.util.Random;
  */
 public class DrainSpell extends Spell {
 	public static final String DRAIN_TYPE = "drain";
-	private static final Class<?> REGISTERED_EVENT = LivingTickEvent.class;
+	private static final Class<?> REGISTERED_EVENT = PlayerTickEvent.Post.class;
 
 	/**
 	 *
@@ -62,11 +61,6 @@ public class DrainSpell extends Spell {
 		super(builder);
 	}
 
-	@Override
-	public boolean clientUpdate(ItemStack jewelry, SpellEntity entity, SpellUpdateS2C message) {
-		// TODO
-		return super.clientUpdate(jewelry, entity, message);
-	}
 
 	@Override
 	public Class<?> getRegisteredEvent() {
@@ -81,7 +75,7 @@ public class DrainSpell extends Spell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 		if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
 			if (handler.getMana() > 0 && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
 				// get player position

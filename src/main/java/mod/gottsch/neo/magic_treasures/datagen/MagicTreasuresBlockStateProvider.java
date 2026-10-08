@@ -10,11 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.WallSignBlock;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 /**
  * @author Mark Gottschling on Aug 26, 2024
@@ -93,8 +93,8 @@ public class MagicTreasuresBlockStateProvider extends BlockStateProvider {
     }
 
     public void myOreBlock(Block block, String parent, String texture) {
-        myOreBlock(block, new ResourceLocation(MagicTreasures.MOD_ID, block(parent)),
-                new ResourceLocation(MagicTreasures.MOD_ID, block(texture)));
+        myOreBlock(block, ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, block(parent)),
+                ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, block(texture)));
     }
 
     public void myOreBlock(Block block, ResourceLocation parent,
@@ -108,9 +108,9 @@ public class MagicTreasuresBlockStateProvider extends BlockStateProvider {
     public void myDeepslateOreBlock(Block block, String parent,
                                     String topTexture, String sideTexture) {
 
-        myDeepslateOreBlock(block, new ResourceLocation(MagicTreasures.MOD_ID, block(parent)),
-                new ResourceLocation(MagicTreasures.MOD_ID, block(topTexture)),
-                new ResourceLocation(MagicTreasures.MOD_ID, block(sideTexture)));
+        myDeepslateOreBlock(block, ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, block(parent)),
+                ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, block(topTexture)),
+                ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, block(sideTexture)));
     }
 
     public void myDeepslateOreBlock(Block block, ResourceLocation parent,
@@ -140,6 +140,6 @@ public class MagicTreasuresBlockStateProvider extends BlockStateProvider {
     }
 
     private ResourceLocation key(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 }

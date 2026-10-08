@@ -24,10 +24,10 @@ import mod.gottsch.neo.magic_treasures.core.integration.MagicTreasuresIntegratio
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.LevelEvent;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.nio.file.Path;
 import java.util.Optional;
@@ -37,7 +37,8 @@ import java.util.Optional;
  * @author Mark Gottschling on May 10, 2024
  *
  */
-@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.FORGE)
+// NOTE no @EventBusSubscriber: this class has no @SubscribeEvent methods, and NeoForge throws at launch if it is registered anyway
+// @EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class WorldEventHandler {
 
 	private static Path worldSavePath;

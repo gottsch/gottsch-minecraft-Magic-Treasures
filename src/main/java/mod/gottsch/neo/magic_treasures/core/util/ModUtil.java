@@ -13,14 +13,15 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.SpawnPlacementType;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.NaturalSpawner;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.LevelStorageSource;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.fml.util.ObfuscationReflectionHelper;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +57,7 @@ public class ModUtil {
 	 * @return
 	 */
 	public static ResourceLocation asLocation(String name) {
-		return hasDomain(name) ? new ResourceLocation(name) : new ResourceLocation(MagicTreasures.MOD_ID, name);
+		return hasDomain(name) ? ResourceLocation.parse(name) : ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, name);
 	}
 
 	public static boolean hasDomain(String name) {
@@ -65,13 +66,13 @@ public class ModUtil {
 
 	public static ResourceLocation getName(Block block) {
 		// don't bother checking optional - if it is empty, then the block isn't registered and this shouldn't run anyway.
-		ResourceLocation name = ForgeRegistries.BLOCKS.getResourceKey(block).get().location();
+		ResourceLocation name = BuiltInRegistries.BLOCK.getKey(block);
 		return name;
 	}
 
 	public static ResourceLocation getName(Item item) {
 		// don't bother checking optional - if it is empty, then the block isn't registered and this shouldn't run anyway.
-		ResourceLocation name = ForgeRegistries.ITEMS.getResourceKey(item).get().location();
+		ResourceLocation name = BuiltInRegistries.ITEM.getKey(item);
 		return name;
 	}
 
@@ -190,8 +191,8 @@ public class ModUtil {
 
 				boolean isSpawned = false;
 				if (!WorldInfo.isClientSide(level)) {
-					SpawnPlacements.Type placement = SpawnPlacements.getPlacementType(entityType);
-					if (NaturalSpawner.isSpawnPositionOk(placement, level, spawnCoords.toPos(), entityType)) {
+					SpawnPlacementType placement = SpawnPlacements.getPlacementType(entityType);
+					if (placement.isSpawnPositionOk(level, spawnCoords.toPos(), entityType)) {
 						//						mob = entityType.create(level);
 						mob.setPos((double)spawnX, (double)spawnY, (double)spawnZ);
 						level.addFreshEntityWithPassengers(mob);

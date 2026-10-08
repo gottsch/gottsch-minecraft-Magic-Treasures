@@ -4,7 +4,7 @@ import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 

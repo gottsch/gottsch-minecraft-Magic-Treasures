@@ -21,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public interface IJewelry {
         return false;
     }
 
-    void appendLoreHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag);
+    void appendLoreHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag);
 
     String getLoreKey();
 

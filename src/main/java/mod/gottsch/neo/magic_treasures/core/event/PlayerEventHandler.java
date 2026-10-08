@@ -18,14 +18,15 @@
 package mod.gottsch.neo.magic_treasures.core.event;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * 
  * @author Mark Gottschling May 7, 2024
  *
  */
-@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID)
+// NOTE no @EventBusSubscriber: this class has no @SubscribeEvent methods, and NeoForge throws at launch if it is registered anyway
+// @EventBusSubscriber(modid = MagicTreasures.MOD_ID)
 public class PlayerEventHandler {
 //
 //	@SubscribeEvent

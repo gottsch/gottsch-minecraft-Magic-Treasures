@@ -18,13 +18,13 @@
 package mod.gottsch.neo.magic_treasures.core.event;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.generator.JewelryGenerator;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  */
 public class AnvilEventHandler {
-	@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.FORGE)
+	@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 	public static class RegistrationHandler {
 
 		private static JewelryGenerator generator = new JewelryGenerator();
@@ -51,7 +51,7 @@ public class AnvilEventHandler {
 			AtomicReference<ItemStack> resultOutStack = new AtomicReference<>(ItemStack.EMPTY);
 			ItemStack outStack = ItemStack.EMPTY;
 
-			leftStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
+			JewelryHandler.get(leftStack).ifPresent(handler -> {
 				event.setMaterialCost(1);
 				event.setCost(1);
 

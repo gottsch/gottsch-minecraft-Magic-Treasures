@@ -18,7 +18,7 @@
 package mod.gottsch.neo.magic_treasures.core.jewelry;
 
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 
 /**
  * @author Mark Gottschling May 9, 2024
@@ -68,7 +68,7 @@ public class JewelryStoneTiers {
             new JewelryStoneTier.Builder("skeletons_heart", 100, 3)
                     .with($ -> {
                         $.canAffix = p -> {
-                            IJewelryHandler jewelryHandler = p.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+                            IJewelryHandler jewelryHandler = JewelryHandler.get(p).orElseThrow(IllegalStateException::new);
                             return jewelryHandler.getMaterial().equals(JewelryMaterials.BONE);
                         };
                         $.spellCostFactor = 0.75;

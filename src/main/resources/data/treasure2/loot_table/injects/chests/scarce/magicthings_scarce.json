@@ -1,0 +1,198 @@
+{
+  "pools": [
+    {
+      "name": "rare_stuff",
+      "rolls": 1,
+      "entries": [
+        {
+          "entryName": "jewelry0",
+          "type": "item",
+          "name": "magictreasures:silver_ring",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "random_chance",
+              "chance": 0.1
+            }
+          ],
+          "functions": [
+            {
+              "function": "magictreasures:random_jewelry",
+              "rarity": "rare"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "scarce_stuff",
+      "rolls": 1,
+      "entries": [
+        {
+          "entryName": "jewelry1",
+          "type": "item",
+          "name": "magictreasures:silver_ring",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_enchanted_bonus",
+              "enchantment": "minecraft:looting",
+              "unenchanted_chance": 0.85,
+              "enchanted_chance": {
+                "type": "minecraft:linear",
+                "base": 0.95,
+                "per_level_above_first": 0.1
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "magictreasures:random_jewelry",
+              "rarities": [
+                "common",
+                "uncommon",
+                "scarce"
+              ]
+            },
+            {
+              "function": "magictreasures:imbue_randomly",
+              "levels": {
+                "min": 2,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "entryName": "jewelry2",
+          "type": "item",
+          "name": "magictreasures:copper_ring",
+          "weight": 10,
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_enchanted_bonus",
+              "enchantment": "minecraft:looting",
+              "unenchanted_chance": 0.85,
+              "enchanted_chance": {
+                "type": "minecraft:linear",
+                "base": 0.95,
+                "per_level_above_first": 0.1
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "magictreasures:random_jewelry",
+              "rarities": [
+                "uncommon",
+                "scarce"
+              ]
+            }
+          ]
+        },
+        {
+          "entryName": "jadeite_stone",
+          "type": "minecraft:item",
+          "name": "magictreasures:jadeite",
+          "weight": 5
+        },
+        {
+          "entryName": "silver_castle_ring",
+          "type": "item",
+          "name": "magictreasures:silver_castle_ring",
+          "weight": 1,
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_enchanted_bonus",
+              "enchantment": "minecraft:looting",
+              "unenchanted_chance": 0.85,
+              "enchanted_chance": {
+                "type": "minecraft:linear",
+                "base": 0.95,
+                "per_level_above_first": 0.1
+              }
+            }
+          ]
+        },
+        {
+          "entryName": "random_spell",
+          "type": "minecraft:item",
+          "name": "magictreasures:healing_scroll",
+          "weight": 5,
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_enchanted_bonus",
+              "enchantment": "minecraft:looting",
+              "unenchanted_chance": 0.85,
+              "enchanted_chance": {
+                "type": "minecraft:linear",
+                "base": 0.95,
+                "per_level_above_first": 0.1
+              }
+            }
+          ],
+          "functions": [
+            {
+              "function": "magictreasures:random_spell",
+              "levels": {
+                "min": 2,
+                "max": 6
+              }
+            }
+          ]
+        },
+        {
+          "entryName": "recharge_scroll",
+          "type": "minecraft:item",
+          "name": "magictreasures:recharge_scroll",
+          "weight": 3,
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_enchanted_bonus",
+              "enchantment": "minecraft:looting",
+              "unenchanted_chance": 0.85,
+              "enchanted_chance": {
+                "type": "minecraft:linear",
+                "base": 1.0,
+                "per_level_above_first": 0.15
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "recipes",
+      "rolls": 1,
+      "entries": [
+        {
+          "entryName": "ring_recipe",
+          "type": "minecraft:item",
+          "name": "magictreasures:ring_recipe"
+        },
+        {
+          "entryName": "bracelet_recipe",
+          "type": "minecraft:item",
+          "name": "magictreasures:bracelet_recipe"
+        },
+        {
+          "entryName": "necklace_recipe",
+          "type": "minecraft:item",
+          "name": "magictreasures:necklace_recipe"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance_with_enchanted_bonus",
+          "enchantment": "minecraft:looting",
+          "unenchanted_chance": 0.5,
+          "enchanted_chance": {
+            "type": "minecraft:linear",
+            "base": 0.6,
+            "per_level_above_first": 0.1
+          }
+        }
+      ]
+    }
+  ]
+}

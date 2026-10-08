@@ -19,6 +19,7 @@ package mod.gottsch.neo.magic_treasures.core.loot.modifier;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
@@ -35,10 +36,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -56,8 +59,8 @@ public class LootModifierByRarity extends LootModifier {
 	private final String rarity;
 	private final double chance;
 
-	public static final Supplier<Codec<LootModifierByRarity>> CODEC = Suppliers.memoize(()
-			-> RecordCodecBuilder.create(inst -> codecStart(inst)
+	public static final Supplier<MapCodec<LootModifierByRarity>> CODEC = Suppliers.memoize(()
+			-> RecordCodecBuilder.mapCodec(inst -> codecStart(inst)
 			.and(Codec.INT.fieldOf("count").forGetter(m -> m.count))
 			.and(Codec.STRING.fieldOf("rarity").forGetter(m -> m.rarity))
 			.and(Codec.DOUBLE.fieldOf("chance").forGetter(m -> m.chance))
@@ -72,7 +75,7 @@ public class LootModifierByRarity extends LootModifier {
 	}
 
 	@Override
-	public Codec<? extends IGlobalLootModifier> codec() {
+	public MapCodec<? extends IGlobalLootModifier> codec() {
 		return CODEC.get();
 	}
 
@@ -85,7 +88,7 @@ public class LootModifierByRarity extends LootModifier {
 
 		// determine if specific loot modifier is enabled
 		boolean isEnabled = Optional.ofNullable(Config.enableLootModifiers.get(rarity.toLowerCase())).
-				map(ForgeConfigSpec.ConfigValue::get).orElse(false);
+				map(ModConfigSpec.ConfigValue::get).orElse(false);
 		MagicTreasures.LOGGER.debug("isEnabled for {} -> {}", rarity, isEnabled);
 
 		if (Config.SERVER.loot.enableVanillaLootModifiers.get()
@@ -97,7 +100,7 @@ public class LootModifierByRarity extends LootModifier {
 			lootList.addAll(StoneRegistry.get(rarity));
 			lootList.addAll(
 					MagicTreasuresItems.ALL_SPELL_SCROLLS.stream()
-							.map(RegistryObject::get)
+							.map(DeferredItem::get)
 							.filter(scroll -> ((SpellScroll)scroll).getSpell().getRarity() == rarity)
 							.toList()
 			);

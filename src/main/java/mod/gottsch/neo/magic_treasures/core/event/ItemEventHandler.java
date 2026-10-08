@@ -25,16 +25,16 @@ import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * 
  * @author Mark Gottschling May 26, 2024
  *
  */
-@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID)
+@EventBusSubscriber(modid = MagicTreasures.MOD_ID)
 public class ItemEventHandler {
 
 	@SubscribeEvent
@@ -43,7 +43,7 @@ public class ItemEventHandler {
 		if (!(event.getItemStack().getItem() instanceof Gemstone) && event.getItemStack().is(MagicTreasuresTags.Items.STONES)) {
 //			event.getToolTip().add(Component.translatable(LangUtil.tooltip("gemstone.usage")).withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC));
 //			event.getToolTip().add(Component.translatable(LangUtil.NEWLINE));
-			Gemstone.addHoverText(event.getItemStack(), null, event.getToolTip(), TooltipFlag.Default.NORMAL);
+			Gemstone.addHoverText(event.getItemStack(), net.minecraft.world.item.Item.TooltipContext.EMPTY, event.getToolTip(), TooltipFlag.Default.NORMAL);
 		}
 
 		// attach magic things recharge item tooltips to vanilla and other mod items

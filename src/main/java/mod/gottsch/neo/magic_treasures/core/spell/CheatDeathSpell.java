@@ -4,7 +4,7 @@ package mod.gottsch.neo.magic_treasures.core.spell;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -13,8 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 
@@ -27,7 +27,7 @@ public class CheatDeathSpell extends CooldownSpell {
 
 	public static String TYPE = "cheat_death";
 
-	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.class;
+	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.Pre.class;
 
 	/**
 	 *
@@ -56,12 +56,12 @@ public class CheatDeathSpell extends CooldownSpell {
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
 		CooldownSpellEntity entity = (CooldownSpellEntity) context.getEntity();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (handler.getMana() > 0 && player.isAlive()) {
-			if (((LivingDamageEvent)event).getEntity() instanceof Player) {
+			if (((LivingDamageEvent.Pre)event).getEntity() instanceof Player) {
 				// get the source and amount
-				double damage = ((LivingDamageEvent)event).getAmount();
+				double damage = ((LivingDamageEvent.Pre)event).getNewDamage();
 				if (damage > 0D && damage > player.getHealth()) {
 
 					// set player's health to amount
@@ -71,7 +71,7 @@ public class CheatDeathSpell extends CooldownSpell {
 					double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
 
 					// reduce damage to 0
-					((LivingDamageEvent)event).setAmount(0F);
+					((LivingDamageEvent.Pre)event).setNewDamage(0F);
 
 					result = true;
 				}

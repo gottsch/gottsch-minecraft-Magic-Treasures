@@ -19,19 +19,14 @@ package mod.gottsch.neo.magic_treasures.core.setup;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
+import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.neo.magic_treasures.core.loot.modifier.MagicTreasuresLootModifiers;
 import mod.gottsch.neo.magic_treasures.core.world.feature.MagicTreasuresConfiguredFeatures;
-import net.minecraft.core.particles.ParticleType;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 /**
  * Created by Mark Gottschling on 5/3/2023
@@ -40,25 +35,23 @@ public class Registration {
     /*
      * deferred registries
      */
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MagicTreasures.MOD_ID);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MagicTreasures.MOD_ID);
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MagicTreasures.MOD_ID);
-    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MagicTreasures.MOD_ID);
-
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MagicTreasures.MOD_ID);
-    public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MagicTreasures.MOD_ID);
-
-     // item properties convenience property
-//    public static final Item.Properties ITEM_PROPERTIES = new Item.Properties().tab(CreativeModeTab.TAB_MISC);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MagicTreasures.MOD_ID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MagicTreasures.MOD_ID);
 
     /**
-     *
+     * Attaches every deferred register to the mod event bus.
      */
     public static void init(IEventBus eventBus) {
-        MagicTreasuresBlocks.register();
-    	MagicTreasuresItems.register();
-        MagicTreasuresConfiguredFeatures.register();
-        MagicTreasuresLootModifiers.register();
+        // force-load the static holders before their registers are attached to the bus
+        MagicTreasuresBlocks.init();
+        MagicTreasuresItems.init();
+
+        MagicTreasuresDataComponents.DATA_COMPONENTS.register(eventBus);
+        BLOCKS.register(eventBus);
+        ITEMS.register(eventBus);
+        MagicTreasuresConfiguredFeatures.FEATURES.register(eventBus);
+        MagicTreasuresLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
+        MagicTreasuresLootFunctions.LOOT_FUNCTIONS.register(eventBus);
         MagicTreasuresCreativeModeTabs.TABS.register(eventBus);
     }
 }

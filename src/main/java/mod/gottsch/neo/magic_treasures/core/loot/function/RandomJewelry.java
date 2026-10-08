@@ -17,11 +17,15 @@
  */
 package mod.gottsch.neo.magic_treasures.core.loot.function;
 
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import com.google.gson.*;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
@@ -37,7 +41,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunct
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +54,7 @@ import java.util.Random;
  *
  */
 public class RandomJewelry extends LootItemConditionalFunction {
-	//	private static final ResourceLocation LOCATION = new ResourceLocation("gealdorcraft:random_gemstone");
+	//	private static final ResourceLocation LOCATION = ResourceLocation.parse("gealdorcraft:random_gemstone");
 	private static final String RARITY = "rarity";
 	private static final String RARITIES = "rarities";
 	private static final String GEMSTONES = "gemstones";
@@ -63,7 +67,7 @@ public class RandomJewelry extends LootItemConditionalFunction {
 	private final List<ResourceLocation> materials;
 	private final NumberProvider levels;
 
-	public RandomJewelry(LootItemCondition[] conditions, IRarity rarity, List<IRarity> rarities,
+	public RandomJewelry(List<LootItemCondition> conditions, IRarity rarity, List<IRarity> rarities,
 						 List<ResourceLocation> materials, List<ResourceLocation> gemstones, NumberProvider levels) {
 		super(conditions);
 		this.rarity = rarity;
@@ -74,8 +78,8 @@ public class RandomJewelry extends LootItemConditionalFunction {
 	}
 
 	@Override
-	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.RANDOM_JEWELRY;
+	public LootItemFunctionType<RandomJewelry> getType() {
+		return MagicTreasuresLootFunctions.RANDOM_JEWELRY.get();
 	}
 
 	@Override
@@ -143,7 +147,7 @@ public class RandomJewelry extends LootItemConditionalFunction {
 		return jewelry.stream()
 				.filter(j -> {
 					ItemStack jewelryStack = new ItemStack(j);
-					return jewelryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY)
+					return JewelryHandler.get(jewelryStack)
 							.map(jj -> jj.getMaxLevel() >= level).orElse(false);
 				}).toList();
 	}
@@ -154,7 +158,7 @@ public class RandomJewelry extends LootItemConditionalFunction {
 			return jewelry.stream()
 					.filter(j -> {
 						ItemStack jewelryStack = new ItemStack(j);
-						return jewelryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY)
+						return JewelryHandler.get(jewelryStack)
 								.map(jj -> gemstones.contains(jj.getStone())).orElse(false);
 					}).toList();
 		}
@@ -168,79 +172,13 @@ public class RandomJewelry extends LootItemConditionalFunction {
 		return Optional.empty();
 	}
 
-	/*
-	 *
-	 */
-	public static class Serializer extends LootItemConditionalFunction.Serializer<RandomJewelry> {
-		public void serialize(JsonObject json, RandomJewelry value, JsonSerializationContext context) {
-			super.serialize(json, value, context);
-			json.addProperty(RARITY, value.rarity.getName());
-			if (!value.rarities.isEmpty()) {
-				final JsonArray jsonArray = new JsonArray();
-				value.rarities.forEach(r -> {
-					jsonArray.add(new JsonPrimitive(r.getName().toString()));
-				});
-				json.add(RARITIES, jsonArray);
-			}
-			if (!value.materials.isEmpty()) {
-				final JsonArray jsonArray = new JsonArray();
-				value.materials.forEach(resourceLocation -> {
-					jsonArray.add(new JsonPrimitive(resourceLocation.toString()));
-				});
-				json.add(MATERIALS, jsonArray);
-			}
-			if (!value.gemstones.isEmpty()) {
-				final JsonArray jsonArray = new JsonArray();
-				value.gemstones.forEach(resourceLocation -> {
-					jsonArray.add(new JsonPrimitive(resourceLocation.toString()));
-				});
-				json.add(GEMSTONES, jsonArray);
-			}
-			json.add(LEVELS, context.serialize(value.levels));
-		}
-
-		public RandomJewelry deserialize(JsonObject jsonObject, JsonDeserializationContext context, LootItemCondition[] conditions) {
-			NumberProvider numberProvider = null;
-			if (jsonObject.has(LEVELS)) {
-				numberProvider = GsonHelper.getAsObject(jsonObject, LEVELS, context, NumberProvider.class);
-			}
-			String rarityStr = "";
-			if (jsonObject.has(RARITY)) {
-				rarityStr = GsonHelper.getAsString(jsonObject, RARITY);
-			}
-			IRarity rarity = MagicTreasuresApi.getRarity(rarityStr).orElse(MagicTreasuresRarity.NONE);
-
-			List<IRarity> rarities = new ArrayList<>();
-			if (jsonObject.has(RARITIES)) {
-				GsonHelper.getAsJsonArray(jsonObject, RARITIES).forEach(element -> {
-					String rarityName = GsonHelper.convertToString(element, RARITY);
-					MagicTreasuresApi.getRarity(rarityName).ifPresent(rarities::add);
-				});
-			}
-
-			List<ResourceLocation> materials = new ArrayList<>();
-			if (jsonObject.has(MATERIALS)) {
-				GsonHelper.getAsJsonArray(jsonObject, MATERIALS).forEach(element -> {
-					ResourceLocation material = ModUtil.asLocation(GsonHelper.convertToString(element, "material"));
-					// check if valid material
-					if (JewelryMaterialRegistry.has(material)) {
-						materials.add(material);
-					}
-				});
-			}
-
-			List<ResourceLocation> gemstones = new ArrayList<>();
-			if (jsonObject.has(GEMSTONES)) {
-				GsonHelper.getAsJsonArray(jsonObject, GEMSTONES).forEach(element -> {
-					ResourceLocation gemstone = ModUtil.asLocation(GsonHelper.convertToString(element, "gemstone"));
-					// check if valid item
-					Optional.ofNullable(ForgeRegistries.ITEMS.getValue(gemstone)).ifPresent(g -> {
-						gemstones.add(gemstone);
-					});
-				});
-			}
-
-			return new RandomJewelry(conditions, rarity, rarities, materials, gemstones, numberProvider);
-		}
-	}
+	public static final MapCodec<RandomJewelry> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance)
+			.and(Codec.STRING.optionalFieldOf(RARITY, "").forGetter(f -> f.rarity.getName()))
+			.and(Codec.STRING.listOf().optionalFieldOf(RARITIES, List.of()).forGetter(f -> LootFunctionHelper.rarityNames(f.rarities)))
+			.and(Codec.STRING.listOf().optionalFieldOf(MATERIALS, List.of()).forGetter(f -> LootFunctionHelper.names(f.materials)))
+			.and(Codec.STRING.listOf().optionalFieldOf(GEMSTONES, List.of()).forGetter(f -> LootFunctionHelper.names(f.gemstones)))
+			.and(NumberProviders.CODEC.optionalFieldOf(LEVELS).forGetter(f -> Optional.ofNullable(f.levels)))
+			.apply(instance, (conditions, rarity, rarities, materials, gemstones, levels) -> new RandomJewelry(conditions,
+					LootFunctionHelper.rarity(rarity, MagicTreasuresRarity.NONE), LootFunctionHelper.rarities(rarities),
+					LootFunctionHelper.materials(materials), LootFunctionHelper.locations(gemstones), levels.orElse(null))));
 }

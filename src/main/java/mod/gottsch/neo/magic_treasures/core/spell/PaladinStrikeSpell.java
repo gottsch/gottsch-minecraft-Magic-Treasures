@@ -5,7 +5,7 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.spell.cost.CostEvaluator;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
@@ -17,8 +17,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 
@@ -31,7 +31,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 	private static final float MIN_HEALTH_TO_CAST = 3.0F;
 
 	public static String TYPE = "paladin_strike";
-	private static final Class<?> REGISTERED_EVENT = LivingHurtEvent.class;
+	private static final Class<?> REGISTERED_EVENT = LivingIncomingDamageEvent.class;
 
 	// the amount of health it costs in addition to mana
 	private double lifeCost;
@@ -58,22 +58,22 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (handler.getMana() > 0 && player.isAlive()) {
-			DamageSource source = ((LivingHurtEvent) event).getSource();
+			DamageSource source = ((LivingIncomingDamageEvent) event).getSource();
 			if (source.getDirectEntity() instanceof Player) {
 
 				if (player.getHealth() > MIN_HEALTH_TO_CAST) {
 					// get the source and amount
-					double sourceAmount = ((LivingHurtEvent)event).getAmount();
+					double sourceAmount = ((LivingIncomingDamageEvent)event).getAmount();
 					// calculate lifeCost
 					double lifeCost = Math.min(getLifeCost(), player.getHealth() - (player.getMaxHealth() / 2));
 					// calculate the damage amount based on lifeCost and modifiers
 					double damageAmount = sourceAmount + (lifeCost * modifyEffectAmount(jewelry));
 
 					// increase damage amount
-					((LivingHurtEvent)event).setAmount((float) damageAmount);
+					((LivingIncomingDamageEvent)event).setAmount((float) damageAmount);
 
 					applyCost(world, random, coords, context, modifySpellCost(jewelry));
 					result = true;

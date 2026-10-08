@@ -17,24 +17,17 @@
  */
 package mod.gottsch.neo.magic_treasures;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
-import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
-import mod.gottsch.neo.magic_treasures.core.network.MagicTreasuresNetworking;
 import mod.gottsch.neo.magic_treasures.core.setup.CommonSetup;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
 import mod.gottsch.neo.magic_treasures.core.spell.MagicTreasuresSpells;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.IConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Optional;
 
 /**
  * 
@@ -51,42 +44,34 @@ public class MagicTreasures {
 	/**
 	 * 
 	 */
-	public MagicTreasures() {
+	public MagicTreasures(IEventBus eventBus, ModContainer container) {
 		// TODO change to the new Echelons style of config setup
-		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+		container.registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+		container.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
 
 		// force load of static blocks
 		MagicTreasuresSpells.init();
 
-		// Register the setup method for modloading
-		IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
 		// register the deferred registries
 		Registration.init(eventBus);
 
-		eventBus.addListener(MagicTreasuresNetworking::common);
 		// TODO anything that is registering magic things only, like jewelry material tiers, in common setup can and needs to be called before Registration.init()
 		eventBus.addListener(CommonSetup::init);
-		eventBus.addListener(this::config);
+		eventBus.addListener(ModConfigEvent.Loading.class, this::onConfig);
+		eventBus.addListener(ModConfigEvent.Reloading.class, this::onConfig);
 	}
 
 	/*
-	 * NOTE Curios slots (necklace, ring x2, bracelet, belt) are registered by datapack in
+	 * NOTE Curios slots (necklace, ring, bracelet, belt) are registered by datapack in
 	 * data/magictreasures/curios/slots and data/magictreasures/curios/entities, not by IMC.
+	 *
+	 * NOTE there is no custom networking: jewelry state is a data component, which syncs with the stack
+	 * (vanilla inventory sync for hands/hotbar, Curios' own stack sync for curio slots).
 	 */
 
-	private void config(final ModConfigEvent event) {
-		if (event.getConfig().getModId().equals(MOD_ID)) {
-			if (event.getConfig().getType() == ModConfig.Type.SERVER) {
-				IConfigSpec<?> spec = event.getConfig().getSpec();
-				// get the toml config data
-				CommentedConfig commentedConfig = event.getConfig().getConfigData();
-
-				if (spec == Config.SERVER_CONFIG) {
-					Config.mapEnableLootModifiers(commentedConfig);
-				}
-			}
+	private void onConfig(final ModConfigEvent event) {
+		if (event.getConfig().getSpec() == Config.SERVER_CONFIG) {
+			Config.mapEnableLootModifiers();
 		}
 	}
 }

@@ -24,7 +24,7 @@ import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.data.PackOutput;
-import net.minecraftforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.common.data.LanguageProvider;
 import org.apache.commons.lang3.text.WordUtils;
 
 /**

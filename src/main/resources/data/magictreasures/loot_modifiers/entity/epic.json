@@ -4,23 +4,23 @@
       "condition": "minecraft:any_of",
       "terms": [
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/elder_guardian"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/ender_dragon"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/ravager"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/warden"
         },
         {
-          "condition": "forge:loot_table_id",
+          "condition": "neoforge:loot_table_id",
           "loot_table_id": "minecraft:entities/wither"
         }
       ]

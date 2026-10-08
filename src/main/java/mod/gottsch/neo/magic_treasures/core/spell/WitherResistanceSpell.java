@@ -4,7 +4,7 @@ package mod.gottsch.neo.magic_treasures.core.spell;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -13,8 +13,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 
@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public class WitherResistanceSpell extends Spell {
 	public static final String TYPE = "wither_resistance";
-	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.class;
+	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.Pre.class;
 
 	/**
 	 *
@@ -48,12 +48,12 @@ public class WitherResistanceSpell extends Spell {
 		boolean result = false;
 
 		// exit if not fire damage
-		if (((LivingDamageEvent)event).getSource().is(DamageTypes.WITHER)) {
-			IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		if (((LivingDamageEvent.Pre)event).getSource().is(DamageTypes.WITHER)) {
+			IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 			if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
 				// get the source and amount
-				double amount = ((LivingDamageEvent)event).getAmount();
+				double amount = ((LivingDamageEvent.Pre)event).getNewDamage();
 				// calculate the new amount
 				double newAmount = 0;
 				double amountToSpell = amount * Math.min(1.0, modifyEffectAmount(context.getJewelry()));
@@ -66,7 +66,7 @@ public class WitherResistanceSpell extends Spell {
 //				else {
 					newAmount = amountToPlayer;
 //				}
-				((LivingDamageEvent)event).setAmount((float) newAmount);
+				((LivingDamageEvent.Pre)event).setNewDamage((float) newAmount);
 				result = true;
 			}    
 		}

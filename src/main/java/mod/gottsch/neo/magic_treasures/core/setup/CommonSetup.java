@@ -25,12 +25,11 @@ import mod.gottsch.neo.magic_treasures.core.item.JewelryType;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
-import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +37,8 @@ import java.util.Map;
 /**
  * Created by Mark Gottschling on 5/3/2023
  */
-@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+// NOTE no @EventBusSubscriber: this class has no @SubscribeEvent methods, and NeoForge throws at launch if it is registered anyway
+// @EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class CommonSetup {
 
     /**
@@ -128,7 +128,6 @@ public class CommonSetup {
 
         // loot functions
         // NOTE are in common setup because there are not deferred, but registered directly into the vanilla registry
-        MagicTreasuresLootFunctions.register();
 
         // treasure2 integration (needs to be registered BEFORE LevelEvent.Load)
         MagicTreasuresIntegrations.registerTreasure2Integration();

@@ -19,6 +19,7 @@ package mod.gottsch.neo.magic_treasures.datagen.loot;
 
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
@@ -33,8 +34,8 @@ import java.util.Set;
  */
 public class MagicTreasuresBlockLootTables extends BlockLootSubProvider {
 
-    public MagicTreasuresBlockLootTables() {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+    public MagicTreasuresBlockLootTables(HolderLookup.Provider registries) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
     @Override

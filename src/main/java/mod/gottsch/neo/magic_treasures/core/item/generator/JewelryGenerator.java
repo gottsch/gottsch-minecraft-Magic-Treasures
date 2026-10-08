@@ -19,7 +19,7 @@ package mod.gottsch.neo.magic_treasures.core.item.generator;
 
 
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
@@ -31,7 +31,7 @@ import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class JewelryGenerator {
     }
 
     public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
-        IJewelryHandler sourceHandler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler sourceHandler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
         // ensure a valid stone stack
         if (stone == null || stone == ItemStack.EMPTY || !sourceHandler.acceptsAffixer(stone)
@@ -70,7 +70,7 @@ public class JewelryGenerator {
         ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
 
         // get the dest capability handlers
-        IJewelryHandler destHandler = destJewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler destHandler = JewelryHandler.get(destJewelry).orElseThrow(IllegalStateException::new);
 
         int mana = 0;
         int recharges = 0;
@@ -121,14 +121,14 @@ public class JewelryGenerator {
         IJewelryHandler sourceHandler = null;
         IJewelryHandler destHandler = null;
         try {
-            sourceHandler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-            destHandler = destJewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+            sourceHandler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
+            destHandler = JewelryHandler.get(destJewelry).orElseThrow(IllegalStateException::new);
         } catch(Exception e) {
             return Optional.empty();
         }
 
         // get the stone item from the sourceHandler
-        Item stone = ForgeRegistries.ITEMS.getValue(sourceHandler.getStone());
+        Item stone = BuiltInRegistries.ITEM.get(sourceHandler.getStone());
 
         int mana = 0;
         int recharges = 0;
@@ -178,7 +178,7 @@ public class JewelryGenerator {
         // copy values from jewelry to destStack
         copyStack(jewelry, destStack);
 
-        IJewelryHandler handler = destStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         ISpell spell = ((SpellScroll)spellStack.getItem()).getSpell();
         if (handler.getMaxLevel() >= spell.getLevel()) {
             handler.getSpells().add(spell.entity());
@@ -188,8 +188,8 @@ public class JewelryGenerator {
     }
 
     private void copyStack(ItemStack sourceStack, ItemStack destStack) {
-        IJewelryHandler handler = sourceStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        IJewelryHandler destHandler = destStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(sourceStack).orElseThrow(IllegalStateException::new);
+        IJewelryHandler destHandler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
 
         // copy over current state
         copyHandlers(handler, destHandler);
@@ -218,7 +218,7 @@ public class JewelryGenerator {
         // copy values from jewelry to destStack
         copyStack(jewelry, destStack);
 
-        IJewelryHandler handler = destStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         if (handler.getRecharges() > 0) {
             handler.setMana(handler.getMaxMana());
             handler.setRecharges(handler.getRecharges() - 1);
@@ -233,7 +233,7 @@ public class JewelryGenerator {
         // copy values from jewelry to destStack
         copyStack(jewelry, destStack);
 
-        IJewelryHandler handler = destStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         if (handler.getRepairs() > 0) {
             handler.setUses(handler.getMaxUses());
             handler.setRepairs(Math.max(0, handler.getRepairs() - 1));
@@ -246,7 +246,7 @@ public class JewelryGenerator {
         public String name(ItemStack jewelry, ItemStack stone) {
             StringBuffer buffer = new StringBuffer();
 
-            IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+            IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
            return buffer.append((handler.getJewelrySizeTier() != JewelrySizeTier.REGULAR ? (handler.getJewelrySizeTier().getName() + "_") : ""))
                    .append(handler.getMaterial().getName()).append("_")
                    .append(ModUtil.getName(stone.getItem()).getPath()).append("_")
@@ -258,7 +258,7 @@ public class JewelryGenerator {
         public String name(ItemStack jewelry) {
             StringBuilder buffer = new StringBuilder();
 
-            IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+            IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
            return buffer.append((handler.getJewelrySizeTier() != JewelrySizeTier.REGULAR ? (handler.getJewelrySizeTier().getName() + "_") : ""))
                     .append(handler.getMaterial().getName()).append("_")
                     .append(

@@ -17,8 +17,10 @@
  */
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
+import java.util.Optional;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellRegistry;
@@ -26,8 +28,8 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 /**
  * Created by Mark Gottschling on 6/1/2023
@@ -158,17 +160,15 @@ public class ItemModelsProvider extends ItemModelProvider {
 	private ResourceLocation buildLoc(Item item) {
 		StringBuilder loc = new StringBuilder("items/jewelry/");
 		
-		ItemStack stack = new ItemStack(item);
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(c -> {
+		// NOTE datagen reads the item's defaults builder (see MagicTreasuresItemTagsProvider)
+		Optional.of(item).filter(i -> i instanceof Jewelry).map(i -> ((Jewelry) i).jewelryDefaults()).ifPresent(c -> {
 		if (c.getJewelrySizeTier() != JewelrySizeTier.REGULAR) {
 			loc .append(c.getJewelrySizeTier().getValue() + "_");
 		}
 		
 		// stone (can't get from key....)
 
-			if (c.hasStone()) {
-				loc.append(c.getStone().getPath()).append("_");
-			}
+			// NOTE stone omitted: hasStone() checks an item tag, and tags aren't loaded in datagen (always false in 1.20.1 too)
 			
 			// material
 			loc.append(c.getMaterial().getName() + "_");

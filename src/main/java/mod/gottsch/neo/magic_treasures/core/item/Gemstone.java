@@ -51,12 +51,12 @@ public class Gemstone extends Item {
 
 
     @Override
-    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component>tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack itemStack, TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(itemStack, level, tooltip, flag);
         addHoverText(itemStack, level, tooltip, flag);
     }
 
-    public static void addHoverText(ItemStack itemStack, @Nullable Level level, List<Component>tooltip, TooltipFlag flag) {
+    public static void addHoverText(ItemStack itemStack, TooltipContext level, List<Component>tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable(LangUtil.tooltip("gemstone.usage")).withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC));
         tooltip.add(Component.translatable(LangUtil.NEWLINE));
 

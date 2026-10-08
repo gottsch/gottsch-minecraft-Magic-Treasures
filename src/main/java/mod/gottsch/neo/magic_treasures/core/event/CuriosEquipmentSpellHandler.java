@@ -17,13 +17,12 @@
  */
 package mod.gottsch.neo.magic_treasures.core.event;
 
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellContext;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -51,7 +50,7 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 		// Comment out when running DataGen until I figure out why it's not working with Curios
 		///////////////////////////////////
 		// check curio slots
-		LazyOptional<ICuriosItemHandler> handler = CuriosApi.getCuriosHelper().getCuriosHandler(player);
+		Optional<ICuriosItemHandler> handler = CuriosApi.getCuriosInventory(player);
 		handler.ifPresent(itemHandler -> {
 			// curios type names -> head, necklace, back, bracelet, hands, ring, belt, charm, feet
 			CURIOS_SLOTS.forEach(slot -> {
@@ -61,7 +60,7 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 					for (int slotIndex = 0; slotIndex < stacksHandler.getStacks().getSlots(); slotIndex++) {
 					final int curiosSlotIndex = slotIndex;
 					ItemStack curiosStack = stacksHandler.getStacks().getStackInSlot(slotIndex);
-					curiosStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
+					JewelryHandler.get(curiosStack).ifPresent(cap -> {
 
 							AtomicInteger index = new AtomicInteger();
 							// requires indexed for-loop

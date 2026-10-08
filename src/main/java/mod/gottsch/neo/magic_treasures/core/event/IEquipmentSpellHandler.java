@@ -19,7 +19,7 @@ package mod.gottsch.neo.magic_treasures.core.event;
 
 import mod.gottsch.neo.magic_treasures.core.spell.SpellContext;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 import java.util.List;
 

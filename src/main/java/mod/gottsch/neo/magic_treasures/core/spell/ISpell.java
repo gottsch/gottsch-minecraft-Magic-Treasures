@@ -20,17 +20,16 @@ package mod.gottsch.neo.magic_treasures.core.spell;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
-import mod.gottsch.neo.magic_treasures.core.network.SpellUpdateS2C;
 import mod.gottsch.neo.magic_treasures.core.spell.cost.ICostEvaluator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 import java.util.List;
 import java.util.Random;
@@ -44,14 +43,8 @@ public interface ISpell {
 
     boolean serverUpdate(Level level, Random random, ICoords coords, Event event, ICastSpellContext context);
 
-    default public boolean clientUpdate(ItemStack jewelry, SpellEntity entity, SpellUpdateS2C message) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        handler.setMana(message.getMana());
-        return true;
-    }
-
     @SuppressWarnings("deprecation")
-    void addInformation(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flagIn, SpellEntity entity);
+    void addInformation(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flagIn, SpellEntity entity);
 
     Component getSpellDesc();
 

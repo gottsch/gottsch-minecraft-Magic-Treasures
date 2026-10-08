@@ -5,7 +5,7 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -13,8 +13,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 
@@ -27,7 +27,7 @@ public class
 SpectralArmorSpell extends Spell {
 	public static String SPECTRAL_ARMOR_TYPE = "spectral_armor";
 
-	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.class;
+	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.Pre.class;
 
 	/**
 	 *
@@ -61,7 +61,7 @@ SpectralArmorSpell extends Spell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 		if (context.getEntity() instanceof CooldownSpellEntity) {
 			CooldownSpellEntity spellEntity = (CooldownSpellEntity) context.getEntity();
 			double cooldown = modifyCooldown(jewelry);
@@ -69,9 +69,9 @@ SpectralArmorSpell extends Spell {
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
 				if (handler.getMana() > 0 && player.isAlive()) {
 					// TODO only execute if damage is coming from a Mob ie not Fire, Fall etc
-					if (((LivingDamageEvent)event).getEntity() instanceof Player) {
+					if (((LivingDamageEvent.Pre)event).getEntity() instanceof Player) {
 						// get the source and amount
-						double amount = ((LivingDamageEvent)event).getAmount();
+						double amount = ((LivingDamageEvent.Pre)event).getNewDamage();
 						if (amount > 0D) {
 							// NOTE each effectAmount integer reduces by 4% just like vanilla armor, ie Leather Chest = 3 points or 12% reduction
 							// calculate the new amount
@@ -81,7 +81,7 @@ SpectralArmorSpell extends Spell {
 							MagicTreasures.LOGGER.debug("cost (mana) incurred to jewelry -> {}", cost);
 
 							// update the newAmount with what comes back from cost eval
-							((LivingDamageEvent)event).setAmount((float) newAmount);
+							((LivingDamageEvent.Pre)event).setNewDamage((float) newAmount);
 
 							// set cooldown expire time if cooldown is activated
 							if (cooldown > 0.0) {

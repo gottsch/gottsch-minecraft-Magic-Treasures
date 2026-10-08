@@ -17,9 +17,8 @@
  */
 package mod.gottsch.neo.magic_treasures.core.config;
 
-import com.electronwill.nightconfig.core.CommentedConfig;
 import mod.gottsch.neo.gottschcore.config.AbstractConfig;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -36,17 +35,17 @@ public class Config extends AbstractConfig {
 	public static final String UNDERLINE_DIV = "------------------------------";
 
 	// TODO change to the new Echelons style of config setup
-	protected static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
-	protected static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+	protected static final ModConfigSpec.Builder COMMON_BUILDER = new ModConfigSpec.Builder();
+	protected static final ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 	
-	public static ForgeConfigSpec COMMON_CONFIG;
-	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ModConfigSpec COMMON_CONFIG;
+	public static ModConfigSpec SERVER_CONFIG;
 	
 	public static final Logging LOGGING;
 	public static final ServerConfig SERVER;
 	public static Config instance = new Config();
 
-	public static final Map<String, ForgeConfigSpec.BooleanValue> enableLootModifiers = new HashMap<>();
+	public static final Map<String, ModConfigSpec.BooleanValue> enableLootModifiers = new HashMap<>();
 
 	static {
 		LOGGING = new Logging(COMMON_BUILDER);
@@ -64,33 +63,33 @@ public class Config extends AbstractConfig {
 		public Loot loot;
 //		public Integration integration;
 
-		public ServerConfig(ForgeConfigSpec.Builder builder) {
+		public ServerConfig(ModConfigSpec.Builder builder) {
 			loot = new Loot(builder);
 //			integration = new Integration(builder);
 		}
 	}
 
 	public static class Loot {
-		public ForgeConfigSpec.BooleanValue enableVanillaLootModifiers;
-		public ForgeConfigSpec.BooleanValue enableGeneralEntityLootModifier;
-		public ForgeConfigSpec.BooleanValue enableZombieEntityLootModifier;
-		public ForgeConfigSpec.BooleanValue enableSkeletonEntityLootModifier;
-		public ForgeConfigSpec.BooleanValue enableWitherSkeletonEntityLootModifier;
-		public ForgeConfigSpec.BooleanValue enableScarceEntityLootModifier;
-		public ForgeConfigSpec.BooleanValue enableRareEntityLootModifier;
-		public ForgeConfigSpec.BooleanValue enableEpicEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableVanillaLootModifiers;
+		public ModConfigSpec.BooleanValue enableGeneralEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableZombieEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableSkeletonEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableWitherSkeletonEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableScarceEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableRareEntityLootModifier;
+		public ModConfigSpec.BooleanValue enableEpicEntityLootModifier;
 
-		public ForgeConfigSpec.BooleanValue enableUncommonChestLootModifier;
-		public ForgeConfigSpec.BooleanValue enableScarceChestLootModifier;
-		public ForgeConfigSpec.BooleanValue enableRareChestLootModifier;
-		public ForgeConfigSpec.BooleanValue enableEpicChestLootModifier;
-		public ForgeConfigSpec.BooleanValue enableLegendaryChestLootModifier;
-		public ForgeConfigSpec.BooleanValue enableMythicalChestLootModifier;
+		public ModConfigSpec.BooleanValue enableUncommonChestLootModifier;
+		public ModConfigSpec.BooleanValue enableScarceChestLootModifier;
+		public ModConfigSpec.BooleanValue enableRareChestLootModifier;
+		public ModConfigSpec.BooleanValue enableEpicChestLootModifier;
+		public ModConfigSpec.BooleanValue enableLegendaryChestLootModifier;
+		public ModConfigSpec.BooleanValue enableMythicalChestLootModifier;
 
-		public ForgeConfigSpec.BooleanValue enableFishingJunkLootModifier;
-		public ForgeConfigSpec.BooleanValue enableFishingTreasureLootModifier;
+		public ModConfigSpec.BooleanValue enableFishingJunkLootModifier;
+		public ModConfigSpec.BooleanValue enableFishingTreasureLootModifier;
 
-		public Loot(final ForgeConfigSpec.Builder builder) {
+		public Loot(final ModConfigSpec.Builder builder) {
 			builder.comment(CATEGORY_DIV, " Loot properties", CATEGORY_DIV)
 					.push("loot");
 
@@ -163,7 +162,7 @@ public class Config extends AbstractConfig {
 		}
 	}
 
-	public static void mapEnableLootModifiers(CommentedConfig commentedConfig) {
+	public static void mapEnableLootModifiers() {
 		// map config values
 		enableLootModifiers.put("magictreasures:entities/general", Config.SERVER.loot.enableGeneralEntityLootModifier);
 		enableLootModifiers.put("magictreasures:entities/zombie", Config.SERVER.loot.enableZombieEntityLootModifier);
@@ -186,10 +185,10 @@ public class Config extends AbstractConfig {
 	 *
 	 */
 //	public static class Integration {
-//		public ForgeConfigSpec.ConfigValue<List<? extends String>> dimensionsWhiteList;
-//		public ForgeConfigSpec.BooleanValue  enableCurios;
+//		public ModConfigSpec.ConfigValue<List<? extends String>> dimensionsWhiteList;
+//		public ModConfigSpec.BooleanValue  enableCurios;
 //
-//		public Integration(final ForgeConfigSpec.Builder builder)	 {
+//		public Integration(final ModConfigSpec.Builder builder)	 {
 //			builder.comment(CATEGORY_DIV, " Integration properties", CATEGORY_DIV)
 //					.push("integration");
 //

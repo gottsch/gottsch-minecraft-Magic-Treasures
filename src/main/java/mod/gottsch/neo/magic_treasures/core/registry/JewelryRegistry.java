@@ -21,7 +21,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
-import mod.gottsch.neo.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
@@ -50,7 +50,7 @@ public class JewelryRegistry {
 	 */
 	public static void register(Item item) {		
 		ItemStack stack = new ItemStack(item);
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(c -> {
+		JewelryHandler.get(stack).ifPresent(c -> {
 			NAME_MAP.put(ModUtil.getName(item), item);
 
 			// get the stone

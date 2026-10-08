@@ -37,7 +37,7 @@ public class JewelryPliers extends Item {
 	}
 	
 	@Override
-	public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+	public void appendHoverText(ItemStack stack, TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);	
 		tooltip.add(Component.translatable(LangUtil.tooltip("jewelry_pliers")));
 	}
