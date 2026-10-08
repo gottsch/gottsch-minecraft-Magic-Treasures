@@ -59,7 +59,11 @@ public class HarmSpell extends CooldownSpell {
             double pz = player.getZ();
             double range = handler.modifyRange(getRange());
 
-            List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
+            // only target mobs that are not in their post-hit invulnerability ticks (vanilla rejects most damage while
+            // invulnerableTime > 10). if every mob in range was just hit, don't cast - no cost, no cooldown - and try next tick.
+            // NOTE once cast, the spell always costs mana, even if the mob resists or is immune to the damage.
+            List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range),
+                    mob -> mob.invulnerableTime <= 10);
             if (mobs.isEmpty()) {
                 return result;
             }

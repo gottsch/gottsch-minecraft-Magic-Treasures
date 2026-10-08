@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed jewelry in a second (or later) Curios slot of the same type not casting spells.
 - Fixed custom names and enchantments on jewelry being lost on the client and in creative mode.
 - Fixed spell priority sorting violating the comparator contract (equal priorities now keep their order).
+- Harm spells (Harm, Mind Jab, Mind Fist) no longer cast at mobs that are briefly invulnerable after being hit (ex. right after a melee hit), which wasted the spell's mana and cooldown. The spell waits until the mob can be hurt again, or targets another mob in range.
+- Skull Belt hidden from the creative tab (the Mana Well feature is not implemented yet).
 - Network protocol version bumped to 1.1 (client and server must both be updated).
 
 ## [1.3.0] - 2024-11-12
