@@ -73,6 +73,7 @@ public class SpeedSpell extends CooldownSpell {
 	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.speed.rate"),
+				MathUtil.r1d(modifyDuration(jewelry) / 20.0),
 				MathUtil.r1d(modifyCooldown(jewelry) / 20.0));
 	}
 

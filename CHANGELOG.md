@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed custom names and enchantments on jewelry being lost on the client and in creative mode.
 - Fixed spell priority sorting violating the comparator contract (equal priorities now keep their order).
 - Harm spells (Harm, Mind Jab, Mind Fist) no longer cast at mobs that are briefly invulnerable after being hit (ex. right after a melee hit), which wasted the spell's mana and cooldown. The spell waits until the mob can be hurt again, or targets another mob in range.
+- Players now get 2 Curios ring slots. Curios slots (necklace, ring, bracelet, belt) are now registered by datapack (`data/magictreasures/curios/`) instead of the deprecated IMC messages. The ring size uses Curios' SET operation, so other mods or packs that ask for more ring slots still get them.
+- Fixed the Speed spell tooltip on jewelry showing "%s" instead of its duration and cooldown.
+- Removed an unused Treasure2 import that broke compiling against Treasure2 4.x.
 - Skull Belt hidden from the creative tab (the Mana Well feature is not implemented yet).
 - Network protocol version bumped to 1.1 (client and server must both be updated).
 
