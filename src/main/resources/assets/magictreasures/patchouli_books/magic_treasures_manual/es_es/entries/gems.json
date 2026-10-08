@@ -1,0 +1,81 @@
+{
+  "name": "Gemas",
+  "icon": "minecraft:diamond",
+  "category": "magictreasures:guide",
+  "sortnum": 1,
+  "pages": [
+    "Las gemas o piedras se pueden engarzar en joyas y otros objetos colocando el objeto en la 1.ª ranura de un yunque y la gema en la 2.ª.$(br)Las gemas proporcionan maná y recargas adicionales a los objetos.$(br)Nota: las gemas no tienen por qué ser gemas de verdad. P. ej., un lingote de hierro podría configurarse como gema.",
+    {
+      "type": "patchouli:spotlight",
+      "title": "Topacio",
+      "item": {
+        "item": "magictreasures:topaz"
+      },
+      "text": "El topacio es la gema menos poderosa y la más común.$(br)$(l)Nivel:$() $(4)1$()$(br)$(l)Maná:$() $(1)25$()$(br)$(l)Recargas:$() $(6)1$()$(br)",
+      "anchor": "topaz"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Ónix",
+      "item": {
+        "item": "magictreasures:onyx"
+      },
+      "text": "$(l)Nivel:$() $(4)2$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Recargas:$() $(6)1$()$(br)",
+      "anchor": "onyx"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Diamante",
+      "item": {
+        "item": "minecraft:diamond"
+      },
+      "text": "El diamante es la única gema vanilla por defecto.$(br)$(l)Nivel:$() $(4)3$()$(br)$(l)Maná:$() $(1)75$()$(br)$(l)Recargas:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-2%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-2%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+2%$()",
+      "anchor": "diamond"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Jadeíta",
+      "item": {
+        "item": "magictreasures:jadeite"
+      },
+      "text": "La jadeíta sustituye a la esmeralda vanilla como gema para joyas.$(br)$(l)Nivel:$() $(4)4$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Recargas:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-4%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-4%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+4%$()",
+      "anchor": "jadeite"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Rubí",
+      "item": {
+        "item": "magictreasures:ruby"
+      },
+      "text": "$(l)Nivel:$() $(4)5$()$(br)$(l)Maná:$() $(1)125$()$(br)$(l)Recargas:$() $(6)3$()$(br)$(l)Coste de hechizo:$() $(3)-6%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-6%$()$(br)$(l)Efecto de hechizo:$() $(3)+6%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+6%$()$(br)$(l)Alcance de hechizo:$() $(3)+3%$()",
+      "anchor": "ruby"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Zafiro",
+      "item": {
+        "item": "magictreasures:sapphire"
+      },
+      "text": "$(l)Nivel:$() $(4)6$()$(br)$(l)Maná:$() $(1)150$()$(br)$(l)Recargas:$() $(6)4$()$(br)$(l)Coste de hechizo:$() $(3)-8%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-8%$()$(br)$(l)Efecto de hechizo:$() $(3)+10%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+8%$()$(br)$(l)Alcance de hechizo:$() $(3)+6%$()",
+      "anchor": "sapphire"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Perla blanca",
+      "item": {
+        "item": "magictreasures:white_pearl"
+      },
+      "text": "$(l)Nivel:$() $(4)5$()$(br)$(l)Maná:$() $(1)125$()$(br)$(l)Recargas:$() $(6)3$()$(br)$(l)Coste de hechizo:$() $(3)-6%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-6%$()$(br)$(l)Efecto de hechizo:$() $(3)+6%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+6%$()$(br)$(l)Alcance de hechizo:$() $(3)+3%$()",
+      "anchor": "white_pearl"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Perla negra",
+      "item": {
+        "item": "magictreasures:black_pearl"
+      },
+      "text": "$(l)Nivel:$() $(4)6$()$(br)$(l)Maná:$() $(1)150$()$(br)$(l)Recargas:$() $(6)4$()$(br)$(l)Coste de hechizo:$() $(3)-8%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-8%$()$(br)$(l)Efecto de hechizo:$() $(3)+10%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+8%$()$(br)$(l)Alcance de hechizo:$() $(3)+6%$()",
+      "anchor": "black_pearl"
+    }
+  ]
+}
