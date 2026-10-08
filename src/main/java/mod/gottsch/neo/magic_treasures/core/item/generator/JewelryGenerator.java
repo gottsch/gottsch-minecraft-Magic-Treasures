@@ -181,7 +181,7 @@ public class JewelryGenerator {
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         ISpell spell = ((SpellScroll)spellStack.getItem()).getSpell();
         if (handler.getMaxLevel() >= spell.getLevel()) {
-            handler.getSpells().add(spell.entity());
+            handler.addSpell(spell.entity());
             return Optional.of(destStack);
         }
         return Optional.empty();
@@ -208,7 +208,7 @@ public class JewelryGenerator {
         destHandler.setMana(handler.getMana());
         destHandler.setRecharges(handler.getRecharges());
         destHandler.setRepairs(handler.getRepairs());
-        destHandler.getSpells().addAll(handler.getSpells());
+        destHandler.setSpells(handler.getSpells());
         destHandler.setUses(handler.getUses());
     }
 
