@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-10-08
+
+### Changed
+- Fixed Epic chest loot modifier never firing (incorrect loot table ids, ex. `minecraft:desert_pyramid` instead of `minecraft:chests/desert_pyramid`).
+- Epic chest loot modifier now also applies to Abandoned Mineshaft, Ancient City and Ancient City Ice Box chests.
+- Fixed Epic entity loot table "legendar" rarity typo.
+- Removed Vex from the General entity loot modifier.
+- Updated GottschCore dependency to 2.6.0 (now the minimum required version).
+- Fixed rarity loot modifiers always giving the same item; items are now chosen at random.
+- Fixed fractional mana being truncated on save/load and client sync (jewelry and Mana Well).
+- Fixed hotbar jewelry (no Curios) only checking the first 4 hotbar slots instead of the first 4 jewelry items.
+- Fixed jewelry in a second (or later) Curios slot of the same type not casting spells.
+- Fixed custom names and enchantments on jewelry being lost on the client and in creative mode.
+- Fixed spell priority sorting violating the comparator contract (equal priorities now keep their order).
+- Network protocol version bumped to 1.1 (client and server must both be updated).
+
 ## [1.3.0] - 2024-11-12
 
 ### Changed

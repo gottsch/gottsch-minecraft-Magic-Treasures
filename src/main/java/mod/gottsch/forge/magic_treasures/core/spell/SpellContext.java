@@ -18,6 +18,8 @@ public class SpellContext {
 	private InteractionHand hand;
 	private String slotProviderId;
 	private String slot;
+	// index within the slot type (ex. a second ring slot)
+	private int slotIndex;
 	private ItemStack itemStack;
 	private IJewelryHandler capability;
 	private int index;
@@ -31,6 +33,7 @@ public class SpellContext {
 		this.hand = builder.hand;
 		this.slotProviderId = builder.slotProviderId;
 		this.slot = builder.slot;
+		this.slotIndex = builder.slotIndex;
 		this.itemStack = builder.itemStack;
 		this.capability = builder.capability;
 		this.index = builder.index;
@@ -40,14 +43,8 @@ public class SpellContext {
 	public static Comparator<SpellContext> priorityComparator = new Comparator<SpellContext>() {
 		@Override
 		public int compare(SpellContext p1, SpellContext p2) {
-			// use p1 < p2 because the sort should be ascending
-			if (p1.getEntity().getSpell().getPriority() < p2.getEntity().getSpell().getPriority()) {
-				// greater than
-				return 1;
-			} else {
-				// less than
-				return -1;
-			}
+			// higher priority spells execute first; equal priorities keep their gathered order
+			return Integer.compare(p2.getEntity().getSpell().getPriority(), p1.getEntity().getSpell().getPriority());
 		}
 	};
 
@@ -61,6 +58,10 @@ public class SpellContext {
 
 	public String getSlot() {
 		return slot;
+	}
+
+	public int getSlotIndex() {
+		return slotIndex;
 	}
 
 	public ItemStack getItemStack() {
@@ -79,6 +80,7 @@ public class SpellContext {
 		public InteractionHand hand;
 		public String slotProviderId;
 		public String slot;
+		public int slotIndex;
 		public ItemStack itemStack;
 		public IJewelryHandler capability;
 		public int index;

@@ -63,6 +63,7 @@ public class SpellUpdateS2C {
 	private InteractionHand hand;					//4
 	private String slot;										//5
 	private String slotProviderId;						//6
+	private int slotIndex;									//6b
 	private int index; 										//7
 	private double mana;									//8
 	private int uses;										//9
@@ -80,6 +81,7 @@ public class SpellUpdateS2C {
 		this.hand = context.getHand();			//4
 		this.slot = Objects.toString(context.getSlot(), "");				//5
 		this.slotProviderId = context.getSlotProviderId();									//6
+		this.slotIndex = context.getSlotIndex();									//6b
 		this.index = context.getIndex();			//7
 		// jewelry state properties
 		this.mana = context.getCapability().getMana();									//8
@@ -124,6 +126,7 @@ public class SpellUpdateS2C {
 			}
 			message.setSlot(buf.readUtf());											//5
 			message.setSlotProviderId(buf.readUtf());							//6
+			message.setSlotIndex(buf.readInt());									//6b
 			message.setIndex(buf.readInt());										//7
 			message.setMana(buf.readDouble());									//8
 			message.setUses(buf.readInt());											//9
@@ -161,6 +164,7 @@ public class SpellUpdateS2C {
 		buf.writeUtf(handAsString);													//4
 		buf.writeUtf(Objects.toString(slot, ""));					//5
 		buf.writeUtf(Objects.toString(slotProviderId, ""));	//6
+		buf.writeInt(slotIndex);															//6b
 		buf.writeInt(index);																//7
 		buf.writeDouble(this.mana);													//8
 		buf.writeInt(this.uses);															//9
@@ -234,8 +238,10 @@ public class SpellUpdateS2C {
 						Optional<ICurioStacksHandler> stacksOptional = itemHandler.getStacksHandler(message.getSlot());
 						stacksOptional.ifPresent(stacksHandler -> {
 							MagicTreasures.LOGGER.debug("# of slots in curios handler -> {}", stacksHandler.getStacks().getSlots());
-							ItemStack curiosStack = stacksHandler.getStacks().getStackInSlot(0);
-							updateJewelry(player, curiosStack, message);
+							if (message.getSlotIndex() >= 0 && message.getSlotIndex() < stacksHandler.getStacks().getSlots()) {
+								ItemStack curiosStack = stacksHandler.getStacks().getStackInSlot(message.getSlotIndex());
+								updateJewelry(player, curiosStack, message);
+							}
 						});
 					});
 				}
@@ -339,6 +345,14 @@ public class SpellUpdateS2C {
 		this.slotProviderId = slotProviderId;
 	}
 
+	public int getSlotIndex() {
+		return slotIndex;
+	}
+
+	public void setSlotIndex(int slotIndex) {
+		this.slotIndex = slotIndex;
+	}
+
 	public int getIndex() {
 		return index;
 	}
@@ -380,6 +394,7 @@ public class SpellUpdateS2C {
 				", hand=" + hand +
 				", slot='" + slot + '\'' +
 				", slotProviderId='" + slotProviderId + '\'' +
+				", slotIndex=" + slotIndex +
 				", index=" + index +
 				", mana=" + mana +
 				", uses=" + uses +

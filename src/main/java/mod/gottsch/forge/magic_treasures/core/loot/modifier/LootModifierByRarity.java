@@ -108,10 +108,10 @@ public class LootModifierByRarity extends LootModifier {
 				lootList.add(MagicTreasuresItems.NECKLACE_RECIPE.get());
 //				lootList.add(MagicTreasuresItems.BELT_RECIPE.get());
 			}
-			// grab the loot from the loot list
-			for (int index = 0; index < Math.min(count, lootList.size()); index++) {
-				ItemStack outputStack = new ItemStack(lootList.get(index));
-				generatedLoot.add(outputStack);
+			// grab random loot from the loot list (without replacement)
+			for (int index = 0; index < count && !lootList.isEmpty(); index++) {
+				Item item = lootList.remove(context.getRandom().nextInt(lootList.size()));
+				generatedLoot.add(new ItemStack(item));
 			}
 		}
 		return generatedLoot;

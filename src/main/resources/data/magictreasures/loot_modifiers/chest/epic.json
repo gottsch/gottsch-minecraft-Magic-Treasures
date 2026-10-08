@@ -1,21 +1,34 @@
 {
   "conditions" : [ {
     "condition" : "minecraft:any_of",
-    "terms" : [ {
+    "terms" : [
+      {
+        "condition" : "forge:loot_table_id",
+        "loot_table_id" : "minecraft:chests/abandoned_mineshaft"
+      },
+      {
+        "condition" : "forge:loot_table_id",
+        "loot_table_id" : "minecraft:chests/ancient_city"
+      },
+      {
+        "condition" : "forge:loot_table_id",
+        "loot_table_id" : "minecraft:chests/ancient_city_ice_box"
+      },
+      {
       "condition" : "forge:loot_table_id",
-      "loot_table_id" : "minecraft:desert_pyramid"
+      "loot_table_id" : "minecraft:chests/desert_pyramid"
     }, {
       "condition" : "forge:loot_table_id",
-      "loot_table_id" : "minecraft:igloo_chest"
+      "loot_table_id" : "minecraft:chests/igloo_chest"
     }, {
       "condition" : "forge:loot_table_id",
-      "loot_table_id" : "minecraft:jungle_temple"
+      "loot_table_id" : "minecraft:chests/jungle_temple"
     }, {
       "condition" : "forge:loot_table_id",
-      "loot_table_id" : "minecraft:shipwrech_treasure"
+      "loot_table_id" : "minecraft:chests/shipwreck_treasure"
     }, {
       "condition" : "forge:loot_table_id",
-      "loot_table_id" : "minecraft:under_water_ruin_big"
+      "loot_table_id" : "minecraft:chests/under_water_ruin_big"
     } ]
   } ],
   "count" : 2,

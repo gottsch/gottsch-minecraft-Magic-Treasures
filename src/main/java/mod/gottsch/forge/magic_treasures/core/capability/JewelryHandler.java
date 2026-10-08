@@ -590,10 +590,10 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
                 this.maxLevel = compound.getInt(MAX_LEVEL);
             }
             if (compound.contains(MAX_MANA)) {
-                this.maxMana = compound.getInt(MAX_MANA);
+                this.maxMana = compound.getDouble(MAX_MANA);
             }
             if (compound.contains(MANA)) {
-                this.mana = compound.getInt(MANA);
+                this.mana = compound.getDouble(MANA);
             }
             if (compound.contains(MAX_REPAIRS)) {
                 this.maxRepairs = compound.getInt(MAX_REPAIRS);

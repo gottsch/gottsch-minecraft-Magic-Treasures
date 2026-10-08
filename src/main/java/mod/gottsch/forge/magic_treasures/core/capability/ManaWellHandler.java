@@ -63,10 +63,10 @@ public class ManaWellHandler implements IManaWellHandler, INBTSerializable<Tag> 
     public void deserializeNBT(Tag tag) {
         if (tag instanceof CompoundTag compound) {
             if (compound.contains(MAX_MANA)) {
-                this.maxMana = compound.getInt(MAX_MANA);
+                this.maxMana = compound.getDouble(MAX_MANA);
             }
             if (compound.contains(MANA)) {
-                this.mana = compound.getInt(MANA);
+                this.mana = compound.getDouble(MANA);
             }
             if (compound.contains(RECHARGES)) {
                 this.recharges = compound.getInt(RECHARGES);

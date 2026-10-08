@@ -62,7 +62,7 @@
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["legendar", "mythical"]
+              "rarities": ["legendary", "mythical"]
             }
           ]
         },

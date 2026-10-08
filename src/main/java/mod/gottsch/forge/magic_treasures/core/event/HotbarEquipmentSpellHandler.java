@@ -45,7 +45,8 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 		for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
 			hotbarSlotStr.set(String.valueOf(hotbarSlot));
 			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
-			if (inventoryStack != player.getItemInHand(InteractionHand.MAIN_HAND)) {
+			if (inventoryStack != player.getItemInHand(InteractionHand.MAIN_HAND)
+					&& inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
 				inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
 
 					AtomicInteger index = new AtomicInteger();

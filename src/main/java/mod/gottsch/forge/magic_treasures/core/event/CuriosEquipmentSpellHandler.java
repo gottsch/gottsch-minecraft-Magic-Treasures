@@ -57,7 +57,10 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 			CURIOS_SLOTS.forEach(slot -> {
 				Optional<ICurioStacksHandler> stacksOptional = itemHandler.getStacksHandler(slot);
 				stacksOptional.ifPresent(stacksHandler -> {
-					ItemStack curiosStack = stacksHandler.getStacks().getStackInSlot(0);
+					// check every slot of this type (ex. players can have more than one ring slot)
+					for (int slotIndex = 0; slotIndex < stacksHandler.getStacks().getSlots(); slotIndex++) {
+					final int curiosSlotIndex = slotIndex;
+					ItemStack curiosStack = stacksHandler.getStacks().getStackInSlot(slotIndex);
 					curiosStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
 
 							AtomicInteger index = new AtomicInteger();
@@ -72,6 +75,7 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 								SpellContext curiosContext = new SpellContext.Builder().with($ -> {
 									$.slotProviderId = CURIOS_ID;
 									$.slot = slot;
+									$.slotIndex = curiosSlotIndex;
 									$.itemStack = curiosStack;
 									$.capability = cap;
 									$.index = index.get();
@@ -81,6 +85,7 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 							}
 
 					});
+					}
 				});
 			});
 		});
