@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed hotbar jewelry (no Curios) only checking the first 4 hotbar slots instead of the first 4 jewelry items.
 - Fixed jewelry in a second (or later) Curios slot of the same type not casting spells.
 - Fixed custom names and enchantments on jewelry being lost on the client and in creative mode.
+- Fixed named jewelry (ex. Silbro's Ring of Vitality) gaining duplicate copies of its spells each time it was repaired or recharged at an anvil.
 - Fixed spell priority sorting violating the comparator contract (equal priorities now keep their order).
 - Harm spells (Harm, Mind Jab, Mind Fist) no longer cast at mobs that are briefly invulnerable after being hit (ex. right after a melee hit), which wasted the spell's mana and cooldown. The spell waits until the mob can be hurt again, or targets another mob in range.
 - Curios slots (necklace, ring, bracelet, belt) are now registered by datapack (`data/magictreasures/curios/`) instead of the deprecated IMC messages. Players still get 1 ring slot. Modpacks can add more with their own `curios/slots/ring.json` (Curios uses the largest size).
