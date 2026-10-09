@@ -291,6 +291,7 @@
   "item.magictreasures.iron_white_pearl_necklace": "Железн White Pearl ожерелье с белым жемчугом",
   "item.magictreasures.iron_white_pearl_ring": "Железн White Pearl кольцо с белым жемчугом",
   "item.magictreasures.jadeite": "Жадеит",
+  "item.magictreasures.jewelry_pliers": "Ювелирные щипцы",
   "item.magictreasures.journeyman_bands": "Journeyman's Bands",
   "item.magictreasures.lesser_healing_scroll": "Scroll Of Lesser Healing",
   "item.magictreasures.lords_bone_black_pearl_necklace": "Lords Костяной Black Pearl ожерелье с чёрным жемчугом",
@@ -602,5 +603,5 @@
   "tooltip.magictreasures.spell.water_breathing.rate": "Даёт водное дыхание на %s с. Перезарядка: %s с.",
   "tooltip.magictreasures.spell.wither_resistance.rate": "Блокирует %s урона от иисушения.",
   "tooltip.magictreasures.spell_scroll.usage": "Положите на наковальню вместе с бижутерией чтобы соединить их.",
-  "tooltip.magictreasures.tools.jewelry_pliers": "Необходим для извлечения драгоценных камней из бижутерии."
+  "tooltip.magictreasures.tools.jewelry_pliers": "Соедините с украшением на верстаке, чтобы извлечь камень. Украшение будет уничтожено."
 }

@@ -291,6 +291,7 @@
   "item.magictreasures.iron_white_pearl_necklace": "Iron White Pearl Necklace",
   "item.magictreasures.iron_white_pearl_ring": "Iron White Pearl Ring",
   "item.magictreasures.jadeite": "Jadeite",
+  "item.magictreasures.jewelry_pliers": "Jewelry Pliers",
   "item.magictreasures.journeyman_bands": "Journeyman's Bands",
   "item.magictreasures.lesser_healing_scroll": "Scroll Of Lesser Healing",
   "item.magictreasures.lords_bone_black_pearl_necklace": "Lords Bone Black Pearl Necklace",
@@ -602,5 +603,5 @@
   "tooltip.magictreasures.spell.water_breathing.rate": "Bestows Water Breathing effect for %s seconds. Cooldown: %s seconds.",
   "tooltip.magictreasures.spell.wither_resistance.rate": "Resists %s wither damage.",
   "tooltip.magictreasures.spell_scroll.usage": "Place on an anvil with Magic Treasures jewelry to combine.",
-  "tooltip.magictreasures.tools.jewelry_pliers": "Required for removing gemstones from jewelry."
+  "tooltip.magictreasures.tools.jewelry_pliers": "Craft with jewelry to remove its gem. The jewelry is destroyed."
 }

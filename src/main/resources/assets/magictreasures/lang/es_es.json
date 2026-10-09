@@ -603,5 +603,5 @@
   "tooltip.magictreasures.spell.water_breathing.rate": "Otorga el efecto Respiración acuática durante %s segundos. Enfriamiento: %s segundos.",
   "tooltip.magictreasures.spell.wither_resistance.rate": "Resiste %s del daño de Wither.",
   "tooltip.magictreasures.spell_scroll.usage": "Colócalo en un yunque junto con una joya de Magic Treasures para combinarlos.",
-  "tooltip.magictreasures.tools.jewelry_pliers": "Necesarios para quitar las gemas de las joyas."
+  "tooltip.magictreasures.tools.jewelry_pliers": "Combínalos con una joya en la mesa de crafteo para quitarle la gema. La joya se destruye."
 }

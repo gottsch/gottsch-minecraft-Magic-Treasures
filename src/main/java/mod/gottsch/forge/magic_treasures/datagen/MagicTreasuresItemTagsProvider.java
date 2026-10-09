@@ -134,8 +134,8 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 
 		// jewelry tools
 		tag(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)
-				.addTag(Tags.Items.SHEARS)
-				.add(Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE, Items.NETHERITE_AXE);
+				// shears only: the anvil uses up the tool, so no axes
+				.addTag(Tags.Items.SHEARS);
 
 		/*
 		 *  process all items.

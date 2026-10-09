@@ -130,7 +130,8 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("divider"), "--------------------");
 
         // tools
-        add(LangUtil.tooltip("tools.jewelry_pliers"), "Required for removing gemstones from jewelry.");
+        add(MagicTreasuresItems.JEWELRY_PLIERS.get(), "Jewelry Pliers");
+        add(LangUtil.tooltip("tools.jewelry_pliers"), "Craft with jewelry to remove its gem. The jewelry is destroyed.");
 
         // gemstones
         add(LangUtil.tooltip("gemstone.usage"), "Place on an anvil with Magic Treasures jewelry to combine.");
