@@ -17,6 +17,7 @@
  */
 package mod.gottsch.forge.magic_treasures.core.client.particle;
 
+import mod.gottsch.forge.magic_treasures.core.config.Config;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
@@ -129,6 +130,11 @@ public class ArcaneSparkParticle extends TextureSheetParticle {
 		@Override
 		public Particle createParticle(SimpleParticleType type, ClientLevel level,
 									   double x, double y, double z, double dx, double dy, double dz) {
+			// the server sends spell particles to everyone nearby; each player chooses whether to draw them.
+			// returning null tells the particle engine to skip it.
+			if (!Config.CLIENT.enableSpellParticles.get()) {
+				return null;
+			}
 			return new ArcaneSparkParticle(level, x, y, z, dx, dy, dz, this.sprites);
 		}
 	}

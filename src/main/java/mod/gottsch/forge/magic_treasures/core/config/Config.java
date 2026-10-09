@@ -38,12 +38,15 @@ public class Config extends AbstractConfig {
 	// TODO change to the new Echelons style of config setup
 	protected static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
 	protected static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+	protected static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
 	
 	public static ForgeConfigSpec COMMON_CONFIG;
 	public static ForgeConfigSpec SERVER_CONFIG;
+	public static ForgeConfigSpec CLIENT_CONFIG;
 	
 	public static final Logging LOGGING;
 	public static final ServerConfig SERVER;
+	public static final ClientConfig CLIENT;
 	public static Config instance = new Config();
 
 	public static final Map<String, ForgeConfigSpec.BooleanValue> enableLootModifiers = new HashMap<>();
@@ -54,6 +57,9 @@ public class Config extends AbstractConfig {
 		
 		SERVER = new ServerConfig(SERVER_BUILDER);
 		SERVER_CONFIG = SERVER_BUILDER.build();
+
+		CLIENT = new ClientConfig(CLIENT_BUILDER);
+		CLIENT_CONFIG = CLIENT_BUILDER.build();
 	}
 
 	/*
@@ -67,6 +73,26 @@ public class Config extends AbstractConfig {
 		public ServerConfig(ForgeConfigSpec.Builder builder) {
 			loot = new Loot(builder);
 //			integration = new Integration(builder);
+		}
+	}
+
+	/*
+	 * Per-player display options. Only read on the client.
+	 */
+	public static class ClientConfig {
+		public final ForgeConfigSpec.BooleanValue enableSpellParticles;
+		public final ForgeConfigSpec.BooleanValue showTooltipIcon;
+
+		public ClientConfig(ForgeConfigSpec.Builder builder) {
+			builder.comment(CATEGORY_DIV, " Client properties", CATEGORY_DIV).push("client");
+			enableSpellParticles = builder
+					.comment(" Show the spark particles spells make when they cast (Harm, Drain, Reflection, Mana Shield, etc.).",
+							" Only affects what this player sees.")
+					.define("enableSpellParticles", true);
+			showTooltipIcon = builder
+					.comment(" Show the item's icon beside its name in Magic Treasures tooltips.")
+					.define("showTooltipIcon", true);
+			builder.pop();
 		}
 	}
 

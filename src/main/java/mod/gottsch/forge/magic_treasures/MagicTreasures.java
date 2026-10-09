@@ -55,6 +55,7 @@ public class MagicTreasures {
 		// TODO change to the new Echelons style of config setup
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
 
 		// force load of static blocks
 		MagicTreasuresSpells.init();
