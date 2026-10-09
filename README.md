@@ -75,7 +75,7 @@ Note: Silver ingots are only used to make jewelry. There are no Silver swords or
 
 | Minecraft | Loader | Magic Treasures | Branch | GottschCore | Treasure2 (optional) |
 |---|---|---|---|---|---|
-| 1.21.1 | NeoForge 21.1.117+ | 2.x | `neoforge-1.21.1-main` | 2.7.0+ | 5.0.0+ |
+| 1.21.1 | NeoForge 21.1.117+ | 1.3.2+ | `neoforge-1.21.1-main` | 2.7.0+ | 5.0.0+ |
 | 1.20.1 | Forge 47+ | 1.3.x | `1.20.1-main` | 2.6.0+ | 3.8.1+ |
 
 Jewelry from a 1.20.1 world doesn't keep its Magic Treasures data in 1.21.1. See the [changelog](CHANGELOG.md).
