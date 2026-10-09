@@ -3,7 +3,7 @@
     "condition" : "minecraft:any_of",
     "terms" : [ {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:abandoned_mineshaft"
+      "loot_table_id" : "minecraft:chests/abandoned_mineshaft"
     } ]
   } ],
   "count" : 2,

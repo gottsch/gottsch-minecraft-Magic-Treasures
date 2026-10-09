@@ -3,26 +3,26 @@
     "condition" : "minecraft:any_of",
     "terms" : [ {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:bastion_bridge"
+      "loot_table_id" : "minecraft:chests/bastion_bridge"
     }, {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:bastion_other"
+      "loot_table_id" : "minecraft:chests/bastion_other"
     }, {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:buried_treasure"
+      "loot_table_id" : "minecraft:chests/buried_treasure"
     }, {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:nether_bridge"
+      "loot_table_id" : "minecraft:chests/nether_bridge"
     }, {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:pillager_outpost"
+      "loot_table_id" : "minecraft:chests/pillager_outpost"
     }, {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:simple_dungeon"
+      "loot_table_id" : "minecraft:chests/simple_dungeon"
     }
     , {
       "condition" : "neoforge:loot_table_id",
-      "loot_table_id" : "minecraft:underwater_ruin_small"
+      "loot_table_id" : "minecraft:chests/underwater_ruin_small"
     } ]
   } ],
   "count" : 2,
