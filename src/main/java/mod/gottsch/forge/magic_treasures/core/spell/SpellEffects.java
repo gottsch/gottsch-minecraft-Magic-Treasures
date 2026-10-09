@@ -48,10 +48,14 @@ public final class SpellEffects {
             return;
         }
         RandomSource random = serverLevel.getRandom();
-        int steps = Math.max(8, (int) (a.distanceTo(b) * 3));
+        // about 3 nodes per block, so a short (melee-range) arc stays a thin line instead of a blob of sparks,
+        // and the zig-zag shrinks with it
+        double length = a.distanceTo(b);
+        int steps = Math.max(3, (int) Math.round(length * 3));
+        double maxJitter = Math.min(0.35D, length * 0.12D);
         for (int i = 0; i <= steps; i++) {
             double t = i / (double) steps;
-            double jitter = 0.35D * Math.sin(Math.PI * t);
+            double jitter = maxJitter * Math.sin(Math.PI * t);
             serverLevel.sendParticles(particle,
                     a.x + (b.x - a.x) * t + (random.nextDouble() - 0.5D) * jitter,
                     a.y + (b.y - a.y) * t + (random.nextDouble() - 0.5D) * jitter,
@@ -75,5 +79,21 @@ public final class SpellEffects {
     /** {@link #burst} sized to an entity, at its chest. */
     public static void burst(Level level, Entity entity, ParticleOptions particle, int count) {
         burst(level, chest(entity), particle, count, entity.getBbWidth() * 0.4);
+    }
+
+    /**
+     * A flat ring of particles around an entity at chest height, like a shield ripple. Reads clearly even
+     * when a mob is right beside the player, where an arc would be a blob. Does nothing on the client.
+     */
+    public static void ring(Level level, Entity entity, ParticleOptions particle, double radius, int count) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        Vec3 c = chest(entity);
+        for (int i = 0; i < count; i++) {
+            double angle = 2 * Math.PI * i / count;
+            serverLevel.sendParticles(particle, c.x + Math.cos(angle) * radius, c.y, c.z + Math.sin(angle) * radius,
+                    1, 0.0D, 0.0D, 0.0D, 0.0D);
+        }
     }
 }
