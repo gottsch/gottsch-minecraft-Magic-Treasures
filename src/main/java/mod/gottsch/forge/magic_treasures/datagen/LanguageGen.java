@@ -210,7 +210,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.name.mana_tower_shield"), "Mana Tower Shield");
         add(LangUtil.tooltip("spell.name.mana_pavise_shield"), "Mana Pavise Shield");
 
-        add(LangUtil.tooltip("spell.mana_shield.rate"), "Absorbs %s damage.");
+        add(LangUtil.tooltip("spell.mana_shield.rate"), "Absorbs %s damage. Cooldown: %s seconds.");
 
         ///// spectral armor /////
         add(LangUtil.tooltip("spell.name.ghostly_armor"), "Ghostly Armor");
@@ -252,7 +252,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.name.reflection"), "Reflection");
         add(LangUtil.tooltip("spell.name.crushing_response"), "Crushing Response");
 
-        add(LangUtil.tooltip("spell.reflection.rate"), "Reflects %s damage back onto mob.");
+        add(LangUtil.tooltip("spell.reflection.rate"), "Reflects %s damage back onto mob. Cooldown: %s seconds.");
 
         ///// paladin strike /////
         add(LangUtil.tooltip("spell.name.paladin_strike"), "Paladin Strike");

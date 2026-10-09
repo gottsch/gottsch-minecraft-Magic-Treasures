@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - Unreleased
+
+### Changed
+- Fixed Mana Shield and Mana Tower Shield letting through too little damage when the jewelry ran short of mana. The damage the shield couldn't pay for replaced the damage it passes through instead of adding to it.
+- Fixed Drain ignoring the jewelry's range modifier when finding mobs. The tooltip already showed the modified range.
+- Mana Shield and Reflection tooltips now show their cooldown.
+
 ## [1.3.2] - 2026-10-09
 
 ### Changed

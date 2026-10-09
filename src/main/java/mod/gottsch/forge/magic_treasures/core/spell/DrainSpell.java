@@ -90,7 +90,7 @@ public class DrainSpell extends Spell {
 				double pz = player.getZ();
 
 				// calculate the new amount
-				double range = getRange();
+				double range = handler.modifyRange(getRange());
 				AtomicDouble drainedHealth = new AtomicDouble(0);
 				List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
 				if (mobs.isEmpty()) {
