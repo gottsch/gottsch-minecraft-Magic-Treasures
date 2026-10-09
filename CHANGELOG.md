@@ -13,6 +13,7 @@ First release for NeoForge 1.21.1, ported from Forge 1.20.1 version 1.3.1 (inclu
 - Ported to Minecraft 1.21.1 / NeoForge 21.1.117+.
 - Requires GottschCore for NeoForge 1.21.1, version 2.7.0 or later.
 - Optional integrations now target Treasure2 5.0.0+ and Curios 9.x for NeoForge 1.21.1.
+- Patchouli (for the Magic Treasures Guide book) is now listed as an optional dependency, so it shows in the mod list.
 - Jewelry data (mana, uses, repairs, recharges, stone, spells and cooldowns) is now stored as an item data component (`magictreasures:jewelry`) instead of a Forge capability.
   NOTE: jewelry from a 1.20.1 world does not keep its Magic Treasures data. It resets to that item's default stats and spells, so spells added with scrolls are lost.
 - Jewelry now syncs to the client through Curios and vanilla item syncing. The custom spell update packet was removed.
