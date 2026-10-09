@@ -205,6 +205,9 @@ public class Config extends AbstractConfig {
 		enableLootModifiers.put("epic", Config.SERVER.loot.enableEpicChestLootModifier);
 		enableLootModifiers.put("legendary", Config.SERVER.loot.enableLegendaryChestLootModifier);
 		enableLootModifiers.put("mythical", Config.SERVER.loot.enableMythicalChestLootModifier);
+		// fishing modifiers name their option with "config" in their json (they share the default modifier type)
+		enableLootModifiers.put("fishing_junk", Config.SERVER.loot.enableFishingJunkLootModifier);
+		enableLootModifiers.put("fishing_treasure", Config.SERVER.loot.enableFishingTreasureLootModifier);
 	}
 
 	/*

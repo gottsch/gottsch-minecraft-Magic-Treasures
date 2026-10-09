@@ -29,6 +29,7 @@ import mod.gottsch.neo.magic_treasures.core.world.feature.MagicTreasuresConfigur
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import mod.gottsch.neo.magic_treasures.core.recipe.MagicTreasuresRecipes;
+import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 
 /**
  * Created by Mark Gottschling on 5/3/2023
@@ -56,6 +57,7 @@ public class Registration {
         MagicTreasuresLootFunctions.LOOT_FUNCTIONS.register(eventBus);
         MagicTreasuresParticles.register(eventBus);
         MagicTreasuresRecipes.register(eventBus);
+        MagicTreasuresCriteria.register(eventBus);
         MagicTreasuresCreativeModeTabs.TABS.register(eventBus);
     }
 }

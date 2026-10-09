@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
 
 /**
  *
@@ -89,5 +90,33 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 			});
 		});
 		return contexts;
+	}
+
+	/** the slots that make a full set */
+	private static final List<String> FULL_SET_SLOTS = Arrays.asList("ring", "necklace", "bracelet");
+
+	@Override
+	public boolean isWearingFullSet(ServerPlayer player) {
+		Optional<ICuriosItemHandler> inventory = CuriosApi.getCuriosInventory(player);
+		if (inventory.isEmpty()) {
+			return false;
+		}
+		for (String slot : FULL_SET_SLOTS) {
+			Optional<ICurioStacksHandler> stacks = inventory.get().getStacksHandler(slot);
+			if (stacks.isEmpty() || !hasJewelry(stacks.get())) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static boolean hasJewelry(ICurioStacksHandler stacksHandler) {
+		for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
+			ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
+			if (!stack.isEmpty() && stack.getItem() instanceof Jewelry) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

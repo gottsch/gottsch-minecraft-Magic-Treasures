@@ -6,5 +6,6 @@
   "count" : 1,
   "rarity": "scarce",
   "chance": 0.10,
+  "config": "fishing_treasure",
   "type" : "magictreasures:default"
 }

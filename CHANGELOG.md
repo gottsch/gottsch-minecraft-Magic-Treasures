@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Magic Treasures item tooltips now show the item, at double size, beside its name.
 - Client config (`magictreasures-client.toml`) with `enableSpellParticles` and `showTooltipIcon`, both on by default. Each player chooses for themselves, even on a server.
 - Jewelry Pliers (2 Iron Ingots + 1 Iron Nugget, 64 uses). Craft them with a piece of jewelry that has a gem to get the gem back; the jewelry is destroyed. Removing a gem at the anvil still keeps the jewelry and destroys the gem, so you choose which to keep.
+- Advancements: a Magic Treasures tab with Set in Stone (add a gem), Spellbound (add a spell), Second Wind (recharge), Delicate Work (remove a gem with pliers) and Fully Adorned (wear a ring, necklace and bracelet at once).
 
 ### Changed
 - Fixed Mana Shield and Mana Tower Shield letting through too little damage when the jewelry ran short of mana. The damage the shield couldn't pay for replaced the damage it passes through instead of adding to it.
@@ -19,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Magic Resistance (Magic Ward, Sal'andaar's Magic Coat) now resists all magic damage: Harming potions, witch potions, evoker fangs and poison. Before, it only worked while the player was poisoned.
 - Fixed Reflection and Crushing Response hitting every creature in range, including villagers, iron golems, pets and farm animals, and firing on any damage (falls, fire, drowning). They now reflect only onto the mob that hurt you (the shooter, for arrows), if it's within range, and damage with no attacker doesn't trigger them or cost mana.
 - Only shears remove a gem at the anvil now. Axes are no longer in the `magictreasures:tools/stone_removal` tag, because the anvil uses up the tool and it was easy to lose a good axe.
+- Fixed fishing junk never giving Magic Treasures loot, and the two fishing options in the server config doing nothing. `enableFishingJunkChestLootModifier` and `enableFishingTreasureChestLootModifier` now control the fishing loot (before, fishing treasure followed the Scarce chest option).
+- License metadata now says GNU LGPL v3, matching LICENSE.txt and the source headers (it said GPL v3).
 - Harm, Mind Jab and Mind Fist play a sound when they cast, and target the nearest mob in range instead of an arbitrary one.
 - Passive spells now show when they work, with new glowing spark particles: Harm, Mind Jab and Mind Fist (violet arc to the mob), Drain (crimson arc from each drained mob), Reflection (cyan arc to each mob hit), Mana Shield and Magic Resistance (blue), Fire Resistance (orange), Wither Resistance and Spectral Armor (pale ash), Paladin Strike (gold, on the struck mob) and Cheat Death (big gold burst plus the totem sound). Healing shows small hearts. The sparks are adapted from gottsch's Monster Manual.
 - Rebalanced Harm, Mind Jab and Mind Fist so they strike mobs as they approach instead of only ones already in melee range. Damage: 2 / 3 / 4 to 3 / 4.5 / 6. Range: 2 / 2.5 / 3 to 4 / 5 / 6 blocks. Cooldown and cost are unchanged.

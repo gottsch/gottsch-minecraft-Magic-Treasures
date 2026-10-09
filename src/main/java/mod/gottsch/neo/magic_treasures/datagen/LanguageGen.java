@@ -131,6 +131,20 @@ public class LanguageGen extends LanguageProvider {
 
         // tools
         add(MagicTreasuresItems.JEWELRY_PLIERS.get(), "Jewelry Pliers");
+
+        // advancements
+        add("advancements.magictreasures.root.title", "Magic Treasures");
+        add("advancements.magictreasures.root.description", "Find a piece of magic jewelry");
+        add("advancements.magictreasures.set_in_stone.title", "Set in Stone");
+        add("advancements.magictreasures.set_in_stone.description", "Set a gem into jewelry at an anvil");
+        add("advancements.magictreasures.spellbound.title", "Spellbound");
+        add("advancements.magictreasures.spellbound.description", "Imbue jewelry with a spell scroll at an anvil");
+        add("advancements.magictreasures.second_wind.title", "Second Wind");
+        add("advancements.magictreasures.second_wind.description", "Recharge jewelry at an anvil");
+        add("advancements.magictreasures.delicate_work.title", "Delicate Work");
+        add("advancements.magictreasures.delicate_work.description", "Pull a gem out of jewelry with Jewelry Pliers");
+        add("advancements.magictreasures.fully_adorned.title", "Fully Adorned");
+        add("advancements.magictreasures.fully_adorned.description", "Wear a magic ring, necklace and bracelet at once");
         add(LangUtil.tooltip("tools.jewelry_pliers"), "Craft with jewelry to remove its gem. The jewelry is destroyed.");
 
         // gemstones

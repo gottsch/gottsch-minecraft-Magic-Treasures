@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:set_in_stone",
+  "display": {
+    "icon": {
+      "id": "magictreasures:jewelry_pliers"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.delicate_work.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.delicate_work.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "extract_gem": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "extract_gem"
+      }
+    }
+  }
+}
