@@ -67,7 +67,13 @@ public class ReflectionSpell extends CooldownSpell {
 				}
 				boolean flag = attacker.hurt(world.damageSources().magic(), (float) reflectedAmount);
 				MagicTreasures.LOGGER.debug("reflected damage {} onto mob -> {} was successful -> {}", reflectedAmount, attacker.getName(), flag);
-				SpellEffects.arc(world, player, attacker, MagicTreasuresParticles.SPARK_CYAN.get());
+				// a ripple around the player and a burst on the attacker read at melee range; add the arc only when
+				// the attacker is far enough away for it to be a visible line
+				SpellEffects.ring(world, player, MagicTreasuresParticles.SPARK_CYAN.get(), 0.9, 16);
+				SpellEffects.burst(world, attacker, MagicTreasuresParticles.SPARK_CYAN.get(), 6);
+				if (player.distanceTo(attacker) > 2.5F) {
+					SpellEffects.arc(world, player, attacker, MagicTreasuresParticles.SPARK_CYAN.get());
+				}
 
 				applyCost(world, random, coords, context, Math.min(modifySpellCost(jewelry), reflectedAmount));
 

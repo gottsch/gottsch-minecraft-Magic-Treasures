@@ -61,7 +61,7 @@ public class ArcaneSparkParticle extends TextureSheetParticle {
 		// long enough to actually register the bolt (a too-short flash was invisible mid-swing),
 		// still snappy enough to read as lightning rather than a lingering mote
 		this.lifetime = 10 + this.random.nextInt(8);  // 10–17 ticks (~0.5–0.85s)
-		this.quadSize = 0.32F + this.random.nextFloat() * 0.14F;
+		this.quadSize = 0.22F + this.random.nextFloat() * 0.10F;  // ~70% of GMM's spark: spell sparks sit close to the player
 		// a tiny crackle of motion around the spawn point (plus whatever tiny seed velocity was passed)
 		this.xd = dx + (this.random.nextDouble() - 0.5D) * 0.02D;
 		this.yd = dy + (this.random.nextDouble() - 0.5D) * 0.02D;
