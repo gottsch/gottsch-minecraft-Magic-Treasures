@@ -17,14 +17,16 @@
  */
 package mod.gottsch.forge.magic_treasures.core.loot;
 
+import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.loot.function.ImbueRandomly;
 import mod.gottsch.forge.magic_treasures.core.loot.function.RandomGemstone;
 import mod.gottsch.forge.magic_treasures.core.loot.function.RandomJewelry;
 import mod.gottsch.forge.magic_treasures.core.loot.function.RandomSpell;
-import mod.gottsch.forge.magic_treasures.core.util.ModUtil;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 /**
  * 
@@ -32,29 +34,19 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
  *
  */
 public class MagicTreasuresLootFunctions {
+	public static final DeferredRegister<LootItemFunctionType> LOOT_FUNCTIONS =
+			DeferredRegister.create(Registries.LOOT_FUNCTION_TYPE, MagicTreasures.MOD_ID);
 
-	public static LootItemFunctionType RANDOM_GEMSTONE;
-	public static LootItemFunctionType RANDOM_JEWELRY;
-	public static LootItemFunctionType RANDOM_SPELL;
-	public static LootItemFunctionType IMBUE_RANDOMLY;
+	public static final RegistryObject<LootItemFunctionType> RANDOM_GEMSTONE =
+			LOOT_FUNCTIONS.register("random_gemstone", () -> new LootItemFunctionType(new RandomGemstone.Serializer()));
+	public static final RegistryObject<LootItemFunctionType> RANDOM_JEWELRY =
+			LOOT_FUNCTIONS.register("random_jewelry", () -> new LootItemFunctionType(new RandomJewelry.Serializer()));
+	public static final RegistryObject<LootItemFunctionType> RANDOM_SPELL =
+			LOOT_FUNCTIONS.register("random_spell", () -> new LootItemFunctionType(new RandomSpell.Serializer()));
+	public static final RegistryObject<LootItemFunctionType> IMBUE_RANDOMLY =
+			LOOT_FUNCTIONS.register("imbue_randomly", () -> new LootItemFunctionType(new ImbueRandomly.Serializer()));
 
-	/**
-	 * 
-	 */
-	public static void register() {
-		RANDOM_GEMSTONE = register("random_gemstone", new LootItemFunctionType(new RandomGemstone.Serializer()));
-		RANDOM_JEWELRY = register("random_jewelry", new LootItemFunctionType(new RandomJewelry.Serializer()));
-		RANDOM_SPELL = register("random_spell", new LootItemFunctionType(new RandomSpell.Serializer()));
-		IMBUE_RANDOMLY = register("imbue_randomly", new LootItemFunctionType(new ImbueRandomly.Serializer()));
-	}
-	
-	/**
-	 * 
-	 * @param name
-	 * @param type
-	 * @return
-	 */
-	public static LootItemFunctionType register(String name, LootItemFunctionType type) {
-		return Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE, ModUtil.asLocation(name), type);
+	public static void register(IEventBus bus) {
+		LOOT_FUNCTIONS.register(bus);
 	}
 }

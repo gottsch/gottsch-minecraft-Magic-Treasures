@@ -75,7 +75,7 @@ public class RandomJewelry extends LootItemConditionalFunction {
 
 	@Override
 	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.RANDOM_JEWELRY;
+		return MagicTreasuresLootFunctions.RANDOM_JEWELRY.get();
 	}
 
 	@Override

@@ -6,5 +6,6 @@
   "count" : 1,
   "rarity": "common",
   "chance": 0.10,
+  "config": "fishing_junk",
   "type" : "magictreasures:default"
 }

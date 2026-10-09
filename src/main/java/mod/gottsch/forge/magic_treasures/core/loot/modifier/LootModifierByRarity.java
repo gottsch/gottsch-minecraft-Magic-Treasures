@@ -55,20 +55,24 @@ public class LootModifierByRarity extends LootModifier {
 	private final int count;
 	private final String rarity;
 	private final double chance;
+	/** which enable option in the server config gates this modifier; blank = the one named after its rarity */
+	private final String config;
 
 	public static final Supplier<Codec<LootModifierByRarity>> CODEC = Suppliers.memoize(()
 			-> RecordCodecBuilder.create(inst -> codecStart(inst)
 			.and(Codec.INT.fieldOf("count").forGetter(m -> m.count))
 			.and(Codec.STRING.fieldOf("rarity").forGetter(m -> m.rarity))
 			.and(Codec.DOUBLE.fieldOf("chance").forGetter(m -> m.chance))
+			.and(Codec.STRING.optionalFieldOf("config", "").forGetter(m -> m.config))
 			.apply(inst, LootModifierByRarity::new)));
 
 
-	protected LootModifierByRarity(LootItemCondition[] conditionsIn, int count, String rarity, double chance) {
+	protected LootModifierByRarity(LootItemCondition[] conditionsIn, int count, String rarity, double chance, String config) {
 		super(conditionsIn);
 		this.count = count;
 		this.rarity = rarity;
 		this.chance = chance;
+		this.config = config;
 	}
 
 	@Override
@@ -84,7 +88,8 @@ public class LootModifierByRarity extends LootModifier {
 		double localChance = chance == 0.0 ? 1.0 : chance;
 
 		// determine if specific loot modifier is enabled
-		boolean isEnabled = Optional.ofNullable(Config.enableLootModifiers.get(rarity.toLowerCase())).
+		String configKey = config.isBlank() ? rarity.toLowerCase() : config;
+		boolean isEnabled = Optional.ofNullable(Config.enableLootModifiers.get(configKey)).
 				map(ForgeConfigSpec.ConfigValue::get).orElse(false);
 		MagicTreasures.LOGGER.debug("isEnabled for {} -> {}", rarity, isEnabled);
 

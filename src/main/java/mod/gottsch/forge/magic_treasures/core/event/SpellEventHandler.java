@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.advancement.MagicTreasuresCriteria;
 
 /**
  * 
@@ -49,6 +50,9 @@ import java.util.Random;
  *
  */
 public class SpellEventHandler {
+	/** shared by every cast: spells only run on the server thread, so one instance is safe */
+	private final Random random = new Random();
+
 
 	private IEquipmentSpellHandler equipmentSpellHandler;
 
@@ -79,6 +83,11 @@ public class SpellEventHandler {
 			// get the player
 			ServerPlayer player = (ServerPlayer) event.getEntity();
 			processSpells(event, player);
+			// once a second is plenty for an advancement; the trigger is a no-op once it is granted
+			if (player.tickCount % 20 == 0 && getEquipmentSpellHandler() != null
+					&& getEquipmentSpellHandler().isWearingFullSet(player)) {
+				MagicTreasuresCriteria.JEWELRY.trigger(player, MagicTreasuresCriteria.FULL_SET);
+			}
 		}
 	}
 
@@ -217,7 +226,11 @@ public class SpellEventHandler {
 		/*
 		 * a list of spell types that are non-stackable that should not be executed more than once.
 		 */
+		if (contexts.isEmpty()) {
+			return;
+		}
 		final List<String> executeOnceSpellTypes = new ArrayList<>(5);
+		Coords coords = new Coords(player.position());
 
 		contexts.forEach(context -> {
 			ISpell spell = (ISpell)context.getEntity().getSpell();
@@ -236,7 +249,7 @@ public class SpellEventHandler {
 
 			// if spell is executable and executes successfully
 			ICastSpellContext castContext = new CastSpellContext(context.getItemStack(), null, context.getEntity(), player);
-			if (context.getEntity().getSpell().serverUpdate(player.level(), new Random(), new Coords(player.position()), event, castContext)) {
+			if (context.getEntity().getSpell().serverUpdate(player.level(), random, coords, event, castContext)) {
 //				MagicTreasures.LOGGER.debug("spell {} successfully updated.", spell.getName().toString());
 				processUsage(player.level(), player, event, context);
 				

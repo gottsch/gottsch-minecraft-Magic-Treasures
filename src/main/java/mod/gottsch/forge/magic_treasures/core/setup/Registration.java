@@ -34,6 +34,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import mod.gottsch.forge.magic_treasures.core.recipe.MagicTreasuresRecipes;
+import mod.gottsch.forge.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 
 /**
  * Created by Mark Gottschling on 5/3/2023
@@ -63,6 +64,7 @@ public class Registration {
         MagicTreasuresLootModifiers.register();
         MagicTreasuresParticles.register(eventBus);
         MagicTreasuresRecipes.register(eventBus);
+        MagicTreasuresLootFunctions.register(eventBus);
         MagicTreasuresCreativeModeTabs.TABS.register(eventBus);
     }
 }

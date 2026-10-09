@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:root",
+  "display": {
+    "icon": {
+      "item": "magictreasures:gold_ruby_necklace"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.fully_adorned.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.fully_adorned.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_set": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set"
+      }
+    }
+  }
+}

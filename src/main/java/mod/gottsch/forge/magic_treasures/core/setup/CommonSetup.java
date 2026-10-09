@@ -25,7 +25,6 @@ import mod.gottsch.forge.magic_treasures.core.item.JewelryType;
 import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.forge.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryStoneTiers;
-import mod.gottsch.forge.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.forge.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.forge.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -125,10 +124,6 @@ public class CommonSetup {
 
         // map stone items -> handlers
 //        MagicTreasuresApi.registerJewelryStoneHandler(Items.DIAMOND, JewelryStoneHandlers.STANDARD);
-
-        // loot functions
-        // NOTE are in common setup because there are not deferred, but registered directly into the vanilla registry
-        MagicTreasuresLootFunctions.register();
 
         // treasure2 integration (needs to be registered BEFORE LevelEvent.Load)
         MagicTreasuresIntegrations.registerTreasure2Integration();
