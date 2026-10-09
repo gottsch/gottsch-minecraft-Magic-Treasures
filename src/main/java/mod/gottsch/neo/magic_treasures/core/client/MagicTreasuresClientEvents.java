@@ -18,31 +18,35 @@
 package mod.gottsch.neo.magic_treasures.core.client;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.core.client.particle.ArcaneSparkParticle;
-import mod.gottsch.neo.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
-import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltip;
-import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltips;
+import mod.gottsch.neo.magic_treasures.core.config.Config;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 
 /**
- * Client-only mod-bus registrations.
+ * Client-only game-bus events.
  *
  * @author Mark Gottschling on 10/9/2026
  */
-@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public class MagicTreasuresClientSetup {
+@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
+public class MagicTreasuresClientEvents {
+	/** icon scale for the tooltip header: 2 = 32px */
+	private static final float TOOLTIP_ICON_SCALE = 2.0F;
 
+	/** Show the item's icon beside its name in every Magic Treasures tooltip. */
 	@SubscribeEvent
-	public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
-		MagicTreasuresParticles.sparks().forEach(spark -> event.registerSpriteSet(spark.get(), ArcaneSparkParticle.Provider::new));
+	public static void onGatherTooltipComponents(RenderTooltipEvent.GatherComponents event) {
+		if (!Config.CLIENT.showTooltipIcon.get()) {
+			return;
+		}
+		IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 	}
 
-	@SubscribeEvent
-	public static void onRegisterTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
-		event.register(IconTitleTooltip.class, ClientIconTitleTooltip::new);
+	private static boolean isMagicTreasuresItem(ItemStack stack) {
+		return MagicTreasures.MOD_ID.equals(BuiltInRegistries.ITEM.getKey(stack.getItem()).getNamespace());
 	}
 }

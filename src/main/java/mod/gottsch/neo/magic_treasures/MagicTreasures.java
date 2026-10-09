@@ -48,6 +48,7 @@ public class MagicTreasures {
 		// TODO change to the new Echelons style of config setup
 		container.registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 		container.registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
+		container.registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
 
 		// force load of static blocks
 		MagicTreasuresSpells.init();
