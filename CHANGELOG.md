@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Fixed gem ores (Topaz, Onyx, Jadeite, Ruby, Sapphire, in Stone and Deepslate) dropping the ore block instead of the gem. They now drop their gem, with Fortune giving more, like vanilla diamond ore. Silk Touch still drops the ore block.
+- Fixed Uncommon, Scarce, Rare, Legendary and Mythical chest loot never appearing. Their loot table ids were missing the `chests/` folder (ex. `minecraft:simple_dungeon` instead of `minecraft:chests/simple_dungeon`), the same typo fixed for Epic chests in 1.3.1, so only Epic chests ever had Magic Treasures loot. Also fixed three misspelled ids: Shepherd and Tannery village chests, and big Underwater Ruins (Epic).
 
 ## [1.3.1] - 2026-10-08
 
