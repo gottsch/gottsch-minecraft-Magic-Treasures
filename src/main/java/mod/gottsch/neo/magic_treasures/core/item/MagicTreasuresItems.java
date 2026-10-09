@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import mod.gottsch.neo.magic_treasures.core.item.JewelryPliers;
 
 
 /**
@@ -64,7 +65,8 @@ public class MagicTreasuresItems {
     public static final DeferredItem<Item> MAGIC_TREASURES_TAB = Registration.ITEMS.register("magic_treasures_tab", () -> new Item(new Item.Properties()));
 
 	// tools
-//	public static DeferredItem<Item> JEWELRY_PLIERS = Registration.ITEMS.register("jewelry_pliers", () -> new JewelryPliers(magic_treasures_PROPS_SUPPLIER.get()));
+	// 64 uses: each gem extraction costs 1 durability
+	public static DeferredItem<Item> JEWELRY_PLIERS = Registration.ITEMS.register("jewelry_pliers", () -> new JewelryPliers(MAGIC_TREASURES_PROPS_SUPPLIER.get().durability(64)));
 
 	// spell scrolls
 	public static final List<DeferredItem<Item>> ALL_SPELL_SCROLLS = Lists.newArrayList();
