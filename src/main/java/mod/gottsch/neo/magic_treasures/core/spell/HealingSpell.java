@@ -33,6 +33,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import net.minecraft.core.particles.ParticleTypes;
 
 /**
  *
@@ -80,6 +82,7 @@ public class HealingSpell extends Spell {
                 float amount = Math.min((float)handler.modifyEffectAmount(getEffectAmount()), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
                 context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
                 applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+                SpellEffects.burst(level, context.getPlayer(), ParticleTypes.HEART, 2);
                 result = true;
             }
         }

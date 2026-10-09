@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Drain ignoring the jewelry's range modifier when finding mobs. The tooltip already showed the modified range.
 - Mana Shield and Reflection tooltips now show their cooldown.
 - Magic Resistance (Magic Ward, Sal'andaar's Magic Coat) now resists all magic damage: Harming potions, witch potions, evoker fangs and poison. Before, it only worked while the player was poisoned.
+- Fixed Reflection and Crushing Response hitting every creature in range, including villagers, iron golems, pets and farm animals, and firing on any damage (falls, fire, drowning). They now reflect only onto the mob that hurt you (the shooter, for arrows), if it's within range, and damage with no attacker doesn't trigger them or cost mana.
+- Harm, Mind Jab and Mind Fist play a sound when they cast, and target the nearest mob in range instead of an arbitrary one.
+- Passive spells now show when they work, with new glowing spark particles: Harm, Mind Jab and Mind Fist (violet arc to the mob), Drain (crimson arc from each drained mob), Reflection (cyan arc to each mob hit), Mana Shield and Magic Resistance (blue), Fire Resistance (orange), Wither Resistance and Spectral Armor (pale ash), Paladin Strike (gold, on the struck mob) and Cheat Death (big gold burst plus the totem sound). Healing shows small hearts. The sparks are adapted from gottsch's Monster Manual.
+- Rebalanced Harm, Mind Jab and Mind Fist so they strike mobs as they approach instead of only ones already in melee range. Damage: 2 / 3 / 4 to 3 / 4.5 / 6. Range: 2 / 2.5 / 3 to 4 / 5 / 6 blocks. Cooldown and cost are unchanged.
 
 ## [1.3.2] - 2026-10-09
 

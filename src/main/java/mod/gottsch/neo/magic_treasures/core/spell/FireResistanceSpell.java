@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * This is essentially the same as Mana Shield except it resists fire damage only and doesn't have a cooldown.
@@ -70,6 +71,7 @@ public class FireResistanceSpell extends Spell {
 				newAmount = amountToPlayer;
 //			}
 			((LivingDamageEvent.Pre)event).setNewDamage((float) newAmount);
+			SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_ORANGE.get(), 5);
 			result = true;
 		}    		
 		return result;

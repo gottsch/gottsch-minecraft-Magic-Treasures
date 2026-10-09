@@ -18,6 +18,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -92,6 +93,7 @@ public class ManaShieldSpell extends Spell {
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
+							SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_BLUE.get(), 10);
 							result = true;
 						}
 					}

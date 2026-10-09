@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -67,6 +68,7 @@ public class WitherResistanceSpell extends Spell {
 					newAmount = amountToPlayer;
 //				}
 				((LivingDamageEvent.Pre)event).setNewDamage((float) newAmount);
+				SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_ASH.get(), 5);
 				result = true;
 			}    
 		}
