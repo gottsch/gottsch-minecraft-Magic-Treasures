@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -67,6 +68,7 @@ public class WitherResistanceSpell extends Spell {
 					newAmount = amountToPlayer;
 //				}
 				((LivingDamageEvent)event).setAmount((float) newAmount);
+				SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_ASH.get(), 5);
 				result = true;
 			}    
 		}

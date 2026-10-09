@@ -17,12 +17,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.Event;
 
-import java.util.List;
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * Fired on LivingHurtEvent, so the original amount of damage INTENDED (ie not actual Damage) to be
@@ -57,22 +56,18 @@ public class ReflectionSpell extends CooldownSpell {
 
 		if (handler.getMana() > 0 && player.isAlive()) {
 			if (((LivingHurtEvent)event).getEntity() instanceof Player) {
-				// get player position
-				double px = player.getX();
-				double py = player.getY();
-				double pz = player.getZ();
-
-				// get the source and amount
 				double amount = ((LivingHurtEvent)event).getAmount();
-				// calculate the new amount
 				double reflectedAmount = amount * modifyEffectAmount(jewelry);
 				double range = modifyRange(jewelry);
-				List<Mob> mobs = world.getEntitiesOfClass(Mob.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
-				// hurt the mob with reflected amount
-				mobs.forEach(mob -> {
-					boolean flag = mob.hurt(world.damageSources().magic(), (float) reflectedAmount);
-					MagicTreasures.LOGGER.debug("reflected damage {} onto mob -> {} was successful -> {}", reflectedAmount, mob.getName(), flag);
-				});
+				// reflect onto the mob that caused the damage (the shooter, for a projectile) if it is within range.
+				// damage with no attacker (falls, fire, drowning) or from a player does not trigger it and costs nothing.
+				if (!(((LivingHurtEvent)event).getSource().getEntity() instanceof Mob attacker) || !attacker.isAlive()
+						|| player.distanceToSqr(attacker) > range * range) {
+					return result;
+				}
+				boolean flag = attacker.hurt(world.damageSources().magic(), (float) reflectedAmount);
+				MagicTreasures.LOGGER.debug("reflected damage {} onto mob -> {} was successful -> {}", reflectedAmount, attacker.getName(), flag);
+				SpellEffects.arc(world, player, attacker, MagicTreasuresParticles.SPARK_CYAN.get());
 
 				applyCost(world, random, coords, context, Math.min(modifySpellCost(jewelry), reflectedAmount));
 

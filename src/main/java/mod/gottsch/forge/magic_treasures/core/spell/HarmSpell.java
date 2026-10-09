@@ -4,6 +4,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
@@ -12,15 +13,19 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -69,22 +74,34 @@ public class HarmSpell extends CooldownSpell {
             }
             MagicTreasures.LOGGER.debug("number of mobs in range -> {}", mobs.size());
 
+            // target the nearest mob. only 1 mob is affected - an area spell would be an Aura spell.
+            Monster mob = mobs.stream().min(Comparator.comparingDouble(m -> m.distanceToSqr(player))).get();
             double effectAmount = handler.modifyEffectAmount(getEffectAmount());
-            for (Mob mob : mobs) {
-                boolean flag = mob.hurt(level.damageSources().magic(), (float) effectAmount);
-                if (flag) {
-                    MagicTreasures.LOGGER.debug("inflict {} hp of damage. resulting health -> {}", effectAmount, mob.getHealth());
-                }
-                // TODO create effects
-            	// TODO add number of mobs to affect and break if reached - update: only going to affect 1 mob. else it is an Aura spell.
-				break;
-			}
+            boolean flag = mob.hurt(level.damageSources().magic(), (float) effectAmount);
+            if (flag) {
+                MagicTreasures.LOGGER.debug("inflict {} hp of damage. resulting health -> {}", effectAmount, mob.getHealth());
+            }
+            playEffects(level, player, mob);
 
             double c = applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
 //            MagicTreasures.LOGGER.debug("new cost -> {}", c);
             result = true;
         }
         return result;
+    }
+
+    /**
+     * A violet arc from the player to the target, a burst on the target and a cast sound, so the player
+     * can see the spell working. Played on every cast, even if the mob resists the damage.
+     */
+    private void playEffects(Level level, Player player, LivingEntity target) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        SpellEffects.arc(serverLevel, SpellEffects.chest(player), SpellEffects.chest(target), MagicTreasuresParticles.SPARK_VIOLET.get());
+        SpellEffects.burst(serverLevel, target, MagicTreasuresParticles.SPARK_VIOLET.get(), 6);
+        // played at the caster, so it isn't lost among the target's own hurt sounds. null = everyone nearby hears it, caster included.
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.PLAYERS, 1.0F, 1.2F);
     }
 
     @Override

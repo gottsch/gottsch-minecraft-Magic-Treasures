@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -87,6 +88,7 @@ SpectralArmorSpell extends Spell {
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
+							SpellEffects.burst(world, player, MagicTreasuresParticles.SPARK_ASH.get(), 8);
 							result = true;
 						}
 					}

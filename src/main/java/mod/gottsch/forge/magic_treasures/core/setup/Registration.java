@@ -22,6 +22,7 @@ import mod.gottsch.forge.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.forge.magic_treasures.core.loot.modifier.MagicTreasuresLootModifiers;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 import mod.gottsch.forge.magic_treasures.core.world.feature.MagicTreasuresConfiguredFeatures;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.EntityType;
@@ -59,6 +60,7 @@ public class Registration {
     	MagicTreasuresItems.register();
         MagicTreasuresConfiguredFeatures.register();
         MagicTreasuresLootModifiers.register();
+        MagicTreasuresParticles.register(eventBus);
         MagicTreasuresCreativeModeTabs.TABS.register(eventBus);
     }
 }

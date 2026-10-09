@@ -44,6 +44,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -103,6 +104,7 @@ public class DrainSpell extends Spell {
 					MagicTreasures.LOGGER.debug("health drained from mob -> {} was successful -> {}", mob.getName(), flag);
 					if (flag) {
 						drainedHealth.addAndGet(effectAmount);
+						SpellEffects.arc(level, mob, player, MagicTreasuresParticles.SPARK_CRIMSON.get());
 					}
 				});
 

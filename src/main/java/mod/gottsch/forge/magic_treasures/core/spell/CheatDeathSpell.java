@@ -17,6 +17,9 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 /**
  * 
@@ -73,6 +76,8 @@ public class CheatDeathSpell extends CooldownSpell {
 					// reduce damage to 0
 					((LivingDamageEvent)event).setAmount(0F);
 
+					SpellEffects.burst(world, SpellEffects.chest(player), MagicTreasuresParticles.SPARK_GOLD.get(), 30, 0.8);
+					world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					result = true;
 				}
 			}
