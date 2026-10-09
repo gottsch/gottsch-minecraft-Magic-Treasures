@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Mana Shield and Mana Tower Shield letting through too little damage when the jewelry ran short of mana. The damage the shield couldn't pay for replaced the damage it passes through instead of adding to it.
 - Fixed Drain ignoring the jewelry's range modifier when finding mobs. The tooltip already showed the modified range.
 - Mana Shield and Reflection tooltips now show their cooldown.
+- Magic Resistance (Magic Ward, Sal'andaar's Magic Coat) now resists all magic damage: Harming potions, witch potions, evoker fangs and poison. Before, it only worked while the player was poisoned.
 
 ## [1.3.2] - 2026-10-09
 

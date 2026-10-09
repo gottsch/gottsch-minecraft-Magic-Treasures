@@ -10,7 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -48,7 +48,8 @@ public class MagicResistanceSpell extends Spell {
 		boolean result = false;
 
 		// exit if not magic damage
-		if (((LivingDamageEvent.Pre)event).getSource().is(DamageTypes.MAGIC) && context.getPlayer().hasEffect(MobEffects.POISON)) {
+		DamageSource source = ((LivingDamageEvent.Pre)event).getSource();
+		if (source.is(DamageTypes.MAGIC) || source.is(DamageTypes.INDIRECT_MAGIC)) {
 			IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 			if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
