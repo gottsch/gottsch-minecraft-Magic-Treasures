@@ -5,17 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] - Unreleased
+## [1.4.0] - 2026-10-10
 
 ### Added
 - Magic Treasures item tooltips now show the item, at double size, beside its name.
 - Client config (`magictreasures-client.toml`) with `enableSpellParticles` and `showTooltipIcon`, both on by default. Each player chooses for themselves, even on a server.
 - Jewelry Pliers (2 Iron Ingots + 1 Iron Nugget, 64 uses). Craft them with a piece of jewelry that has a gem to get the gem back; the jewelry is destroyed. Removing a gem at the anvil still keeps the jewelry and destroys the gem, so you choose which to keep.
-- Advancements: a Magic Treasures tab with Set in Stone (add a gem), Spellbound (add a spell), Second Wind (recharge), Delicate Work (remove a gem with pliers) and Fully Adorned (wear a ring, necklace and bracelet at once).
-- The Skull Belt is now a working mana well (250 mana, 2 recharges) and is back in the creative tab. Wear it in the Curios belt slot or hold it; when a spell's jewelry runs out of mana, the rest of the cost comes from the belt, so spells keep casting. Recharge it at an anvil with an Amethyst Shard, Emerald or Recharge Scroll. Found in Rare, Epic, Legendary and Mythical chests.
+- Advancements: a Magic Treasures tab with Set in Stone (add a gem), Spellbound (add a spell), Second Wind (recharge), Delicate Work (remove a gem with pliers) and Fully Adorned (wear a ring, necklace and bracelet at once; without Curios, have all three in your hotbar).
+- The Skull Belt is now a working mana well (250 mana, 2 recharges) and is back in the creative tab. Wear it in the Curios belt slot, hold it, or (without Curios) keep it in your hotbar; when a spell's jewelry runs out of mana, the rest of the cost comes from the belt, so spells keep casting. Recharge it at an anvil with an Amethyst Shard, Emerald or Recharge Scroll. Found in Rare, Epic, Legendary and Mythical chests.
 
 ### Changed
 - Fixed Mana Shield and Mana Tower Shield letting through too little damage when the jewelry ran short of mana. The damage the shield couldn't pay for replaced the damage it passes through instead of adding to it.
+- Every spell cast now costs at least 1 mana. Fire, Magic and Wither Resistance and Mana Shield cost a share of the damage they block, which for small hits like standing in fire was a fraction of a point, so the jewelry wore out (1 durability per cast) long before its mana ran low.
 - Fixed Drain ignoring the jewelry's range modifier when finding mobs. The tooltip already showed the modified range.
 - Mana Shield and Reflection tooltips now show their cooldown.
 - Magic Resistance (Magic Ward, Sal'andaar's Magic Coat) now resists all magic damage: Harming potions, witch potions, evoker fangs and poison. Before, it only worked while the player was poisoned.
