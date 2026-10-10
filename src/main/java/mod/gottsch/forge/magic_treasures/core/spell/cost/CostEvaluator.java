@@ -26,6 +26,9 @@ import net.minecraft.world.item.ItemStack;
  * @return actual cost incurred
  */
 public class CostEvaluator implements ICostEvaluator {
+	/** every successful cast costs at least this much, so durability (1 per cast) can't outlast mana */
+	private static final double MIN_COST = 1.0;
+
 	@Override
 	public double apply(Level level, Random random, ICoords coords, ICastSpellContext context, double amount) {
 		IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
@@ -36,6 +39,7 @@ public class CostEvaluator implements ICostEvaluator {
 		// calculate the new amount for cost
 		double newAmount = amount * handler.getMaterial().getSpellCostFactor()
 				* stoneTier.getSpellCostFactor();
+		newAmount = Math.max(MIN_COST, newAmount);
 
 		double cost = 0;
 		if (handler.getMana() >= newAmount) {
