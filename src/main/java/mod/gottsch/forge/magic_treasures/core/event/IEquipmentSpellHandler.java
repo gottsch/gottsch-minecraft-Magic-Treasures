@@ -23,6 +23,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 
 /**
  *
@@ -38,6 +39,14 @@ public interface IEquipmentSpellHandler {
 	 */
 	default boolean isWearingFullSet(ServerPlayer player) {
 		return false;
+	}
+
+	/**
+	 * Every jewelry piece and mana well that counts as worn in this handler's slots (not hands or armor), for sets.
+	 * Works on either side: the client uses it for set tooltips.
+	 */
+	default List<ItemStack> getWornJewelry(Player player) {
+		return List.of();
 	}
 
 	/** Mana wells the player is wearing in this equipment mod's slots. */

@@ -59,7 +59,7 @@ public class MagicResistanceSpell extends Spell {
 				double amount = ((LivingDamageEvent)event).getAmount();
 				// calculate the new amount
 				double newAmount = 0;
-				double amountToSpell = amount * Math.min(1.0, modifyEffectAmount(context.getJewelry()));
+				double amountToSpell = amount * Math.min(1.0, effectAmount(context));
 				double amountToPlayer = amount - amountToSpell;
 				// Treasure.logger.debug("amount to charm -> {}); amount to player -> {}", amountToCharm, amountToPlayer);
 				double cost = applyCost(world, random, coords, context, amountToSpell);
@@ -85,7 +85,7 @@ public class MagicResistanceSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("resist", percent(Math.min(1.0, modifyEffectAmount(jewelry))), ChatFormatting.RED));
+		return List.of(chip("resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override

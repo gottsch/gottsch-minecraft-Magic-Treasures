@@ -36,6 +36,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import net.minecraft.world.entity.player.Player;
 
 /**
  *
@@ -109,6 +110,29 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			}
 		}
 		return types.containsAll(FULL_SET_TYPES);
+	}
+
+	/**
+	 * The jewelry that casts from the hotbar (not the main hand, first MAX_HOTBAR_JEWELRY pieces), plus hotbar mana
+	 * wells.
+	 */
+	@Override
+	public List<ItemStack> getWornJewelry(Player player) {
+		List<ItemStack> worn = new ArrayList<>(5);
+		int jewelryCount = 0;
+		for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
+			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
+			if (inventoryStack.isEmpty() || inventoryStack == player.getItemInHand(InteractionHand.MAIN_HAND)) {
+				continue;
+			}
+			if (inventoryStack.getItem() instanceof ManaWell) {
+				worn.add(inventoryStack);
+			} else if (jewelryCount < MAX_HOTBAR_JEWELRY && inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
+				worn.add(inventoryStack);
+				jewelryCount++;
+			}
+		}
+		return worn;
 	}
 
 	/**

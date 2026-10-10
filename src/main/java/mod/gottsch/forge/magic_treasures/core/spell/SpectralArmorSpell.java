@@ -66,7 +66,7 @@ SpectralArmorSpell extends Spell {
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 		if (context.getEntity() instanceof CooldownSpellEntity) {
 			CooldownSpellEntity spellEntity = (CooldownSpellEntity) context.getEntity();
-			double cooldown = modifyCooldown(jewelry);
+			double cooldown = cooldown(context);
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
 				if (hasMana(handler, context) && player.isAlive()) {
@@ -77,7 +77,7 @@ SpectralArmorSpell extends Spell {
 						if (amount > 0D) {
 							// NOTE each effectAmount integer reduces by 4% just like vanilla armor, ie Leather Chest = 3 points or 12% reduction
 							// calculate the new amount
-							double newAmount = amount - (amount * modifyEffectAmount(jewelry) * 0.04);
+							double newAmount = amount - (amount * effectAmount(context) * 0.04);
 							// cost eval
 							double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
 							MagicTreasures.LOGGER.debug("cost (mana) incurred to jewelry -> {}", cost);
@@ -107,7 +107,7 @@ SpectralArmorSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("armor", percent(modifyEffectAmount(jewelry) * 0.04), ChatFormatting.LIGHT_PURPLE));
+		return List.of(chip("armor", percent(tooltipEffectAmount(jewelry) * 0.04), ChatFormatting.LIGHT_PURPLE));
 	}
 
 	@Override

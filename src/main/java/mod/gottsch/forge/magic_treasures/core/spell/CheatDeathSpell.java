@@ -69,7 +69,7 @@ public class CheatDeathSpell extends CooldownSpell {
 				if (damage > 0D && damage > player.getHealth()) {
 
 					// set player's health to amount
-					player.setHealth((float) handler.modifyEffectAmount(getEffectAmount()));
+					player.setHealth((float) effectAmount(context));
 
 					// cost eval
 					double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
@@ -94,7 +94,7 @@ public class CheatDeathSpell extends CooldownSpell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+		return List.of(chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

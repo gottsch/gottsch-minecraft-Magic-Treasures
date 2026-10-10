@@ -19,6 +19,8 @@ import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.capability.IManaWellHandler;
 import mod.gottsch.forge.magic_treasures.core.capability.ManaWellHandler;
 import net.minecraft.world.item.ItemStack;
+import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
+import mod.gottsch.forge.magic_treasures.core.set.SpellStat;
 
 /*
  * Generic cost evaluator
@@ -39,6 +41,7 @@ public class CostEvaluator implements ICostEvaluator {
 		// calculate the new amount for cost
 		double newAmount = amount * handler.getMaterial().getSpellCostFactor()
 				* stoneTier.getSpellCostFactor();
+		newAmount = SetEquipment.modify(context.getPlayer(), context.getEntity().getSpell(), SpellStat.COST, newAmount);
 		newAmount = Math.max(MIN_COST, newAmount);
 
 		double cost = 0;

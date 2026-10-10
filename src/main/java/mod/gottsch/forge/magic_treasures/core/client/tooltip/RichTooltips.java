@@ -18,6 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
@@ -111,6 +112,34 @@ public final class RichTooltips {
             if (component instanceof FullWidthTooltip fullWidth) {
                 fullWidth.setTooltipWidth(width);
             }
+        }
+        // a text line is 1px shorter than a bar row, so a divider under text gets that pixel back: every divider
+        // then has the same gap above it
+        List<ClientTooltipComponent> components = event.getComponents();
+        for (int i = 0; i < components.size(); i++) {
+            if (components.get(i) instanceof ClientDividerTooltip divider) {
+                divider.setPadTop(i > 0 && components.get(i - 1) instanceof ClientTextTooltip ? 1 : 0);
+            }
+        }
+    }
+
+    /**
+     * Call from {@code RenderTooltipEvent.Pre}: a rich tooltip that would rest on the bottom of the screen is lifted
+     * so {@code margin} pixels show under it, which reads as "nothing cut off". Vanilla clamps it to 3.
+     */
+    public static void lift(RenderTooltipEvent.Pre event, int margin) {
+        if (event.getComponents().stream().noneMatch(component -> component instanceof FullWidthTooltip)) {
+            return;
+        }
+        // the height vanilla gives the tooltip's contents
+        int height = event.getComponents().size() == 1 ? -2 : 0;
+        for (ClientTooltipComponent component : event.getComponents()) {
+            height += component.getHeight();
+        }
+        // vanilla draws the tooltip at mouse y - 12, then pulls it up to end 3 pixels above the bottom
+        int lowest = event.getScreenHeight() - height - 3 - margin + 12;
+        if (event.getY() > lowest) {
+            event.setY(Math.max(lowest, 4 + 12));
         }
     }
 

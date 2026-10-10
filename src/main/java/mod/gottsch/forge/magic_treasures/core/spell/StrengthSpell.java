@@ -56,7 +56,7 @@ public class StrengthSpell extends CooldownSpell {
 
 		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.DAMAGE_BOOST)) {
-				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, handler.modifyDuration(getDuration()), getAmplifier()));
+				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, duration(context), getAmplifier()));
 			}
 			applyCost(world, random, coords, context, handler.modifySpellCost(getSpellCost()));
        		result = true;
@@ -73,8 +73,8 @@ public class StrengthSpell extends CooldownSpell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("duration", seconds(modifyDuration(jewelry)), ChatFormatting.AQUA),
-			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+		return List.of(chip("duration", seconds(tooltipDuration(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

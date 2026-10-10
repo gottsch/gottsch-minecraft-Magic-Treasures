@@ -83,7 +83,7 @@ public class DrainSpell extends Spell {
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-		if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
+		if (level.getGameTime() % frequency(context) == 0) {
 			if (hasMana(handler, context) && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
 				// get player position
 				double px = player.getX();
@@ -91,13 +91,13 @@ public class DrainSpell extends Spell {
 				double pz = player.getZ();
 
 				// calculate the new amount
-				double range = handler.modifyRange(getRange());
+				double range = range(context);
 				AtomicDouble drainedHealth = new AtomicDouble(0);
 				List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
 				if (mobs.isEmpty()) {
 					return result;
 				}
-				double effectAmount = handler.modifyEffectAmount(getEffectAmount());
+				double effectAmount = effectAmount(context);
 				mobs.forEach(mob -> {
 //					boolean flag = mob.attackEntityFrom(DamageSource.GENERIC, (float)getAmount());
 					boolean flag = mob.hurt(level.damageSources().generic(), (float)effectAmount);
@@ -130,9 +130,9 @@ public class DrainSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("drain", number(modifyEffectAmount(jewelry)), ChatFormatting.RED),
-			chip("range", number(modifyRange(jewelry)), ChatFormatting.AQUA),
-			chip("every", seconds(modifyFrequency(jewelry)), ChatFormatting.AQUA));
+		return List.of(chip("drain", number(tooltipEffectAmount(jewelry)), ChatFormatting.RED),
+			chip("range", number(tooltipRange(jewelry)), ChatFormatting.AQUA),
+			chip("every", seconds(tooltipFrequency(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

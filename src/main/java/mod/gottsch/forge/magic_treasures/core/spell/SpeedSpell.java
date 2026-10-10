@@ -56,7 +56,7 @@ public class SpeedSpell extends CooldownSpell {
 
 		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.MOVEMENT_SPEED)) {
-				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, handler.modifyDuration(getDuration()), getAmplifier()));
+				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, duration(context), getAmplifier()));
 			}
 			applyCost(world, random, coords, context, handler.modifySpellCost(getSpellCost()));
        		result = true;
@@ -73,8 +73,8 @@ public class SpeedSpell extends CooldownSpell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("duration", seconds(modifyDuration(jewelry)), ChatFormatting.AQUA),
-			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+		return List.of(chip("duration", seconds(tooltipDuration(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

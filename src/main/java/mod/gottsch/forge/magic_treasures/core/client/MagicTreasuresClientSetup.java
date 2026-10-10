@@ -23,6 +23,8 @@ import mod.gottsch.forge.magic_treasures.core.client.tooltip.ClientIconTitleTool
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.RichTooltips;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.IconTitleTooltip;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
+import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -46,5 +48,7 @@ public class MagicTreasuresClientSetup {
 	public static void onRegisterTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
 		event.register(IconTitleTooltip.class, ClientIconTitleTooltip::new);
 		RichTooltips.registerFactories(event);
+		// spell chips show the set bonuses of the player wearing the jewelry
+		SetEquipment.setTooltipPlayer(() -> Minecraft.getInstance().player);
 	}
 }

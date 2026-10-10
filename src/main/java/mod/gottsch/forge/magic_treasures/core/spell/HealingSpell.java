@@ -76,11 +76,11 @@ public class HealingSpell extends Spell {
     public boolean serverUpdate(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
         boolean result = false;
         IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
+        if (level.getGameTime() % frequency(context) == 0) {
             if (hasMana(handler, context) && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
 
                 // determine the actual amount of health (0.0 -> getAmount())
-                float amount = Math.min((float)handler.modifyEffectAmount(getEffectAmount()), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
+                float amount = Math.min((float)effectAmount(context), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
                 context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
                 applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
                 SpellEffects.burst(level, context.getPlayer(), ParticleTypes.HEART, 2);
@@ -99,8 +99,8 @@ public class HealingSpell extends Spell {
 
     @Override
     public List<Component> getStatChips(ItemStack jewelry) {
-        return List.of(chip("heal", number(modifyEffectAmount(jewelry)), ChatFormatting.GREEN),
-            chip("every", seconds(modifyFrequency(jewelry)), ChatFormatting.AQUA));
+        return List.of(chip("heal", number(tooltipEffectAmount(jewelry)), ChatFormatting.GREEN),
+            chip("every", seconds(tooltipFrequency(jewelry)), ChatFormatting.AQUA));
     }
 
     @Override
