@@ -99,6 +99,13 @@ public class ItemModelsProvider extends ItemModelProvider {
 		singleTexture(MagicTreasuresItems.STRONGMANS_BRACERS.getId().getPath()
 				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/wood_bracelet"));
 
+		singleTexture(MagicTreasuresItems.SILBROS_ACORN.getId().getPath()
+				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/silbros_acorn"));
+
+		// set weapons and armor (the Rootstaff's model is hand-made in src/main: it's drawn bigger in hand)
+		singleTexture(MagicTreasuresItems.BARKSKIN_VEST.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/barkskin_vest"));
+
 		singleTexture(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET.getId().getPath()
 				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/bone_onyx_necklace"));
 

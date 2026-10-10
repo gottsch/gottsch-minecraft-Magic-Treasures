@@ -234,6 +234,7 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		tag(MagicTreasuresTags.Items.JEWELRY_COMMON).add(MagicTreasuresItems.PEASANTS_FORTUNE.get());
 
 		tag(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET.get());
+		tag(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.SILBROS_ACORN.get());
 		tag(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.AQUA_RING.get());
 		tag(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.AMULET_OF_DEFENCE.get());
 

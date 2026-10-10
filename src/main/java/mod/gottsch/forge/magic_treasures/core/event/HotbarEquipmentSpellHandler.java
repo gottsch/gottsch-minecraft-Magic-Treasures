@@ -89,6 +89,37 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 		return contexts;
 	}
 
+	/** The hotbar jewelry that casts (same rules as handleEquipmentSpells), each with its first spell. */
+	@Override
+	public List<SpellContext> getWornJewelryContexts(ServerPlayer player) {
+		List<SpellContext> contexts = new ArrayList<>(MAX_HOTBAR_JEWELRY);
+		int jewelryCount = 0;
+		for (int hotbarSlot = 0; hotbarSlot < 9 && jewelryCount < MAX_HOTBAR_JEWELRY; hotbarSlot++) {
+			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
+			if (inventoryStack == player.getItemInHand(InteractionHand.MAIN_HAND)) {
+				continue;
+			}
+			Optional<IJewelryHandler> cap = inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve();
+			if (cap.isEmpty()) {
+				continue;
+			}
+			jewelryCount++;
+			if (cap.get().getSpells().isEmpty()) {
+				continue;
+			}
+			String slot = String.valueOf(hotbarSlot);
+			contexts.add(new SpellContext.Builder().with($ -> {
+				$.slotProviderId = "minecraft";
+				$.slot = slot;
+				$.itemStack = inventoryStack;
+				$.capability = cap.get();
+				$.index = 0;
+				$.entity = cap.get().getSpells().get(0);
+			}).build());
+		}
+		return contexts;
+	}
+
 	/**
 	 * Without an equipment mod the hotbar stands in for the jewelry slots, so a full set is a ring, a necklace and a
 	 * bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and

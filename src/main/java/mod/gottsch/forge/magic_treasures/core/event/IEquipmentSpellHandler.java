@@ -49,6 +49,14 @@ public interface IEquipmentSpellHandler {
 		return List.of();
 	}
 
+	/**
+	 * One context per jewelry piece with a spell in this handler's slots (its first spell), with the slot it sits in.
+	 * For changes made outside a cast (siphon, Take Root): the server sends the jewelry's new state with it.
+	 */
+	default List<SpellContext> getWornJewelryContexts(ServerPlayer player) {
+		return List.of();
+	}
+
 	/** Mana wells the player is wearing in this equipment mod's slots. */
 	default List<ItemStack> getManaWells(ServerPlayer player) {
 		return List.of();

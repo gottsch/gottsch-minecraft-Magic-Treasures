@@ -160,7 +160,7 @@ public final class JewelryHud implements IGuiOverlay {
 				continue;
 			}
 			// the full length this cast was given, set bonuses included, as the cast worked it out
-			double total = SetEquipment.modify(player, spell, SpellStat.COOLDOWN, spell.modifyCooldown(stack));
+			double total = SetEquipment.modify(player, stack, spell, SpellStat.COOLDOWN, spell.modifyCooldown(stack));
 			if (total > 0) {
 				result = Math.max(result, (float) Math.min(1.0, remaining / total));
 			}

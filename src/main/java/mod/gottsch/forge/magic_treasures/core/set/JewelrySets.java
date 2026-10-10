@@ -47,9 +47,14 @@ public final class JewelrySets {
     public static final JewelrySet SILBROS_GROVE = register(JewelrySet.builder("silbros_grove")
             .piece(MagicTreasuresItems.SILBROS_RING_OF_VITALITY)
             .piece(MagicTreasuresItems.STRONGMANS_BRACERS)
+            .piece(MagicTreasuresItems.SILBROS_ACORN)
+            .piece(MagicTreasuresItems.ROOTSTAFF)
+            .piece(MagicTreasuresItems.BARKSKIN_VEST)
             // 25% more often: a 10 s pulse comes every 8 s
             .bonus(2, SetBonus.of(SpellStatBonus.multiply(SpellStat.EFFECT, 1.15, "healing"),
                     SpellStatBonus.multiply(SpellStat.FREQUENCY, 0.8, "healing")))
+            .bonus(4, new RegrowthBonus())
+            .bonus(5, new TakeRootBonus(() -> JewelrySets.SILBROS_GROVE))
             .build());
 
     public static final JewelrySet MALDRITCHS_REMAINS = register(JewelrySet.builder("maldritchs_remains")

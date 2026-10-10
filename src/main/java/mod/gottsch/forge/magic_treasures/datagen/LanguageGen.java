@@ -66,6 +66,9 @@ public class LanguageGen extends LanguageProvider {
         // special jewelry
         add(MagicTreasuresItems.SILBROS_RING_OF_VITALITY.get(), WordUtils.capitalizeFully("Silbro's Ring of Vitality"));
         add(MagicTreasuresItems.STRONGMANS_BRACERS.get(), WordUtils.capitalizeFully("Strongman's Bracers"));
+        add(MagicTreasuresItems.SILBROS_ACORN.get(), "Silbro's Acorn");
+        add(MagicTreasuresItems.ROOTSTAFF.get(), "Rootstaff");
+        add(MagicTreasuresItems.BARKSKIN_VEST.get(), "Barkskin Vest");
         add(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET.get(), WordUtils.capitalizeFully("Maldritch's First Amulet"));
 
         add(MagicTreasuresItems.PEASANTS_FORTUNE.get(), WordUtils.capitalizeFully("Peasant's Fortune"));
@@ -216,10 +219,14 @@ public class LanguageGen extends LanguageProvider {
         // sets
         add("tooltip.magictreasures.set.header", "%s (%s/%s)");
         add("tooltip.magictreasures.set.bonus", "(%s) %s");
+        add(LangUtil.tooltip("set_piece.siphon"), "Siphon: full-strength hits restore %s mana to your worn jewelry");
+        add(LangUtil.tooltip("set_piece.resonance"), "Resonance: +%s%% effect to this set's jewelry spells");
         add("set.magictreasures.salandaars_anvilwork", "Sal'andaar's Anvilwork");
         add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10%% less mana");
         add("set.magictreasures.silbros_grove", "Silbro's Grove");
         add("set.magictreasures.silbros_grove.bonus.2", "Healing spells heal 15%% more, 25%% more often");
+        add("set.magictreasures.silbros_grove.bonus.4", "Standing on grass, moss or leaves slowly heals you");
+        add("set.magictreasures.silbros_grove.bonus.5", "Take Root: in sunlight, worn set pieces slowly mend");
         add("set.magictreasures.maldritchs_remains", "Maldritch's Remains");
         add("set.magictreasures.maldritchs_remains.bonus.2", "Drain spells reach 1 block further");
         add("set.magictreasures.selenes_tides", "Selene's Tides");
@@ -285,6 +292,9 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.hawk_ring.lore"), "Hawk rings contain an abundance of mana and a higher max spell level.~Cannot be affixed with any gems.");
         add(LangUtil.tooltip("jewelry.silbros_ring_of_vitality.lore"), "Silbro grew this ring into shape.~Living wood holds mana as well as any metal.");
         add(LangUtil.tooltip("jewelry.strongmans_bracers.lore"), "Silbro grew these for a woodcutter who wore out every axe.~Living wood holds strength as well as mana.");
+        add(LangUtil.tooltip("jewelry.silbros_acorn.lore"), "Silbro gave an acorn from his oldest oak to anyone who went hungry.~Planted, it feeds a village; worn, it feeds you.");
+        add(LangUtil.tooltip("set_piece.rootstaff.lore"), "Silbro never cut a staff; he asked a root to grow straight.~Every blow it lands sends a little mana home.");
+        add(LangUtil.tooltip("set_piece.barkskin_vest.lore"), "Bark from a living tree, which grew it back the next spring.~It hums when Silbro's other pieces are near.");
         add(LangUtil.tooltip("jewelry.maldritchs_first_amulet.lore"), "Maldritch is a powerful lich, but he wasn't always one.~This is his first amulet when he was a mere apprentice.");
 
         /*

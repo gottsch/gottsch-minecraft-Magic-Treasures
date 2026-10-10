@@ -91,6 +91,33 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 		return contexts;
 	}
 
+	@Override
+	public List<SpellContext> getWornJewelryContexts(ServerPlayer player) {
+		List<SpellContext> contexts = new ArrayList<>();
+		CuriosApi.getCuriosInventory(player).ifPresent(itemHandler -> CURIOS_SLOTS.forEach(slot ->
+				itemHandler.getStacksHandler(slot).ifPresent(stacksHandler -> {
+					for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
+						final int slotIndex = i;
+						ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
+						stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
+							if (cap.getSpells().isEmpty()) {
+								return;
+							}
+							contexts.add(new SpellContext.Builder().with($ -> {
+								$.slotProviderId = CURIOS_ID;
+								$.slot = slot;
+								$.slotIndex = slotIndex;
+								$.itemStack = stack;
+								$.capability = cap;
+								$.index = 0;
+								$.entity = cap.getSpells().get(0);
+							}).build());
+						});
+					}
+				})));
+		return contexts;
+	}
+
 	/** the slots that make a full set */
 	private static final List<String> FULL_SET_SLOTS = Arrays.asList("ring", "necklace", "bracelet");
 

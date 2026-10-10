@@ -26,6 +26,9 @@ import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.forge.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.forge.magic_treasures.core.item.set.SetArmor;
+import mod.gottsch.forge.magic_treasures.core.item.set.SetMaterials;
+import mod.gottsch.forge.magic_treasures.core.item.set.SiphonWeapon;
 import mod.gottsch.forge.magic_treasures.core.setup.Registration;
 import mod.gottsch.forge.magic_treasures.core.spell.MagicTreasuresSpells;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellRegistry;
@@ -159,6 +162,33 @@ public class MagicTreasuresItems {
 			return new JewelryCapability(handler);
 		}
 	}.setLoreKey("jewelry.strongmans_bracers.lore"));
+
+	public static RegistryObject<Item> SILBROS_ACORN = Registration.ITEMS.register("silbros_acorn", () -> new NamedJewelry(MAGIC_TREASURES_PROPS_SUPPLIER.get()) {
+		public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag tag) {
+			IJewelryHandler handler = new JewelryHandler.Builder(JewelryType.NECKLACE, JewelryMaterials.WOOD)
+					.withSize(JewelrySizeTier.REGULAR)
+					.withStone(ModUtil.getName(Items.BEDROCK))
+					.with($ -> {
+						$.spells.add(SpellRegistry.get(MagicTreasuresSpells.SATIETY).orElse(MagicTreasuresSpells.DEFAULT_HEALING).entity());
+						$.maxMana = 80;
+						$.maxRecharges = 0;
+						$.maxRepairs = 1;
+						$.maxLevel = 2;
+						$.acceptsAffixer = p -> {
+							return false;
+						};
+					})
+					.build();
+			return new JewelryCapability(handler);
+		}
+	}.setLoreKey("jewelry.silbros_acorn.lore"));
+
+	// set weapons and armor: no spells; siphon (weapons) and resonance (armor)
+	public static RegistryObject<Item> ROOTSTAFF = Registration.ITEMS.register("rootstaff", () ->
+			new SiphonWeapon(SetMaterials.LIVING_WOOD, 3, -2.4F, 2, "set_piece.rootstaff.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+
+	public static RegistryObject<Item> BARKSKIN_VEST = Registration.ITEMS.register("barkskin_vest", () ->
+			new SetArmor(SetMaterials.BARKSKIN, ArmorItem.Type.CHESTPLATE, "set_piece.barkskin_vest.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	// common
 	public static RegistryObject<Item> PEASANTS_FORTUNE = Registration.ITEMS.register("peasants_fortune", () -> new NamedJewelry(MAGIC_TREASURES_PROPS_SUPPLIER.get()) {
