@@ -57,7 +57,7 @@ public class HarmSpell extends CooldownSpell {
 
         IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
         Player player = context.getPlayer();
-        if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+        if (hasMana(handler, context) && context.getPlayer().isAlive()) {
             // get player position
             double px = player.getX();
             double py = player.getY();

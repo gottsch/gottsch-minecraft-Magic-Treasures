@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.Event;
 
 import java.util.List;
+import net.minecraft.world.item.ItemStack;
 
 /**
  *
@@ -37,5 +38,10 @@ public interface IEquipmentSpellHandler {
 	 */
 	default boolean isWearingFullSet(ServerPlayer player) {
 		return false;
+	}
+
+	/** Mana wells the player is wearing in this equipment mod's slots. */
+	default List<ItemStack> getManaWells(ServerPlayer player) {
+		return List.of();
 	}
 }

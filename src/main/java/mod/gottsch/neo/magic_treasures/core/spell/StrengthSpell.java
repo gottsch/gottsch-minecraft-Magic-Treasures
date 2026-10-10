@@ -53,7 +53,7 @@ public class StrengthSpell extends CooldownSpell {
 
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.DAMAGE_BOOST)) {
 				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, handler.modifyDuration(getDuration()), getAmplifier()));
 			}

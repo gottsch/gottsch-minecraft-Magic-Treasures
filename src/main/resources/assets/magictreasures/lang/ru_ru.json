@@ -541,6 +541,7 @@
   "tooltip.magictreasures.jewelry.stone": "Камень: %s",
   "tooltip.magictreasures.jewelry.usage": "Держите в руке или наденьте для получения эффекта.",
   "tooltip.magictreasures.jewelry_recipe_scroll.usage": "Соедините с 4 слитками соответствующего материала на верстаке, чтобы создать бижутерию.",
+  "tooltip.magictreasures.mana_well.usage": "Наденьте или держите в руке. Заклинания берут из него ману, когда у украшения она заканчивается.",
   "tooltip.magictreasures.spell.cheat_death.rate": "Предотвращает смерть. Перезарядка: %s с.",
   "tooltip.magictreasures.spell.cooldown": "Перезарядка: %s с.",
   "tooltip.magictreasures.spell.cost": "Цена: %s",

@@ -107,7 +107,8 @@ public class MagicTreasuresItems {
     public static DeferredItem<Item> BLACK_PEARL = Registration.ITEMS.register("black_pearl", () -> new Gemstone(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	// belts
-	public static DeferredItem<Item> SKULL_BELT = Registration.ITEMS.register("skull_belt", () -> new ManaWell(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	// a mana well: 250 mana, 2 recharges
+	public static DeferredItem<Item> SKULL_BELT = Registration.ITEMS.register("skull_belt", () -> new ManaWell(MAGIC_TREASURES_PROPS_SUPPLIER.get(), 250, 2));
 
 	/*
      * a list of all mod generated items.

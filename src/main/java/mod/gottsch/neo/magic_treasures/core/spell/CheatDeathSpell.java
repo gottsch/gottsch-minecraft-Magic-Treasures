@@ -61,7 +61,7 @@ public class CheatDeathSpell extends CooldownSpell {
 		CooldownSpellEntity entity = (CooldownSpellEntity) context.getEntity();
 		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && player.isAlive()) {
+		if (hasMana(handler, context) && player.isAlive()) {
 			if (((LivingDamageEvent.Pre)event).getEntity() instanceof Player) {
 				// get the source and amount
 				double damage = ((LivingDamageEvent.Pre)event).getNewDamage();

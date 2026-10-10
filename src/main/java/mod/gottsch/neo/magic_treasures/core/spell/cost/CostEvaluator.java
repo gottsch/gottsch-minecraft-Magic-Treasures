@@ -16,6 +16,9 @@ import net.minecraft.world.level.Level;
 
 import java.util.Optional;
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.capability.IManaWellHandler;
+import mod.gottsch.neo.magic_treasures.core.capability.ManaWellHandler;
+import net.minecraft.world.item.ItemStack;
 
 /*
  * Generic cost evaluator
@@ -42,6 +45,21 @@ public class CostEvaluator implements ICostEvaluator {
 		else {
 			cost = handler.getMana();
 			handler.setMana(0);
+			// the jewelry ran short: draw the rest from worn/held mana wells, in order
+			if (context.getManaWells() != null) {
+				for (ItemStack well : context.getManaWells()) {
+					double shortfall = newAmount - cost;
+					if (shortfall <= 0) {
+						break;
+					}
+					Optional<IManaWellHandler> wellHandler = ManaWellHandler.get(well);
+					if (wellHandler.isPresent() && wellHandler.get().getMana() > 0) {
+						double drawn = Math.min(shortfall, wellHandler.get().getMana());
+						wellHandler.get().setMana(wellHandler.get().getMana() - drawn);
+						cost += drawn;
+					}
+				}
+			}
 		}
 		return cost;
 	}

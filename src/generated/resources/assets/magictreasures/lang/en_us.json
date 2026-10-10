@@ -541,6 +541,7 @@
   "tooltip.magictreasures.jewelry.stone": "Stone: %s",
   "tooltip.magictreasures.jewelry.usage": "Hold in hand or equip for buffs.",
   "tooltip.magictreasures.jewelry_recipe_scroll.usage": "Combine with 4 ingots of respective material on crafting table to craft jewelry item.",
+  "tooltip.magictreasures.mana_well.usage": "Wear or hold it. Spells draw from it when their jewelry runs out of mana.",
   "tooltip.magictreasures.spell.cheat_death.rate": "Prevents death. Cooldown: %s seconds.",
   "tooltip.magictreasures.spell.cooldown": "Cooldown Time: %s seconds.",
   "tooltip.magictreasures.spell.cost": "Cost: %s",

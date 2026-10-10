@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Client config (`magictreasures-client.toml`) with `enableSpellParticles` and `showTooltipIcon`, both on by default. Each player chooses for themselves, even on a server.
 - Jewelry Pliers (2 Iron Ingots + 1 Iron Nugget, 64 uses). Craft them with a piece of jewelry that has a gem to get the gem back; the jewelry is destroyed. Removing a gem at the anvil still keeps the jewelry and destroys the gem, so you choose which to keep.
 - Advancements: a Magic Treasures tab with Set in Stone (add a gem), Spellbound (add a spell), Second Wind (recharge), Delicate Work (remove a gem with pliers) and Fully Adorned (wear a ring, necklace and bracelet at once).
+- The Skull Belt is now a working mana well (250 mana, 2 recharges) and is back in the creative tab. Wear it in the Curios belt slot or hold it; when a spell's jewelry runs out of mana, the rest of the cost comes from the belt, so spells keep casting. Recharge it at an anvil with an Amethyst Shard, Emerald or Recharge Scroll. Found in Rare, Epic, Legendary and Mythical chests.
 
 ### Changed
 - Fixed Mana Shield and Mana Tower Shield letting through too little damage when the jewelry ran short of mana. The damage the shield couldn't pay for replaced the damage it passes through instead of adding to it.

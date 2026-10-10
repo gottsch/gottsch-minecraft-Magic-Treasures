@@ -55,7 +55,7 @@ public class FireResistanceSpell extends Spell {
 		}
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			// get the source and amount
 			double amount = ((LivingDamageEvent.Pre)event).getNewDamage();
 			// calculate the new amount

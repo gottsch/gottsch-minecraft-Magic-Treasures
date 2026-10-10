@@ -116,6 +116,10 @@ public class LootModifierByRarity extends LootModifier {
 				lootList.add(MagicTreasuresItems.NECKLACE_RECIPE.get());
 //				lootList.add(MagicTreasuresItems.BELT_RECIPE.get());
 			}
+			// mana wells
+			if (rarity.getCode() >= MagicTreasuresRarity.RARE.getCode()) {
+				lootList.add(MagicTreasuresItems.SKULL_BELT.get());
+			}
 			// grab random loot from the loot list (without replacement)
 			for (int index = 0; index < count && !lootList.isEmpty(); index++) {
 				Item item = lootList.remove(context.getRandom().nextInt(lootList.size()));

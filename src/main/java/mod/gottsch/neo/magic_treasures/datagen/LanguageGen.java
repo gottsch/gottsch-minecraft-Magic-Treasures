@@ -131,6 +131,7 @@ public class LanguageGen extends LanguageProvider {
 
         // tools
         add(MagicTreasuresItems.JEWELRY_PLIERS.get(), "Jewelry Pliers");
+        add(LangUtil.tooltip("mana_well.usage"), "Wear or hold it. Spells draw from it when their jewelry runs out of mana.");
 
         // advancements
         add("advancements.magictreasures.root.title", "Magic Treasures");

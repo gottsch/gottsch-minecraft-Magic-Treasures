@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
+import mod.gottsch.neo.magic_treasures.core.item.ManaWell;
 
 /**
  *
@@ -118,5 +119,20 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<ItemStack> getManaWells(ServerPlayer player) {
+		List<ItemStack> wells = new ArrayList<>(1);
+		Optional<ICuriosItemHandler> inventory = CuriosApi.getCuriosInventory(player);
+		inventory.ifPresent(itemHandler -> itemHandler.getCurios().values().forEach(stacksHandler -> {
+			for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
+				ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
+				if (stack.getItem() instanceof ManaWell) {
+					wells.add(stack);
+				}
+			}
+		}));
+		return wells;
 	}
 }
