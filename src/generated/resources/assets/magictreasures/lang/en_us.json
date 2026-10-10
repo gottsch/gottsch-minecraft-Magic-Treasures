@@ -688,6 +688,7 @@
   "tooltip.magictreasures.spell.stat.range": "%s range",
   "tooltip.magictreasures.spell.stat.reflect": "%s reflect",
   "tooltip.magictreasures.spell.stat.resist": "%s resist",
+  "tooltip.magictreasures.spell.stat.seconds": "%ss",
   "tooltip.magictreasures.spell.stat.stacks": "stacks",
   "tooltip.magictreasures.spell.strength.rate": "Bestows Strength effect for %s seconds. Cooldown: %s seconds.",
   "tooltip.magictreasures.spell.water_breathing.rate": "Bestows Water Breathing effect for %s seconds. Cooldown: %s seconds.",

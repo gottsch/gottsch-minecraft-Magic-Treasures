@@ -212,6 +212,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.stat.reflect"), "%s reflect");
         add(LangUtil.tooltip("spell.stat.resist"), "%s resist");
         add(LangUtil.tooltip("spell.stat.stacks"), "stacks");
+        add(LangUtil.tooltip("spell.stat.seconds"), "%ss");
         add(LangUtil.tooltip("spell.flavor.blessing_of_the_phoenix"), "Rise unburnt from the flames, as the phoenix does.");
         add(LangUtil.tooltip("spell.flavor.cat_sight"), "See in the dark as clearly as a cat.");
         add(LangUtil.tooltip("spell.flavor.cheat_death"), "Turns aside one killing blow.");

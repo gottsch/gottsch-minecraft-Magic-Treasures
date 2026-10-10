@@ -209,7 +209,11 @@ public abstract class Spell implements ISpell {
 
     /** A chip such as "4 dmg": {@code stat} picks the lang key, and {@code value} is drawn in {@code color}. */
     protected static Component chip(String stat, String value, ChatFormatting color) {
-        return Component.translatable(LangUtil.tooltip("spell.stat." + stat), Component.literal(value).withStyle(color))
+        return chip(stat, Component.literal(value), color);
+    }
+
+    protected static Component chip(String stat, MutableComponent value, ChatFormatting color) {
+        return Component.translatable(LangUtil.tooltip("spell.stat." + stat), value.withStyle(color))
                 .withStyle(ChatFormatting.GRAY);
     }
 
@@ -218,8 +222,9 @@ public abstract class Spell implements ISpell {
         return MathUtil.r1d(value).replaceAll("[.,]0$", "");
     }
 
-    protected static String seconds(long ticks) {
-        return number(ticks / 20.0) + "s";
+    /** "9s", with the unit from the lang file */
+    protected static MutableComponent seconds(long ticks) {
+        return Component.translatable(LangUtil.tooltip("spell.stat.seconds"), number(ticks / 20.0));
     }
 
     /** 0.3 -> "30%" */

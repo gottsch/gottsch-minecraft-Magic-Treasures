@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.5.0] - Unreleased
 
+### Changed
+- Redesigned jewelry tooltips. The header shows the jewelry's type, gem and max spell level under its name. Mana and durability are short bars, each spell has a one-line description and a small box for each of its numbers (effect, range, cooldown, mana cost and so on), and the jewelry's modifiers sit in two columns with full names. Dashed lines are now drawn lines, long text wraps, and Hold [SHIFT] shows the material, gem, repairs and recharges.
+- The "+" after a spell's name is now a green "stacks" box: that spell's effect adds up with the same spell on other jewelry you wear.
+- New lore for Silbro's Ring of Vitality, and Strongman's Bracers has lore (it's Silbro's work too).
+- Fixed Strength (Quick, Greater and Giant Strength) showing its cooldown where its tooltip says the effect's duration.
+
 ## [1.4.0] - 2026-10-10
 
 ### Added
