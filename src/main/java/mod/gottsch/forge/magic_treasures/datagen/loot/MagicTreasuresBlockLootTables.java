@@ -42,26 +42,26 @@ public class MagicTreasuresBlockLootTables extends BlockLootSubProvider {
 
 
         this.add(MagicTreasuresBlocks.DEEPSLATE_JADEITE_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.DEEPSLATE_JADEITE_ORE.get()));
+                MagicTreasuresItems.JADEITE.get()));
         this.add(MagicTreasuresBlocks.DEEPSLATE_ONYX_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.DEEPSLATE_ONYX_ORE.get()));
+                MagicTreasuresItems.ONYX.get()));
         this.add(MagicTreasuresBlocks.DEEPSLATE_RUBY_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.DEEPSLATE_RUBY_ORE.get()));
+                MagicTreasuresItems.RUBY.get()));
         this.add(MagicTreasuresBlocks.DEEPSLATE_SAPPHIRE_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.DEEPSLATE_SAPPHIRE_ORE.get()));
+                MagicTreasuresItems.SAPPHIRE.get()));
         this.add(MagicTreasuresBlocks.DEEPSLATE_TOPAZ_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.DEEPSLATE_TOPAZ_ORE.get()));
+                MagicTreasuresItems.TOPAZ.get()));
 
         this.add(MagicTreasuresBlocks.JADEITE_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.JADEITE_ORE.get()));
+                MagicTreasuresItems.JADEITE.get()));
         this.add(MagicTreasuresBlocks.ONYX_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.ONYX_ORE.get()));
+                MagicTreasuresItems.ONYX.get()));
         this.add(MagicTreasuresBlocks.RUBY_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.RUBY_ORE.get()));
+                MagicTreasuresItems.RUBY.get()));
         this.add(MagicTreasuresBlocks.SAPPHIRE_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.SAPPHIRE_ORE.get()));
+                MagicTreasuresItems.SAPPHIRE.get()));
         this.add(MagicTreasuresBlocks.TOPAZ_ORE.get(), block -> createOreDrop(block,
-                MagicTreasuresItems.TOPAZ_ORE.get()));
+                MagicTreasuresItems.TOPAZ.get()));
 
         this.add(MagicTreasuresBlocks.SILVER_ORE.get(), block -> createOreDrop(block,
                 MagicTreasuresItems.RAW_SILVER.get()));

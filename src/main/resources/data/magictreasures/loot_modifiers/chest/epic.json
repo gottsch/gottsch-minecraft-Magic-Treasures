@@ -28,7 +28,7 @@
       "loot_table_id" : "minecraft:chests/shipwreck_treasure"
     }, {
       "condition" : "forge:loot_table_id",
-      "loot_table_id" : "minecraft:chests/under_water_ruin_big"
+      "loot_table_id" : "minecraft:chests/underwater_ruin_big"
     } ]
   } ],
   "count" : 2,
