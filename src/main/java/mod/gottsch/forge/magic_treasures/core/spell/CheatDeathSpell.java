@@ -20,6 +20,7 @@ import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import java.util.List;
 
 /**
  * 
@@ -89,6 +90,11 @@ public class CheatDeathSpell extends CooldownSpell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.cheat_death.rate"),
 				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

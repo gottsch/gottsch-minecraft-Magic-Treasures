@@ -22,6 +22,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * Fired on LivingHurtEvent, so the original amount of damage INTENDED (ie not actual Damage) to be
@@ -88,6 +89,12 @@ public class ReflectionSpell extends CooldownSpell {
 		return Component.translatable(LangUtil.tooltip("spell.reflection.rate"),
 				LangUtil.asPercentString(getEffectAmount() * 100),
 				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("reflect", percent(modifyEffectAmount(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

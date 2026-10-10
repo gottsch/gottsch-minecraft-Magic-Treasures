@@ -129,6 +129,13 @@ public class DrainSpell extends Spell {
 	}
 
 	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("drain", number(modifyEffectAmount(jewelry)), ChatFormatting.RED),
+			chip("range", number(modifyRange(jewelry)), ChatFormatting.AQUA),
+			chip("every", seconds(modifyFrequency(jewelry)), ChatFormatting.AQUA));
+	}
+
+	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.drain.rate"),
 				MathUtil.r1d(modifyEffectAmount(jewelry)),

@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import java.util.List;
 
 /**
  * @author Mark Gottschling on June 4, 2024
@@ -71,9 +72,15 @@ public class StrengthSpell extends CooldownSpell {
 	}
 
 	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("duration", seconds(modifyDuration(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+	}
+
+	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.strength.rate"),
-				MathUtil.r1d(modifyCooldown(jewelry) / 20.0),
+				MathUtil.r1d(modifyDuration(jewelry) / 20.0),
 				MathUtil.r1d(modifyCooldown(jewelry) / 20.0));
 	}
 

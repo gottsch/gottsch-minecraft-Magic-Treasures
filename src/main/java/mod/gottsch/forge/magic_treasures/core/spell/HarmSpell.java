@@ -113,6 +113,13 @@ public class HarmSpell extends CooldownSpell {
     }
 
     @Override
+    public List<Component> getStatChips(ItemStack jewelry) {
+        return List.of(chip("damage", number(modifyEffectAmount(jewelry)), ChatFormatting.RED),
+            chip("range", number(modifyRange(jewelry)), ChatFormatting.AQUA),
+            chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+    }
+
+    @Override
     public Component getSpellDesc(ItemStack jewelry) {
         return Component.translatable(LangUtil.tooltip("spell.harm.rate"),
                 MathUtil.r1d(modifyEffectAmount(jewelry)),

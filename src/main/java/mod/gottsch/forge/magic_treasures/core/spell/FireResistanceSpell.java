@@ -17,6 +17,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * This is essentially the same as Mana Shield except it resists fire damage only and doesn't have a cooldown.
@@ -81,6 +82,11 @@ public class FireResistanceSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.fire_resistance.rate"),
 				LangUtil.asPercentString(Math.min(100, getEffectAmount() * 100)));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("resist", percent(Math.min(1.0, modifyEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override

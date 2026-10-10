@@ -35,6 +35,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import java.util.List;
 
 /**
  *
@@ -83,6 +84,12 @@ public class SatietySpell extends Spell {
 		// "Restores 0.5 hunger every %s seconds."
 		return Component.translatable(LangUtil.tooltip("spell.satiety.rate"),
 				MathUtil.r1d(getFrequency()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("hunger", "0.5", ChatFormatting.GOLD),
+			chip("every", seconds(modifyFrequency(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

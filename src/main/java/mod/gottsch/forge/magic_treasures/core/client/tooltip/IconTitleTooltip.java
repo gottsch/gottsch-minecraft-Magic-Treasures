@@ -30,9 +30,18 @@ import net.minecraft.world.item.ItemStack;
  *
  * @param stack the item to draw
  * @param title the tooltip's original title line (keeps its rarity color and formatting)
+ * @param subtitle a second line under the title, or null (see {@link TooltipMarkers#subtitle})
  * @param scale icon scale: 1 = 16px, 2 = 32px
  *
  * @author Mark Gottschling on 10/9/2026
  */
-public record IconTitleTooltip(ItemStack stack, FormattedText title, float scale) implements TooltipComponent {
+public record IconTitleTooltip(ItemStack stack, FormattedText title, FormattedText subtitle, float scale) implements TooltipComponent {
+
+    public IconTitleTooltip(ItemStack stack, FormattedText title, float scale) {
+        this(stack, title, null, scale);
+    }
+
+    public IconTitleTooltip withSubtitle(FormattedText subtitle) {
+        return new IconTitleTooltip(stack, title, subtitle, scale);
+    }
 }

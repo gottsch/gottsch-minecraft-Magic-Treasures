@@ -19,6 +19,7 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * 
@@ -108,6 +109,12 @@ public class ManaShieldSpell extends Spell {
 		return Component.translatable(LangUtil.tooltip("spell.mana_shield.rate"),
 				LangUtil.asPercentString(getEffectAmount() * 100),
 				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("absorb", percent(modifyEffectAmount(jewelry)), ChatFormatting.BLUE),
+			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

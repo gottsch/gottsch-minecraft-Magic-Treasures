@@ -105,6 +105,9 @@ public interface IJewelryHandler {
 
     void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag);
 
+    /** The tooltip header's second line: type, gem and max spell level. */
+    Component getSubtitle();
+
     int getRecharges();
 
     void setRecharges(int recharges);
