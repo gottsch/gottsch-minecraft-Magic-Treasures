@@ -146,24 +146,24 @@ public abstract class Spell implements ISpell {
     // below (jewelry only), since a tooltip has no cast.
 
     protected double effectAmount(ICastSpellContext context) {
-        return SetEquipment.modify(context.getPlayer(), this, SpellStat.EFFECT, modifyEffectAmount(context.getJewelry()));
+        return SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.EFFECT, modifyEffectAmount(context.getJewelry()));
     }
 
     protected double range(ICastSpellContext context) {
-        return SetEquipment.modify(context.getPlayer(), this, SpellStat.RANGE, modifyRange(context.getJewelry()));
+        return SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.RANGE, modifyRange(context.getJewelry()));
     }
 
     protected int duration(ICastSpellContext context) {
-        return (int) Math.round(SetEquipment.modify(context.getPlayer(), this, SpellStat.DURATION, modifyDuration(context.getJewelry())));
+        return (int) Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.DURATION, modifyDuration(context.getJewelry())));
     }
 
     /** never below 1 tick: callers use it as a modulus */
     protected long frequency(ICastSpellContext context) {
-        return Math.max(1L, Math.round(SetEquipment.modify(context.getPlayer(), this, SpellStat.FREQUENCY, modifyFrequency(context.getJewelry()))));
+        return Math.max(1L, Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.FREQUENCY, modifyFrequency(context.getJewelry()))));
     }
 
     protected long cooldown(ICastSpellContext context) {
-        return Math.round(SetEquipment.modify(context.getPlayer(), this, SpellStat.COOLDOWN, modifyCooldown(context.getJewelry())));
+        return Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.COOLDOWN, modifyCooldown(context.getJewelry())));
     }
 
     public double modifySpellCost(ItemStack jewelry) {
@@ -200,7 +200,7 @@ public abstract class Spell implements ISpell {
     // jewelry, so the chips show what a cast will use
 
     private double withSetBonus(ItemStack jewelry, SpellStat stat, double value) {
-        return SetEquipment.modify(SetEquipment.getTooltipWearer(jewelry), this, stat, value);
+        return SetEquipment.modify(SetEquipment.getTooltipWearer(jewelry), jewelry, this, stat, value);
     }
 
     protected double tooltipEffectAmount(ItemStack jewelry) {

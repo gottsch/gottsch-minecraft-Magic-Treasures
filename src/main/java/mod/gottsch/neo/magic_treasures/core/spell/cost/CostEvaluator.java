@@ -41,7 +41,7 @@ public class CostEvaluator implements ICostEvaluator {
 		// calculate the new amount for cost
 		double newAmount = amount * handler.getMaterial().getSpellCostFactor()
 				* stoneTier.getSpellCostFactor();
-		newAmount = SetEquipment.modify(context.getPlayer(), context.getEntity().getSpell(), SpellStat.COST, newAmount);
+		newAmount = SetEquipment.modify(context.getPlayer(), context.getJewelry(), context.getEntity().getSpell(), SpellStat.COST, newAmount);
 		newAmount = Math.max(MIN_COST, newAmount);
 
 		double cost = 0;

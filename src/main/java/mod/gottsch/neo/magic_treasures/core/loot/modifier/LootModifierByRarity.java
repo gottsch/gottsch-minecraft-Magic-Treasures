@@ -28,6 +28,7 @@ import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.neo.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.registry.JewelryRegistry;
@@ -120,10 +121,19 @@ public class LootModifierByRarity extends LootModifier {
 			if (rarity.getCode() >= MagicTreasuresRarity.RARE.getCode()) {
 				lootList.add(MagicTreasuresItems.SKULL_BELT.get());
 			}
+			// set weapons and armor
+			if (rarity.getCode() >= MagicTreasuresRarity.UNCOMMON.getCode()) {
+				lootList.add(MagicTreasuresItems.ROOTSTAFF.get());
+				lootList.add(MagicTreasuresItems.BARKSKIN_VEST.get());
+			}
 			// grab random loot from the loot list (without replacement)
 			for (int index = 0; index < count && !lootList.isEmpty(); index++) {
 				Item item = lootList.remove(context.getRandom().nextInt(lootList.size()));
 				generatedLoot.add(new ItemStack(item));
+				// set pieces drop one per chest
+				if (JewelrySets.get(item).isPresent()) {
+					lootList.removeIf(other -> JewelrySets.get(other).isPresent());
+				}
 			}
 		}
 		return generatedLoot;
