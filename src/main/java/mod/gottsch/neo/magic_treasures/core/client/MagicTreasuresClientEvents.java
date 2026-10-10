@@ -25,6 +25,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
@@ -55,6 +56,12 @@ public class MagicTreasuresClientEvents {
 	private static final int TOOLTIP_BOTTOM_MARGIN = 16;
 
 	/**
+	 * Obscure Tooltips draws its own icon, name and rarity header from the tooltip's first text line. With our icon
+	 * header in place of the name, it takes the next line (Curios' "Slot: Ring") as the title and both headers show.
+	 */
+	private static final boolean HAS_OWN_ICON_HEADER = ModList.get().isLoaded("obscure_tooltips");
+
+	/**
 	 * Show the item's icon beside its name in every Magic Treasures tooltip, then swap the tooltip's marker lines
 	 * (dividers, bars, chips, grids) for drawn components.
 	 * <p>
@@ -63,7 +70,7 @@ public class MagicTreasuresClientEvents {
 	 */
 	@SubscribeEvent
 	public static void onGatherTooltipComponents(RenderTooltipEvent.GatherComponents event) {
-		if (Config.CLIENT.showTooltipIcon.get()) {
+		if (Config.CLIENT.showTooltipIcon.get() && !HAS_OWN_ICON_HEADER) {
 			IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 		}
 		RichTooltips.apply(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH);
