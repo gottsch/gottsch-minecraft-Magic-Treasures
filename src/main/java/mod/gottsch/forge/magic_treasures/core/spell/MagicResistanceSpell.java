@@ -53,7 +53,7 @@ public class MagicResistanceSpell extends Spell {
 		if (source.is(DamageTypes.MAGIC) || source.is(DamageTypes.INDIRECT_MAGIC)) {
 			IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-			if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+			if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 				// get the source and amount
 				double amount = ((LivingDamageEvent)event).getAmount();
 				// calculate the new amount

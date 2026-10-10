@@ -84,7 +84,7 @@ public class DrainSpell extends Spell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 		if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
-			if (handler.getMana() > 0 && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
+			if (hasMana(handler, context) && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
 				// get player position
 				double px = player.getX();
 				double py = player.getY();

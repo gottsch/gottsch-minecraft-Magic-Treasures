@@ -541,6 +541,7 @@
   "tooltip.magictreasures.jewelry.stone": "Gema: %s",
   "tooltip.magictreasures.jewelry.usage": "Sostenla en la mano o equípala para obtener mejoras.",
   "tooltip.magictreasures.jewelry_recipe_scroll.usage": "Combínala con 4 lingotes del material correspondiente en una mesa de crafteo para fabricar la joya.",
+  "tooltip.magictreasures.mana_well.usage": "Llévalo puesto o en la mano. Los hechizos toman maná de él cuando a su joya se le acaba.",
   "tooltip.magictreasures.spell.cheat_death.rate": "Evita la muerte. Enfriamiento: %s segundos.",
   "tooltip.magictreasures.spell.cooldown": "Tiempo de enfriamiento: %s segundos.",
   "tooltip.magictreasures.spell.cost": "Coste: %s",

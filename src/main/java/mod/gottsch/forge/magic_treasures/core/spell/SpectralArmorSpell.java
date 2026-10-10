@@ -68,7 +68,7 @@ SpectralArmorSpell extends Spell {
 			double cooldown = modifyCooldown(jewelry);
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
-				if (handler.getMana() > 0 && player.isAlive()) {
+				if (hasMana(handler, context) && player.isAlive()) {
 					// TODO only execute if damage is coming from a Mob ie not Fire, Fall etc
 					if (((LivingDamageEvent)event).getEntity() instanceof Player) {
 						// get the source and amount

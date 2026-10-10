@@ -69,7 +69,7 @@ public class ManaShieldSpell extends Spell {
 
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
-				if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+				if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 					if (((LivingDamageEvent)event).getEntity() instanceof Player) {
 						// get the source and amount
 						double amount = ((LivingDamageEvent)event).getAmount();

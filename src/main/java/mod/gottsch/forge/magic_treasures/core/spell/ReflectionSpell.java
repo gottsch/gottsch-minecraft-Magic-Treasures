@@ -54,7 +54,7 @@ public class ReflectionSpell extends CooldownSpell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && player.isAlive()) {
+		if (hasMana(handler, context) && player.isAlive()) {
 			if (((LivingHurtEvent)event).getEntity() instanceof Player) {
 				double amount = ((LivingHurtEvent)event).getAmount();
 				double reflectedAmount = amount * modifyEffectAmount(jewelry);

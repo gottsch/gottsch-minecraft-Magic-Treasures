@@ -76,7 +76,7 @@ public class HealingSpell extends Spell {
         boolean result = false;
         IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
         if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
-            if (handler.getMana() > 0 && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
+            if (hasMana(handler, context) && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
 
                 // determine the actual amount of health (0.0 -> getAmount())
                 float amount = Math.min((float)handler.modifyEffectAmount(getEffectAmount()), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());

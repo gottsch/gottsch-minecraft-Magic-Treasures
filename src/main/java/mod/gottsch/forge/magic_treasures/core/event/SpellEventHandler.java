@@ -43,6 +43,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.advancement.MagicTreasuresCriteria;
+import mod.gottsch.forge.magic_treasures.core.item.ManaWell;
 
 /**
  * 
@@ -217,6 +218,23 @@ public class SpellEventHandler {
 	}
 	
 	/**
+	 * Mana wells the player can draw from: held in either hand, or worn in an equipment slot.
+	 */
+	private List<ItemStack> gatherManaWells(ServerPlayer player) {
+		List<ItemStack> wells = new ArrayList<>(2);
+		for (InteractionHand hand : InteractionHand.values()) {
+			ItemStack stack = player.getItemInHand(hand);
+			if (stack.getItem() instanceof ManaWell) {
+				wells.add(stack);
+			}
+		}
+		if (getEquipmentSpellHandler() != null) {
+			wells.addAll(getEquipmentSpellHandler().getManaWells(player));
+		}
+		return wells;
+	}
+
+	/**
 	 * 
 	 * @param event
 	 * @param player
@@ -231,6 +249,7 @@ public class SpellEventHandler {
 		}
 		final List<String> executeOnceSpellTypes = new ArrayList<>(5);
 		Coords coords = new Coords(player.position());
+		List<ItemStack> manaWells = gatherManaWells(player);
 
 		contexts.forEach(context -> {
 			ISpell spell = (ISpell)context.getEntity().getSpell();
@@ -248,7 +267,7 @@ public class SpellEventHandler {
 			}
 
 			// if spell is executable and executes successfully
-			ICastSpellContext castContext = new CastSpellContext(context.getItemStack(), null, context.getEntity(), player);
+			ICastSpellContext castContext = new CastSpellContext(context.getItemStack(), manaWells, context.getEntity(), player);
 			if (context.getEntity().getSpell().serverUpdate(player.level(), random, coords, event, castContext)) {
 //				MagicTreasures.LOGGER.debug("spell {} successfully updated.", spell.getName().toString());
 				processUsage(player.level(), player, event, context);

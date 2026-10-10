@@ -61,7 +61,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && player.isAlive()) {
+		if (hasMana(handler, context) && player.isAlive()) {
 			DamageSource source = ((LivingHurtEvent) event).getSource();
 			if (source.getDirectEntity() instanceof Player) {
 

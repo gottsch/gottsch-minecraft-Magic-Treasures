@@ -68,7 +68,7 @@ public class SatietySpell extends Spell {
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
 		if (world.getGameTime() % modifyFrequency(jewelry) == 0) {
-			if (player.isAlive() && handler.getMana() > 0 && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
+			if (player.isAlive() && hasMana(handler, context) && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
 				double amount = modifyEffectAmount(jewelry);
 				player.getFoodData().eat((int)amount, (float) amount);
 				applyCost(world, random, coords, context, modifySpellCost(jewelry));
