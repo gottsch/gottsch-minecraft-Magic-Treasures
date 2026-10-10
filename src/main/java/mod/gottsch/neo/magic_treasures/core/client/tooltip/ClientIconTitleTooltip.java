@@ -28,8 +28,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 
 /**
- * Draws an {@link IconTitleTooltip}: the item's icon at the given scale, with the title vertically
- * centered beside it.
+ * Draws an {@link IconTitleTooltip}: the item's icon at the given scale, with the title (and the subtitle under
+ * it, if any) vertically centered beside it.
  *
  * @author Mark Gottschling on 10/9/2026
  */
@@ -42,11 +42,14 @@ public class ClientIconTitleTooltip implements ClientTooltipComponent {
 
     private final IconTitleTooltip tooltip;
     private final FormattedCharSequence title;
+    /** null when there is no subtitle */
+    private final FormattedCharSequence subtitle;
     private final int iconSize;
 
     public ClientIconTitleTooltip(IconTitleTooltip tooltip) {
         this.tooltip = tooltip;
         this.title = Language.getInstance().getVisualOrder(tooltip.title());
+        this.subtitle = tooltip.subtitle() == null ? null : Language.getInstance().getVisualOrder(tooltip.subtitle());
         this.iconSize = Math.round(ICON_PX * tooltip.scale());
     }
 
@@ -58,13 +61,21 @@ public class ClientIconTitleTooltip implements ClientTooltipComponent {
 
     @Override
     public int getWidth(Font font) {
-        return iconSize + GAP + font.width(title);
+        int textWidth = font.width(title);
+        if (subtitle != null) {
+            textWidth = Math.max(textWidth, font.width(subtitle));
+        }
+        return iconSize + GAP + textWidth;
     }
 
     @Override
     public void renderText(Font font, int x, int y, Matrix4f matrix, MultiBufferSource.BufferSource buffer) {
-        int textY = y + (iconSize - font.lineHeight) / 2 + 1;
+        int lines = subtitle == null ? 1 : 2;
+        int textY = y + (iconSize - font.lineHeight * lines - (lines - 1)) / 2 + 1;
         font.drawInBatch(title, x + iconSize + GAP, textY, -1, true, matrix, buffer, Font.DisplayMode.NORMAL, 0, LIGHT);
+        if (subtitle != null) {
+            font.drawInBatch(subtitle, x + iconSize + GAP, textY + font.lineHeight + 1, -1, true, matrix, buffer, Font.DisplayMode.NORMAL, 0, LIGHT);
+        }
     }
 
     @Override

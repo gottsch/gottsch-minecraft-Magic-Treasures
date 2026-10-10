@@ -18,6 +18,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * 
@@ -102,6 +103,11 @@ SpectralArmorSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.spectral_armor.rate"),
 				LangUtil.asPercentString(getEffectAmount() * 4.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("armor", percent(modifyEffectAmount(jewelry) * 0.04), ChatFormatting.LIGHT_PURPLE));
 	}
 
 	@Override

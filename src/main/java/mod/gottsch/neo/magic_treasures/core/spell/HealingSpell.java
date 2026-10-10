@@ -35,6 +35,7 @@ import net.neoforged.bus.api.Event;
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 import net.minecraft.core.particles.ParticleTypes;
+import java.util.List;
 
 /**
  *
@@ -94,6 +95,12 @@ public class HealingSpell extends Spell {
         return Component.translatable(LangUtil.tooltip("spell.healing.rate"),
                 MathUtil.r1d(getEffectAmount()),
                 MathUtil.r1d(getFrequency()/20.0));
+    }
+
+    @Override
+    public List<Component> getStatChips(ItemStack jewelry) {
+        return List.of(chip("heal", number(modifyEffectAmount(jewelry)), ChatFormatting.GREEN),
+            chip("every", seconds(modifyFrequency(jewelry)), ChatFormatting.AQUA));
     }
 
     @Override

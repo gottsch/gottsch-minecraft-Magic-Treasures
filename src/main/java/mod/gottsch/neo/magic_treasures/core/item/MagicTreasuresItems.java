@@ -153,7 +153,7 @@ public class MagicTreasuresItems {
 					};
 				});
 		}
-	});
+	}.setLoreKey("jewelry.strongmans_bracers.lore"));
 
 	// common
 	public static DeferredItem<Item> PEASANTS_FORTUNE = Registration.ITEMS.register("peasants_fortune", () -> new NamedJewelry(MAGIC_TREASURES_PROPS_SUPPLIER.get()) {

@@ -37,6 +37,10 @@ import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
+import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
+import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
+import java.util.Optional;
 
 /**
  * Created by Mark Gottschling on 5/29/2023
@@ -119,22 +123,17 @@ public class Jewelry extends Item implements IJewelry{
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, context, tooltip, flag);
-        tooltip.add(Component.translatable(LangUtil.NEWLINE));
+        Optional<IJewelryHandler> handler = JewelryHandler.get(stack);
+        // "Ring · Ruby · Lvl 4", drawn under the name in the icon header
+        handler.ifPresent(h -> tooltip.add(TooltipMarkers.subtitle(MagicTreasures.MOD_ID, h.getSubtitle())));
+        tooltip.add(Component.literal(LangUtil.NEWLINE));
 
-        // hide when [shift]
-        LangUtil.appendHideableHoverText(tooltip, tt -> {
-            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.usage")).withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC));
-            tooltip.add(Component.translatable(LangUtil.NEWLINE));
-
-            if (StringUtils.isNotBlank(getLoreKey())) {
-                appendLoreHoverText(stack, context, tooltip, flag);
-            }
-        });
+        if (StringUtils.isNotBlank(getLoreKey())) {
+            appendLoreHoverText(stack, context, tooltip, flag);
+        }
 
         // add handler tooltips
-        JewelryHandler.get(stack).ifPresent(handler -> {
-            handler.appendHoverText(stack, context, tooltip, flag);
-        });
+        handler.ifPresent(h -> h.appendHoverText(stack, context, tooltip, flag));
     }
 
     @Override
@@ -143,8 +142,7 @@ public class Jewelry extends Item implements IJewelry{
             // lore may be multiple lines, so separate on \n and add to tooltip
             Component lore = Component.translatable(LangUtil.tooltip(getLoreKey()));
             for (String s : lore.getString().split("~")) {
-                tooltip.add(Component.literal(LangUtil.INDENT2)
-                        .append(Component.translatable(s))
+                tooltip.add(Component.translatable(s)
                         .withStyle(ChatFormatting.DARK_AQUA).withStyle(ChatFormatting.ITALIC));
             }
         tooltip.add(Component.literal(LangUtil.NEWLINE));

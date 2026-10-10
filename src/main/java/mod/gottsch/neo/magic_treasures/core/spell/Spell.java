@@ -26,6 +26,7 @@ import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.spell.cost.CostEvaluator;
 import mod.gottsch.neo.magic_treasures.core.spell.cost.ICostEvaluator;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
+import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -42,6 +43,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
 import mod.gottsch.neo.magic_treasures.core.capability.ManaWellHandler;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
+import net.minecraft.locale.Language;
+import java.util.ArrayList;
 
 /**
  * Spells are a single instance within the mod like Blocks and Items.
@@ -174,13 +178,58 @@ public abstract class Spell implements ISpell {
     @Override
     public void addInformation(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flagIn, SpellEntity entity) {
         tooltip.add(getLabel());
-        getDesc(stack).ifPresent(tooltip::add);
+        String flavorKey = LangUtil.tooltip("spell.flavor." + getName().getPath());
+        if (Language.getInstance().has(flavorKey)) {
+            tooltip.add(TooltipMarkers.space(MagicTreasures.MOD_ID, 2));
+            tooltip.add(Component.translatable(flavorKey).withStyle(getSpellDescColor(), ChatFormatting.ITALIC));
+        }
+        tooltip.add(TooltipMarkers.space(MagicTreasures.MOD_ID, 3));
+        List<Component> chips = new ArrayList<>(getStatChips(stack));
+        chips.add(getCostChip(stack));
+        if (isEffectStackable()) {
+            // the effect adds up with the same spell on other worn jewelry
+            chips.add(Component.translatable(LangUtil.tooltip("spell.stat.stacks")).withStyle(ChatFormatting.GREEN));
+        }
+        tooltip.add(TooltipMarkers.chips(MagicTreasures.MOD_ID, chips));
+    }
+
+    /**
+     * Every number this spell has, as tooltip chips, already modified by the jewelry. Leave out the mana cost:
+     * {@link #addInformation} adds that chip for every spell.
+     */
+    public List<Component> getStatChips(ItemStack jewelry) {
+        return List.of();
+    }
+
+    private Component getCostChip(ItemStack jewelry) {
+        // spells without a set cost pay a share of the damage they handle, so it varies; every cast costs at least 1
+        String value = getSpellCost() > 0 ? number(Math.max(1.0, modifySpellCost(jewelry))) : "1+";
+        return chip("mana", value, ChatFormatting.BLUE);
+    }
+
+    /** A chip such as "4 dmg": {@code stat} picks the lang key, and {@code value} is drawn in {@code color}. */
+    protected static Component chip(String stat, String value, ChatFormatting color) {
+        return Component.translatable(LangUtil.tooltip("spell.stat." + stat), Component.literal(value).withStyle(color))
+                .withStyle(ChatFormatting.GRAY);
+    }
+
+    /** One decimal place at most, and none for whole numbers: 4.0 -> "4", 4.46 -> "4.5". */
+    protected static String number(double value) {
+        return MathUtil.r1d(value).replaceAll("[.,]0$", "");
+    }
+
+    protected static String seconds(long ticks) {
+        return number(ticks / 20.0) + "s";
+    }
+
+    /** 0.3 -> "30%" */
+    protected static String percent(double fraction) {
+        return number(fraction * 100) + "%";
     }
 
     private Component getLabel() {
         MutableComponent label = Component.translatable(LangUtil.tooltip("spell.name.") + getName().getPath().toLowerCase());
-        label.append(" ").append((this.effectStackable ? "+" : ""));
-        return Component.translatable(LangUtil.INDENT2).append(label.withStyle(getSpellLabelColor()).withStyle(ChatFormatting.BOLD));
+        return label.withStyle(getSpellLabelColor()).withStyle(ChatFormatting.BOLD);
     }
 
     // a short desc of its effect ex "Heals 1hp / 10 sec"

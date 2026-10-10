@@ -1,11 +1,10 @@
 {
   "homepage": "https://www.curseforge.com/minecraft/mc-mods/magic-treasures",
   "promos": {
-    "1.21.1-latest": "1.4.0",
-    "1.21.1-recommended": "1.4.0"
+    "1.21.1-latest": "1.5.0",
+    "1.21.1-recommended": "1.5.0"
   },
   "1.21.1": {
-    "1.4.0": "See https://raw.githubusercontent.com/gottsch/gottsch-minecraft-Magic-Treasures/neoforge-1.21.1-main/CHANGELOG.md",
-    "1.3.2": "See https://raw.githubusercontent.com/gottsch/gottsch-minecraft-Magic-Treasures/neoforge-1.21.1-main/CHANGELOG.md"
+    "1.5.0": "See https://raw.githubusercontent.com/gottsch/gottsch-minecraft-Magic-Treasures/neoforge-1.21.1-main/CHANGELOG.md"
   }
 }

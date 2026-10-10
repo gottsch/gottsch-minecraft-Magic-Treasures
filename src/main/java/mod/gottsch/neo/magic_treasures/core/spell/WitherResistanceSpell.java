@@ -18,6 +18,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * 
@@ -79,6 +80,11 @@ public class WitherResistanceSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.wither_resistance.rate"),
 				LangUtil.asPercentString(Math.min(100, getEffectAmount() * 100)));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("resist", percent(Math.min(1.0, modifyEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override

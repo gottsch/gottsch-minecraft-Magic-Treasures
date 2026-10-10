@@ -50,6 +50,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
 
 /**
  * A write-through view of a jewelry stack's JewelryData component.
@@ -59,6 +61,11 @@ import java.util.function.UnaryOperator;
  * Created by Mark Gottschling on 6/1/2023
  */
 public class JewelryHandler implements IJewelryHandler {
+    private static final int MANA_BAR_RGB = 0x5555FF;
+    private static final int DURABILITY_BAR_RGB = 0x55AA55;
+    private static final int INFINITE_BAR_RGB = 0x777777;
+    private static final String SUBTITLE_SEPARATOR = " \u00B7 ";
+
 
     private final ItemStack stack;
 
@@ -268,92 +275,79 @@ public class JewelryHandler implements IJewelryHandler {
 
     @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-
-        // spell max level
-        tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("jewelry.max_level"),
-                ChatFormatting.GOLD + String.valueOf(getMaxLevel()))));
-
-        // durability
+        // mana and durability bars
+        tooltip.add(TooltipMarkers.bar(MagicTreasures.MOD_ID,
+                Component.translatable(LangUtil.tooltip("jewelry.bar.mana")).withStyle(ChatFormatting.BLUE),
+                Component.literal(Math.round(getMana()) + "/" + (long) Math.ceil(getMaxMana())),
+                getMaxMana() > 0 ? getMana() / getMaxMana() : 0, MANA_BAR_RGB));
+        Component durabilityLabel = Component.translatable(LangUtil.tooltip("jewelry.bar.durability")).withStyle(ChatFormatting.GRAY);
         if (isInfinite()) {
-            tooltip.add(Component.translatable(LangUtil.INDENT2)
-                    .append(Component.translatable(LangUtil.tooltip("jewelry.durability.infinite"), Component.translatable(LangUtil.tooltip("infinite")).withStyle(ChatFormatting.GRAY))));
+            tooltip.add(TooltipMarkers.bar(MagicTreasures.MOD_ID, durabilityLabel, Component.literal("\u221E"), 1.0, INFINITE_BAR_RGB));
         } else {
-            tooltip.add(Component.translatable(LangUtil.INDENT2)
-                    .append(Component.translatable(LangUtil.tooltip("jewelry.durability.amount"),
-                    ChatFormatting.GRAY + String.valueOf(getUses()),
-                    ChatFormatting.GRAY + String.valueOf(getMaxUses()))));
+            tooltip.add(TooltipMarkers.bar(MagicTreasures.MOD_ID, durabilityLabel,
+                    Component.literal(getUses() + "/" + getMaxUses()),
+                    getMaxUses() > 0 ? (double) getUses() / getMaxUses() : 0, DURABILITY_BAR_RGB));
         }
 
-        // mana
-        tooltip.add(Component.translatable(LangUtil.INDENT2)
-                .append(Component.translatable(LangUtil.tooltip("jewelry.mana"),
-                        ChatFormatting.BLUE + String.valueOf(Math.toIntExact(Math.round(getMana()))),
-                        ChatFormatting.BLUE + String.valueOf(Math.toIntExact((long)Math.ceil(getMaxMana()))))));
-
+        // spells: name, flavor line and stat chips each, with a blank line between spells
         List<SpellEntity> spells = getSpells();
         if (!spells.isEmpty()) {
-            tooltip.add(Component.translatable(LangUtil.NEWLINE));
-            tooltip.add(Component.translatable(LangUtil.INDENT2)
-                    .append(Component.translatable(LangUtil.tooltip("divider")).withStyle(ChatFormatting.GRAY)));
-
-            // add spells
-            for (SpellEntity entity : spells) {
-                entity.getSpell().addInformation(stack, context, tooltip, flag, entity);
+            tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
+            for (int i = 0; i < spells.size(); i++) {
+                if (i > 0) {
+                    tooltip.add(Component.literal(LangUtil.NEWLINE));
+                }
+                spells.get(i).getSpell().addInformation(stack, context, tooltip, flag, spells.get(i));
             }
         }
 
-        // -----------
-        MutableComponent component = Component.translatable(LangUtil.INDENT2);
-        Optional<MutableComponent> c = Optional.empty();
-        if (getSpellCostFactor() != 1.0) {
-            c = Optional.of(component);
-            component.append(Component.translatable(LangUtil.tooltip("jewelry.stats.cost_factor"), ChatFormatting.AQUA + formatStat(getSpellCostFactor())))
-                    .append(" ");
+        // modifiers, two per row; only the ones this jewelry has
+        List<Component> modifiers = new ArrayList<>(5);
+        addModifier(modifiers, "cost", getSpellCostFactor());
+        addModifier(modifiers, "cooldown", getSpellCooldownFactor());
+        addModifier(modifiers, "effect", getSpellEffectAmountFactor());
+        // a lower frequency factor means more often, which reads as a bonus
+        addModifier(modifiers, "frequency", getSpellFrequencyFactor() == 1.0 ? 1.0 : 1.0 + (1.0 - getSpellFrequencyFactor()));
+        addModifier(modifiers, "range", getSpellRangeFactor());
+        if (!modifiers.isEmpty()) {
+            tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
+            tooltip.add(TooltipMarkers.grid(MagicTreasures.MOD_ID, 2, modifiers));
         }
-        if (getSpellCooldownFactor() != 1.0) {
-            c = c.isEmpty() ? Optional.of(component) : c;
-            component.append(Component.translatable(LangUtil.tooltip("jewelry.stats.cooldown_factor"), ChatFormatting.AQUA + formatStat(getSpellCooldownFactor())))
-                    .append(" ");
-        }
-        if (getSpellEffectAmountFactor() != 1.0) {
-            c = c.isEmpty() ? Optional.of(component) : c;
-            component.append(Component.translatable(LangUtil.tooltip("jewelry.stats.effect_amount_factor"), ChatFormatting.AQUA + formatStat(getSpellEffectAmountFactor())))
-                    .append(" ");
-        }
-        if (getSpellFrequencyFactor() != 1.0) {
-            c = c.isEmpty() ? Optional.of(component) : c;
-            component.append(Component.translatable(LangUtil.tooltip("jewelry.stats.frequency_factor"), ChatFormatting.AQUA + formatStat(1.0 + (1.0 - getSpellFrequencyFactor()))))
-                    .append(" ");
-        }
-        if (getSpellRangeFactor() != 1.0) {
-            c = c.isEmpty() ? Optional.of(component) : c;
-            component.append(Component.translatable(LangUtil.tooltip("jewelry.stats.range_factor"), ChatFormatting.AQUA + formatStat(getSpellRangeFactor())))
-                    .append(" ");
-        }
-        c.ifPresent(x -> {
-            tooltip.add(Component.translatable(LangUtil.NEWLINE));
-            tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("divider")).withStyle(ChatFormatting.GRAY)));
-            tooltip.add(component);
-        });
-        // ------------
 
         // advanced tooltip (hold shift)
         LangUtil.appendAdvancedHoverText(tooltip, tt -> {
-            tooltip.add(Component.translatable(LangUtil.NEWLINE));
+            tooltip.add(Component.literal(LangUtil.NEWLINE));
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.usage")).withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC));
             // material
-            tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("jewelry.material"), ChatFormatting.GREEN + WordUtils.capitalizeFully(getMaterial().getId().getPath()))));
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.material"), ChatFormatting.GREEN + WordUtils.capitalizeFully(getMaterial().getId().getPath())));
             // stones
             if (hasStone()) {
-                tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("jewelry.stone"), ChatFormatting.YELLOW + WordUtils.capitalizeFully(getStone().getPath().replace("_", " ")))));
+                tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.stone"), ChatFormatting.YELLOW + WordUtils.capitalizeFully(getStone().getPath().replace("_", " "))));
             }
             if (!isInfinite()) {
-                tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("jewelry.durability.repairs"), ChatFormatting.GRAY + String.valueOf(getRepairs()))));
-            } // TODO add else ? to display 0 repairs?
-            tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("jewelry.mana.recharges"), ChatFormatting.BLUE + String.valueOf(getRecharges()))));
-            tooltip.add(Component.translatable(LangUtil.NEWLINE));
-
+                tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.durability.repairs"), ChatFormatting.GRAY + String.valueOf(getRepairs())));
+            }
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.mana.recharges"), ChatFormatting.BLUE + String.valueOf(getRecharges())));
             appendSpecialHoverText(stack, context, tooltip, flag);
         });
+    }
+
+    /** The header's second line: "Ring · Ruby · Lvl 4". */
+    public Component getSubtitle() {
+        MutableComponent subtitle = Component.translatable(LangUtil.tooltip("jewelry.type." + getJewelryType().getValue()));
+        if (hasStone()) {
+            StoneRegistry.get(getStone()).ifPresent(stone -> subtitle.append(SUBTITLE_SEPARATOR).append(stone.getDescription()));
+        }
+        subtitle.append(SUBTITLE_SEPARATOR).append(Component.translatable(LangUtil.tooltip("jewelry.level"),
+                Component.literal(String.valueOf(getMaxLevel())).withStyle(ChatFormatting.GOLD)));
+        return subtitle.withStyle(ChatFormatting.GRAY);
+    }
+
+    private void addModifier(List<Component> modifiers, String stat, double factor) {
+        if (factor != 1.0) {
+            modifiers.add(Component.translatable(LangUtil.tooltip("jewelry.modifier." + stat),
+                    Component.literal(formatStat(factor)).withStyle(ChatFormatting.AQUA)));
+        }
     }
 
     @Override

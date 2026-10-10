@@ -22,6 +22,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * @author Mark Gottschling on May 16, 2024
@@ -94,6 +95,13 @@ public class PaladinStrikeSpell extends CooldownSpell {
 				MathUtil.r1d(getCooldown()/20.0),
 				MathUtil.r1d(getSpellCost()),
 				MathUtil.r1d(getLifeCost()));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("damage", number(getLifeCost() * modifyEffectAmount(jewelry)), ChatFormatting.RED),
+			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA),
+			chip("life", number(getLifeCost()), ChatFormatting.RED));
 	}
 
 	@Override

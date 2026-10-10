@@ -19,6 +19,7 @@ package mod.gottsch.neo.magic_treasures.core.client;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltips;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.RichTooltips;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
@@ -36,14 +37,28 @@ import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 public class MagicTreasuresClientEvents {
 	/** icon scale for the tooltip header: 2 = 32px */
 	private static final float TOOLTIP_ICON_SCALE = 2.0F;
+	/** text wraps here, and chips start a new row */
+	private static final int TOOLTIP_MAX_WIDTH = 200;
 
-	/** Show the item's icon beside its name in every Magic Treasures tooltip. */
+	/**
+	 * Show the item's icon beside its name in every Magic Treasures tooltip, then swap the tooltip's marker lines
+	 * (dividers, bars, chips, grids) for drawn components.
+	 * <p>
+	 * The marker swap runs for every tooltip, not only Magic Treasures items: some screens (Curios slots) draw an
+	 * item's tooltip lines without passing the stack, so the event's stack is empty. Only the icon needs the stack.
+	 */
 	@SubscribeEvent
 	public static void onGatherTooltipComponents(RenderTooltipEvent.GatherComponents event) {
-		if (!Config.CLIENT.showTooltipIcon.get()) {
-			return;
+		if (Config.CLIENT.showTooltipIcon.get()) {
+			IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 		}
-		IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
+		RichTooltips.apply(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH);
+	}
+
+	/** Widen dividers and bars to the finished tooltip. */
+	@SubscribeEvent
+	public static void onRenderTooltipPre(RenderTooltipEvent.Pre event) {
+		RichTooltips.stretch(event);
 	}
 
 	private static boolean isMagicTreasuresItem(ItemStack stack) {

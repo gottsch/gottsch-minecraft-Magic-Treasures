@@ -20,6 +20,7 @@ package mod.gottsch.neo.magic_treasures.core.client;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.particle.ArcaneSparkParticle;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.RichTooltips;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltip;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 import net.neoforged.api.distmarker.Dist;
@@ -44,5 +45,6 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
 		event.register(IconTitleTooltip.class, ClientIconTitleTooltip::new);
+		RichTooltips.registerFactories(event);
 	}
 }

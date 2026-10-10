@@ -18,6 +18,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import java.util.List;
 
 /**
  * @author Mark Gottschling on June 17, 2024
@@ -68,6 +69,12 @@ public class WaterBreathingSpell extends CooldownSpell {
 		return Component.translatable(LangUtil.tooltip("spell.water_breathing.rate"),
 				MathUtil.r1d(getDuration() / 20.0),
 				MathUtil.r1d(getCooldown() / 20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("duration", seconds(modifyDuration(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override
