@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The "+" after a spell's name is now a green "stacks" box: that spell's effect adds up with the same spell on other jewelry you wear.
 - New lore for Silbro's Ring of Vitality, and Strongman's Bracers has lore (it's Silbro's work too).
 - Fixed Strength (Quick, Greater and Giant Strength) showing its cooldown where its tooltip says the effect's duration.
+- With Obscure Tooltips installed, Magic Treasures tooltips leave the icon header to it, so the name isn't shown twice. Legendary Tooltips needs no change.
 
 ## [1.4.0] - 2026-10-10
 
