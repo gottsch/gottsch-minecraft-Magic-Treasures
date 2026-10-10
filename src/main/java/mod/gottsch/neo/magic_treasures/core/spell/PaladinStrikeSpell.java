@@ -72,7 +72,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 					// calculate lifeCost
 					double lifeCost = Math.min(getLifeCost(), player.getHealth() - (player.getMaxHealth() / 2));
 					// calculate the damage amount based on lifeCost and modifiers
-					double damageAmount = sourceAmount + (lifeCost * modifyEffectAmount(jewelry));
+					double damageAmount = sourceAmount + (lifeCost * effectAmount(context));
 
 					// increase damage amount
 					((LivingIncomingDamageEvent)event).setAmount((float) damageAmount);
@@ -99,8 +99,8 @@ public class PaladinStrikeSpell extends CooldownSpell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("damage", number(getLifeCost() * modifyEffectAmount(jewelry)), ChatFormatting.RED),
-			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA),
+		return List.of(chip("damage", number(getLifeCost() * tooltipEffectAmount(jewelry)), ChatFormatting.RED),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA),
 			chip("life", number(getLifeCost()), ChatFormatting.RED));
 	}
 

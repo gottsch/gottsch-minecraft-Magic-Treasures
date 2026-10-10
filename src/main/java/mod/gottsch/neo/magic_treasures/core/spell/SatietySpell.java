@@ -68,9 +68,9 @@ public class SatietySpell extends Spell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
-		if (world.getGameTime() % modifyFrequency(jewelry) == 0) {
+		if (world.getGameTime() % frequency(context) == 0) {
 			if (player.isAlive() && hasMana(handler, context) && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
-				double amount = modifyEffectAmount(jewelry);
+				double amount = effectAmount(context);
 				player.getFoodData().eat((int)amount, (float) amount);
 				applyCost(world, random, coords, context, modifySpellCost(jewelry));
 				result = true;
@@ -89,7 +89,7 @@ public class SatietySpell extends Spell {
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
 		return List.of(chip("hunger", "0.5", ChatFormatting.GOLD),
-			chip("every", seconds(modifyFrequency(jewelry)), ChatFormatting.AQUA));
+			chip("every", seconds(tooltipFrequency(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

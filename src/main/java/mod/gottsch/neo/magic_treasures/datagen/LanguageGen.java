@@ -213,6 +213,17 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.stat.resist"), "%s resist");
         add(LangUtil.tooltip("spell.stat.stacks"), "stacks");
         add(LangUtil.tooltip("spell.stat.seconds"), "%ss");
+        // sets
+        add("tooltip.magictreasures.set.header", "%s (%s/%s)");
+        add("tooltip.magictreasures.set.bonus", "(%s) %s");
+        add("set.magictreasures.salandaars_anvilwork", "Sal'andaar's Anvilwork");
+        add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10%% less mana");
+        add("set.magictreasures.silbros_grove", "Silbro's Grove");
+        add("set.magictreasures.silbros_grove.bonus.2", "Healing spells heal 15%% more, 25%% more often");
+        add("set.magictreasures.maldritchs_remains", "Maldritch's Remains");
+        add("set.magictreasures.maldritchs_remains.bonus.2", "Drain spells reach 1 block further");
+        add("set.magictreasures.selenes_tides", "Selene's Tides");
+        add("set.magictreasures.selenes_tides.bonus.2", "Water Breathing and Night Vision last 50%% longer");
         add(LangUtil.tooltip("spell.flavor.blessing_of_the_phoenix"), "Rise unburnt from the flames, as the phoenix does.");
         add(LangUtil.tooltip("spell.flavor.cat_sight"), "See in the dark as clearly as a cat.");
         add(LangUtil.tooltip("spell.flavor.cheat_death"), "Turns aside one killing blow.");

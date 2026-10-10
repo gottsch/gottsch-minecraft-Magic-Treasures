@@ -34,15 +34,21 @@ public class ClientDividerTooltip implements ClientTooltipComponent, FullWidthTo
     private static final int RGB = 0x5A3A8E;
 
     private int width;
+    /** extra space above the line, to even out what sits above it */
+    private int padTop;
 
     @Override
     public void setTooltipWidth(int width) {
         this.width = width;
     }
 
+    public void setPadTop(int padTop) {
+        this.padTop = padTop;
+    }
+
     @Override
     public int getHeight() {
-        return MARGIN * 2 + 1;
+        return padTop + MARGIN * 2 + 1;
     }
 
     @Override
@@ -55,7 +61,7 @@ public class ClientDividerTooltip implements ClientTooltipComponent, FullWidthTo
         if (width <= 0) {
             return;
         }
-        int lineY = y + MARGIN;
+        int lineY = y + padTop + MARGIN;
         int fade = Math.max(1, width / 6);
         // solid middle in one fill, then each faded end pixel by pixel
         guiGraphics.fill(x + fade, lineY, x + width - fade, lineY + 1, 0xFF000000 | RGB);

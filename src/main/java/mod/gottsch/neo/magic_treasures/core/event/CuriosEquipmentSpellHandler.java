@@ -34,6 +34,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
 import mod.gottsch.neo.magic_treasures.core.item.ManaWell;
+import net.minecraft.world.entity.player.Player;
 
 /**
  *
@@ -119,6 +120,21 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public List<ItemStack> getWornJewelry(Player player) {
+		List<ItemStack> worn = new ArrayList<>();
+		CuriosApi.getCuriosInventory(player).ifPresent(itemHandler -> CURIOS_SLOTS.forEach(slot ->
+				itemHandler.getStacksHandler(slot).ifPresent(stacksHandler -> {
+					for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
+						ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
+						if (!stack.isEmpty()) {
+							worn.add(stack);
+						}
+					}
+				})));
+		return worn;
 	}
 
 	@Override

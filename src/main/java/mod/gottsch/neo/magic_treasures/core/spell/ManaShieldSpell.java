@@ -66,7 +66,7 @@ public class ManaShieldSpell extends Spell {
 
 		// TODO extend CooldownSpell class and update
 		if (context.getEntity() instanceof CooldownSpellEntity spellEntity) {
-            double cooldown = handler.modifyCooldown(getCooldown());
+            double cooldown = cooldown(context);
 
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
@@ -76,7 +76,7 @@ public class ManaShieldSpell extends Spell {
 						double amount = ((LivingDamageEvent.Pre)event).getNewDamage();
 						if (amount > 0D) {
 							// calculate the new amount
-							double amountToSpell = amount * handler.modifyEffectAmount(getEffectAmount());
+							double amountToSpell = amount * effectAmount(context);
 							double amountToPlayer = amount - amountToSpell;
 							double newAmount = amountToPlayer;
 							MagicTreasures.LOGGER.debug("amount to jewelry -> {} amount to player -> {}", amountToSpell, amountToPlayer);
@@ -113,8 +113,8 @@ public class ManaShieldSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("absorb", percent(modifyEffectAmount(jewelry)), ChatFormatting.BLUE),
-			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+		return List.of(chip("absorb", percent(tooltipEffectAmount(jewelry)), ChatFormatting.BLUE),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

@@ -46,6 +46,8 @@ import mod.gottsch.neo.magic_treasures.core.capability.ManaWellHandler;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
 import net.minecraft.locale.Language;
 import java.util.ArrayList;
+import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
+import mod.gottsch.neo.magic_treasures.core.set.SpellStat;
 
 /**
  * Spells are a single instance within the mod like Blocks and Items.
@@ -140,6 +142,30 @@ public abstract class Spell implements ISpell {
         return amount;
     }
 
+    // cast-time numbers: the jewelry's modifiers, then the wearer's set bonuses. Tooltips use the modify* methods
+    // below (jewelry only), since a tooltip has no cast.
+
+    protected double effectAmount(ICastSpellContext context) {
+        return SetEquipment.modify(context.getPlayer(), this, SpellStat.EFFECT, modifyEffectAmount(context.getJewelry()));
+    }
+
+    protected double range(ICastSpellContext context) {
+        return SetEquipment.modify(context.getPlayer(), this, SpellStat.RANGE, modifyRange(context.getJewelry()));
+    }
+
+    protected int duration(ICastSpellContext context) {
+        return (int) Math.round(SetEquipment.modify(context.getPlayer(), this, SpellStat.DURATION, modifyDuration(context.getJewelry())));
+    }
+
+    /** never below 1 tick: callers use it as a modulus */
+    protected long frequency(ICastSpellContext context) {
+        return Math.max(1L, Math.round(SetEquipment.modify(context.getPlayer(), this, SpellStat.FREQUENCY, modifyFrequency(context.getJewelry()))));
+    }
+
+    protected long cooldown(ICastSpellContext context) {
+        return Math.round(SetEquipment.modify(context.getPlayer(), this, SpellStat.COOLDOWN, modifyCooldown(context.getJewelry())));
+    }
+
     public double modifySpellCost(ItemStack jewelry) {
         IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifySpellCost(getSpellCost());
@@ -169,6 +195,37 @@ public abstract class Spell implements ISpell {
         IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifyRange(getRange());
    }
+
+    // tooltip numbers: the jewelry's modifiers, plus the set bonuses of the client's player when it wears the
+    // jewelry, so the chips show what a cast will use
+
+    private double withSetBonus(ItemStack jewelry, SpellStat stat, double value) {
+        return SetEquipment.modify(SetEquipment.getTooltipWearer(jewelry), this, stat, value);
+    }
+
+    protected double tooltipEffectAmount(ItemStack jewelry) {
+        return withSetBonus(jewelry, SpellStat.EFFECT, modifyEffectAmount(jewelry));
+    }
+
+    protected double tooltipRange(ItemStack jewelry) {
+        return withSetBonus(jewelry, SpellStat.RANGE, modifyRange(jewelry));
+    }
+
+    protected long tooltipDuration(ItemStack jewelry) {
+        return Math.round(withSetBonus(jewelry, SpellStat.DURATION, modifyDuration(jewelry)));
+    }
+
+    protected long tooltipFrequency(ItemStack jewelry) {
+        return Math.max(1L, Math.round(withSetBonus(jewelry, SpellStat.FREQUENCY, modifyFrequency(jewelry))));
+    }
+
+    protected long tooltipCooldown(ItemStack jewelry) {
+        return Math.round(withSetBonus(jewelry, SpellStat.COOLDOWN, modifyCooldown(jewelry)));
+    }
+
+    protected double tooltipSpellCost(ItemStack jewelry) {
+        return withSetBonus(jewelry, SpellStat.COST, modifySpellCost(jewelry));
+    }
 
     private IJewelryHandler getHandler(ItemStack jewelry) {
         return  JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
@@ -203,7 +260,7 @@ public abstract class Spell implements ISpell {
 
     private Component getCostChip(ItemStack jewelry) {
         // spells without a set cost pay a share of the damage they handle, so it varies; every cast costs at least 1
-        String value = getSpellCost() > 0 ? number(Math.max(1.0, modifySpellCost(jewelry))) : "1+";
+        String value = getSpellCost() > 0 ? number(Math.max(1.0, tooltipSpellCost(jewelry))) : "1+";
         return chip("mana", value, ChatFormatting.BLUE);
     }
 
@@ -218,8 +275,11 @@ public abstract class Spell implements ISpell {
     }
 
     /** One decimal place at most, and none for whole numbers: 4.0 -> "4", 4.46 -> "4.5". */
+    /** up to two decimals, so a 15% bonus shows (1.15, not 1.1); trailing zeros dropped (8, not 8.00) */
     protected static String number(double value) {
-        return MathUtil.r1d(value).replaceAll("[.,]0$", "");
+        DecimalFormat format = new DecimalFormat("0.##");
+        format.setRoundingMode(java.math.RoundingMode.HALF_UP);
+        return format.format(value);
     }
 
     /** "9s", with the unit from the lang file */

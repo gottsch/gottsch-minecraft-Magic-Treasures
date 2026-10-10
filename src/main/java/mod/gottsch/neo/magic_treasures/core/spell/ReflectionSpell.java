@@ -58,8 +58,8 @@ public class ReflectionSpell extends CooldownSpell {
 		if (hasMana(handler, context) && player.isAlive()) {
 			if (((LivingIncomingDamageEvent)event).getEntity() instanceof Player) {
 				double amount = ((LivingIncomingDamageEvent)event).getAmount();
-				double reflectedAmount = amount * modifyEffectAmount(jewelry);
-				double range = modifyRange(jewelry);
+				double reflectedAmount = amount * effectAmount(context);
+				double range = range(context);
 				// reflect onto the mob that caused the damage (the shooter, for a projectile) if it is within range.
 				// damage with no attacker (falls, fire, drowning) or from a player does not trigger it and costs nothing.
 				if (!(((LivingIncomingDamageEvent)event).getSource().getEntity() instanceof Mob attacker) || !attacker.isAlive()
@@ -93,8 +93,8 @@ public class ReflectionSpell extends CooldownSpell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("reflect", percent(modifyEffectAmount(jewelry)), ChatFormatting.AQUA),
-			chip("cooldown", seconds(modifyCooldown(jewelry)), ChatFormatting.AQUA));
+		return List.of(chip("reflect", percent(tooltipEffectAmount(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

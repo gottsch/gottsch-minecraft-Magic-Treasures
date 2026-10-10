@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.neo.magic_treasures.core.item.ManaWell;
+import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
 
 /**
  * 
@@ -81,6 +82,9 @@ public class SpellEventHandler {
 		// do something to player every update tick:
 		if (event.getEntity() instanceof ServerPlayer player) {
 			processSpells(event, player);
+			if (player.tickCount % 20 == 0) {
+				SetEquipment.tick(player);
+			}
 			// once a second is plenty for an advancement; the trigger is a no-op once it is granted
 			if (player.tickCount % 20 == 0 && getEquipmentSpellHandler() != null
 					&& getEquipmentSpellHandler().isWearingFullSet(player)) {
