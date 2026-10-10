@@ -47,6 +47,9 @@ public interface ISpell {
     default public boolean clientUpdate(ItemStack jewelry, SpellEntity entity, SpellUpdateS2C message) {
         IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
         handler.setMana(message.getMana());
+        if (entity instanceof CooldownSpellEntity cooldownEntity && message.getCooldownExpireTime() >= 0) {
+            cooldownEntity.setCooldownExpireTime(message.getCooldownExpireTime());
+        }
         return true;
     }
 

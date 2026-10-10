@@ -21,6 +21,7 @@ package mod.gottsch.forge.magic_treasures.core.network;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.spell.CooldownSpellEntity;
 import mod.gottsch.forge.magic_treasures.core.spell.ISpell;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellContext;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellEntity;
@@ -64,6 +65,7 @@ public class SpellUpdateS2C {
 	private int index; 										//7
 	private double mana;									//8
 	private int uses;										//9
+	private double cooldownExpireTime;				//10 (-1 = not a cooldown spell)
 //	private int itemDamage;
 	
 	/**
@@ -83,6 +85,9 @@ public class SpellUpdateS2C {
 		// jewelry state properties
 		this.mana = context.getCapability().getMana();									//8
 		this.uses = context.getCapability().getUses();										//9
+		// the HUD's cooldown sweep: capability changes don't resync the stack, so send it here
+		this.cooldownExpireTime = context.getEntity() instanceof CooldownSpellEntity cooldownEntity
+				? cooldownEntity.getCooldownExpireTime() : -1;		//10
 //		this.itemDamage = context.getItemStack().getDamageValue();
 
 	}
@@ -123,6 +128,7 @@ public class SpellUpdateS2C {
 			message.setIndex(buf.readInt());										//7
 			message.setMana(buf.readDouble());									//8
 			message.setUses(buf.readInt());											//9
+			message.setCooldownExpireTime(buf.readDouble());					//10
 //			message.setItemDamage(buf.readInt());
 		}
 		catch(Exception e) {
@@ -167,6 +173,7 @@ public class SpellUpdateS2C {
 		buf.writeInt(index);																//7
 		buf.writeDouble(this.mana);													//8
 		buf.writeInt(this.uses);															//9
+		buf.writeDouble(this.cooldownExpireTime);									//10
 //		buf.writeInt(this.itemDamage);
 	}
 
@@ -373,6 +380,14 @@ public class SpellUpdateS2C {
 		this.uses = uses;
 	}
 
+	public double getCooldownExpireTime() {
+		return cooldownExpireTime;
+	}
+
+	public void setCooldownExpireTime(double cooldownExpireTime) {
+		this.cooldownExpireTime = cooldownExpireTime;
+	}
+
 	//	public int getItemDamage() {
 //		return itemDamage;
 //	}
@@ -394,6 +409,7 @@ public class SpellUpdateS2C {
 				", index=" + index +
 				", mana=" + mana +
 				", uses=" + uses +
+				", cooldownExpireTime=" + cooldownExpireTime +
 //				", itemDamage=" + itemDamage +
 				'}';
 	}

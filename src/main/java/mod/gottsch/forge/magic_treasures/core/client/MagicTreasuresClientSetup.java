@@ -18,6 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.client;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import mod.gottsch.forge.magic_treasures.core.client.hud.JewelryHud;
 import mod.gottsch.forge.magic_treasures.core.client.particle.ArcaneSparkParticle;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.RichTooltips;
@@ -27,6 +28,7 @@ import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -50,5 +52,10 @@ public class MagicTreasuresClientSetup {
 		RichTooltips.registerFactories(event);
 		// spell chips show the set bonuses of the player wearing the jewelry
 		SetEquipment.setTooltipPlayer(() -> Minecraft.getInstance().player);
+	}
+
+	@SubscribeEvent
+	public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
+		event.registerAboveAll(JewelryHud.ID, new JewelryHud());
 	}
 }
