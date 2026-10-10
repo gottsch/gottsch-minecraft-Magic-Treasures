@@ -18,6 +18,7 @@
 package mod.gottsch.neo.magic_treasures.core.client;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.client.hud.JewelryHud;
 import mod.gottsch.neo.magic_treasures.core.client.particle.ArcaneSparkParticle;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.RichTooltips;
@@ -29,6 +30,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 /**
@@ -50,5 +52,10 @@ public class MagicTreasuresClientSetup {
 		RichTooltips.registerFactories(event);
 		// spell chips show the set bonuses of the player wearing the jewelry
 		SetEquipment.setTooltipPlayer(() -> Minecraft.getInstance().player);
+	}
+
+	@SubscribeEvent
+	public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
+		event.registerAboveAll(JewelryHud.ID, new JewelryHud());
 	}
 }

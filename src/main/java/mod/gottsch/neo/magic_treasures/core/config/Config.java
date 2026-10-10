@@ -78,9 +78,25 @@ public class Config extends AbstractConfig {
 	/*
 	 * Per-player display options. Only read on the client.
 	 */
+	public enum HudCorner {
+		TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT;
+
+		public boolean isRight() {
+			return this == TOP_RIGHT || this == BOTTOM_RIGHT;
+		}
+
+		public boolean isBottom() {
+			return this == BOTTOM_LEFT || this == BOTTOM_RIGHT;
+		}
+	}
+
 	public static class ClientConfig {
 		public final ModConfigSpec.BooleanValue enableSpellParticles;
 		public final ModConfigSpec.BooleanValue showTooltipIcon;
+		public final ModConfigSpec.BooleanValue showJewelryHud;
+		public final ModConfigSpec.EnumValue<HudCorner> jewelryHudCorner;
+		public final ModConfigSpec.IntValue jewelryHudOffsetX;
+		public final ModConfigSpec.IntValue jewelryHudOffsetY;
 
 		public ClientConfig(ModConfigSpec.Builder builder) {
 			builder.comment(CATEGORY_DIV, " Client properties", CATEGORY_DIV).push("client");
@@ -91,6 +107,19 @@ public class Config extends AbstractConfig {
 			showTooltipIcon = builder
 					.comment(" Show the item's icon beside its name in Magic Treasures tooltips.")
 					.define("showTooltipIcon", true);
+			showJewelryHud = builder
+					.comment(" Show the jewelry HUD: each worn piece with its mana and cooldown, and the active sets.",
+							" It only appears while you wear jewelry with a spell.")
+					.define("showJewelryHud", true);
+			jewelryHudCorner = builder
+					.comment(" The screen corner the jewelry HUD sits in.")
+					.defineEnum("jewelryHudCorner", HudCorner.TOP_LEFT);
+			jewelryHudOffsetX = builder
+					.comment(" How far the jewelry HUD sits from the side of the screen, in GUI pixels.")
+					.defineInRange("jewelryHudOffsetX", 4, 0, 1000);
+			jewelryHudOffsetY = builder
+					.comment(" How far the jewelry HUD sits from the top or bottom of the screen, in GUI pixels.")
+					.defineInRange("jewelryHudOffsetY", 4, 0, 1000);
 			builder.pop();
 		}
 	}
