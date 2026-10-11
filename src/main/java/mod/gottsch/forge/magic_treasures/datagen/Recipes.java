@@ -2,6 +2,7 @@
 package mod.gottsch.forge.magic_treasures.datagen;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import net.minecraft.resources.ResourceLocation;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.forge.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -144,6 +145,14 @@ public class Recipes extends RecipeProvider {
 					.group("silver_ingot")
 					.unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(MagicTreasuresItems.RAW_SILVER.get()).build()))
 					.save(recipe);
+
+			// until 2.0.0 this recipe was only a hand-added file in src/generated (no datagen code produced it)
+			SimpleCookingRecipeBuilder.blasting(Ingredient.of(MagicTreasuresTags.Items.RAW_SILVER),
+							RecipeCategory.MISC,
+							MagicTreasuresItems.SILVER_INGOT.get(), 1.0f, 100)
+					.group("silver_ingot")
+					.unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(MagicTreasuresItems.RAW_SILVER.get()).build()))
+					.save(recipe, new ResourceLocation(MagicTreasures.MOD_ID, "silver_ingot_from_blasting"));
 
 			// TODO Treasure2 doesn't use Tags for key recipes (ruby, sapphire)
 			// so need to add the recipes individually

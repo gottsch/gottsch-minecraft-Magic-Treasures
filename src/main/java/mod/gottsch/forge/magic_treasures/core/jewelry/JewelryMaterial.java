@@ -57,7 +57,6 @@ public class JewelryMaterial {
 
     private double spellCostFactor;
     private double spellEffectAmountFactor;
-    private double spellFrequencyFactor;
     private double spellDurationFactor;
     private double spellCooldownFactor;
     private double spellRangeFactor;
@@ -89,7 +88,6 @@ public class JewelryMaterial {
         this.spellCostFactor = builder.spellCostFactor;
         this.spellDurationFactor = builder.spellDurationFactor;
         this.spellEffectAmountFactor = builder.spellEffectAmountFactor;
-        this.spellFrequencyFactor = builder.spellFrequencyFactor;
         this.spellRangeFactor = builder.spellRangeFactor;
    }
 
@@ -110,7 +108,6 @@ public class JewelryMaterial {
 
         public double spellCostFactor = 1.0;
         public double spellEffectAmountFactor = 1.0;
-        public double spellFrequencyFactor = 1.0;
         public double spellDurationFactor = 1.0;
         public double spellCooldownFactor = 1.0;
         public double spellRangeFactor = 1.0;
@@ -188,14 +185,6 @@ public class JewelryMaterial {
 
     public void setSpellEffectAmountFactor(double spellEffectAmountFactor) {
         this.spellEffectAmountFactor = spellEffectAmountFactor;
-    }
-
-    public double getSpellFrequencyFactor() {
-        return spellFrequencyFactor;
-    }
-
-    public void setSpellFrequencyFactor(double spellFrequencyFactor) {
-        this.spellFrequencyFactor = spellFrequencyFactor;
     }
 
     public double getSpellDurationFactor() {

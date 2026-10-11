@@ -40,7 +40,7 @@ import java.util.List;
 /**
  *
  */
-public class HealingSpell extends Spell {
+public class HealingSpell extends CooldownSpell {
     public static String HEALING_TYPE = "healing";
     private static final Class<?> REGISTERED_EVENT = LivingEvent.LivingTickEvent.class;
 
@@ -73,19 +73,17 @@ public class HealingSpell extends Spell {
      */
 
     @Override
-    public boolean serverUpdate(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
+    public boolean execute(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
         boolean result = false;
         IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        if (level.getGameTime() % frequency(context) == 0) {
-            if (hasMana(handler, context) && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
+        if (hasMana(handler, context) && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
 
-                // determine the actual amount of health (0.0 -> getAmount())
-                float amount = Math.min((float)effectAmount(context), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
-                context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
-                applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
-                SpellEffects.burst(level, context.getPlayer(), ParticleTypes.HEART, 2);
-                result = true;
-            }
+            // determine the actual amount of health (0.0 -> getAmount())
+            float amount = Math.min((float)effectAmount(context), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
+            context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
+            applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+            SpellEffects.burst(level, context.getPlayer(), ParticleTypes.HEART, 2);
+            result = true;
         }
         return result;
     }
@@ -94,20 +92,20 @@ public class HealingSpell extends Spell {
     public Component getSpellDesc() {
         return Component.translatable(LangUtil.tooltip("spell.healing.rate"),
                 MathUtil.r1d(getEffectAmount()),
-                MathUtil.r1d(getFrequency()/20.0));
+                MathUtil.r1d(getCooldown()/20.0));
     }
 
     @Override
     public List<Component> getStatChips(ItemStack jewelry) {
         return List.of(chip("heal", number(tooltipEffectAmount(jewelry)), ChatFormatting.GREEN),
-            chip("every", seconds(tooltipFrequency(jewelry)), ChatFormatting.AQUA));
+            chip("every", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
     }
 
     @Override
     public Component getSpellDesc(ItemStack jewelry) {
         return Component.translatable(LangUtil.tooltip("spell.healing.rate"),
                 MathUtil.r1d(modifyEffectAmount(jewelry)),
-                MathUtil.r1d(modifyFrequency(jewelry)/20.0));
+                MathUtil.r1d(modifyCooldown(jewelry)/20.0));
     }
 
     @Override

@@ -83,7 +83,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
     private static final String SPELL_COST_FACTOR = "spellCostFactor";
     private static final String SPELL_COOLDOWN_FACTOR = "spellCooldownFactor";
     private static final String SPELL_EFFECT_AMOUNT_FACTOR = "spellEffectAmountFactor";
-    private static final String SPELL_FREQUENCY_FACTOR = "spellFrequencyFactor";
     private static final String SPELL_DURATION_FACTOR = "spellDurationFactor";
     private static final String SPELL_RANGE_FACTOR = "spellRangeFactor";
 
@@ -123,7 +122,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
      */
     private double spellCostFactor;
     private double spellEffectAmountFactor;
-    private double spellFrequencyFactor;
     private double spellDurationFactor;
     private double spellCooldownFactor;
     private double spellRangeFactor;
@@ -150,7 +148,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
 
         public double spellCostFactor = -1.0;
         public double spellEffectAmountFactor = -1.0;
-        public double spellFrequencyFactor = -1.0;
         public double spellDurationFactor = -1.0;
         public double spellCooldownFactor = -1.0;
         public double spellRangeFactor = -1.0;
@@ -289,12 +286,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
             this.spellEffectAmountFactor = builder.spellEffectAmountFactor;
         }
 
-        if (builder.spellFrequencyFactor < 0) {
-            this.spellFrequencyFactor = calcSpellFrequencyFactor();
-        } else {
-            this.spellFrequencyFactor = builder.spellFrequencyFactor;
-        }
-
         if (builder.spellRangeFactor < 0) {
             this.spellRangeFactor = calcSpellRangeFactor();
         } else {
@@ -349,8 +340,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
         addModifier(modifiers, "cost", getSpellCostFactor());
         addModifier(modifiers, "cooldown", getSpellCooldownFactor());
         addModifier(modifiers, "effect", getSpellEffectAmountFactor());
-        // a lower frequency factor means more often, which reads as a bonus
-        addModifier(modifiers, "frequency", getSpellFrequencyFactor() == 1.0 ? 1.0 : 1.0 + (1.0 - getSpellFrequencyFactor()));
         addModifier(modifiers, "range", getSpellRangeFactor());
         if (!modifiers.isEmpty()) {
             tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
@@ -474,22 +463,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
     }
 
     @Override
-    public long modifyFrequency(long frequency) {
-        return (long)(frequency * getSpellFrequencyFactor());
-    }
-
-    @Override
-    public double getSpellFrequencyFactor() {
-        return spellFrequencyFactor;
-    }
-
-    private double calcSpellFrequencyFactor() {
-        JewelryStoneTier stoneTier = getStoneTier();
-        double materialModifier = getMaterial().getSpellFrequencyFactor();
-        return materialModifier * (stoneTier != null ? stoneTier.getSpellFrequencyFactor() : 1);
-    }
-
-    @Override
     public double modifyRange(double range) {
         return range * getSpellRangeFactor();
     }
@@ -546,7 +519,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
         tag.putDouble(SPELL_COOLDOWN_FACTOR, getSpellCooldownFactor());
         tag.putDouble(SPELL_DURATION_FACTOR, getSpellDurationFactor());
         tag.putDouble(SPELL_EFFECT_AMOUNT_FACTOR, getSpellEffectAmountFactor());
-        tag.putDouble(SPELL_FREQUENCY_FACTOR, getSpellFrequencyFactor());
         tag.putDouble(SPELL_RANGE_FACTOR, getSpellRangeFactor());
 
         return tag;
@@ -641,9 +613,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
             }
             if (compound.contains(SPELL_EFFECT_AMOUNT_FACTOR)) {
                 this.spellEffectAmountFactor = compound.getDouble(SPELL_EFFECT_AMOUNT_FACTOR);
-            }
-            if (compound.contains(SPELL_FREQUENCY_FACTOR)) {
-                this.spellFrequencyFactor = compound.getDouble(SPELL_FREQUENCY_FACTOR);
             }
             if (compound.contains(SPELL_RANGE_FACTOR)) {
                 this.spellRangeFactor = compound.getDouble(SPELL_RANGE_FACTOR);
@@ -822,11 +791,6 @@ public class JewelryHandler implements IJewelryHandler, INBTSerializable<Tag> {
     @Override
     public void setSpellEffectAmountFactor(double spellEffectAmountFactor) {
         this.spellEffectAmountFactor = spellEffectAmountFactor;
-    }
-
-    @Override
-    public void setSpellFrequencyFactor(double spellFrequencyFactor) {
-        this.spellFrequencyFactor = spellFrequencyFactor;
     }
 
     @Override

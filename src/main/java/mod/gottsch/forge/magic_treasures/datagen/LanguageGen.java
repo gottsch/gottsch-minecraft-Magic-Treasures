@@ -161,7 +161,6 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("gemstone.cost_factor"), "Mana Cost: %s");
         add(LangUtil.tooltip("gemstone.cooldown_factor"), "Cooldown Time: %s");
         add(LangUtil.tooltip("gemstone.effect_amount_factor"), "Effect Amount: %s");
-        add(LangUtil.tooltip("gemstone.frequency_factor"), "Frequency: %s");
         add(LangUtil.tooltip("gemstone.range_factor"), "Range: %s");
 
         // gemstone tier names
@@ -198,7 +197,6 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.modifier.cost"), "Cost %s");
         add(LangUtil.tooltip("jewelry.modifier.cooldown"), "Cooldown %s");
         add(LangUtil.tooltip("jewelry.modifier.effect"), "Effect %s");
-        add(LangUtil.tooltip("jewelry.modifier.frequency"), "Frequency %s");
         add(LangUtil.tooltip("jewelry.modifier.range"), "Range %s");
         add(LangUtil.tooltip("spell.stat.absorb"), "%s absorb");
         add(LangUtil.tooltip("spell.stat.armor"), "%s armor");
@@ -281,7 +279,6 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.stats.cost_factor"), "C:%s");
         add(LangUtil.tooltip("jewelry.stats.cooldown_factor"), "Cd:%s");
         add(LangUtil.tooltip("jewelry.stats.effect_amount_factor"), "E:%s");
-        add(LangUtil.tooltip("jewelry.stats.frequency_factor"), "Fq:%s");
         add(LangUtil.tooltip("jewelry.stats.range_factor"), "R:%s");
 
         /*
@@ -309,7 +306,6 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.cost.varies"), "Cost: Varies");
         add(LangUtil.tooltip("spell.effect_amount"), "Effect Amount: %s");
         add(LangUtil.tooltip("spell.cooldown"), "Cooldown Time: %s seconds.");
-        add(LangUtil.tooltip("spell.frequency"), "Frequency: Every %s seconds.");
         add(LangUtil.tooltip("spell.range"), "Range: %s blocks.");
 
         ///// healing /////

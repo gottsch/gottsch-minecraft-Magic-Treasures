@@ -69,8 +69,6 @@ public abstract class Spell implements ISpell {
     private double spellCost;
     private double effectAmount;
     private int duration;
-    // TODO frequency and cooldown are mutually exclusive, so make classes for each of them
-    private long frequency;
     private double range;
     private long cooldown;
     private boolean effectStackable;
@@ -90,7 +88,6 @@ public abstract class Spell implements ISpell {
         this.spellCost = builder.spellCost;
         this.effectAmount = builder.effectAmount;
         this.duration = builder.duration;
-        this.frequency = builder.frequency;
         this.range = builder.range;
         this.cooldown = builder.cooldown;
         this.effectStackable = builder.effectStackable;
@@ -156,11 +153,6 @@ public abstract class Spell implements ISpell {
         return (int) Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.DURATION, modifyDuration(context.getJewelry())));
     }
 
-    /** never below 1 tick: callers use it as a modulus */
-    protected long frequency(ICastSpellContext context) {
-        return Math.max(1L, Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.FREQUENCY, modifyFrequency(context.getJewelry()))));
-    }
-
     protected long cooldown(ICastSpellContext context) {
         return Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.COOLDOWN, modifyCooldown(context.getJewelry())));
     }
@@ -185,11 +177,6 @@ public abstract class Spell implements ISpell {
         return handler.modifyDuration(getDuration());
     }
 
-    public long modifyFrequency(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        return handler.modifyFrequency(getFrequency());
-   }
-
     public double modifyRange(ItemStack jewelry) {
         IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
         return handler.modifyRange(getRange());
@@ -212,10 +199,6 @@ public abstract class Spell implements ISpell {
 
     protected long tooltipDuration(ItemStack jewelry) {
         return Math.round(withSetBonus(jewelry, SpellStat.DURATION, modifyDuration(jewelry)));
-    }
-
-    protected long tooltipFrequency(ItemStack jewelry) {
-        return Math.max(1L, Math.round(withSetBonus(jewelry, SpellStat.FREQUENCY, modifyFrequency(jewelry))));
     }
 
     protected long tooltipCooldown(ItemStack jewelry) {
@@ -337,7 +320,6 @@ public abstract class Spell implements ISpell {
         public double spellCost;
         public double effectAmount;
         public int duration;
-        public long frequency;
         public double range;
         public long cooldown;
         public boolean effectStackable;
@@ -420,16 +402,6 @@ public abstract class Spell implements ISpell {
     }
 
     @Override
-    public long getFrequency() {
-        return frequency;
-    }
-
-    @Override
-    public void setFrequency(long frequency) {
-        this.frequency = frequency;
-    }
-
-    @Override
     public double getRange() {
         return range;
     }
@@ -497,7 +469,6 @@ public abstract class Spell implements ISpell {
                 ", effectStackable=" + effectStackable +
                 ", cooldown=" + cooldown +
                 ", range=" + range +
-                ", frequency=" + frequency +
                 ", duration=" + duration +
                 ", effectAmount=" + effectAmount +
                 ", spellCost=" + spellCost +

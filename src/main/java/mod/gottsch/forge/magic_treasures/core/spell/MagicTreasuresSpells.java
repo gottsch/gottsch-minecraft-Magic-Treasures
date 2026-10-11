@@ -38,7 +38,7 @@ public class MagicTreasuresSpells {
             .with($ -> {
                 $.spellCost = 2.0;
                 $.effectAmount = 1.0;
-                $.frequency = 200; // 10 seconds
+                $.cooldown = 200; // 10 seconds
                 $.effectStackable = true;
             }).build());
 
@@ -65,21 +65,21 @@ public class MagicTreasuresSpells {
         SpellRegistry.register(new HealingSpell.Builder(ModUtil.asLocation("healing"), 3, MagicTreasuresRarity.UNCOMMON).with($ -> {
             $.spellCost = 3.0;
             $.effectAmount = 2.0;
-            $.frequency = 180; // 9 seconds
+            $.cooldown = 180; // 9 seconds
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HealingSpell.Builder(ModUtil.asLocation("greater_healing"), 5, MagicTreasuresRarity.SCARCE).with($ -> {
             $.spellCost = 4;
             $.effectAmount = 3.0;
-            $.frequency = 160; // 8 seconds
+            $.cooldown = 160; // 8 seconds
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HealingSpell.Builder(ModUtil.asLocation("regeneration"), 8, MagicTreasuresRarity.RARE).with($ -> {
             $.spellCost = 5.0;
             $.effectAmount = 5.0;
-            $.frequency = 140; // 7 seconds
+            $.cooldown = 140; // 7 seconds
             $.effectStackable = true;
         })	.build());
 
@@ -154,7 +154,7 @@ public class MagicTreasuresSpells {
                 .with($ -> {
                     $.spellCost = 2.0;
                     $.effectAmount = 2.0;
-                    $.frequency = 180; // 9 seconds
+                    $.cooldown = 180; // 9 seconds
                     $.range = 2.0;
                     $.effectStackable = true;
                 })	.build());
@@ -163,7 +163,7 @@ public class MagicTreasuresSpells {
                 .with($ -> {
                     $.spellCost = 3.0;
                     $.effectAmount = 4.0;
-                    $.frequency = 150; // 7.5 seconds
+                    $.cooldown = 150; // 7.5 seconds
                     $.range = 4.0;
                     $.effectStackable = true;
                 })	.build());
@@ -172,7 +172,7 @@ public class MagicTreasuresSpells {
                 .with($ -> {
                     $.spellCost = 4.0;
                     $.effectAmount = 6.0;
-                    $.frequency = 120; // 6 seconds
+                    $.cooldown = 120; // 6 seconds
                     $.range = 6.0;
                     $.effectStackable = true;
                 })	.build());
@@ -181,7 +181,7 @@ public class MagicTreasuresSpells {
 //                .with($ -> {
 //                    $.spellCost = 4.0;
 //                    $.effectAmount = 0;
-//                    $.frequency = 100; // 6 seconds
+//                    $.cooldown = 100; // 6 seconds
 //                    $.range = 6.0;
 //                    $.effectStackable = false;
 //                })	.build());
@@ -256,7 +256,7 @@ public class MagicTreasuresSpells {
         SpellRegistry.register(new SatietySpell.Builder(ModUtil.asLocation(SATIETY), 2, MagicTreasuresRarity.COMMON).with($ -> {
             $.spellCost = 3.0;
             $.effectAmount = 1.0;
-            $.frequency = 100; // 5 seconds
+            $.cooldown = 100; // 5 seconds
             $.effectStackable = true;
             $.priority = 1;
         })	.build());

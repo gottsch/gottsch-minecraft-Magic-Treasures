@@ -52,8 +52,6 @@ public interface IJewelryHandler {
 
     long modifyCooldown(long cooldown);
 
-    long modifyFrequency(long frequency);
-
     double modifyRange(double range);
 
     public Tag serializeNBT();
@@ -133,10 +131,6 @@ public interface IJewelryHandler {
     double getSpellDurationFactor();
 
     void setSpellDurationFactor(double spellDurationFactor);
-
-    double getSpellFrequencyFactor();
-
-    void setSpellFrequencyFactor(double spellFrequencyFactor);
 
     double getSpellEffectAmountFactor();
 

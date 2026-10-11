@@ -92,15 +92,6 @@ public class Gemstone extends Item {
                     tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.effect_amount_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(tier.getSpellEffectAmountFactor()))));
                 }
 
-                // frequency
-                // NOTE the sign changes, is different than the others
-                double ff = 1.0 + (1.0 - tier.getSpellFrequencyFactor());
-                if (ff < 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.frequency_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(ff))));
-                } else if (ff > 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.frequency_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(ff))));
-                }
-
                 // range
                 if (tier.getSpellRangeFactor() < 1.0) {
                     tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.range_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(tier.getSpellRangeFactor()))));

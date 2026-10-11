@@ -50,9 +50,9 @@ public final class JewelrySets {
             .piece(MagicTreasuresItems.SILBROS_ACORN)
             .piece(MagicTreasuresItems.ROOTSTAFF)
             .piece(MagicTreasuresItems.BARKSKIN_VEST)
-            // 25% more often: a 10 s pulse comes every 8 s
+            // 25% more often: a 10 s wait becomes 8 s
             .bonus(2, SetBonus.of(SpellStatBonus.multiply(SpellStat.EFFECT, 1.15, "healing"),
-                    SpellStatBonus.multiply(SpellStat.FREQUENCY, 0.8, "healing")))
+                    SpellStatBonus.multiply(SpellStat.COOLDOWN, 0.8, "healing")))
             .bonus(4, new RegrowthBonus())
             .bonus(5, new TakeRootBonus(() -> JewelrySets.SILBROS_GROVE))
             .build());

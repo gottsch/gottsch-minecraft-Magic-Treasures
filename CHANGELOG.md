@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New lore for Silbro's Ring of Vitality, and Strongman's Bracers has lore (it's Silbro's work too).
 - Fixed Strength (Quick, Greater and Giant Strength) showing its cooldown where its tooltip says the effect's duration.
 - With Obscure Tooltips installed, Magic Treasures tooltips leave the icon header to it, so the name isn't shown twice. Legendary Tooltips needs no change.
+- Healing (Lesser Healing to Regeneration), Drain (Drain, Greater Drain, Desiccate) and Satiety now act as soon as they're needed, then wait their "every N s" time before acting again. Before, they only acted on a fixed beat, so after you got hurt or hungry the first heal or bite could take up to the full wait. Their wait now shows on the jewelry HUD like other cooldowns.
+- Removed the Frequency spell modifier: those three spells use Cooldown now. Materials and gems always had the same Frequency and Cooldown values, so no numbers change. Silbro's Grove's "25% more often" bonus now lowers their cooldown.
+
+### Fixed
+- Removed a duplicate raw-silver smelting recipe (`minecraft:silver_ingot_from_raw`, left over from an old recipe id). Smelting and blasting raw silver work as before, and the silver recipes now show up in the recipe book once you pick up raw silver.
 
 ## [1.4.0] - 2026-10-10
 

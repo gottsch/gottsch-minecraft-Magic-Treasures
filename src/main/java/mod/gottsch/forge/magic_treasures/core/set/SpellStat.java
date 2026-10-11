@@ -25,6 +25,5 @@ public enum SpellStat {
     EFFECT,
     DURATION,
     RANGE,
-    FREQUENCY,
     COOLDOWN
 }
