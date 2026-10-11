@@ -185,7 +185,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.mana.gauge"), "[%s/%s]");
         add(LangUtil.tooltip("jewelry.spells"), "Spells:");
 
-        // 1.5.0 tooltip redesign
+        // 2.0.0 tooltip redesign
         add(LangUtil.tooltip("jewelry.bar.mana"), "Mana");
         add(LangUtil.tooltip("jewelry.bar.durability"), "Durability");
         add(LangUtil.tooltip("jewelry.level"), "Lvl %s");

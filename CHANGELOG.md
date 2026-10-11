@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0] - Unreleased
+## [2.0.0] - Unreleased
 
 ### Added
 - Jewelry sets. Four named sets, one for each of the mod's legendary jewelers: Sal'andaar's Anvilwork (Sal'andaar's Ward, Ring of Fortitude), Silbro's Grove (Silbro's Ring of Vitality, Strongman's Bracers), Maldritch's Remains (Maldritch's First Amulet, Ring of Life and Death, Skull Belt) and Selene's Tides (Aqua Ring, Journeyman's Bands, Eye of the Phoenix). Wearing 2 pieces of a set turns on its bonus: ward spells cost 10% less, healing spells heal 15% more and 25% more often, Drain spells reach 1 block further, or Water Breathing and Night Vision last 50% longer. A set piece's tooltip lists the set, lights the pieces you're wearing and the bonuses that are on. Without Curios, set pieces count from the hotbar, like their spells.
