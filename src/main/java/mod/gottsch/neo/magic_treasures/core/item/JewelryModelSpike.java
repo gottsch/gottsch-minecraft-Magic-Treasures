@@ -22,17 +22,23 @@ public class JewelryModelSpike {
     public static List<ItemStack> stacks() {
         return List.of(
                 // 1. legacy full-combination art: must look exactly like magictreasures:gold_ruby_ring
-                stack("legacy: gold + ruby", JewelryIdentity.of("ring", mt("gold"), mt("ruby"), "regular")),
-                stack("legacy: great silver + sapphire", JewelryIdentity.of("ring", mt("silver"), mt("sapphire"), "great")),
+                stack("legacy: gold + ruby", JewelryIdentity.of("ring", mt("gold"), mt("ruby"), mt("regular"))),
+                stack("legacy: great silver + sapphire", JewelryIdentity.of("ring", mt("silver"), mt("sapphire"), mt("great"))),
                 // 2. preset art: must look like magictreasures:angels_ring
                 stack("preset: angels_ring", JewelryIdentity.preset("ring", mt("gold"), mt("angels_ring"))),
                 // 3. layered: no copper+emerald art, so ring/copper + ring/gem/emerald
-                stack("layered: copper + emerald", JewelryIdentity.of("ring", mt("copper"), ResourceLocation.withDefaultNamespace("emerald"), "regular")),
-                // 4. tinted fallback: a pack material and gem with no art at all
+                stack("layered: copper + emerald", JewelryIdentity.of("ring", mt("copper"), ResourceLocation.withDefaultNamespace("emerald"), mt("regular"))),
+                // 4. tinted fallback, built-in data: no atium+sapphire art, so both layers take the registry colors
+                stack("fallback: atium + sapphire", JewelryIdentity.of("ring", mt("atium"), mt("sapphire"), mt("regular"))),
+                stack("fallback: shadow + topaz", JewelryIdentity.of("ring", mt("shadow"), mt("topaz"), mt("regular"))),
+                // 5. tinted fallback, pack data: plain gray (untinted) until the mypack test datapack is loaded
                 stack("fallback: titanium + amber", JewelryIdentity.of("ring", ResourceLocation.fromNamespaceAndPath("mypack", "titanium"),
-                        ResourceLocation.fromNamespaceAndPath("mymod", "amber"), "regular")),
-                // 5. mixed: no titanium art, no ring/gem/ruby layer -> tinted base + tinted overlay
-                stack("fallback: titanium + ruby", JewelryIdentity.of("ring", ResourceLocation.fromNamespaceAndPath("mypack", "titanium"), mt("ruby"), "regular")),
+                        ResourceLocation.fromNamespaceAndPath("mypack", "amber"), mt("regular"))),
+                stack("fallback: titanium + ruby", JewelryIdentity.of("ring", ResourceLocation.fromNamespaceAndPath("mypack", "titanium"), mt("ruby"), mt("regular"))),
+                // a pack style with its own shape and no art yet: ring/_base_pixaltier etc. when drawn, MT's plain
+                // tinted fallback until then
+                stack("style: pixaltier titanium + amber", JewelryIdentity.of("ring", ResourceLocation.fromNamespaceAndPath("mypack", "titanium"),
+                        ResourceLocation.fromNamespaceAndPath("mypack", "amber"), ResourceLocation.fromNamespaceAndPath("mypack", "pixaltier"))),
                 // 6. no identity at all: the plain default model
                 new ItemStack(MagicTreasuresItems.RING.get())
         );

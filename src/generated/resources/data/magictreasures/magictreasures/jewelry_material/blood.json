@@ -1,0 +1,10 @@
+{
+  "color": "#640900",
+  "factors": {
+    "cost": 0.9
+  },
+  "mana": 100,
+  "max_level": 8,
+  "repairs": 2,
+  "uses": 250
+}

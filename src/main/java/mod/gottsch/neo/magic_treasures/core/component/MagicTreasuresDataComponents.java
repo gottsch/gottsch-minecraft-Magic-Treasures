@@ -48,6 +48,16 @@ public class MagicTreasuresDataComponents {
                     .networkSynchronized(JewelryIdentity.STREAM_CODEC)
                     .cacheEncoding());
 
+    /**
+     * 2.0 generic jewelry: its play state (uses, mana, repairs, recharges, spells). Max values are computed from the
+     * identity, never stored. Filled from the computed stats the first time a handler reads the stack.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<JewelryState>> JEWELRY_STATE =
+            DATA_COMPONENTS.registerComponentType("jewelry_state", builder -> builder
+                    .persistent(JewelryState.CODEC)
+                    .networkSynchronized(JewelryState.STREAM_CODEC)
+                    .cacheEncoding());
+
     /** a mana well's mana and recharges; the item sets a full default, so every well has it */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ManaWellData>> MANA_WELL =
             DATA_COMPONENTS.registerComponentType("mana_well", builder -> builder

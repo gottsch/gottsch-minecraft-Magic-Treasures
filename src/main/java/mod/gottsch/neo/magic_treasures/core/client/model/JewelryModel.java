@@ -6,6 +6,9 @@ import com.google.gson.JsonParseException;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryRules;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryStyleDef;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
@@ -19,6 +22,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -33,8 +37,11 @@ import net.neoforged.neoforge.client.model.geometry.UnbakedGeometryHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -46,13 +53,17 @@ import java.util.function.Function;
  * Sprite lookup, first match wins:
  * <ol>
  *   <li>preset art: {@code <preset ns>:item/jewelry/<preset path>}</li>
- *   <li>full-combination art: {@code <material ns>:item/jewelry/[size_]material_[gem_]type}, which keeps every
+ *   <li>full-combination art: {@code <material ns>:item/jewelry/[affix_]material_[gem_]type}, which keeps every
  *       hand-drawn 1.x texture</li>
- *   <li>layers: base {@code <material ns>:item/jewelry/<type>/<material>[_size]} and gem
- *       {@code <gem ns or magictreasures>:item/jewelry/<type>/gem/<gem>}</li>
- *   <li>fallback, per layer: MT's {@code <type>/_base} and {@code <type>/gem/_overlay}, tinted with the
- *       material's and gem's colors (see {@link JewelryColors})</li>
+ *   <li>layers: base {@code <material ns>:item/jewelry/<type>/<material>[_affix]} and gem
+ *       {@code <gem ns or magictreasures>:item/jewelry/<type>/gem/<gem>[_affix]}</li>
+ *   <li>fallback, per layer: {@code <type>/_base[_affix]} and {@code <type>/gem/_overlay[_affix]} (the style's
+ *       namespace, then MT's), tinted with the material's and gem's colors (see {@link JewelryColors})</li>
  * </ol>
+ * The affix comes from the jewelry_style ({@code great}; none for regular). Layer and fallback lookups walk the
+ * style's {@code texture_fallback} chain (great, then regular), real art before tinted art. A style with its own
+ * shape has no fallback, so its gem never lands on another style's band. The last resort is MT's plain
+ * {@code _base} and {@code _overlay}.
  * Textures under {@code textures/item/jewelry/} of any namespace are stitched by the directory atlas source in
  * {@code assets/minecraft/atlases/blocks.json}, so a resource pack needs no model files.
  */
@@ -83,6 +94,15 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
 
     /** one sprite and the tint index its quads carry */
     record Layer(TextureAtlasSprite sprite, int tintIndex) {}
+
+    /** where a style's art lives: the namespace of its fallback art, and the affix of its texture names */
+    record StyleArt(String namespace, String affix) {
+        String suffix() {
+            return affix.isEmpty() ? "" : "_" + affix;
+        }
+    }
+
+    private static final int MAX_STYLE_CHAIN = 4;
 
     /** bakes layer lists into item models with this model file's display settings */
     static final class Baker {
@@ -124,8 +144,7 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
 
         List<Layer> layers(JewelryIdentity identity, Function<ResourceLocation, TextureAtlasSprite> find) {
             ResourceLocation material = identity.material();
-            String size = identity.size();
-            boolean regular = JewelryIdentity.REGULAR.equals(size);
+            List<StyleArt> chain = styleChain(identity.style());
 
             // 1. preset art
             if (identity.preset().isPresent()) {
@@ -136,31 +155,73 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
             }
 
             // 2. full-combination art, as named by the 1.x JewelryBuilder
-            String combo = (regular ? "" : size + "_") + material.getPath() + "_"
+            String affix = chain.get(0).affix();
+            String combo = (affix.isEmpty() ? "" : affix + "_") + material.getPath() + "_"
                     + identity.gem().map(gem -> gem.getPath() + "_").orElse("") + type;
             TextureAtlasSprite full = find.apply(jewelryTexture(material.getNamespace(), combo));
             if (full != null) {
                 return List.of(new Layer(full, LAYER_BASE));
             }
 
-            // 3./4. layers, each falling back to MT's tinted art on its own
+            // 3./4. layers, each falling back to tinted art on its own
             List<Layer> layers = new ArrayList<>(2);
-            TextureAtlasSprite base = regular ? null : find.apply(jewelryTexture(material.getNamespace(), type + "/" + material.getPath() + "_" + size));
-            if (base == null) {
-                base = find.apply(jewelryTexture(material.getNamespace(), type + "/" + material.getPath()));
-            }
-            layers.add(base != null ? new Layer(base, LAYER_BASE) : new Layer(find.apply(fallbackBase(type)), TINT_MATERIAL));
+            TextureAtlasSprite base = first(chain, art -> find.apply(jewelryTexture(material.getNamespace(),
+                    type + "/" + material.getPath() + art.suffix())));
+            layers.add(base != null ? new Layer(base, LAYER_BASE) : new Layer(fallback(chain, "/_base", find), TINT_MATERIAL));
 
             identity.gem().ifPresent(gem -> {
-                TextureAtlasSprite gemSprite = find.apply(jewelryTexture(gem.getNamespace(), type + "/gem/" + gem.getPath()));
-                if (gemSprite == null) {
+                TextureAtlasSprite gemSprite = first(chain, art -> {
+                    String path = type + "/gem/" + gem.getPath() + art.suffix();
+                    TextureAtlasSprite sprite = find.apply(jewelryTexture(gem.getNamespace(), path));
                     // MT can ship gem layers for other namespaces' gems (vanilla, Treasure2)
-                    gemSprite = find.apply(jewelryTexture(MagicTreasures.MOD_ID, type + "/gem/" + gem.getPath()));
-                }
-                layers.add(gemSprite != null ? new Layer(gemSprite, LAYER_GEM)
-                        : new Layer(find.apply(jewelryTexture(MagicTreasures.MOD_ID, type + "/gem/_overlay")), TINT_GEM));
+                    return sprite != null ? sprite : find.apply(jewelryTexture(MagicTreasures.MOD_ID, path));
+                });
+                layers.add(gemSprite != null ? new Layer(gemSprite, LAYER_GEM) : new Layer(fallback(chain, "/gem/_overlay", find), TINT_GEM));
             });
             return layers;
+        }
+
+        /** the tinted art of the first style in the chain that has it; MT's plain one otherwise */
+        private TextureAtlasSprite fallback(List<StyleArt> chain, String name, Function<ResourceLocation, TextureAtlasSprite> find) {
+            TextureAtlasSprite sprite = first(chain, art -> {
+                String path = type + name + art.suffix();
+                TextureAtlasSprite found = find.apply(jewelryTexture(art.namespace(), path));
+                return found != null ? found : find.apply(jewelryTexture(MagicTreasures.MOD_ID, path));
+            });
+            return sprite != null ? sprite : find.apply(jewelryTexture(MagicTreasures.MOD_ID, type + name));
+        }
+
+        private static TextureAtlasSprite first(List<StyleArt> chain, Function<StyleArt, TextureAtlasSprite> lookup) {
+            for (StyleArt art : chain) {
+                TextureAtlasSprite sprite = lookup.apply(art);
+                if (sprite != null) {
+                    return sprite;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * The style followed by its texture_fallback chain. An unknown style (missing pack, disabled) uses its id
+         * path as the affix and falls back to regular art.
+         */
+        static List<StyleArt> styleChain(ResourceLocation style) {
+            List<StyleArt> chain = new ArrayList<>(3);
+            Set<ResourceLocation> seen = new HashSet<>();
+            ResourceLocation next = style;
+            while (next != null && seen.add(next) && chain.size() < MAX_STYLE_CHAIN) {
+                Optional<Holder.Reference<JewelryStyleDef>> def = JewelryDataIndex.style(next);
+                if (def.isPresent()) {
+                    chain.add(new StyleArt(next.getNamespace(), def.get().value().affix(next)));
+                    next = def.get().value().textureFallback().orElse(null);
+                } else if (chain.isEmpty()) {
+                    chain.add(new StyleArt(next.getNamespace(), JewelryRules.REGULAR.equals(next) ? "" : next.getPath()));
+                    next = JewelryRules.REGULAR;
+                } else {
+                    next = null;
+                }
+            }
+            return chain;
         }
 
         static ResourceLocation fallbackBase(String type) {
@@ -172,10 +233,14 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
         }
     }
 
-    /** picks the stack's model from its identity; one cache per baked model, so a resource reload clears it */
+    /**
+     * picks the stack's model from its identity; one cache per baked model, so a resource reload clears it. The
+     * styles' art settings come from the datapack registries, so a change of data (another server) clears it too.
+     */
     static final class Overrides extends ItemOverrides {
         private final Baker baker;
         private final Map<JewelryIdentity, BakedModel> cache = new ConcurrentHashMap<>();
+        private volatile int generation = JewelryDataIndex.generation();
 
         Overrides(Baker baker) {
             this.baker = baker;
@@ -186,6 +251,10 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
             JewelryIdentity identity = stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
             if (identity == null) {
                 return model;
+            }
+            if (generation != JewelryDataIndex.generation()) {
+                cache.clear();
+                generation = JewelryDataIndex.generation();
             }
             return cache.computeIfAbsent(identity, baker::bake);
         }

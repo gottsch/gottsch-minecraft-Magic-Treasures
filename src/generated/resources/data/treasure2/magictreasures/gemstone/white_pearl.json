@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "treasure2:white_pearl"
+    }
+  ],
+  "color": "#DDE3F0",
+  "item": "treasure2:white_pearl",
+  "rarity": "rare",
+  "tier": "magictreasures:tier5"
+}

@@ -1,0 +1,15 @@
+{
+  "color": "#9C9870",
+  "factors": {
+    "cooldown": 0.9,
+    "cost": 0.9,
+    "duration": 1.5,
+    "effect": 1.12,
+    "range": 1.1
+  },
+  "mana": 200,
+  "max_level": 10,
+  "repairs": 3,
+  "spells": 2,
+  "uses": 325
+}

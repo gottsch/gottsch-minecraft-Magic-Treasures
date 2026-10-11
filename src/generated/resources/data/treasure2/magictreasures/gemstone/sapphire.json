@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "treasure2:sapphire"
+    }
+  ],
+  "color": "#0353B3",
+  "item": "treasure2:sapphire",
+  "rarity": "epic",
+  "tier": "magictreasures:tier6"
+}

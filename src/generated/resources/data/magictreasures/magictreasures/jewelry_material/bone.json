@@ -1,0 +1,14 @@
+{
+  "color": "#B4B194",
+  "factors": {
+    "cost": 1.05,
+    "effect": 1.25
+  },
+  "ingredient": {
+    "tag": "c:bones"
+  },
+  "mana": 50,
+  "max_level": 7,
+  "rarity": "scarce",
+  "uses": 200
+}

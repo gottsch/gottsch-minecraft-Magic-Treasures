@@ -1,0 +1,14 @@
+{
+  "color": "#B65737",
+  "factors": {
+    "cooldown": 0.95
+  },
+  "ingredient": {
+    "tag": "c:ingots/copper"
+  },
+  "mana": 50,
+  "max_level": 4,
+  "rarity": "uncommon",
+  "repairs": 1,
+  "uses": 75
+}

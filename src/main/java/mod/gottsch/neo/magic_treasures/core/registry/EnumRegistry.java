@@ -51,8 +51,9 @@ public class EnumRegistry {
 			map = ENUMS_MAP.get(key);
 		}
 		// add enum to inner map
+		// stored upper case, as get() and isRegistered() look it up (1.4.x hotfix list #14.5)
 		if (!map.containsKey(ienum.getName().toUpperCase())) {
-			map.put(ienum.getName(), ienum);
+			map.put(ienum.getName().toUpperCase(), ienum);
 		}
 	}
 	

@@ -1,0 +1,14 @@
+{
+  "color": "#94A3AC",
+  "factors": {
+    "cost": 0.95
+  },
+  "ingredient": {
+    "tag": "c:ingots/silver"
+  },
+  "mana": 75,
+  "max_level": 5,
+  "rarity": "scarce",
+  "repairs": 2,
+  "uses": 150
+}

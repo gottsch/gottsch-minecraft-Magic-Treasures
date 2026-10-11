@@ -1,0 +1,8 @@
+{
+  "factors": {
+    "cooldown": 0.98,
+    "cost": 0.98
+  },
+  "mana": 75,
+  "recharges": 2
+}
