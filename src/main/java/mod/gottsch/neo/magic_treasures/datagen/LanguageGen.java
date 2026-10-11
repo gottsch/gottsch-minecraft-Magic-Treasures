@@ -104,6 +104,7 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.BRACELET_RECIPE.get(), "Bracelet Recipe");
 
         // recharge scroll
+        add(MagicTreasuresItems.RING.get(), "Ring");
         add(MagicTreasuresItems.RECHARGE_SCROLL.get(), "Recharge Scroll");
 
         // ore

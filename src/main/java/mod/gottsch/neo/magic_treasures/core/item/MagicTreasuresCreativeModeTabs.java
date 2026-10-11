@@ -47,10 +47,12 @@ public class MagicTreasuresCreativeModeTabs {
 			.displayItems((displayParams, output) -> {
 				// add all items
 				Registration.ITEMS.getEntries().forEach(item -> {
-				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB)) {
+				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB) && !item.equals(MagicTreasuresItems.RING)) {
 						output.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
 					}
 				});
+				// TODO M3 replaces this with stacks built from the jewelry registries
+				JewelryModelSpike.stacks().forEach(stack -> output.accept(stack, TabVisibility.PARENT_AND_SEARCH_TABS));
 			})
 			.build()
 			);

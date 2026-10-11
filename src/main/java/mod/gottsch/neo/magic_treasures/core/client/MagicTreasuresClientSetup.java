@@ -19,6 +19,11 @@ package mod.gottsch.neo.magic_treasures.core.client;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.hud.JewelryHud;
+import mod.gottsch.neo.magic_treasures.core.client.model.JewelryColors;
+import mod.gottsch.neo.magic_treasures.core.client.model.JewelryModel;
+import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import mod.gottsch.neo.magic_treasures.core.client.particle.ArcaneSparkParticle;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.RichTooltips;
@@ -57,5 +62,17 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
 		event.registerAboveAll(JewelryHud.ID, new JewelryHud());
+	}
+
+	/** the composed model of 2.0 generic jewelry */
+	@SubscribeEvent
+	public static void onRegisterGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+		event.register(JewelryModel.LOADER_ID, JewelryModel.Loader.INSTANCE);
+	}
+
+	/** tints the composed model's fallback layers */
+	@SubscribeEvent
+	public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
+		event.register(new JewelryColors(), MagicTreasuresItems.RING.get());
 	}
 }
