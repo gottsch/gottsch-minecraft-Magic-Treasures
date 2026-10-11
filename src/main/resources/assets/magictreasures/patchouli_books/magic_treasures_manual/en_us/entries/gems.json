@@ -29,7 +29,7 @@
       "item": {
         "item": "minecraft:diamond"
       },
-      "text": "Diamond is the only vanilla gem by default.$(br)$(l)Tier:$() $(4)3$()$(br)$(l)Mana:$() $(1)75$()$(br)$(l)Recharges:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-2%$()$(br)$(l)Spell Cooldown:$() $(3)-2%$()$(br)$(l)Spell Frequency:$() $(3)+2%$()",
+      "text": "Diamond is the only vanilla gem by default.$(br)$(l)Tier:$() $(4)3$()$(br)$(l)Mana:$() $(1)75$()$(br)$(l)Recharges:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-2%$()$(br)$(l)Spell Cooldown:$() $(3)-2%$()",
       "anchor": "diamond"
     },
     {
@@ -38,7 +38,7 @@
       "item": {
         "item": "magictreasures:jadeite"
       },
-      "text": "Jadeite replaces vanilla Emerald as a gem for jewelry.$(br)$(l)Tier:$() $(4)4$()$(br)$(l)Mana:$() $(1)100$()$(br)$(l)Recharges:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-4%$()$(br)$(l)Spell Cooldown:$() $(3)-4%$()$(br)$(l)Spell Frequency:$() $(3)+4%$()",
+      "text": "Jadeite replaces vanilla Emerald as a gem for jewelry.$(br)$(l)Tier:$() $(4)4$()$(br)$(l)Mana:$() $(1)100$()$(br)$(l)Recharges:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-4%$()$(br)$(l)Spell Cooldown:$() $(3)-4%$()",
       "anchor": "jadeite"
     },
     {
@@ -47,7 +47,7 @@
       "item": {
         "item": "magictreasures:ruby"
       },
-      "text": "$(l)Tier:$() $(4)5$()$(br)$(l)Mana:$() $(1)125$()$(br)$(l)Recharges:$() $(6)3$()$(br)$(l)Spell Cost:$() $(3)-6%$()$(br)$(l)Spell Cooldown:$() $(3)-6%$()$(br)$(l)Spell Effect:$() $(3)+6%$()$(br)$(l)Spell Frequency:$() $(3)+6%$()$(br)$(l)Spell Range:$() $(3)+3%$()",
+      "text": "$(l)Tier:$() $(4)5$()$(br)$(l)Mana:$() $(1)125$()$(br)$(l)Recharges:$() $(6)3$()$(br)$(l)Spell Cost:$() $(3)-6%$()$(br)$(l)Spell Cooldown:$() $(3)-6%$()$(br)$(l)Spell Effect:$() $(3)+6%$()$(br)$(l)Spell Range:$() $(3)+3%$()",
       "anchor": "ruby"
     },
     {
@@ -56,7 +56,7 @@
       "item": {
         "item": "magictreasures:sapphire"
       },
-      "text": "$(l)Tier:$() $(4)6$()$(br)$(l)Mana:$() $(1)150$()$(br)$(l)Recharges:$() $(6)4$()$(br)$(l)Spell Cost:$() $(3)-8%$()$(br)$(l)Spell Cooldown:$() $(3)-8%$()$(br)$(l)Spell Effect:$() $(3)+10%$()$(br)$(l)Spell Frequency:$() $(3)+8%$()$(br)$(l)Spell Range:$() $(3)+6%$()",
+      "text": "$(l)Tier:$() $(4)6$()$(br)$(l)Mana:$() $(1)150$()$(br)$(l)Recharges:$() $(6)4$()$(br)$(l)Spell Cost:$() $(3)-8%$()$(br)$(l)Spell Cooldown:$() $(3)-8%$()$(br)$(l)Spell Effect:$() $(3)+10%$()$(br)$(l)Spell Range:$() $(3)+6%$()",
       "anchor": "sapphire"
     },
 
@@ -66,7 +66,7 @@
       "item": {
         "item": "magictreasures:white_pearl"
       },
-      "text": "$(l)Tier:$() $(4)5$()$(br)$(l)Mana:$() $(1)125$()$(br)$(l)Recharges:$() $(6)3$()$(br)$(l)Spell Cost:$() $(3)-6%$()$(br)$(l)Spell Cooldown:$() $(3)-6%$()$(br)$(l)Spell Effect:$() $(3)+6%$()$(br)$(l)Spell Frequency:$() $(3)+6%$()$(br)$(l)Spell Range:$() $(3)+3%$()",
+      "text": "$(l)Tier:$() $(4)5$()$(br)$(l)Mana:$() $(1)125$()$(br)$(l)Recharges:$() $(6)3$()$(br)$(l)Spell Cost:$() $(3)-6%$()$(br)$(l)Spell Cooldown:$() $(3)-6%$()$(br)$(l)Spell Effect:$() $(3)+6%$()$(br)$(l)Spell Range:$() $(3)+3%$()",
       "anchor": "white_pearl"
     },
     {
@@ -75,7 +75,7 @@
       "item": {
         "item": "magictreasures:black_pearl"
       },
-      "text": "$(l)Tier:$() $(4)6$()$(br)$(l)Mana:$() $(1)150$()$(br)$(l)Recharges:$() $(6)4$()$(br)$(l)Spell Cost:$() $(3)-8%$()$(br)$(l)Spell Cooldown:$() $(3)-8%$()$(br)$(l)Spell Effect:$() $(3)+10%$()$(br)$(l)Spell Frequency:$() $(3)+8%$()$(br)$(l)Spell Range:$() $(3)+6%$()",
+      "text": "$(l)Tier:$() $(4)6$()$(br)$(l)Mana:$() $(1)150$()$(br)$(l)Recharges:$() $(6)4$()$(br)$(l)Spell Cost:$() $(3)-8%$()$(br)$(l)Spell Cooldown:$() $(3)-8%$()$(br)$(l)Spell Effect:$() $(3)+10%$()$(br)$(l)Spell Range:$() $(3)+6%$()",
       "anchor": "black_pearl"
     }
   ]

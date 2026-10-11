@@ -46,7 +46,6 @@ public class JewelryMaterials {
                 $.repairs = 1;
                 $.maxLevel = 4;
                 $.spellCooldownFactor = 0.95;
-                $.spellFrequencyFactor = 0.95;
             }).build();
 
     public static final JewelryMaterial SILVER = new JewelryMaterial.Builder("silver", 150, 75)
@@ -62,7 +61,6 @@ public class JewelryMaterials {
                 $.maxLevel = 6;
                 $.spellCostFactor = 0.925;
                 $.spellCooldownFactor = 0.96;
-                $.spellFrequencyFactor = 0.96;
             }).build();
 
     public static final JewelryMaterial BONE = new JewelryMaterial.Builder("bone", 200, 50)
@@ -99,7 +97,6 @@ public class JewelryMaterials {
                 $.spellCooldownFactor = 0.9;
                 $.spellDurationFactor = 1.5;
                 $.spellEffectAmountFactor = 1.12;
-                $.spellFrequencyFactor = 0.9;
                 $.spellRangeFactor = 1.1;
             }).build();
 }

@@ -42,7 +42,7 @@ import java.util.List;
  * @author Mark Gottschling on May 2, 2020
  *
  */
-public class SatietySpell extends Spell {
+public class SatietySpell extends CooldownSpell {
 	public static final int MAX_FOOD_LEVEL = 20;
 	public static final String SATIETY_TYPE = "satiety";
 
@@ -62,19 +62,17 @@ public class SatietySpell extends Spell {
 	}
 
 	@Override
-	public boolean serverUpdate(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
+	public boolean execute(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
 		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
-		if (world.getGameTime() % frequency(context) == 0) {
-			if (player.isAlive() && hasMana(handler, context) && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
-				double amount = effectAmount(context);
-				player.getFoodData().eat((int)amount, (float) amount);
-				applyCost(world, random, coords, context, modifySpellCost(jewelry));
-				result = true;
-			}
+		if (player.isAlive() && hasMana(handler, context) && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
+			double amount = effectAmount(context);
+			player.getFoodData().eat((int)amount, (float) amount);
+			applyCost(world, random, coords, context, modifySpellCost(jewelry));
+			result = true;
 		}
 		return result;
 	}
@@ -83,20 +81,20 @@ public class SatietySpell extends Spell {
 	public Component getSpellDesc() {
 		// "Restores 0.5 hunger every %s seconds."
 		return Component.translatable(LangUtil.tooltip("spell.satiety.rate"),
-				MathUtil.r1d(getFrequency()/20.0));
+				MathUtil.r1d(getCooldown()/20.0));
 	}
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
 		return List.of(chip("hunger", "0.5", ChatFormatting.GOLD),
-			chip("every", seconds(tooltipFrequency(jewelry)), ChatFormatting.AQUA));
+			chip("every", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		// "Restores 0.5 hunger every %s seconds."
 		return Component.translatable(LangUtil.tooltip("spell.satiety.rate"),
-				MathUtil.r1d(modifyFrequency(jewelry)/20.0));
+				MathUtil.r1d(modifyCooldown(jewelry)/20.0));
 	}
 
 	@Override

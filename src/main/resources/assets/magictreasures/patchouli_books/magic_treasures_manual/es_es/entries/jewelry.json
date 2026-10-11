@@ -35,7 +35,7 @@
       "item": {
         "item": "magictreasures:great_copper_necklace"
       },
-      "text": "Las joyas de cobre tienen un nivel mayor que las de hierro, pero no son tan duraderas.$(br2)$(l)Nivel máx.:$() $(4)4$()$(br)$(l)Usos:$() $(1)75$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)1$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-5%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+5%$()$(br)",
+      "text": "Las joyas de cobre tienen un nivel mayor que las de hierro, pero no son tan duraderas.$(br2)$(l)Nivel máx.:$() $(4)4$()$(br)$(l)Usos:$() $(1)75$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)1$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-5%$()$(br)",
       "anchor": "copper_jewelry"
     },
     {
@@ -53,7 +53,7 @@
       "item": {
         "item": "magictreasures:great_gold_ring"
       },
-      "text": "Las joyas de oro son las mejores de los metales comunes.$(br2)$(l)Nivel máx.:$() $(4)6$()$(br)$(l)Usos:$() $(1)150$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-7.5%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-4%$()$(br)$(l)Frecuencia de hechizo:$() $(3)+4%$()$(br)",
+      "text": "Las joyas de oro son las mejores de los metales comunes.$(br2)$(l)Nivel máx.:$() $(4)6$()$(br)$(l)Usos:$() $(1)150$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-7.5%$()$(br)$(l)Enfriamiento de hechizo:$() $(3)-4%$()$(br)",
       "anchor": "gold_jewelry"
     },
     {

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.5.0] - Unreleased
+## [2.0.0] - Unreleased
 
 ### Added
 - Jewelry sets. Four named sets, one for each of the mod's legendary jewelers: Sal'andaar's Anvilwork (Sal'andaar's Ward, Ring of Fortitude), Silbro's Grove (Silbro's Ring of Vitality, Strongman's Bracers), Maldritch's Remains (Maldritch's First Amulet, Ring of Life and Death, Skull Belt) and Selene's Tides (Aqua Ring, Journeyman's Bands, Eye of the Phoenix). Wearing 2 pieces of a set turns on its bonus: ward spells cost 10% less, healing spells heal 15% more and 25% more often, Drain spells reach 1 block further, or Water Breathing and Night Vision last 50% longer. A set piece's tooltip lists the set, lights the pieces you're wearing and the bonuses that are on. Without Curios, set pieces count from the hotbar, like their spells.
@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New lore for Silbro's Ring of Vitality, and Strongman's Bracers has lore (it's Silbro's work too).
 - Fixed Strength (Quick, Greater and Giant Strength) showing its cooldown where its tooltip says the effect's duration.
 - With Obscure Tooltips installed, Magic Treasures tooltips leave the icon header to it, so the name isn't shown twice. Legendary Tooltips needs no change.
+- Healing (Lesser Healing to Regeneration), Drain (Drain, Greater Drain, Desiccate) and Satiety now act as soon as they're needed, then wait their "every N s" time before acting again. Before, they only acted on a fixed beat, so after you got hurt or hungry the first heal or bite could take up to the full wait. Their wait now shows on the jewelry HUD like other cooldowns.
+- Removed the Frequency spell modifier: those three spells use Cooldown now. Materials and gems always had the same Frequency and Cooldown values, so no numbers change. Silbro's Grove's "25% more often" bonus now lowers their cooldown.
 
 ## [1.4.0] - 2026-10-10
 

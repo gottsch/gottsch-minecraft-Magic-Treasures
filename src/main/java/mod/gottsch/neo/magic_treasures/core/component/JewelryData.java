@@ -132,23 +132,22 @@ public record JewelryData(
     /**
      * Spell modifier factors (1.0 = no change).
      */
-    public record Factors(double spellCost, double spellEffectAmount, double spellFrequency,
+    public record Factors(double spellCost, double spellEffectAmount,
                           double spellDuration, double spellCooldown, double spellRange) {
 
+        // NOTE 2.0.0 dropped "spell_frequency"; jewelry saved before that still carries it and decoding ignores it
         public static final Codec<Factors> CODEC = RecordCodecBuilder.create(instance -> instance.group(
                 Codec.DOUBLE.fieldOf("spell_cost").forGetter(Factors::spellCost),
                 Codec.DOUBLE.fieldOf("spell_effect_amount").forGetter(Factors::spellEffectAmount),
-                Codec.DOUBLE.fieldOf("spell_frequency").forGetter(Factors::spellFrequency),
                 Codec.DOUBLE.fieldOf("spell_duration").forGetter(Factors::spellDuration),
                 Codec.DOUBLE.fieldOf("spell_cooldown").forGetter(Factors::spellCooldown),
                 Codec.DOUBLE.fieldOf("spell_range").forGetter(Factors::spellRange)
         ).apply(instance, Factors::new));
 
-        public Factors withSpellCost(double v) { return new Factors(v, spellEffectAmount, spellFrequency, spellDuration, spellCooldown, spellRange); }
-        public Factors withSpellEffectAmount(double v) { return new Factors(spellCost, v, spellFrequency, spellDuration, spellCooldown, spellRange); }
-        public Factors withSpellFrequency(double v) { return new Factors(spellCost, spellEffectAmount, v, spellDuration, spellCooldown, spellRange); }
-        public Factors withSpellDuration(double v) { return new Factors(spellCost, spellEffectAmount, spellFrequency, v, spellCooldown, spellRange); }
-        public Factors withSpellCooldown(double v) { return new Factors(spellCost, spellEffectAmount, spellFrequency, spellDuration, v, spellRange); }
-        public Factors withSpellRange(double v) { return new Factors(spellCost, spellEffectAmount, spellFrequency, spellDuration, spellCooldown, v); }
+        public Factors withSpellCost(double v) { return new Factors(v, spellEffectAmount, spellDuration, spellCooldown, spellRange); }
+        public Factors withSpellEffectAmount(double v) { return new Factors(spellCost, v, spellDuration, spellCooldown, spellRange); }
+        public Factors withSpellDuration(double v) { return new Factors(spellCost, spellEffectAmount, v, spellCooldown, spellRange); }
+        public Factors withSpellCooldown(double v) { return new Factors(spellCost, spellEffectAmount, spellDuration, v, spellRange); }
+        public Factors withSpellRange(double v) { return new Factors(spellCost, spellEffectAmount, spellDuration, spellCooldown, v); }
     }
 }

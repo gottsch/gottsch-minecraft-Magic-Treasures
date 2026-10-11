@@ -35,7 +35,7 @@
       "item": {
         "item": "magictreasures:great_copper_necklace"
       },
-      "text": "Copper jewelry has a higher level than iron, but not as durable.$(br2)$(l)Max Level:$() $(4)4$()$(br)$(l)Uses:$() $(1)75$()$(br)$(l)Mana:$() $(1)50$()$(br)$(l)Repairs:$() $(6)1$()$(br)$(l)Spell Cooldown:$() $(3)-5%$()$(br)$(l)Spell Frequency:$() $(3)+5%$()$(br)",
+      "text": "Copper jewelry has a higher level than iron, but not as durable.$(br2)$(l)Max Level:$() $(4)4$()$(br)$(l)Uses:$() $(1)75$()$(br)$(l)Mana:$() $(1)50$()$(br)$(l)Repairs:$() $(6)1$()$(br)$(l)Spell Cooldown:$() $(3)-5%$()$(br)",
       "anchor": "copper_jewelry"
     },
     {
@@ -53,7 +53,7 @@
       "item": {
         "item": "magictreasures:great_gold_ring"
       },
-      "text": "Gold jewelry is the best of the standard metals.$(br2)$(l)Max Level:$() $(4)6$()$(br)$(l)Uses:$() $(1)150$()$(br)$(l)Mana:$() $(1)100$()$(br)$(l)Repairs:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-7.5%$()$(br)$(l)Spell Cooldown:$() $(3)-4%$()$(br)$(l)Spell Frequency:$() $(3)+4%$()$(br)",
+      "text": "Gold jewelry is the best of the standard metals.$(br2)$(l)Max Level:$() $(4)6$()$(br)$(l)Uses:$() $(1)150$()$(br)$(l)Mana:$() $(1)100$()$(br)$(l)Repairs:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-7.5%$()$(br)$(l)Spell Cooldown:$() $(3)-4%$()$(br)",
       "anchor": "gold_jewelry"
     },
     {

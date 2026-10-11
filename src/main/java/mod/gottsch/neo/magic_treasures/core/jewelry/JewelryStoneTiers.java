@@ -32,7 +32,6 @@ public class JewelryStoneTiers {
             .with($ -> {
                 $.spellCostFactor = .98;
                 $.spellCooldownFactor = .98;
-                $.spellFrequencyFactor = .98;
             })
             .build();
     public static final JewelryStoneTier TIER4 = new JewelryStoneTier.Builder("tier4", 100, 2)
@@ -40,7 +39,6 @@ public class JewelryStoneTiers {
                 $.spellCostFactor = .96;
                 $.spellCooldownFactor = .96;
                 $.spellEffectAmountFactor = 1.03;
-                $.spellFrequencyFactor = .96;
             })
             .build();
     public static final JewelryStoneTier TIER5 = new JewelryStoneTier.Builder("tier5", 125, 3)
@@ -50,7 +48,6 @@ public class JewelryStoneTiers {
                 $.spellEffectAmountFactor = 1.06;
 //                $.spellDurationFactor = 1.15;
                 $.spellRangeFactor = 1.03;
-                $.spellFrequencyFactor = 0.94;
             }).build();
 
     public static final JewelryStoneTier TIER6 = new JewelryStoneTier.Builder("tier6", 150, 4)
@@ -60,7 +57,6 @@ public class JewelryStoneTiers {
                 $.spellEffectAmountFactor = 1.1;
 //                $.spellDurationFactor = 1.25;
                 $.spellRangeFactor = 1.06;
-                $.spellFrequencyFactor = 0.92;
             }).build();
 
     // POC: Skeleton's Heart gem can only affix to Bone material.
@@ -73,7 +69,6 @@ public class JewelryStoneTiers {
                         };
                         $.spellCostFactor = 0.75;
                         $.spellEffectAmountFactor = 1.5;
-                        $.spellFrequencyFactor = 1.10;
                         $.spellCooldownFactor = 1.10;
                     }).build();
 }

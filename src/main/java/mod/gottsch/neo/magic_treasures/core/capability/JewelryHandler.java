@@ -151,7 +151,6 @@ public class JewelryHandler implements IJewelryHandler {
 
         public double spellCostFactor = -1.0;
         public double spellEffectAmountFactor = -1.0;
-        public double spellFrequencyFactor = -1.0;
         public double spellDurationFactor = -1.0;
         public double spellCooldownFactor = -1.0;
         public double spellRangeFactor = -1.0;
@@ -242,7 +241,6 @@ public class JewelryHandler implements IJewelryHandler {
             JewelryData.Factors factors = new JewelryData.Factors(
                     spellCostFactor < 0 ? material.getSpellCostFactor() * tier.getSpellCostFactor() : spellCostFactor,
                     spellEffectAmountFactor < 0 ? material.getSpellEffectAmountFactor() * tier.getSpellEffectAmountFactor() : spellEffectAmountFactor,
-                    spellFrequencyFactor < 0 ? material.getSpellFrequencyFactor() * tier.getSpellFrequencyFactor() : spellFrequencyFactor,
                     spellDurationFactor < 0 ? material.getSpellDurationFactor() * tier.getSpellDurationFactor() : spellDurationFactor,
                     spellCooldownFactor < 0 ? material.getSpellCooldownFactor() * tier.getSpellCooldownFactor() : spellCooldownFactor,
                     spellRangeFactor < 0 ? material.getSpellRangeFactor() * tier.getSpellRangeFactor() : spellRangeFactor);
@@ -306,8 +304,6 @@ public class JewelryHandler implements IJewelryHandler {
         addModifier(modifiers, "cost", getSpellCostFactor());
         addModifier(modifiers, "cooldown", getSpellCooldownFactor());
         addModifier(modifiers, "effect", getSpellEffectAmountFactor());
-        // a lower frequency factor means more often, which reads as a bonus
-        addModifier(modifiers, "frequency", getSpellFrequencyFactor() == 1.0 ? 1.0 : 1.0 + (1.0 - getSpellFrequencyFactor()));
         addModifier(modifiers, "range", getSpellRangeFactor());
         if (!modifiers.isEmpty()) {
             tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
@@ -382,11 +378,6 @@ public class JewelryHandler implements IJewelryHandler {
     @Override
     public long modifyCooldown(long cooldown) {
         return (long)(cooldown * getSpellCooldownFactor());
-    }
-
-    @Override
-    public long modifyFrequency(long frequency) {
-        return (long)(frequency * getSpellFrequencyFactor());
     }
 
     @Override
@@ -585,16 +576,6 @@ public class JewelryHandler implements IJewelryHandler {
     @Override
     public void setSpellEffectAmountFactor(double spellEffectAmountFactor) {
         updateFactors(f -> f.withSpellEffectAmount(spellEffectAmountFactor));
-    }
-
-    @Override
-    public double getSpellFrequencyFactor() {
-        return data().factors().spellFrequency();
-    }
-
-    @Override
-    public void setSpellFrequencyFactor(double spellFrequencyFactor) {
-        updateFactors(f -> f.withSpellFrequency(spellFrequencyFactor));
     }
 
     @Override
