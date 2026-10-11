@@ -21,6 +21,7 @@ import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryData;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.component.SpellData;
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
@@ -79,6 +80,9 @@ public class JewelryHandler extends AbstractJewelryHandler {
         // 2.0 generic jewelry
         if (stack.has(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get())) {
             return GenericJewelryHandler.get(stack);
+        }
+        if (stack.getItem() instanceof GenericJewelry) {
+            return Optional.empty(); // generic jewelry with no identity (a bare /give) isn't jewelry yet
         }
         if (!stack.has(MagicTreasuresDataComponents.JEWELRY)) {
             if (stack.getItem() instanceof Jewelry jewelry) {

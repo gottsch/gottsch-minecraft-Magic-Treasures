@@ -17,8 +17,10 @@
  */
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import java.util.List;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
@@ -103,8 +105,25 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.NECKLACE_RECIPE.get(), "Necklace Recipe");
         add(MagicTreasuresItems.BRACELET_RECIPE.get(), "Bracelet Recipe");
 
-        // recharge scroll
+        // 2.0 generic jewelry: the bare item names, then the parts a combination's name is composed from. A combination
+        // that was a 1.x item uses that item's name key instead (GenericJewelry.name)
         add(MagicTreasuresItems.RING.get(), "Ring");
+        add(MagicTreasuresItems.NECKLACE.get(), "Necklace");
+        add(MagicTreasuresItems.BRACELET.get(), "Bracelet");
+        // arguments: (style, material, gem, type)
+        add(GenericJewelry.NAME_KEY, "%2$s %4$s");
+        add(GenericJewelry.NAME_KEY + ".gem", "%2$s %3$s %4$s");
+        add(GenericJewelry.NAME_KEY + ".style", "%1$s %2$s %4$s");
+        add(GenericJewelry.NAME_KEY + ".style.gem", "%1$s %2$s %3$s %4$s");
+        add("jewelry_style.magictreasures.great", "Great");
+        add("jewelry_style.magictreasures.lords", "Lords");
+        for (String material : List.of("wood", "iron", "copper", "silver", "gold", "bone", "blood", "shadow", "atium")) {
+            add("material.magictreasures." + material, WordUtils.capitalizeFully(material));
+        }
+        add(LangUtil.tooltip("jewelry.unknown"), "Unknown material or style: %s (is a datapack missing?)");
+        add(LangUtil.tooltip("jewelry.unknown_gem"), "Unknown gem %s: it has no effect");
+
+        // recharge scroll
         add(MagicTreasuresItems.RECHARGE_SCROLL.get(), "Recharge Scroll");
 
         // ore

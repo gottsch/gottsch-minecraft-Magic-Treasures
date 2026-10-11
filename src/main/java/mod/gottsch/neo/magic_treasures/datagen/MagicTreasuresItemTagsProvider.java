@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
 import java.util.Optional;
 import com.google.common.collect.Maps;
@@ -146,7 +147,8 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		Registration.ITEMS.getEntries().forEach(registryItem -> {
 			// NOTE read the item's defaults builder, not a stack's component: data runs don't fire FMLCommonSetupEvent,
 			// so the API registries the component's names resolve through are empty
-			Optional.of(registryItem.get()).filter(i -> i instanceof Jewelry).map(i -> ((Jewelry) i).jewelryDefaults()).ifPresent(handler -> {
+			// 2.0 generic jewelry has no 1.x defaults; its Curios tags are added below
+			Optional.of(registryItem.get()).filter(i -> i instanceof Jewelry && !(i instanceof GenericJewelry)).map(i -> ((Jewelry) i).jewelryDefaults()).ifPresent(handler -> {
 				// add to the type tag
 				tag(TYPE_TAG_MAP.get(handler.getJewelryType())).add(registryItem.get());
 				// -- curios integration
@@ -307,6 +309,12 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 
 		// belts
 		tag(MagicTreasuresTags.Items.CURIOUS_BELT).add(MagicTreasuresItems.SKULL_BELT.get());
+
+		// 2.0 generic jewelry: Curios slots only. They stay out of MT's jewelry type/rarity tags, which feed the 1.x
+		// registries (JewelryRegistry, RandomJewelry) until M9
+		tag(MagicTreasuresTags.Items.CURIOUS_RING).add(MagicTreasuresItems.RING.get());
+		tag(MagicTreasuresTags.Items.CURIOUS_NECKLACE).add(MagicTreasuresItems.NECKLACE.get());
+		tag(MagicTreasuresTags.Items.CURIOUS_BRACELET).add(MagicTreasuresItems.BRACELET.get());
 
 		// ores
 		tag(MagicTreasuresTags.Items.ORE_SILVER).add(MagicTreasuresItems.SILVER_ORE_BLOCKITEM.get());

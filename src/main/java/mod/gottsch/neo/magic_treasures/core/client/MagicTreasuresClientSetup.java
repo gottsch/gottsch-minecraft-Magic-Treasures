@@ -73,6 +73,6 @@ public class MagicTreasuresClientSetup {
 	/** tints the composed model's fallback layers */
 	@SubscribeEvent
 	public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
-		event.register(new JewelryColors(), MagicTreasuresItems.RING.get());
+		MagicTreasuresItems.GENERIC_JEWELRY.forEach(item -> event.register(new JewelryColors(), item.get()));
 	}
 }

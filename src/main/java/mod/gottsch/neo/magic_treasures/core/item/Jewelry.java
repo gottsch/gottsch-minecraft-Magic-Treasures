@@ -128,12 +128,17 @@ public class Jewelry extends Item implements IJewelry{
         handler.ifPresent(h -> tooltip.add(TooltipMarkers.subtitle(MagicTreasures.MOD_ID, h.getSubtitle())));
         tooltip.add(Component.literal(LangUtil.NEWLINE));
 
-        if (StringUtils.isNotBlank(getLoreKey())) {
+        if (hasLore(stack)) {
             appendLoreHoverText(stack, context, tooltip, flag);
         }
 
         // add handler tooltips
         handler.ifPresent(h -> h.appendHoverText(stack, context, tooltip, flag));
+    }
+
+    /** whether the tooltip shows lore; generic jewelry has it per stack (its preset's lore) */
+    protected boolean hasLore(ItemStack stack) {
+        return StringUtils.isNotBlank(getLoreKey());
     }
 
     @Override

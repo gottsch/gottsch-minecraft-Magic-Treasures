@@ -18,6 +18,7 @@
 package mod.gottsch.neo.magic_treasures.core.item.generator;
 
 
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
@@ -54,6 +55,9 @@ public class JewelryGenerator {
     }
 
     public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
+        if (jewelry.getItem() instanceof GenericJewelry) {
+            return addGenericGem(jewelry, stone);
+        }
         IJewelryHandler sourceHandler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
         // ensure a valid stone stack
@@ -115,6 +119,9 @@ public class JewelryGenerator {
     }
 
     public Optional<ItemStack> removeStone(ItemStack jewelry, Namer namer) {
+        if (jewelry.getItem() instanceof GenericJewelry) {
+            return removeGenericGem(jewelry);
+        }
         ResourceLocation location = ModUtil.asLocation(namer.name(jewelry));
         ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
 
@@ -173,10 +180,7 @@ public class JewelryGenerator {
     public Optional<ItemStack> addSpells(ItemStack jewelry, ItemStack spellStack) {
         if (!spellStack.is(MagicTreasuresTags.Items.SPELL_SCROLLS)) return Optional.empty();
 
-        // create a new stack based on the jewelry
-        ItemStack destStack = new ItemStack(jewelry.getItem());
-        // copy values from jewelry to destStack
-        copyStack(jewelry, destStack);
+        ItemStack destStack = resultStack(jewelry);
 
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         ISpell spell = ((SpellScroll)spellStack.getItem()).getSpell();
@@ -185,6 +189,51 @@ public class JewelryGenerator {
             return Optional.of(destStack);
         }
         return Optional.empty();
+    }
+
+    /**
+     * The anvil's result stack, holding the input's values. 1.x jewelry is rebuilt as a new stack of the same item;
+     * 2.0 generic jewelry is a copy, because its identity and state are all it has.
+     */
+    private ItemStack resultStack(ItemStack jewelry) {
+        if (jewelry.getItem() instanceof GenericJewelry) {
+            return jewelry.copy();
+        }
+        ItemStack destStack = new ItemStack(jewelry.getItem());
+        copyStack(jewelry, destStack);
+        return destStack;
+    }
+
+    /*
+     * 2.0 generic jewelry. A minimal stand-in until M5 reworks the anvil: the gem is set on the identity, and the
+     * max values follow from it. As in 1.x, the gem's extra mana and recharges are added to the current values.
+     */
+    private ItemStack addGenericGem(ItemStack jewelry, ItemStack stone) {
+        IJewelryHandler source = JewelryHandler.get(jewelry).orElse(null);
+        if (source == null || stone == null || stone.isEmpty() || source.hasStone() || !source.acceptsAffixer(stone)) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack result = jewelry.copy();
+        IJewelryHandler dest = JewelryHandler.get(result).orElseThrow(IllegalStateException::new);
+        dest.setStone(ModUtil.getName(stone.getItem()));
+        if (!dest.hasStone()) {
+            return ItemStack.EMPTY; // not a known gemstone
+        }
+        dest.setMana(source.getMana() + (dest.getMaxMana() - source.getMaxMana()));
+        dest.setRecharges(source.getRecharges() + (dest.getMaxRecharges() - source.getMaxRecharges()));
+        return result;
+    }
+
+    private Optional<ItemStack> removeGenericGem(ItemStack jewelry) {
+        ItemStack result = jewelry.copy();
+        Optional<IJewelryHandler> dest = JewelryHandler.get(result);
+        dest.ifPresent(handler -> {
+            handler.setStone(null);
+            // reads are capped at the new max; store the capped values
+            handler.setMana(handler.getMana());
+            handler.setRecharges(handler.getRecharges());
+        });
+        return dest.map(handler -> result);
     }
 
     private void copyStack(ItemStack sourceStack, ItemStack destStack) {
@@ -213,10 +262,7 @@ public class JewelryGenerator {
     }
 
     public Optional<ItemStack> recharge(ItemStack jewelry) {
-        // create a new stack based on the jewelry
-        ItemStack destStack = new ItemStack(jewelry.getItem());
-        // copy values from jewelry to destStack
-        copyStack(jewelry, destStack);
+        ItemStack destStack = resultStack(jewelry);
 
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         if (handler.getRecharges() > 0) {
@@ -228,10 +274,7 @@ public class JewelryGenerator {
     }
 
     public Optional<ItemStack> repair(ItemStack jewelry) {
-        // create a new stack based on the jewelry
-        ItemStack destStack = new ItemStack(jewelry.getItem());
-        // copy values from jewelry to destStack
-        copyStack(jewelry, destStack);
+        ItemStack destStack = resultStack(jewelry);
 
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         if (handler.getRepairs() > 0) {

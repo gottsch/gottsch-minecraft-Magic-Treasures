@@ -88,8 +88,11 @@ public class MagicTreasuresItems {
 	public static DeferredItem<Item> BRACELET_RECIPE = Registration.ITEMS.register("bracelet_recipe", () -> new JewelryRecipeScroll(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 //	public static DeferredItem<Item> BELT_RECIPE = Registration.ITEMS.register("belt_recipe", () -> new JewelryRecipeScroll(magic_treasures_PROPS_SUPPLIER.get()));
 
-	// 2.0 generic jewelry (M4 model spike): what the piece is lives in the jewelry_identity component
-	public static DeferredItem<Item> RING = Registration.ITEMS.register("ring", () -> new Item(MAGIC_TREASURES_PROPS_SUPPLIER.get().stacksTo(1)));
+	// 2.0 generic jewelry: one item per type; what the piece is lives in the jewelry_identity component
+	public static DeferredItem<Item> RING = Registration.ITEMS.register("ring", () -> new GenericJewelry("ring", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static DeferredItem<Item> NECKLACE = Registration.ITEMS.register("necklace", () -> new GenericJewelry("necklace", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static DeferredItem<Item> BRACELET = Registration.ITEMS.register("bracelet", () -> new GenericJewelry("bracelet", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static final List<DeferredItem<Item>> GENERIC_JEWELRY = List.of(RING, NECKLACE, BRACELET);
 
 	// recharge scroll
 	public static DeferredItem<Item> RECHARGE_SCROLL =Registration.ITEMS.register("recharge_scroll", () -> new Item(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
