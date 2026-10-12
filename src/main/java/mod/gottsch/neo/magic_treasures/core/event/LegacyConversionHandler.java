@@ -12,11 +12,10 @@ import net.minecraft.world.Container;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -40,6 +39,8 @@ import java.util.Set;
 @EventBusSubscriber(modid = MagicTreasures.MOD_ID)
 public final class LegacyConversionHandler {
     private static final int INTERVAL = 20;
+    /** Curios is optional; its slots are only read through {@link CuriosSlots} when it's loaded */
+    private static final boolean CURIOS = ModList.get().isLoaded("curios");
 
     private LegacyConversionHandler() {}
 
@@ -49,9 +50,9 @@ public final class LegacyConversionHandler {
             return;
         }
         int converted = convert(player.getInventory());
-        converted += CuriosApi.getCuriosInventory(player).map(curios -> curios.getCurios().values().stream()
-                .mapToInt(handler -> convert(handler.getStacks()) + convert(handler.getCosmeticStacks()))
-                .sum()).orElse(0);
+        if (CURIOS) {
+            converted += CuriosSlots.replaceEach(player, LegacyConversion::convert);
+        }
         reportCarried(player);
         if (converted > 0) {
             MagicTreasures.LOGGER.info("converted {} 1.x jewelry item(s) carried by {}", converted, player.getGameProfile().getName());
@@ -65,14 +66,9 @@ public final class LegacyConversionHandler {
         for (int i = 0; i < inventory.getContainerSize(); i++) {
             reportCarried(player, inventory.getItem(i), reported);
         }
-        CuriosApi.getCuriosInventory(player).ifPresent(curios -> curios.getCurios().values().forEach(handler -> {
-            for (int i = 0; i < handler.getStacks().getSlots(); i++) {
-                reportCarried(player, handler.getStacks().getStackInSlot(i), reported);
-            }
-            for (int i = 0; i < handler.getCosmeticStacks().getSlots(); i++) {
-                reportCarried(player, handler.getCosmeticStacks().getStackInSlot(i), reported);
-            }
-        }));
+        if (CURIOS) {
+            CuriosSlots.forEach(player, stack -> reportCarried(player, stack, reported));
+        }
     }
 
     private static void reportCarried(ServerPlayer player, ItemStack stack, Set<JewelryTrigger.Details> reported) {
@@ -115,18 +111,6 @@ public final class LegacyConversionHandler {
             Optional<ItemStack> stack = LegacyConversion.convert(container.getItem(i));
             if (stack.isPresent()) {
                 container.setItem(i, stack.get());
-                converted++;
-            }
-        }
-        return converted;
-    }
-
-    private static int convert(IDynamicStackHandler stacks) {
-        int converted = 0;
-        for (int i = 0; i < stacks.getSlots(); i++) {
-            Optional<ItemStack> stack = LegacyConversion.convert(stacks.getStackInSlot(i));
-            if (stack.isPresent()) {
-                stacks.setStackInSlot(i, stack.get());
                 converted++;
             }
         }

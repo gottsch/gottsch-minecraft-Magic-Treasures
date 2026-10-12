@@ -36,7 +36,7 @@ import java.util.Optional;
  * Replaces the 1.20.1 JewelryCapability NBT.
  *
  * @param type     IJewelryType name (EnumRegistry key)
- * @param material JewelryMaterial id
+ * @param material the 1.x material id (wood, gold...)
  * @param sizeTier IJewelrySizeTier name (EnumRegistry key)
  * @param stone    stone item id, if any
  * @param baseName base name used for naming rules, if any

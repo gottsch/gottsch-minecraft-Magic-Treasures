@@ -20,7 +20,6 @@ package mod.gottsch.neo.magic_treasures.core.item;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryData;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;

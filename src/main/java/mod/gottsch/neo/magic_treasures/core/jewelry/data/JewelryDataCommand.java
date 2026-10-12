@@ -6,7 +6,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.core.capability.GenericJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
@@ -14,7 +13,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceLocation;
@@ -61,14 +59,10 @@ public final class JewelryDataCommand {
         }
         IJewelryHandler handler = found.get();
         List<String> lines = new ArrayList<>();
-        if (handler instanceof GenericJewelryHandler generic) {
-            JewelryStats stats = generic.stats();
-            lines.add("2.0 generic: " + generic.identity());
-            lines.add("known: " + stats.known() + ", gem known: " + stats.gemKnown() + ", rarity: " + stats.rarity().getValue()
-                    + ", state stored: " + stack.has(MagicTreasuresDataComponents.JEWELRY_STATE.get()));
-        } else {
-            lines.add("1.x item: " + BuiltInRegistries.ITEM.getKey(stack.getItem()));
-        }
+        JewelryStats stats = handler.getStats();
+        lines.add("identity: " + handler.getIdentity());
+        lines.add("known: " + stats.known() + ", gem known: " + stats.gemKnown() + ", rarity: " + stats.rarity().getValue()
+                + ", state stored: " + stack.has(MagicTreasuresDataComponents.JEWELRY_STATE.get()));
         lines.add(String.format(Locale.ROOT, "uses %s/%d, mana %.1f/%.1f, level %d", handler.isInfinite() ? "inf" : handler.getUses(),
                 handler.getMaxUses(), handler.getMana(), handler.getMaxMana(), handler.getMaxLevel()));
         lines.add(String.format(Locale.ROOT, "repairs %d/%d, recharges %d/%d, stone %s, spells %d", handler.getRepairs(),

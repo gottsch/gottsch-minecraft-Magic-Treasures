@@ -20,7 +20,6 @@ package mod.gottsch.neo.magic_treasures.core.recipe;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.item.JewelryRecipeScroll;
-import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryMaterialDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryRules;
@@ -120,8 +119,7 @@ public class JewelryRecipe extends CustomRecipe {
     }
 
     private static Optional<GenericJewelry> item(String type) {
-        return MagicTreasuresItems.GENERIC_JEWELRY.stream().map(item -> (GenericJewelry) item.get())
-                .filter(item -> item.getJewelryType().equals(type)).findFirst();
+        return GenericJewelry.forType(type);
     }
 
     @Override

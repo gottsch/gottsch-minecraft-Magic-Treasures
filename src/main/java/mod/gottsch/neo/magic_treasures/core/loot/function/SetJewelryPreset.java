@@ -22,7 +22,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
-import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.GemstoneDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryMaterialDef;
@@ -82,9 +81,7 @@ public class SetJewelryPreset extends LootItemConditionalFunction {
             }
         }
         JewelryIdentity identity = new JewelryIdentity(def.type(), def.material(), stone, def.style(), Optional.of(preset));
-        return MagicTreasuresItems.GENERIC_JEWELRY.stream().map(item -> (GenericJewelry) item.get())
-                .filter(item -> item.getJewelryType().equals(def.type())).findFirst()
-                .map(item -> item.stack(identity)).orElse(ItemStack.EMPTY);
+        return GenericJewelry.forType(def.type()).map(item -> item.stack(identity)).orElse(ItemStack.EMPTY);
     }
 
     public static final MapCodec<SetJewelryPreset> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance)

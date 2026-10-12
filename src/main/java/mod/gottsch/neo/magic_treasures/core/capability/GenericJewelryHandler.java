@@ -1,19 +1,11 @@
 package mod.gottsch.neo.magic_treasures.core.capability;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryState;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.component.SpellData;
-import mod.gottsch.neo.magic_treasures.core.item.IJewelrySizeTier;
-import mod.gottsch.neo.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.neo.magic_treasures.core.item.JewelryType;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterials;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.GemstoneDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryMaterialDef;
@@ -24,11 +16,18 @@ import mod.gottsch.neo.magic_treasures.core.jewelry.data.SpellFactors;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellRegistry;
+import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,31 +36,20 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
- * A write-through view of a 2.0 generic jewelry stack: its {@link JewelryIdentity} (what it is) and
- * {@link JewelryState} (uses, mana, repairs, recharges, spells). Max values, level and factors come from
- * {@link JewelryStats}, computed from the identity and the datapack registries, and are never stored.
- * <p>
- * Implements the 1.x {@link IJewelryHandler}, so spells, the cost evaluator, the HUD, tooltips and sets work on
- * generic jewelry unchanged. The setters for computed values ({@code setMaxMana} etc.) do nothing here: only the 1.x
- * anvil code calls them, and M5 replaces it.
+ * A write-through view of a 2.0 jewelry stack: its {@link JewelryIdentity} (what it is) and {@link JewelryState}
+ * (uses, mana, repairs, recharges, spells). Max values, level and factors come from {@link JewelryStats}, computed
+ * from the identity and the datapack registries, and are never stored.
  */
-public class GenericJewelryHandler extends AbstractJewelryHandler {
-    /*
-     * the 1.x constants that IJewelryHandler's typed getters return, for built-in ids (a pack's id gets NONE); until
-     * M10 reworks the interface
-     */
-    private static final java.util.Map<ResourceLocation, JewelryMaterial> LEGACY_MATERIALS = java.util.stream.Stream.of(
-            JewelryMaterials.WOOD, JewelryMaterials.IRON, JewelryMaterials.COPPER, JewelryMaterials.SILVER, JewelryMaterials.GOLD,
-            JewelryMaterials.BONE, JewelryMaterials.BLOOD, JewelryMaterials.SHADOW, JewelryMaterials.ATIUM)
-            .collect(java.util.stream.Collectors.toMap(JewelryMaterial::getId, m -> m));
-    private static final java.util.Map<ResourceLocation, JewelryStoneTier> LEGACY_TIERS = java.util.stream.Stream.of(
-            JewelryStoneTiers.TIER1, JewelryStoneTiers.TIER2, JewelryStoneTiers.TIER3, JewelryStoneTiers.TIER4,
-            JewelryStoneTiers.TIER5, JewelryStoneTiers.TIER6, JewelryStoneTiers.SKELETONS_HEART)
-            .collect(java.util.stream.Collectors.toMap(JewelryStoneTier::getName, t -> t));
+public class GenericJewelryHandler implements IJewelryHandler {
+    private static final int MANA_BAR_RGB = 0x5555FF;
+    private static final int DURABILITY_BAR_RGB = 0x55AA55;
+    private static final int INFINITE_BAR_RGB = 0x777777;
+    private static final String SUBTITLE_SEPARATOR = " · ";
 
+    private final ItemStack stack;
 
     private GenericJewelryHandler(ItemStack stack) {
-        super(stack);
+        this.stack = stack;
     }
 
     /**
@@ -102,23 +90,56 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
         }
     }
 
+    @Override
+    public ItemStack getStack() {
+        return stack;
+    }
+
     /*
      * identity, state and stats
      */
-    public JewelryIdentity identity() {
+    @Override
+    public JewelryIdentity getIdentity() {
         return stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
     }
 
-    public JewelryState state() {
-        return stack.getOrDefault(MagicTreasuresDataComponents.JEWELRY_STATE.get(), JewelryState.EMPTY);
+    @Override
+    public String getType() {
+        return getIdentity().type();
     }
 
-    public JewelryStats stats() {
-        return JewelryStats.of(identity());
+    @Override
+    public ResourceLocation getMaterial() {
+        return getIdentity().material();
     }
 
+    @Override
+    public ResourceLocation getStyle() {
+        return getIdentity().style();
+    }
+
+    @Override
+    public Optional<ResourceLocation> getGem() {
+        return getIdentity().gem();
+    }
+
+    @Override
+    public Optional<ResourceLocation> getPreset() {
+        return getIdentity().preset();
+    }
+
+    @Override
+    public JewelryStats getStats() {
+        return JewelryStats.of(getIdentity());
+    }
+
+    @Override
     public MagicTreasuresRarity getRarity() {
-        return stats().rarity();
+        return getStats().rarity();
+    }
+
+    private JewelryState state() {
+        return stack.getOrDefault(MagicTreasuresDataComponents.JEWELRY_STATE.get(), JewelryState.EMPTY);
     }
 
     private void updateState(UnaryOperator<JewelryState> operator) {
@@ -126,44 +147,11 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
     }
 
     private Optional<Holder.Reference<GemstoneDef>> gemstone() {
-        return identity().gem().flatMap(JewelryDataIndex::gemstone);
+        return getIdentity().gem().flatMap(JewelryDataIndex::gemstone);
     }
 
     private Optional<Holder.Reference<JewelryPresetDef>> preset() {
-        return identity().preset().flatMap(JewelryDataIndex::preset);
-    }
-
-    @Override
-    protected ResourceLocation materialId() {
-        return identity().material();
-    }
-
-    /*
-     * 1.x types. Built-in materials and styles map to their 1.x constants; a pack's map to NONE / UNKNOWN.
-     */
-    @Override
-    public JewelryMaterial getMaterial() {
-        return LEGACY_MATERIALS.getOrDefault(identity().material(), JewelryMaterials.NONE);
-    }
-
-    @Override
-    public IJewelrySizeTier getJewelrySizeTier() {
-        ResourceLocation style = identity().style();
-        return style.getNamespace().equals(MagicTreasures.MOD_ID)
-                ? MagicTreasuresApi.getJewelrySize(style.getPath()).orElse(JewelrySizeTier.UNKNOWN)
-                : JewelrySizeTier.UNKNOWN;
-    }
-
-    @Override
-    public IJewelryType getJewelryType() {
-        return MagicTreasuresApi.getJewelryType(identity().type()).orElse(JewelryType.UNKNOWN);
-    }
-
-    @Override
-    public JewelryStoneTier getStoneTier() {
-        return gemstone().flatMap(gem -> gem.value().tier().unwrapKey())
-                .map(key -> LEGACY_TIERS.getOrDefault(key.location(), JewelryStoneTiers.NONE))
-                .orElse(JewelryStoneTiers.NONE);
+        return getIdentity().preset().flatMap(JewelryDataIndex::preset);
     }
 
     /*
@@ -171,31 +159,31 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
      */
     @Override
     public int getMaxUses() {
-        return stats().maxUses();
+        return getStats().maxUses();
     }
 
     @Override
     public double getMaxMana() {
-        return stats().maxMana();
+        return getStats().maxMana();
     }
 
     @Override
     public int getMaxRepairs() {
-        return stats().maxRepairs();
+        return getStats().maxRepairs();
     }
 
     @Override
     public int getMaxRecharges() {
-        return stats().maxRecharges();
+        return getStats().maxRecharges();
     }
 
     @Override
     public int getMaxLevel() {
-        return stats().maxLevel();
+        return getStats().maxLevel();
     }
 
     private SpellFactors factors() {
-        return stats().factors();
+        return getStats().factors();
     }
 
     @Override
@@ -223,17 +211,30 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
         return factors().range();
     }
 
-    // computed from the identity; only the 1.x anvil calls these, and M5 replaces it
-    @Override public void setMaxUses(int maxUses) {}
-    @Override public void setMaxMana(double maxMana) {}
-    @Override public void setMaxRepairs(int repairs) {}
-    @Override public void setMaxLevel(int maxLevel) {}
-    @Override public void setMaxRecharges(int maxRecharges) {}
-    @Override public void setSpellCostFactor(double spellCostFactor) {}
-    @Override public void setSpellEffectAmountFactor(double spellEffectAmountFactor) {}
-    @Override public void setSpellDurationFactor(double spellDurationFactor) {}
-    @Override public void setSpellCooldownFactor(double spellCooldownFactor) {}
-    @Override public void setSpellRangeFactor(double spellRangeFactor) {}
+    @Override
+    public double modifySpellCost(double cost) {
+        return cost * getSpellCostFactor();
+    }
+
+    @Override
+    public double modifyEffectAmount(double amount) {
+        return amount * getSpellEffectAmountFactor();
+    }
+
+    @Override
+    public int modifyDuration(int duration) {
+        return (int)(duration * getSpellDurationFactor());
+    }
+
+    @Override
+    public long modifyCooldown(long cooldown) {
+        return (long)(cooldown * getSpellCooldownFactor());
+    }
+
+    @Override
+    public double modifyRange(double range) {
+        return range * getSpellRangeFactor();
+    }
 
     /*
      * state. Reads are capped at the current max, so a datapack that lowers a material's mana takes effect on
@@ -248,6 +249,11 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
     @Override
     public void setUses(int uses) {
         updateState(s -> s.withUses(uses));
+    }
+
+    @Override
+    public boolean isInfinite() {
+        return getUses() == Integer.MAX_VALUE;
     }
 
     @Override
@@ -302,18 +308,18 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
     }
 
     /*
-     * the gem. 1.x callers pass and expect the gem's *item* id; the identity stores the gemstone id. They are equal
-     * for built-in gems, not for a pack's (mypack:amber is minecraft:honeycomb in the test pack).
+     * the gem. Callers pass and expect the gem's *item* id; the identity stores the gemstone id. They are equal for
+     * built-in gems, not for a pack's (mypack:amber is minecraft:honeycomb in the test pack).
      */
     @Override
     public ResourceLocation getStone() {
-        return identity().gem().map(id -> gemstone().map(gem -> gem.value().item()).orElse(id)).orElse(null);
+        return getIdentity().gem().map(id -> gemstone().map(gem -> gem.value().item()).orElse(id)).orElse(null);
     }
 
     @Override
     public void setStone(ResourceLocation item) {
         Optional<ResourceLocation> gem = Optional.empty();
-        // null or minecraft:air (what 1.x writes for "no gem") removes the gem
+        // null or minecraft:air removes the gem
         if (item != null && !item.equals(BuiltInRegistries.ITEM.getKey(Items.AIR))) {
             gem = BuiltInRegistries.ITEM.getOptional(item).flatMap(JewelryDataIndex::gemstone).map(h -> h.key().location());
             if (gem.isEmpty()) {
@@ -321,7 +327,7 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
                 return;
             }
         }
-        JewelryIdentity identity = identity();
+        JewelryIdentity identity = getIdentity();
         stack.set(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get(),
                 new JewelryIdentity(identity.type(), identity.material(), gem, identity.style(), identity.preset()));
     }
@@ -338,28 +344,105 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
         if (gem.isEmpty()) {
             return true;
         }
-        Optional<Holder.Reference<JewelryMaterialDef>> material = JewelryDataIndex.material(identity().material());
+        Optional<Holder.Reference<JewelryMaterialDef>> material = JewelryDataIndex.material(getIdentity().material());
         return material.isPresent() && JewelryRules.allowsGem(material.get(), gem.get(), preset());
     }
 
-    /** false when a preset says {@code "accepts_gems": false}: no gem may be set or removed with the anvil */
+    @Override
     public boolean presetAcceptsGems() {
         return preset().map(p -> p.value().acceptsGems()).orElse(true);
     }
 
-    /** false when a preset says {@code "extractable": false}: the pliers can't take its gem out */
+    @Override
     public boolean gemExtractable() {
         return preset().map(p -> p.value().extractable()).orElse(true);
     }
 
-    /** the 1.x base name (castle_ring etc.) is the preset's path */
+    /*
+     * tooltip
+     */
     @Override
-    public String getBaseName() {
-        return identity().preset().map(ResourceLocation::getPath).orElse(null);
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        // mana and durability bars
+        tooltip.add(TooltipMarkers.bar(MagicTreasures.MOD_ID,
+                Component.translatable(LangUtil.tooltip("jewelry.bar.mana")).withStyle(ChatFormatting.BLUE),
+                Component.literal(Math.round(getMana()) + "/" + (long) Math.ceil(getMaxMana())),
+                getMaxMana() > 0 ? getMana() / getMaxMana() : 0, MANA_BAR_RGB));
+        Component durabilityLabel = Component.translatable(LangUtil.tooltip("jewelry.bar.durability")).withStyle(ChatFormatting.GRAY);
+        if (isInfinite()) {
+            tooltip.add(TooltipMarkers.bar(MagicTreasures.MOD_ID, durabilityLabel, Component.literal("∞"), 1.0, INFINITE_BAR_RGB));
+        } else {
+            tooltip.add(TooltipMarkers.bar(MagicTreasures.MOD_ID, durabilityLabel,
+                    Component.literal(getUses() + "/" + getMaxUses()),
+                    getMaxUses() > 0 ? (double) getUses() / getMaxUses() : 0, DURABILITY_BAR_RGB));
+        }
+
+        // spells: name, flavor line and stat chips each, with a blank line between spells
+        List<SpellEntity> spells = getSpells();
+        if (!spells.isEmpty()) {
+            tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
+            for (int i = 0; i < spells.size(); i++) {
+                if (i > 0) {
+                    tooltip.add(Component.literal(LangUtil.NEWLINE));
+                }
+                spells.get(i).getSpell().addInformation(stack, context, tooltip, flag, spells.get(i));
+            }
+        }
+
+        // modifiers, two per row; only the ones this jewelry has
+        List<Component> modifiers = new ArrayList<>(5);
+        addModifier(modifiers, "cost", getSpellCostFactor());
+        addModifier(modifiers, "cooldown", getSpellCooldownFactor());
+        addModifier(modifiers, "effect", getSpellEffectAmountFactor());
+        addModifier(modifiers, "duration", getSpellDurationFactor());
+        addModifier(modifiers, "range", getSpellRangeFactor());
+        if (!modifiers.isEmpty()) {
+            tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
+            tooltip.add(TooltipMarkers.grid(MagicTreasures.MOD_ID, 2, modifiers));
+        }
+
+        // advanced tooltip (hold shift)
+        LangUtil.appendAdvancedHoverText(tooltip, tt -> {
+            tooltip.add(Component.literal(LangUtil.NEWLINE));
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.usage")).withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC));
+            // material
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.material"), ChatFormatting.GREEN + WordUtils.capitalizeFully(getMaterial().getPath())));
+            // stones
+            if (hasStone()) {
+                tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.stone"), ChatFormatting.YELLOW + WordUtils.capitalizeFully(getStone().getPath().replace("_", " "))));
+            }
+            if (!isInfinite()) {
+                tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.durability.repairs"), ChatFormatting.GRAY + String.valueOf(getRepairs())));
+            }
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.mana.recharges"), ChatFormatting.BLUE + String.valueOf(getRecharges())));
+        });
     }
 
+    /** The header's second line: "Ring · Ruby · Lvl 4". */
     @Override
-    public void setBaseName(String baseName) {
-        // the preset is part of the identity; it isn't renamed through the handler
+    public Component getSubtitle() {
+        MutableComponent subtitle = Component.translatable(LangUtil.tooltip("jewelry.type." + getType()));
+        if (hasStone()) {
+            BuiltInRegistries.ITEM.getOptional(getStone()).ifPresent(stone -> subtitle.append(SUBTITLE_SEPARATOR).append(stone.getDescription()));
+        }
+        subtitle.append(SUBTITLE_SEPARATOR).append(Component.translatable(LangUtil.tooltip("jewelry.level"),
+                Component.literal(String.valueOf(getMaxLevel())).withStyle(ChatFormatting.GOLD)));
+        return subtitle.withStyle(ChatFormatting.GRAY);
+    }
+
+    private void addModifier(List<Component> modifiers, String stat, double factor) {
+        if (factor != 1.0) {
+            modifiers.add(Component.translatable(LangUtil.tooltip("jewelry.modifier." + stat),
+                    Component.literal(formatStat(factor)).withStyle(ChatFormatting.AQUA)));
+        }
+    }
+
+    private String formatStat(double value) {
+        if (value < 1.0) {
+            return LangUtil.negativePercent(value);
+        } else if (value > 1.0) {
+            return LangUtil.positivePercent(value);
+        }
+        return "";
     }
 }

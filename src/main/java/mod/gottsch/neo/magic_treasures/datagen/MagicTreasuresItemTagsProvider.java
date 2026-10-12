@@ -25,8 +25,6 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.*;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;

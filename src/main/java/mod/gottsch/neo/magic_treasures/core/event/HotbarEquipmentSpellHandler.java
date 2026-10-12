@@ -28,8 +28,6 @@ import net.neoforged.bus.api.Event;
 import java.util.ArrayList;
 import java.util.List;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.neo.magic_treasures.core.item.JewelryType;
 import mod.gottsch.neo.magic_treasures.core.item.ManaWell;
 import java.util.HashSet;
 import java.util.Optional;
@@ -44,7 +42,7 @@ import net.minecraft.world.entity.player.Player;
 public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	private static final int MAX_HOTBAR_JEWELRY = 4;
 	/** the jewelry types that must all be active to be dressed (plus a belt) */
-	private static final Set<IJewelryType> DRESSED_TYPES = Set.of(JewelryType.RING, JewelryType.NECKLACE, JewelryType.BRACELET);
+	private static final Set<String> DRESSED_TYPES = Set.of("ring", "necklace", "bracelet");
 
 	@Override
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player) {
@@ -92,14 +90,18 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	/**
 	 * Without an equipment mod the hotbar stands in for the jewelry slots, so being dressed is a ring, a necklace and
 	 * a bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and
-	 * only the first MAX_HOTBAR_JEWELRY pieces), plus a belt: a mana well on the hotbar.
+	 * only the first MAX_HOTBAR_JEWELRY pieces), plus a belt: a mana well on the hotbar or in either hand (a held
+	 * well pays for spells too).
 	 */
 	@Override
 	public boolean isDressed(ServerPlayer player) {
-		if (getManaWells(player).isEmpty()) {
+		boolean belt = !getManaWells(player).isEmpty()
+				|| player.getMainHandItem().getItem() instanceof ManaWell
+				|| player.getOffhandItem().getItem() instanceof ManaWell;
+		if (!belt) {
 			return false;
 		}
-		Set<IJewelryType> types = new HashSet<>();
+		Set<String> types = new HashSet<>();
 		int jewelryCount = 0;
 		for (int hotbarSlot = 0; hotbarSlot < 9 && jewelryCount < MAX_HOTBAR_JEWELRY; hotbarSlot++) {
 			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
@@ -108,7 +110,7 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			}
 			Optional<IJewelryHandler> cap = JewelryHandler.get(inventoryStack);
 			if (cap.isPresent()) {
-				types.add(cap.get().getJewelryType());
+				types.add(cap.get().getType());
 				jewelryCount++;
 			}
 		}

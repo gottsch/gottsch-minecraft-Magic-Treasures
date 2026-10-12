@@ -17,7 +17,6 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item.generator;
 
-import mod.gottsch.neo.magic_treasures.core.capability.GenericJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
@@ -60,7 +59,7 @@ public class JewelryGenerator {
     }
 
     public Optional<ItemStack> removeStone(ItemStack jewelry) {
-        if (JewelryHandler.get(jewelry).filter(h -> h instanceof GenericJewelryHandler g && g.presetAcceptsGems()).isEmpty()) {
+        if (JewelryHandler.get(jewelry).filter(IJewelryHandler::presetAcceptsGems).isEmpty()) {
             return Optional.empty();
         }
         ItemStack result = jewelry.copy();

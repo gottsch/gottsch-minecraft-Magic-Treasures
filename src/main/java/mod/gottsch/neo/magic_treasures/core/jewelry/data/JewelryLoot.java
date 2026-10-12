@@ -164,7 +164,6 @@ public final class JewelryLoot {
     }
 
     private static Optional<GenericJewelry> item(String type) {
-        return MagicTreasuresItems.GENERIC_JEWELRY.stream().map(item -> (GenericJewelry) item.get())
-                .filter(item -> item.getJewelryType().equals(type)).findFirst();
+        return GenericJewelry.forType(type);
     }
 }

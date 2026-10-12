@@ -47,6 +47,12 @@ public class GenericJewelry extends Jewelry {
         return type;
     }
 
+    /** the generic item for a jewelry type ({@code "ring"}, {@code "necklace"}, {@code "bracelet"}), if there is one */
+    public static Optional<GenericJewelry> forType(String type) {
+        return MagicTreasuresItems.GENERIC_JEWELRY.stream().map(item -> (GenericJewelry) item.get())
+                .filter(item -> item.getJewelryType().equals(type)).findFirst();
+    }
+
     /** a stack of this item with the given identity; its state is filled the first time a handler reads it */
     public ItemStack stack(JewelryIdentity identity) {
         ItemStack stack = new ItemStack(this);

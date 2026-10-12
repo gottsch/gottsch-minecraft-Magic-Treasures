@@ -83,10 +83,7 @@ public final class JewelryCreativeStacks {
     }
 
     private static Optional<GenericJewelry> item(String type) {
-        return MagicTreasuresItems.GENERIC_JEWELRY.stream().map(DeferredItem::get)
-                .map(GenericJewelry.class::cast)
-                .filter(item -> item.getJewelryType().equals(type))
-                .findFirst();
+        return GenericJewelry.forType(type);
     }
 
     /** enabled entries, ordered by the given rank (rarity etc.) then id */

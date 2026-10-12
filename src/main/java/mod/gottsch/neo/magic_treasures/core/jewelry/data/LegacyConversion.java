@@ -10,7 +10,6 @@ import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryState;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
-import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -77,8 +76,7 @@ public final class LegacyConversion {
         if (tableIdentity == null) {
             return Optional.empty();
         }
-        Optional<GenericJewelry> item = MagicTreasuresItems.GENERIC_JEWELRY.stream().map(i -> (GenericJewelry) i.get())
-                .filter(i -> i.getJewelryType().equals(tableIdentity.type())).findFirst();
+        Optional<GenericJewelry> item = GenericJewelry.forType(tableIdentity.type());
         if (item.isEmpty()) {
             return Optional.empty();
         }

@@ -22,9 +22,7 @@ import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
 import mod.gottsch.neo.magic_treasures.core.integration.MagicTreasuresIntegrations;
 import mod.gottsch.neo.magic_treasures.core.item.JewelryType;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -45,6 +43,7 @@ public class CommonSetup {
      *
      * @param event
      */
+    @SuppressWarnings("removal") // the 1.x types stay registered through 2.0, for addons that still read them
     public static void init(final FMLCommonSetupEvent event) {
         // add mod specific logging
         Config.instance.addRollingFileAppender(MagicTreasures.MOD_ID);
@@ -58,7 +57,7 @@ public class CommonSetup {
         MagicTreasuresApi.registerRarity(MagicTreasuresRarity.LEGENDARY);
         MagicTreasuresApi.registerRarity(MagicTreasuresRarity.MYTHICAL);
 
-        // register jewelry types
+        // register the 1.x jewelry types and sizes (deprecated API; 2.0 doesn't read them)
         MagicTreasuresApi.registerJewelryType(JewelryType.RING);
         MagicTreasuresApi.registerJewelryType(JewelryType.NECKLACE);
         MagicTreasuresApi.registerJewelryType(JewelryType.BRACELET);
@@ -66,7 +65,6 @@ public class CommonSetup {
 //        MagicTreasuresApi.registerJewelryType(JewelryType.CHARM);
         // TODO add Broach ?
 
-        // register jewelry size tiers
         MagicTreasuresApi.registerJewelrySize(JewelrySizeTier.REGULAR);
         MagicTreasuresApi.registerJewelrySize(JewelrySizeTier.GREAT);
         MagicTreasuresApi.registerJewelrySize(JewelrySizeTier.LORDS);

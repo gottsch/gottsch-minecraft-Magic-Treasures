@@ -146,8 +146,7 @@ public final class JewelryGiveCommand {
     }
 
     private static Optional<GenericJewelry> item(String type) {
-        return MagicTreasuresItems.GENERIC_JEWELRY.stream().map(item -> (GenericJewelry) item.get())
-                .filter(item -> item.getJewelryType().equals(type)).findFirst();
+        return GenericJewelry.forType(type);
     }
 
     private static SuggestionProvider<CommandSourceStack> ids(java.util.function.Supplier<? extends Map<ResourceLocation, ?>> entries) {
