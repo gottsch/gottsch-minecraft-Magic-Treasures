@@ -1,0 +1,58 @@
+{
+  "name": "Materiales",
+  "icon": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:iron\"}]",
+  "category": "magictreasures:guide",
+  "sortnum": 3,
+  "pages": [
+    "El material de una pieza fija sus usos, maná, reparaciones y nivel de hechizo máximo de base, y algunos materiales también cambian los hechizos. El estilo y la gema se suman a esto.",
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de madera",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:wood\"}]",
+      "text": "El material más débil. Solo se encuentra como botín y solo en estilo normal.$(br2)$(l)Nivel máx.:$() $(4)2$()$(br)$(l)Usos:$() $(1)40$()$(br)$(l)Maná:$() $(1)20$()$(br)$(l)Reparaciones:$() $(6)0$()",
+      "anchor": "wood_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de hierro",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:iron\"}]",
+      "text": "Muy duradero y fácil de reparar.$(br2)$(l)Nivel máx.:$() $(4)3$()$(br)$(l)Usos:$() $(1)200$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)3$()$(br)$(l)Duración de hechizo:$() $(3)+25%$()",
+      "anchor": "iron_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de cobre",
+      "item": "magictreasures:necklace[magictreasures:jewelry_identity={type:\"necklace\",material:\"magictreasures:copper\",style:\"magictreasures:great\"}]",
+      "text": "Más nivel que el hierro, pero menos duradero.$(br2)$(l)Nivel máx.:$() $(4)4$()$(br)$(l)Usos:$() $(1)75$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)1$()$(br)$(l)Enfriamiento:$() $(3)-5%$()",
+      "anchor": "copper_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de plata",
+      "item": "magictreasures:bracelet[magictreasures:jewelry_identity={type:\"bracelet\",material:\"magictreasures:silver\"}]",
+      "text": "Los hechizos cuestan menos maná.$(br2)$(l)Nivel máx.:$() $(4)5$()$(br)$(l)Usos:$() $(1)150$()$(br)$(l)Maná:$() $(1)75$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-5%$()",
+      "anchor": "silver_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de oro",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:gold\",style:\"magictreasures:great\"}]",
+      "text": "El mejor de los metales comunes.$(br2)$(l)Nivel máx.:$() $(4)6$()$(br)$(l)Usos:$() $(1)150$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-7.5%$()$(br)$(l)Enfriamiento:$() $(3)-4%$()",
+      "anchor": "gold_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de hueso",
+      "item": "magictreasures:necklace[magictreasures:jewelry_identity={type:\"necklace\",material:\"magictreasures:bone\",style:\"magictreasures:great\"}]",
+      "text": "Los hechizos son un 25% más potentes, pero las joyas de hueso no se pueden reparar.$(br2)$(l)Nivel máx.:$() $(4)7$()$(br)$(l)Usos:$() $(1)200$()$(br)$(l)Maná:$() $(1)50$()$(br)$(l)Reparaciones:$() $(6)0$()$(br)$(l)Coste de hechizo:$() $(3)+5%$()$(br)$(l)Efecto de hechizo:$() $(3)+25%$()",
+      "anchor": "bone_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Joyas de sangre",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:blood\",gem:\"magictreasures:ruby\",style:\"magictreasures:lords\",preset:\"magictreasures:ring_of_life_death\"}]",
+      "text": "La sangre (HemalSteel) es muy rara: el Anillo de la vida y la muerte es la única pieza hecha de ella.$(br2)$(l)Nivel máx.:$() $(4)8$()$(br)$(l)Usos:$() $(1)250$()$(br)$(l)Maná:$() $(1)100$()$(br)$(l)Reparaciones:$() $(6)2$()$(br)$(l)Coste de hechizo:$() $(3)-10%$()",
+      "anchor": "blood_jewelry"
+    }
+  ]
+}
