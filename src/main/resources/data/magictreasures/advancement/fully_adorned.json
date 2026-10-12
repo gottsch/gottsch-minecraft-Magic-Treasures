@@ -1,5 +1,5 @@
 {
-  "parent": "magictreasures:root",
+  "parent": "magictreasures:dressed_to_the_nines",
   "display": {
     "icon": {
       "id": "magictreasures:necklace",
@@ -17,7 +17,7 @@
     "description": {
       "translate": "advancements.magictreasures.fully_adorned.description"
     },
-    "frame": "challenge",
+    "frame": "goal",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

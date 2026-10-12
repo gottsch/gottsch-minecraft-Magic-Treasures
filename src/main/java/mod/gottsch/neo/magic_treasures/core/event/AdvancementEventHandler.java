@@ -19,10 +19,12 @@ package mod.gottsch.neo.magic_treasures.core.event;
 
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.advancement.JewelryTrigger;
 import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.JewelryPliers;
+import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -59,17 +61,23 @@ public class AdvancementEventHandler {
             return;
         }
         String action = null;
+        JewelryTrigger.Details details = JewelryTrigger.Details.NONE;
         if (!handler.get().hasStone() && (right.is(MagicTreasuresTags.Items.STONES) || JewelryDataIndex.isGemstone(right))) {
             action = MagicTreasuresCriteria.ADD_GEM;
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)) {
             action = MagicTreasuresCriteria.REMOVE_GEM;
         } else if (handler.get().getSpells().isEmpty() && right.is(MagicTreasuresTags.Items.SPELL_SCROLLS)) {
             action = MagicTreasuresCriteria.IMBUE;
+            if (right.getItem() instanceof SpellScroll scroll) {
+                details = JewelryTrigger.Details.level(scroll.getSpell().getLevel());
+            }
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.RECHARGERS)) {
             action = MagicTreasuresCriteria.RECHARGE;
+        } else if (JewelryHandler.get(right).isPresent()) {
+            action = MagicTreasuresCriteria.REPAIR;
         }
         if (action != null) {
-            MagicTreasuresCriteria.JEWELRY.get().trigger(player, action);
+            MagicTreasuresCriteria.JEWELRY.get().trigger(player, action, details);
         }
     }
 

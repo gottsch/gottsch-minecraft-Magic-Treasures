@@ -1,6 +1,11 @@
 package mod.gottsch.neo.magic_treasures.core.event;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.advancement.JewelryTrigger;
+import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
+import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
+import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryStats;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.LegacyConversion;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -13,7 +18,9 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * M9: converts 1.x jewelry to 2.0 generic jewelry ({@link LegacyConversion}) wherever a player has it:
@@ -26,6 +33,9 @@ import java.util.Optional;
  * <p>
  * {@code Item#inventoryTick} isn't used: its slot number restarts at 0 in each inventory section, so it can't say
  * where to put the new stack.
+ * <p>
+ * The same scan reports each carried 2.0 piece to the {@code carry} advancement action (Lord's Ransom, Treasure
+ * Hunter).
  */
 @EventBusSubscriber(modid = MagicTreasures.MOD_ID)
 public final class LegacyConversionHandler {
@@ -42,8 +52,37 @@ public final class LegacyConversionHandler {
         converted += CuriosApi.getCuriosInventory(player).map(curios -> curios.getCurios().values().stream()
                 .mapToInt(handler -> convert(handler.getStacks()) + convert(handler.getCosmeticStacks()))
                 .sum()).orElse(0);
+        reportCarried(player);
         if (converted > 0) {
             MagicTreasures.LOGGER.info("converted {} 1.x jewelry item(s) carried by {}", converted, player.getGameProfile().getName());
+        }
+    }
+
+    /** Reports every carried 2.0 piece, once per style and rarity, to the {@code carry} advancement action. */
+    private static void reportCarried(ServerPlayer player) {
+        Set<JewelryTrigger.Details> reported = new HashSet<>();
+        Container inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            reportCarried(player, inventory.getItem(i), reported);
+        }
+        CuriosApi.getCuriosInventory(player).ifPresent(curios -> curios.getCurios().values().forEach(handler -> {
+            for (int i = 0; i < handler.getStacks().getSlots(); i++) {
+                reportCarried(player, handler.getStacks().getStackInSlot(i), reported);
+            }
+            for (int i = 0; i < handler.getCosmeticStacks().getSlots(); i++) {
+                reportCarried(player, handler.getCosmeticStacks().getStackInSlot(i), reported);
+            }
+        }));
+    }
+
+    private static void reportCarried(ServerPlayer player, ItemStack stack, Set<JewelryTrigger.Details> reported) {
+        JewelryIdentity identity = stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
+        if (identity == null) {
+            return;
+        }
+        JewelryTrigger.Details details = JewelryTrigger.Details.piece(identity.style(), JewelryStats.of(identity).rarity());
+        if (reported.add(details)) {
+            MagicTreasuresCriteria.JEWELRY.get().trigger(player, MagicTreasuresCriteria.CARRY, details);
         }
     }
 

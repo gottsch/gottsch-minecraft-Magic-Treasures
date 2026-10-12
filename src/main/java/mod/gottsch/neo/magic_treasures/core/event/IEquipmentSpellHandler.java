@@ -34,10 +34,10 @@ public interface IEquipmentSpellHandler {
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player);
 
 	/**
-	 * Whether the player is wearing jewelry in every main jewelry slot (ring, necklace and bracelet) at once.
-	 * Only equipment mods with those slots can answer yes.
+	 * Whether the player is wearing jewelry in every main jewelry slot (ring, necklace and bracelet) and a belt at
+	 * once (Dressed to the Nines).
 	 */
-	default boolean isWearingFullSet(ServerPlayer player) {
+	default boolean isDressed(ServerPlayer player) {
 		return false;
 	}
 

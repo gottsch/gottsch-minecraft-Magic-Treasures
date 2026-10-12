@@ -43,8 +43,8 @@ import net.minecraft.world.entity.player.Player;
  */
 public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	private static final int MAX_HOTBAR_JEWELRY = 4;
-	/** the jewelry types that make a full set */
-	private static final Set<IJewelryType> FULL_SET_TYPES = Set.of(JewelryType.RING, JewelryType.NECKLACE, JewelryType.BRACELET);
+	/** the jewelry types that must all be active to be dressed (plus a belt) */
+	private static final Set<IJewelryType> DRESSED_TYPES = Set.of(JewelryType.RING, JewelryType.NECKLACE, JewelryType.BRACELET);
 
 	@Override
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player) {
@@ -90,12 +90,15 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	}
 
 	/**
-	 * Without an equipment mod the hotbar stands in for the jewelry slots, so a full set is a ring, a necklace and a
-	 * bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and
-	 * only the first MAX_HOTBAR_JEWELRY pieces).
+	 * Without an equipment mod the hotbar stands in for the jewelry slots, so being dressed is a ring, a necklace and
+	 * a bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and
+	 * only the first MAX_HOTBAR_JEWELRY pieces), plus a belt: a mana well on the hotbar.
 	 */
 	@Override
-	public boolean isWearingFullSet(ServerPlayer player) {
+	public boolean isDressed(ServerPlayer player) {
+		if (getManaWells(player).isEmpty()) {
+			return false;
+		}
 		Set<IJewelryType> types = new HashSet<>();
 		int jewelryCount = 0;
 		for (int hotbarSlot = 0; hotbarSlot < 9 && jewelryCount < MAX_HOTBAR_JEWELRY; hotbarSlot++) {
@@ -109,7 +112,7 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 				jewelryCount++;
 			}
 		}
-		return types.containsAll(FULL_SET_TYPES);
+		return types.containsAll(DRESSED_TYPES);
 	}
 
 	/**

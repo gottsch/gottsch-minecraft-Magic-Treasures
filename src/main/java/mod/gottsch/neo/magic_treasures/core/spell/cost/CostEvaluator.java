@@ -2,10 +2,12 @@ package mod.gottsch.neo.magic_treasures.core.spell.cost;
 
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.spell.ICastSpellContext;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -58,6 +60,9 @@ public class CostEvaluator implements ICostEvaluator {
 						double drawn = Math.min(shortfall, wellHandler.get().getMana());
 						wellHandler.get().setMana(wellHandler.get().getMana() - drawn);
 						cost += drawn;
+						if (context.getPlayer() instanceof ServerPlayer player) {
+							MagicTreasuresCriteria.JEWELRY.get().trigger(player, MagicTreasuresCriteria.MANA_WELL);
+						}
 					}
 				}
 			}
