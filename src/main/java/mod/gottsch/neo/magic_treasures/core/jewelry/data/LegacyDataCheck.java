@@ -176,6 +176,7 @@ public final class LegacyDataCheck {
         checkStats(problems);
         checkPresets(problems);
         checkLoot(problems);
+        checkTable(problems);
         return problems;
     }
 
@@ -213,6 +214,25 @@ public final class LegacyDataCheck {
         check(problems, "loot", "built-in jewelry candidates", 418, total);
     }
 
+    /**
+     * M0: the legacy table M9 converts with covers every 1.x jewelry item once, gives each a different identity, and
+     * names only gems and presets that exist. (Stats and presets above already compute through the same mapping.)
+     */
+    private static void checkTable(List<String> problems) {
+        Map<ResourceLocation, JewelryIdentity> table = LegacyJewelry.identities();
+        check(problems, "legacy table", "items", 418, table.size());
+        check(problems, "legacy table", "distinct identities", table.size(), (int) table.values().stream().distinct().count());
+        table.forEach((id, identity) -> {
+            identity.gem().filter(gem -> JewelryDataIndex.gemstone(gem).isEmpty())
+                    .ifPresent(gem -> problems.add("legacy table " + id + ": gem " + gem + " has no gemstone"));
+            identity.preset().filter(preset -> JewelryDataIndex.preset(preset).isEmpty())
+                    .ifPresent(preset -> problems.add("legacy table " + id + ": preset " + preset + " missing"));
+            if (!JewelryStats.of(identity).known()) {
+                problems.add("legacy table " + id + ": unknown material or style");
+            }
+        });
+    }
+
     private static boolean builtIn(JewelryIdentity identity) {
         return BUILT_IN_NAMESPACES.contains(identity.material().getNamespace())
                 && identity.gem().map(gem -> BUILT_IN_NAMESPACES.contains(gem.getNamespace())).orElse(true)
@@ -240,21 +260,15 @@ public final class LegacyDataCheck {
             }
             JewelryData old = stack.get(MagicTreasuresDataComponents.JEWELRY.get());
             String what = "preset of " + deferred.getId();
-            // the castle family; Ring of Fortitude also has base name castle_ring but is a named piece of its own
-            boolean castle = !MagicTreasuresItems.namedJewelry().contains(deferred)
-                    && old.baseName().map("castle_ring"::equals).orElse(false);
-            ResourceLocation presetId = castle ? mt("silver_castle_ring") : deferred.getId();
-            Optional<Holder.Reference<JewelryPresetDef>> preset = JewelryDataIndex.preset(presetId);
+            // the M0 table's identity: the item's own preset, or for a castle ring with a gem the gemless one + gem
+            JewelryIdentity identity = LegacyJewelry.identity(deferred, MagicTreasuresItems.namedJewelry().contains(deferred));
+            ResourceLocation presetId = identity.preset().orElse(null);
+            Optional<Holder.Reference<JewelryPresetDef>> preset = presetId == null ? Optional.empty() : JewelryDataIndex.preset(presetId);
             if (preset.isEmpty()) {
                 problems.add(what + ": preset " + presetId + " missing");
                 continue;
             }
             JewelryPresetDef def = preset.get().value();
-            Optional<ResourceLocation> gem = def.gem();
-            if (castle && old.stone().isPresent() && !old.stone().get().equals(BuiltInRegistries.ITEM.getKey(Items.AIR))) {
-                gem = JewelryDataIndex.gemstone(BuiltInRegistries.ITEM.get(old.stone().get())).map(h -> h.key().location());
-            }
-            JewelryIdentity identity = new JewelryIdentity(def.type(), def.material(), gem, def.style(), Optional.of(presetId));
             JewelryStats stats = JewelryStats.compute(identity);
             JewelryData.Stats oldStats = old.stats();
             JewelryData.Factors oldFactors = old.factors();
@@ -302,17 +316,12 @@ public final class LegacyDataCheck {
                 continue;
             }
             String what = "stats of " + deferred.getId();
-            Optional<ResourceLocation> gem = Optional.empty();
-            // 1.x writes minecraft:air, not an empty stone, for jewelry without a gem (M9's conversion must too)
-            if (old.stone().isPresent() && !old.stone().get().equals(BuiltInRegistries.ITEM.getKey(Items.AIR))) {
-                gem = JewelryDataIndex.gemstone(BuiltInRegistries.ITEM.get(old.stone().get())).map(h -> h.key().location());
-                if (gem.isEmpty()) {
-                    problems.add(what + ": stone " + old.stone().get() + " has no gemstone");
-                    continue;
-                }
+            // the M0 table's identity (1.x writes minecraft:air for "no gem"; the table already reads it as none)
+            JewelryIdentity identity = LegacyJewelry.identity(deferred, false);
+            if (identity.gem().isPresent() && JewelryDataIndex.gemstone(identity.gem().get()).isEmpty()) {
+                problems.add(what + ": gem " + identity.gem().get() + " has no gemstone");
+                continue;
             }
-            JewelryIdentity identity = new JewelryIdentity(old.type().toLowerCase(Locale.ROOT), old.material(), gem,
-                    mt(old.sizeTier().toLowerCase(Locale.ROOT)), Optional.empty());
             JewelryStats stats = JewelryStats.compute(identity);
             JewelryData.Stats oldStats = old.stats();
             JewelryData.Factors oldFactors = old.factors();
