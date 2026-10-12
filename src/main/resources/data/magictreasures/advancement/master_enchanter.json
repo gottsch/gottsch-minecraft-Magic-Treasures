@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:adept_enchanter",
+  "display": {
+    "icon": {
+      "id": "magictreasures:regeneration_scroll"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.master_enchanter.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.master_enchanter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "imbue": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "imbue",
+        "min_level": 7
+      }
+    }
+  }
+}

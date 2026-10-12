@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:fully_adorned",
+  "display": {
+    "icon": {
+      "id": "magictreasures:rootstaff"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.silbros_grove.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.silbros_grove.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_set": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:silbros_grove"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "magictreasures:fully_adorned",
+  "display": {
+    "icon": {
+      "id": "magictreasures:ring",
+      "components": {
+        "magictreasures:jewelry_identity": {
+          "type": "ring",
+          "material": "magictreasures:silver",
+          "gem": "magictreasures:topaz",
+          "preset": "magictreasures:aqua_ring"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.magictreasures.selenes_tides.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.selenes_tides.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_set": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:selenes_tides"
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:root",
+  "display": {
+    "icon": {
+      "id": "magictreasures:ring_recipe"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.apprentice_jeweler.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.apprentice_jeweler.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "craft_jewelry": {
+      "trigger": "minecraft:recipe_crafted",
+      "conditions": {
+        "recipe_id": "magictreasures:jewelry"
+      }
+    }
+  }
+}
