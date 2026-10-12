@@ -2,7 +2,14 @@
   "parent": "magictreasures:root",
   "display": {
     "icon": {
-      "id": "magictreasures:gold_ruby_necklace"
+      "id": "magictreasures:necklace",
+      "components": {
+        "magictreasures:jewelry_identity": {
+          "type": "necklace",
+          "material": "magictreasures:gold",
+          "gem": "magictreasures:ruby"
+        }
+      }
     },
     "title": {
       "translate": "advancements.magictreasures.fully_adorned.title"

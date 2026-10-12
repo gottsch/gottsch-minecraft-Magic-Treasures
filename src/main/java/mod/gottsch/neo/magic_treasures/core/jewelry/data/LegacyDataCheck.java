@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * M1/M2 checkpoint: compares the registry entries with the 1.x constants and tags they were generated from, and the
+ * M1/M2/M6/M8 checkpoint: compares the registry entries with the 1.x constants and tags they were generated from, and the
  * stats computed from them with every 1.x combination item's own values, and lists every difference. Runs alongside
  * the old system; delete it with the old system in M9.
  */
@@ -175,7 +175,49 @@ public final class LegacyDataCheck {
 
         checkStats(problems);
         checkPresets(problems);
+        checkLoot(problems);
         return problems;
+    }
+
+    /**
+     * M6 checkpoint: per rarity, the built-in random loot ({@link JewelryLoot}) must be exactly as large as the 1.x
+     * jewelry rarity tag that {@code JewelryRegistry.get(rarity)} rolled from, and roll the same gem items as the 1.x
+     * stone rarity tag. A pack's content is left out (it wasn't in 1.x). Together with the stats and preset checks,
+     * which prove each 1.x item's identity computes its tag's rarity, equal counts mean equal pools.
+     */
+    private static void checkLoot(List<String> problems) {
+        int total = 0;
+        for (MagicTreasuresRarity rarity : JEWELRY_RARITY_TAGS.keySet()) {
+            int expected = 0;
+            for (Holder<Item> ignored : BuiltInRegistries.ITEM.getTagOrEmpty(JEWELRY_RARITY_TAGS.get(rarity))) {
+                expected++;
+            }
+            List<JewelryLoot.Candidate> candidates = JewelryLoot.jewelry().stream()
+                    .filter(c -> c.rarity() == rarity && builtIn(c.identity()))
+                    .toList();
+            int weight = candidates.stream().mapToInt(JewelryLoot.Candidate::weight).sum();
+            check(problems, "loot " + rarity.getName(), "jewelry candidates (by weight)", expected, weight);
+            total += candidates.size();
+
+            Set<ResourceLocation> oldGems = new java.util.TreeSet<>();
+            Optional.ofNullable(RARITY_TAGS.get(rarity)).ifPresent(tag -> BuiltInRegistries.ITEM.getTagOrEmpty(tag)
+                    .forEach(item -> oldGems.add(BuiltInRegistries.ITEM.getKey(item.value()))));
+            Set<ResourceLocation> newGems = new java.util.TreeSet<>();
+            JewelryLoot.gemstones().stream()
+                    .filter(gem -> gem.value().rarity().equals(Optional.of(rarity))
+                            && BUILT_IN_NAMESPACES.contains(gem.key().location().getNamespace()))
+                    .forEach(gem -> newGems.add(gem.value().item()));
+            check(problems, "loot " + rarity.getName(), "gems", oldGems, newGems);
+        }
+        // 387 combinations + 15 named + 13 hawk + 3 castle (one preset, three gem options)
+        check(problems, "loot", "built-in jewelry candidates", 418, total);
+    }
+
+    private static boolean builtIn(JewelryIdentity identity) {
+        return BUILT_IN_NAMESPACES.contains(identity.material().getNamespace())
+                && identity.gem().map(gem -> BUILT_IN_NAMESPACES.contains(gem.getNamespace())).orElse(true)
+                && identity.style().getNamespace().equals(MagicTreasures.MOD_ID)
+                && identity.preset().map(preset -> preset.getNamespace().equals(MagicTreasures.MOD_ID)).orElse(true);
     }
 
     /**

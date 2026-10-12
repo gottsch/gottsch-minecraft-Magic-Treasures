@@ -1,6 +1,5 @@
 package mod.gottsch.neo.magic_treasures.core.item;
 
-import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresRegistries;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.GemstoneDef;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -37,11 +35,6 @@ import java.util.function.Predicate;
  * unplanned materials with no rarity (blood, shadow, atium), is in the search tab only.
  */
 public final class JewelryCreativeStacks {
-    /** namespaces whose content is built in; anything else came from a pack */
-    private static final Set<String> BUILT_IN = Set.of(MagicTreasures.MOD_ID, "minecraft", "treasure2");
-    /** built-in gems shown in the tab; Treasure2's are duplicates of MT's */
-    private static final Set<String> TAB_GEM_NAMESPACES = Set.of(MagicTreasures.MOD_ID, "minecraft");
-
     public record Entry(ItemStack stack, TabVisibility visibility) {}
 
     private JewelryCreativeStacks() {}
@@ -80,30 +73,13 @@ public final class JewelryCreativeStacks {
                         }
                         JewelryIdentity identity = new JewelryIdentity(type, material.key().location(),
                                 gem.map(g -> g.key().location()), style.key().location(), Optional.empty());
-                        entries.add(new Entry(item.stack(identity), inTab(material, gem)
+                        entries.add(new Entry(item.stack(identity), JewelryRules.featured(material, gem)
                                 ? TabVisibility.PARENT_AND_SEARCH_TABS : TabVisibility.SEARCH_TAB_ONLY));
                     }
                 }
             }
         }
         return entries;
-    }
-
-    /**
-     * A pack's material is always shown. A built-in material is shown only if it has a rarity (not the unplanned
-     * blood, shadow and atium), with no gem, MT's or vanilla gems, or a pack's gem; never Treasure2's duplicates.
-     */
-    private static boolean inTab(Holder.Reference<JewelryMaterialDef> material, Optional<Holder.Reference<GemstoneDef>> gem) {
-        if (!BUILT_IN.contains(material.key().location().getNamespace())) {
-            return true;
-        }
-        if (material.value().rarity().isEmpty()) {
-            return false;
-        }
-        return gem.map(g -> {
-            String namespace = g.key().location().getNamespace();
-            return TAB_GEM_NAMESPACES.contains(namespace) || !BUILT_IN.contains(namespace);
-        }).orElse(true);
     }
 
     private static Optional<GenericJewelry> item(String type) {

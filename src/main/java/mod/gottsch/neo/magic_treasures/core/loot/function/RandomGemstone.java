@@ -17,48 +17,42 @@
  */
 package mod.gottsch.neo.magic_treasures.core.loot.function;
 
-import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.Codec;
-import com.google.gson.*;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
-import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.neo.magic_treasures.api.MagicTreasuresRegistries;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.GemstoneDef;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryLoot;
 import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
-import mod.gottsch.neo.magic_treasures.core.spell.ISpell;
-import mod.gottsch.neo.magic_treasures.core.spell.MagicTreasuresSpells;
-import mod.gottsch.neo.magic_treasures.core.spell.SpellRegistry;
-import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
+import java.util.Set;
 
 /**
+ * Replaces the stack with a random gem from the {@code gemstone} registry. JSON: {@code rarity} or {@code rarities}
+ * (each falls back to the nearest lower rarity with gems, #14.9), or {@code gemstones} (gemstone ids or #tags; bare
+ * names default to magictreasures), and {@code count}. With none of them, any gem with a rarity.
+ * <p>
+ * 1.x defaulted the rarity to common, so a {@code gemstones} list was never read and every such entry gave topaz.
+ * The default is now no rarity, and the list is used.
  *
  * @author Mark Gottschling on May 21, 2024
- *
  */
 public class RandomGemstone extends LootItemConditionalFunction {
-//	private static final ResourceLocation LOCATION = ResourceLocation.parse("gealdorcraft:random_gemstone");
 	private static final String RARITY = "rarity";
 	private static final String RARITIES = "rarities";
 	private static final String GEMSTONES = "gemstones";
@@ -67,17 +61,10 @@ public class RandomGemstone extends LootItemConditionalFunction {
 	private final NumberProvider count;
 	private final IRarity rarity;
 	private final List<IRarity> rarities;
-	private final List<ResourceLocation> gemstones;
+	private final List<String> gemstones;
 
-
-	/**
-	 *
-	 * @param conditions
-	 * @param count
-	 * @param rarity
-	 */
 	public RandomGemstone(List<LootItemCondition> conditions, NumberProvider count,
-						  IRarity rarity, List<IRarity> rarities, List<ResourceLocation> gemstones) {
+						  IRarity rarity, List<IRarity> rarities, List<String> gemstones) {
 		super(conditions);
 		this.count = count;
 		this.rarity = rarity;
@@ -92,46 +79,36 @@ public class RandomGemstone extends LootItemConditionalFunction {
 
 	@Override
 	public ItemStack run(ItemStack stack, LootContext context) {
-		Random random = new Random();
-		Optional<Item> stone = Optional.empty();
-
-		MagicTreasures.LOGGER.debug("incoming stack -> {}", stack.getDisplayName());
-		MagicTreasures.LOGGER.debug("rarity -> {}", rarity);
-
-		List<Item> stones = new ArrayList<>();
-		if (rarity != null) {
-			// get all the gemstones by rarity
-			stones.addAll(StoneRegistry.get(rarity));
-			stone = selectStone(stones);
+		List<Holder.Reference<GemstoneDef>> gems;
+		if (rarity != MagicTreasuresRarity.NONE) {
+			gems = JewelryLoot.gemstones(rarity, gem -> true);
 		} else if (!rarities.isEmpty()) {
-			rarities.forEach(rarity -> {
-				stones.addAll(StoneRegistry.get(rarity));
-			});
-			stone = selectStone(stones);
+			Set<Holder.Reference<GemstoneDef>> union = new LinkedHashSet<>();
+			rarities.forEach(r -> union.addAll(JewelryLoot.gemstones(r, gem -> true)));
+			gems = List.copyOf(union);
 		} else if (!gemstones.isEmpty()) {
-			stone = Optional.ofNullable(BuiltInRegistries.ITEM.get(gemstones.get(random.nextInt(gemstones.size()))));
+			// named gems needn't have a rarity
+			gems = JewelryDataIndex.gemstones().values().stream()
+					.filter(LootFunctionHelper.holders(MagicTreasuresRegistries.GEMSTONE, gemstones)::test)
+					.toList();
+		} else {
+			gems = JewelryLoot.gemstones();
 		}
-
-		// select random count
+		if (gems.isEmpty()) {
+			MagicTreasures.LOGGER.debug("random_gemstone: nothing matches rarity {}, rarities {}, gemstones {}", rarity, rarities, gemstones);
+			return stack;
+		}
+		Holder.Reference<GemstoneDef> gem = gems.get(context.getRandom().nextInt(gems.size()));
 		int count = this.count == null ? 1 : this.count.getInt(context);
-		MagicTreasures.LOGGER.debug("selected count -> {}", count);
-
-        return stone.map(s -> new ItemStack(s, count)).orElse(stack);
-    }
-
-	public Optional<Item> selectStone(List<Item> stones) {
-		if (!stones.isEmpty()) {
-			return Optional.ofNullable(stones.get(new Random().nextInt(stones.size())));
-		}
-		return Optional.empty();
+		return new ItemStack(JewelryLoot.item(gem), count);
 	}
 
 	public static final MapCodec<RandomGemstone> CODEC = RecordCodecBuilder.mapCodec(instance -> commonFields(instance)
 			.and(NumberProviders.CODEC.optionalFieldOf(COUNT).forGetter(f -> Optional.ofNullable(f.count)))
-			.and(Codec.STRING.optionalFieldOf(RARITY, "").forGetter(f -> f.rarity.getName()))
+			.and(Codec.STRING.optionalFieldOf(RARITY, "").forGetter(f -> f.rarity == MagicTreasuresRarity.NONE ? "" : f.rarity.getName()))
 			.and(Codec.STRING.listOf().optionalFieldOf(RARITIES, List.of()).forGetter(f -> LootFunctionHelper.rarityNames(f.rarities)))
-			.and(Codec.STRING.listOf().optionalFieldOf(GEMSTONES, List.of()).forGetter(f -> LootFunctionHelper.names(f.gemstones)))
+			.and(Codec.STRING.listOf().optionalFieldOf(GEMSTONES, List.of()).forGetter(f -> f.gemstones))
 			.apply(instance, (conditions, count, rarity, rarities, gemstones) -> new RandomGemstone(conditions, count.orElse(null),
-					LootFunctionHelper.rarity(rarity, MagicTreasuresRarity.COMMON), LootFunctionHelper.rarities(rarities),
-					LootFunctionHelper.locations(gemstones))));
+					LootFunctionHelper.rarity(rarity, MagicTreasuresRarity.NONE), LootFunctionHelper.rarities(rarities),
+					gemstones)));
 }

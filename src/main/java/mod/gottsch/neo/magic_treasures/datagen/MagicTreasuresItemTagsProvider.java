@@ -382,6 +382,8 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		tag(TreasureTags.Items.POUCH).addTag(MagicTreasuresTags.Items.STONES);
 		tag(TreasureTags.Items.POUCH).addTag(MagicTreasuresTags.Items.RECHARGERS);
 		tag(TreasureTags.Items.POUCH).addTag(MagicTreasuresTags.Items.JEWELRY);
+		// 2.0 generic jewelry isn't in all_jewelry (that tag still feeds the 1.x registries)
+		MagicTreasuresItems.GENERIC_JEWELRY.forEach(item -> tag(TreasureTags.Items.POUCH).add(item.get()));
 
 		// /////////////////
 		// diamethysts integration
