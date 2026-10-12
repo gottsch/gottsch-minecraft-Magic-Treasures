@@ -18,6 +18,7 @@
 package mod.gottsch.neo.magic_treasures.datagen;
 
 import java.util.List;
+import java.util.Map;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
@@ -60,31 +61,33 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.BLACK_PEARL.get(), "Black Pearl");
 //        add(MagicTreasuresItems.SKELETONS_HEART.get(), "Skeleton's Heart");
 
-        // regular jewelry
-		MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
-			add(item.get(), WordUtils.capitalizeFully(item.getId().getPath().replace("_", " ")));
-		});
+        // the 418 1.x item ids (M9: legacy items, converted when carried). Their names are also what 2.0 generic
+        // jewelry and the named presets use (GenericJewelry.name; preset "name": item.magictreasures.<id>)
+        Map<String, String> namedPieces = Map.ofEntries(
+                Map.entry("silbros_ring_of_vitality", WordUtils.capitalizeFully("Silbro's Ring of Vitality")),
+                Map.entry("strongmans_bracers", WordUtils.capitalizeFully("Strongman's Bracers")),
+                Map.entry("silbros_acorn", "Silbro's Acorn"),
+                Map.entry("maldritchs_first_amulet", WordUtils.capitalizeFully("Maldritch's First Amulet")),
+                Map.entry("peasants_fortune", WordUtils.capitalizeFully("Peasant's Fortune")),
+                Map.entry("aqua_ring", WordUtils.capitalizeFully("Aqua Ring")),
+                Map.entry("amulet_of_defence", WordUtils.capitalizeFully("Amulet of Defence")),
+                Map.entry("journeyman_bands", WordUtils.capitalizeFully("Journeyman's Bands")),
+                Map.entry("medics_token", WordUtils.capitalizeFully("Medic's Token")),
+                Map.entry("adephagias_bounty", WordUtils.capitalizeFully("Adephagia's Bounty")),
+                Map.entry("angels_ring", WordUtils.capitalizeFully("Ring of Angels")),
+                Map.entry("salandaars_ward", WordUtils.capitalizeFully("Sal'andaar's Ward")),
+                Map.entry("ring_of_fortitude", WordUtils.capitalizeFully("Ring of Fortitude")),
+                Map.entry("eye_of_the_phoenix", WordUtils.capitalizeFully("Eye of the Phoenix")),
+                Map.entry("ring_of_life_death", WordUtils.capitalizeFully("Ring of Life and Death")));
+        MagicTreasuresItems.LEGACY_JEWELRY.forEach((id, item) -> add(item.get(),
+                namedPieces.getOrDefault(id.getPath(), WordUtils.capitalizeFully(id.getPath().replace("_", " ")))));
+        add(LangUtil.tooltip("legacy_jewelry"), "Magic Treasures 1.x jewelry: becomes 2.0 jewelry when carried");
 
-        // special jewelry
-        add(MagicTreasuresItems.SILBROS_RING_OF_VITALITY.get(), WordUtils.capitalizeFully("Silbro's Ring of Vitality"));
-        add(MagicTreasuresItems.STRONGMANS_BRACERS.get(), WordUtils.capitalizeFully("Strongman's Bracers"));
-        add(MagicTreasuresItems.SILBROS_ACORN.get(), "Silbro's Acorn");
+        // other special items
         add(MagicTreasuresItems.ROOTSTAFF.get(), "Rootstaff");
         add(MagicTreasuresItems.BARKSKIN_VEST.get(), "Barkskin Vest");
-        add(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET.get(), WordUtils.capitalizeFully("Maldritch's First Amulet"));
 
-        add(MagicTreasuresItems.PEASANTS_FORTUNE.get(), WordUtils.capitalizeFully("Peasant's Fortune"));
-        add(MagicTreasuresItems.AQUA_RING.get(), WordUtils.capitalizeFully("Aqua Ring"));
-        add(MagicTreasuresItems.AMULET_OF_DEFENCE.get(), WordUtils.capitalizeFully("Amulet of Defence"));
-        add(MagicTreasuresItems.JOURNEYMANS_BANDS.get(), WordUtils.capitalizeFully("Journeyman's Bands"));
 
-        add(MagicTreasuresItems.MEDICS_TOKEN.get(), WordUtils.capitalizeFully("Medic's Token"));
-        add(MagicTreasuresItems.ADEPHAGIAS_BOUNTY.get(), WordUtils.capitalizeFully("Adephagia's Bounty"));
-        add(MagicTreasuresItems.ANGELS_RING.get(), WordUtils.capitalizeFully("Ring of Angels"));
-        add(MagicTreasuresItems.SALANDAARS_WARD.get(), WordUtils.capitalizeFully("Sal'andaar's Ward"));
-        add(MagicTreasuresItems.RING_OF_FORTITUDE.get(), WordUtils.capitalizeFully("Ring of Fortitude"));
-        add(MagicTreasuresItems.EYE_OF_THE_PHOENIX.get(), WordUtils.capitalizeFully("Eye of the Phoenix"));
-        add(MagicTreasuresItems.RING_LIFE_DEATH.get(), WordUtils.capitalizeFully("Ring of Life and Death"));
 
          // GOTTSCHS_AMULET_OF_HEAVENS
         // GOTTSCHS_RING_OF_MOON
@@ -167,6 +170,8 @@ public class LanguageGen extends LanguageProvider {
         add("advancements.magictreasures.second_wind.description", "Recharge jewelry at an anvil");
         add("advancements.magictreasures.delicate_work.title", "Delicate Work");
         add("advancements.magictreasures.delicate_work.description", "Pull a gem out of jewelry with Jewelry Pliers");
+        add("advancements.magictreasures.second_thoughts.title", "Second Thoughts");
+        add("advancements.magictreasures.second_thoughts.description", "Remove a gem from jewelry with shears on an anvil (the gem is lost)");
         add("advancements.magictreasures.fully_adorned.title", "Fully Adorned");
         add("advancements.magictreasures.fully_adorned.description", "Wear a magic ring, necklace and bracelet at once");
         add(LangUtil.tooltip("tools.jewelry_pliers"), "Craft with jewelry to remove its gem. The jewelry is destroyed.");

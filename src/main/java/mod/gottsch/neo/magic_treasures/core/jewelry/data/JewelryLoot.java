@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 
 /**
  * What random loot can be, built from the registries: the 2.0 replacement for 1.x's jewelry and stone rarity tags
- * ({@code JewelryRegistry.get(rarity)}, {@code StoneRegistry.get(rarity)}).
+ * (the 1.x {@code JewelryRegistry} and {@code StoneRegistry}, deleted in M9).
  * <p>
  * Jewelry candidates are every {@link JewelryRules#featured featured} combination the rules allow (for the built-in
  * data, the 387 1.x combination items) plus every preset with {@code loot}. A preset with a {@code gems} rule and no

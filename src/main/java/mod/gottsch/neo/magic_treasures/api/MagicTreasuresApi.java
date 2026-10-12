@@ -22,7 +22,6 @@ import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.neo.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneHandler;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.neo.magic_treasures.core.registry.*;
 import net.minecraft.resources.ResourceLocation;
@@ -44,38 +43,6 @@ public class MagicTreasuresApi {
     public static final String JEWELRY_STONE = "jewelryStone";
     public static final String JEWELRY_MATERIAL = "jewelryMaterial";
 
-    // TODO this has to be renamed to the specific rarity ie for Stone, Material, Jewelry
-    public static void registerStoneRarityTag(IRarity rarity, TagKey<Item> tagKey) {
-        TagRegistry.registerStoneRarity(rarity, tagKey);
-    }
-
-    public static void registerJewelryRarityTag(IRarity rarity, TagKey<Item> tagKey) {
-        TagRegistry.registerJewelryRarity(rarity, tagKey);
-    }
-
-    public static Optional<TagKey<Item>> getJewelryRarityTag(IRarity rarity) {
-        TagKey<Item> key = TagRegistry.getJewelryRarityTag(rarity);
-        if (key == null) {
-            return Optional.empty();
-        }
-        else {
-            return Optional.of(key);
-        }
-    }
-
-	public static void registerJewerlyTypeTag(IJewelryType type, TagKey<Item> tagKey) {
-		TagRegistry.registerJewelryType(type, tagKey);
-	}
-
-//    @Deprecated
-//	public static void registerJewerlyStoneTierTag(IJewelryStoneTier tier, TagKey<Item> tierTagKey) {
-////		TagRegistry.registerJewelryStoneTier(tier, tierTagKey);
-//	}
-
-    public static void registerJewerlyStoneTierTag(JewelryStoneTier tier, TagKey<Item> tierTagKey) {
-        TagRegistry.registerJewelryStoneTier(tier, tierTagKey);
-    }
-	
     /**
      * TODO how to integrate with Treasure2 rarity and API.
      * @param rarity
@@ -143,29 +110,5 @@ public class MagicTreasuresApi {
         else {
             return Optional.of((IJewelrySizeTier) ienum);
         }
-    }
-
-    public static void registerJewelryStoneTier(mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier tier) {
-        JewelryStoneTierRegistry.register(tier);
-    }
-
-    public static List<JewelryStoneTier> getJewelryStoneTiers() {
-        return JewelryStoneTierRegistry.getStoneTiers();
-    }
-
-    public static void registerJewelryMaterial(JewelryMaterial material) {
-        JewelryMaterialRegistry.register(material);
-    }
-
-    public static Optional<JewelryMaterial> getJewelryMaterial(ResourceLocation name) {
-        return JewelryMaterialRegistry.get(name);
-    }
-
-    public static Optional<Item> registerJewelryStone(Item item) {
-        return StoneRegistry.register(item);
-    }
-
-    public static Optional<JewelryStoneHandler> registerJewelryStoneHandler(Item item, JewelryStoneHandler standard) {
-        return StoneRegistry.register(item, standard);
     }
 }

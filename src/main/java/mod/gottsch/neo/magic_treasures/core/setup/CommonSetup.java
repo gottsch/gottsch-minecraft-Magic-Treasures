@@ -71,60 +71,8 @@ public class CommonSetup {
         MagicTreasuresApi.registerJewelrySize(JewelrySizeTier.GREAT);
         MagicTreasuresApi.registerJewelrySize(JewelrySizeTier.LORDS);
 
-        // register jewelry stone tiers
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER1);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER2);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER3);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER4);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER5);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER6);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.SKELETONS_HEART);
-
-        // register jewelry material tiers
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.WOOD);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.IRON);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.COPPER);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.SILVER);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.GOLD);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.BLOOD);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.BONE);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.SHADOW);
-        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.ATIUM);
-
-        // register jewelry rarity tags
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.COMMON, MagicTreasuresTags.Items.JEWELRY_COMMON);
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.UNCOMMON, MagicTreasuresTags.Items.JEWELRY_UNCOMMON);
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.SCARCE, MagicTreasuresTags.Items.JEWELRY_SCARCE);
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.RARE, MagicTreasuresTags.Items.JEWELRY_RARE);
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.EPIC, MagicTreasuresTags.Items.JEWELRY_EPIC);
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.LEGENDARY, MagicTreasuresTags.Items.JEWELRY_LEGENDARY);
-        MagicTreasuresApi.registerJewelryRarityTag(MagicTreasuresRarity.MYTHICAL, MagicTreasuresTags.Items.JEWELRY_MYTHICAL);
-
-        // register stone rarity tags
-        MagicTreasuresApi.registerStoneRarityTag(MagicTreasuresRarity.COMMON, MagicTreasuresTags.Items.STONE_RARITY_COMMON);
-        MagicTreasuresApi.registerStoneRarityTag(MagicTreasuresRarity.UNCOMMON, MagicTreasuresTags.Items.STONE_RARITY_UNCOMMON);
-        MagicTreasuresApi.registerStoneRarityTag(MagicTreasuresRarity.SCARCE, MagicTreasuresTags.Items.STONE_RARITY_SCARCE);
-        MagicTreasuresApi.registerStoneRarityTag(MagicTreasuresRarity.RARE, MagicTreasuresTags.Items.STONE_RARITY_RARE);
-        MagicTreasuresApi.registerStoneRarityTag(MagicTreasuresRarity.EPIC, MagicTreasuresTags.Items.STONE_RARITY_EPIC);
-
-        // register type tags (TODO this could be a stream of all JewelryTypes ?)
-        MagicTreasuresApi.registerJewerlyTypeTag(JewelryType.RING, MagicTreasuresTags.Items.RINGS);
-        MagicTreasuresApi.registerJewerlyTypeTag(JewelryType.BRACELET, MagicTreasuresTags.Items.BRACELETS);
-        MagicTreasuresApi.registerJewerlyTypeTag(JewelryType.NECKLACE, MagicTreasuresTags.Items.NECKLACES);
-        MagicTreasuresApi.registerJewerlyTypeTag(JewelryType.POCKET, MagicTreasuresTags.Items.POCKETS);
-//        MagicTreasuresApi.registerJewerlyTypeTag(JewelryType.CHARM, MagicTreasuresTags.Items.CHARMS);
-        
-        // register stone tier tags
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER1, MagicTreasuresTags.Items.STONE_TIER1);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER2, MagicTreasuresTags.Items.STONE_TIER2);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER3, MagicTreasuresTags.Items.STONE_TIER3);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER4, MagicTreasuresTags.Items.STONE_TIER4);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER5, MagicTreasuresTags.Items.STONE_TIER5);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER6, MagicTreasuresTags.Items.STONE_TIER6);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.SKELETONS_HEART, MagicTreasuresTags.Items.STONE_TIER_SKELETONS_HEART);
-
-        // map stone items -> handlers
-//        MagicTreasuresApi.registerJewelryStoneHandler(Items.DIAMOND, JewelryStoneHandlers.STANDARD);
+        // M9: the 1.x stone tiers, materials and their tags no longer register anywhere; 2.0 reads the datapack
+        // registries (core/jewelry/data)
 
         // loot functions
         // NOTE are in common setup because there are not deferred, but registered directly into the vanilla registry

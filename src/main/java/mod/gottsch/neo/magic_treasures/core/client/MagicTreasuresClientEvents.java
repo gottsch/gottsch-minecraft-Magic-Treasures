@@ -75,6 +75,8 @@ public class MagicTreasuresClientEvents {
 			IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 		}
 		RichTooltips.apply(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH);
+		// a tooltip taller than the screen loses its top: drop the icon header if that's what tips it over
+		IconTitleTooltips.fitToScreen(event);
 	}
 
 	/** Widen dividers and bars to the finished tooltip, and keep it off the bottom of the screen. */

@@ -52,7 +52,6 @@ public class DataGenerators {
             generator.addProvider(true, jewelryData);
             generator.addProvider(true, new JewelryDataProvider.MaterialTags(output, jewelryData.getRegistryProvider(), event.getExistingFileHelper()));
             generator.addProvider(true, new JewelryDataProvider.GemstoneTags(output, jewelryData.getRegistryProvider(), event.getExistingFileHelper()));
-            generator.addProvider(true, new LegacyJewelryProvider(output));
         }
         if (event.includeClient()) {
             generator.addProvider(true, new MagicTreasuresBlockStateProvider(output, event.getExistingFileHelper()));

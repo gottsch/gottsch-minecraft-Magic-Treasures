@@ -19,6 +19,7 @@ package mod.gottsch.neo.magic_treasures.core.item;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.LegacyConversion;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -48,7 +49,9 @@ public class MagicTreasuresCreativeModeTabs {
 				// add all items
 				Registration.ITEMS.getEntries().forEach(item -> {
 				// the generic jewelry items are listed per combination below, never bare
-				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB) && !MagicTreasuresItems.GENERIC_JEWELRY.contains(item)) {
+				// M9: the 418 1.x jewelry items stay registered (old stacks must load) but leave the tab; generic ones replace them
+				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB) && !MagicTreasuresItems.GENERIC_JEWELRY.contains(item)
+						&& !LegacyConversion.isLegacy(item.get())) {
 						output.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
 					}
 				});

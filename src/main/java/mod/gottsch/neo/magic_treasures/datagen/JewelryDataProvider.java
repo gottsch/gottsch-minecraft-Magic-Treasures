@@ -54,7 +54,8 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * Generates the built-in 2.0 jewelry data (materials, styles, stone tiers, gemstones) from the 1.x constants, so the numbers
- * match exactly. The extra facts the constants don't hold (ingredient, rarity, color, sizes, gem membership) come
+ * match exactly. The presets were generated from the 1.x items' builders until M9 deleted those; they are fixed JSON in
+ * {@code src/main/resources/data/magictreasures/magictreasures/jewelry_preset/} now. The extra facts the constants don't hold (ingredient, rarity, color, sizes, gem membership) come
  * from today's recipes, item tags and art.
  * <p>
  * Gemstone ids are the gem's item id (minecraft:diamond, treasure2:ruby), so 1.x stacks, which store the item id,
@@ -85,8 +86,7 @@ public class JewelryDataProvider extends DatapackBuiltinEntriesProvider {
                 .add(MagicTreasuresRegistries.JEWELRY_STYLE, JewelryDataProvider::styles)
                 .add(MagicTreasuresRegistries.STONE_TIER, JewelryDataProvider::stoneTiers)
                 .add(MagicTreasuresRegistries.JEWELRY_MATERIAL, JewelryDataProvider::materials)
-                .add(MagicTreasuresRegistries.GEMSTONE, JewelryDataProvider::gemstones)
-                .add(MagicTreasuresRegistries.JEWELRY_PRESET, JewelryDataProvider::presets);
+                .add(MagicTreasuresRegistries.GEMSTONE, JewelryDataProvider::gemstones);
     }
 
     /*
@@ -194,104 +194,6 @@ public class JewelryDataProvider extends DatapackBuiltinEntriesProvider {
         context.register(ResourceKey.create(MagicTreasuresRegistries.GEMSTONE, item), new GemstoneDef(item,
                 tiers.getOrThrow(ResourceKey.create(MagicTreasuresRegistries.STONE_TIER, tier.getName())),
                 Optional.of(rarity), color, Optional.empty(), false));
-    }
-
-    /*
-     * presets: the 1.x named pieces, hawk rings and castle ring, read from their items' builders so the values match
-     */
-    private static final Map<String, MagicTreasuresRarity> NAMED_RARITY = Map.ofEntries(
-            // as the explicit jewelry rarity tags of MagicTreasuresItemTagsProvider
-            Map.entry("silbros_ring_of_vitality", MagicTreasuresRarity.COMMON),
-            Map.entry("strongmans_bracers", MagicTreasuresRarity.COMMON),
-            Map.entry("peasants_fortune", MagicTreasuresRarity.COMMON),
-            Map.entry("maldritchs_first_amulet", MagicTreasuresRarity.UNCOMMON),
-            Map.entry("silbros_acorn", MagicTreasuresRarity.UNCOMMON),
-            Map.entry("aqua_ring", MagicTreasuresRarity.UNCOMMON),
-            Map.entry("amulet_of_defence", MagicTreasuresRarity.UNCOMMON),
-            Map.entry("journeyman_bands", MagicTreasuresRarity.SCARCE),
-            Map.entry("adephagias_bounty", MagicTreasuresRarity.SCARCE),
-            Map.entry("medics_token", MagicTreasuresRarity.SCARCE),
-            Map.entry("salandaars_ward", MagicTreasuresRarity.RARE),
-            Map.entry("angels_ring", MagicTreasuresRarity.RARE),
-            Map.entry("ring_of_fortitude", MagicTreasuresRarity.RARE),
-            Map.entry("ring_of_life_death", MagicTreasuresRarity.EPIC),
-            Map.entry("eye_of_the_phoenix", MagicTreasuresRarity.EPIC));
-
-    /** named pieces whose art is a combination's (as ItemModelsProvider); the rest use item/jewelry/<id> */
-    private static final Map<String, String> NAMED_TEXTURE = Map.of(
-            "strongmans_bracers", "wood_bracelet",
-            "maldritchs_first_amulet", "bone_onyx_necklace",
-            "peasants_fortune", "great_iron_ring",
-            "aqua_ring", "silver_topaz_ring",
-            "amulet_of_defence", "copper_topaz_necklace",
-            "journeyman_bands", "great_gold_jadeite_bracelet");
-
-    private static void presets(BootstrapContext<JewelryPresetDef> context) {
-        // spells register in MagicTreasuresSpells' static initializer; the builders look them up by name
-        MagicTreasuresSpells.DEFAULT_HEALING.getName();
-        HolderGetter<GemstoneDef> gems = context.lookup(MagicTreasuresRegistries.GEMSTONE);
-        HolderSet<GemstoneDef> castleGems = gems.getOrThrow(MagicTreasuresRegistries.Tags.CASTLE_RING_GEMS);
-
-        for (DeferredItem<Item> item : MagicTreasuresItems.namedJewelry()) {
-            String id = item.getId().getPath();
-            Jewelry jewelry = (Jewelry) item.get();
-            preset(context, item.getId(), jewelry.jewelryDefaults(), castleGems,
-                    Optional.of("item." + MagicTreasures.MOD_ID + "." + id),
-                    Optional.ofNullable(jewelry.getLoreKey()).map(LangUtil::tooltip),
-                    Optional.of(mt("item/jewelry/" + NAMED_TEXTURE.getOrDefault(id, id))),
-                    Optional.empty(),
-                    Optional.of(NAMED_RARITY.get(id)));
-        }
-        // hawk rings (one preset per material and style) and the castle ring (one preset; its gem varies)
-        for (DeferredItem<Item> item : MagicTreasuresItems.STANDARD_JEWELRY) {
-            Jewelry jewelry = (Jewelry) item.get();
-            JewelryHandler.Builder builder = jewelry.jewelryDefaults();
-            if (builder.baseName == null || hasStone(builder)) {
-                continue;
-            }
-            preset(context, item.getId(), builder, castleGems, Optional.empty(),
-                    Optional.ofNullable(jewelry.getLoreKey()).map(LangUtil::tooltip),
-                    Optional.empty(), Optional.of(builder.baseName), Optional.empty());
-        }
-    }
-
-    private static void preset(BootstrapContext<JewelryPresetDef> context, ResourceLocation id, JewelryHandler.Builder b,
-            HolderSet<GemstoneDef> castleGems, Optional<String> name, Optional<String> lore, Optional<ResourceLocation> texture,
-            Optional<String> baseName, Optional<MagicTreasuresRarity> rarity) {
-        // 1.x "no gem, and none may be added" was a bedrock stone
-        boolean bedrock = b.stone != null && b.stone.equals(BuiltInRegistries.ITEM.getKey(Items.BEDROCK));
-        Optional<ResourceLocation> gem = hasStone(b) && !bedrock ? Optional.of(b.stone) : Optional.empty();
-        // castle rings take rubies and sapphires (the castle_ring family has its own lambda for the same rule)
-        boolean castle = b.acceptsAffixer == MagicTreasuresItems.castleRingAffixer || "castle_ring".equals(baseName.orElse(null));
-        boolean acceptsGems = !bedrock && (castle || b.acceptsAffixer.test(new ItemStack(Items.DIAMOND)));
-
-        PresetOverrides overrides = new PresetOverrides(
-                b.maxUses > 0 && b.maxUses != Integer.MAX_VALUE ? Optional.of(b.maxUses) : Optional.empty(),
-                b.maxUses == Integer.MAX_VALUE,
-                b.maxMana > 0 ? Optional.of(b.maxMana) : Optional.empty(),
-                b.maxLevel > 0 ? Optional.of(b.maxLevel) : Optional.empty(),
-                b.maxRepairs >= 0 ? Optional.of(b.maxRepairs) : Optional.empty(),
-                b.maxRecharges >= 0 ? Optional.of(b.maxRecharges) : Optional.empty(),
-                new PresetOverrides.Factors(factor(b.spellCostFactor), factor(b.spellEffectAmountFactor),
-                        factor(b.spellDurationFactor), factor(b.spellCooldownFactor), factor(b.spellRangeFactor)));
-
-        context.register(ResourceKey.create(MagicTreasuresRegistries.JEWELRY_PRESET, id), new JewelryPresetDef(
-                b.type.getValue(), b.material.getId(), gem, mt(b.sizeTier.getValue()), name, lore, texture, baseName, rarity,
-                b.spells.stream().map(spell -> spell.getSpell().getName()).toList(),
-                overrides,
-                new JewelryPresetDef.Rules(acceptsGems, true, castle ? Optional.of(castleGems) : Optional.empty()),
-                b.vanishingCurse,
-                // every 1.x piece was in a jewelry rarity tag, so loot could roll it
-                Optional.of(new JewelryPresetDef.Loot(1)),
-                false));
-    }
-
-    private static boolean hasStone(JewelryHandler.Builder b) {
-        return b.stone != null && !b.stone.equals(BuiltInRegistries.ITEM.getKey(Items.AIR));
-    }
-
-    private static Optional<Double> factor(double value) {
-        return value >= 0 ? Optional.of(value) : Optional.empty();
     }
 
     private static ResourceLocation mt(String path) {

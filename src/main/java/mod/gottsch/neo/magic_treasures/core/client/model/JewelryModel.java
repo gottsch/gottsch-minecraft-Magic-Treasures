@@ -162,7 +162,7 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
                 }
             }
 
-            // 2. full-combination art, as named by the 1.x JewelryBuilder
+            // 2. full-combination art, named as the 1.x combination items were
             String affix = chain.get(0).affix();
             String combo = (affix.isEmpty() ? "" : affix + "_") + material.getPath() + "_"
                     + identity.gem().map(gem -> gem.getPath() + "_").orElse("") + GenericJewelry.baseName(identity);

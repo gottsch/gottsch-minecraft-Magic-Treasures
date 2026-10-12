@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The computed stats of a generic piece of jewelry: everything that follows from its identity, nothing that changes
- * in play. Uses the 1.x formulas ({@code JewelryHandler.Builder.build()} and the jewelry rarity tags), with the
+ * in play. Uses the 1.x formulas (the 1.x handler builder and jewelry rarity tags, both gone since M9), with the
  * size's numbers now coming from the style. A preset's {@code overrides} replace computed values.
  * <p>
  * An unknown or disabled material or style gives {@link #NONE}: the stack keeps its ids and shows as unknown, but

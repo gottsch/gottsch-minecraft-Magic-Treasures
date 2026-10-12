@@ -2,7 +2,7 @@ package mod.gottsch.neo.magic_treasures.core.capability;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
@@ -110,7 +110,7 @@ public abstract class AbstractJewelryHandler implements IJewelryHandler {
     public Component getSubtitle() {
         MutableComponent subtitle = Component.translatable(LangUtil.tooltip("jewelry.type." + getJewelryType().getValue()));
         if (hasStone()) {
-            StoneRegistry.get(getStone()).ifPresent(stone -> subtitle.append(SUBTITLE_SEPARATOR).append(stone.getDescription()));
+            BuiltInRegistries.ITEM.getOptional(getStone()).ifPresent(stone -> subtitle.append(SUBTITLE_SEPARATOR).append(stone.getDescription()));
         }
         subtitle.append(SUBTITLE_SEPARATOR).append(Component.translatable(LangUtil.tooltip("jewelry.level"),
                 Component.literal(String.valueOf(getMaxLevel())).withStyle(ChatFormatting.GOLD)));

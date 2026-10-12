@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * {@code /magictreasures data}: writes every enabled jewelry data entry to the log, as JSON, and compares the
- * entries and the stats computed from them with the 1.x constants and items ({@link LegacyDataCheck}).
+ * {@code /magictreasures data}: writes every enabled jewelry data entry to the log, as JSON. (Until M9 it also compared
+ * them with the 1.x constants and items; that check went with the 1.x code.)
  * {@code /magictreasures jewelry [mana <amount>]}: shows (and sets the mana of) the held jewelry through its handler.
  * Operators only.
  */
@@ -102,19 +102,10 @@ public final class JewelryDataCommand {
         dump(ops, "gemstone", JewelryDataIndex.gemstones(), GemstoneDef.CODEC);
         dump(ops, "jewelry_preset", JewelryDataIndex.presets(), JewelryPresetDef.CODEC);
 
-        List<String> problems = LegacyDataCheck.run();
-        problems.forEach(problem -> MagicTreasures.LOGGER.warn("[data check] {}", problem));
-
         source.sendSuccess(() -> Component.literal(String.format("%d materials, %d styles, %d stone tiers, %d gemstones, %d presets (written to the log)",
                 JewelryDataIndex.materials().size(), JewelryDataIndex.styles().size(), JewelryDataIndex.stoneTiers().size(),
                 JewelryDataIndex.gemstones().size(), JewelryDataIndex.presets().size())), false);
-        if (problems.isEmpty()) {
-            source.sendSuccess(() -> Component.literal("Matches the 1.x constants and tags").withStyle(ChatFormatting.GREEN), false);
-        } else {
-            source.sendFailure(Component.literal(problems.size() + " differences from the 1.x constants and tags (see the log)"));
-            problems.stream().limit(10).forEach(problem -> source.sendFailure(Component.literal(" - " + problem)));
-        }
-        return problems.isEmpty() ? 1 : 0;
+        return 1;
     }
 
     private static <T> void dump(RegistryOps<com.google.gson.JsonElement> ops, String registry,

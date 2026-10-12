@@ -23,9 +23,6 @@ import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.neo.magic_treasures.core.item.JewelryType;
 import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.neo.magic_treasures.core.registry.JewelryRegistry;
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
-import mod.gottsch.neo.magic_treasures.core.registry.TagRegistry;
 import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -46,7 +43,6 @@ import java.util.List;
 /**
  * Created by Mark Gottschling on 5/29/2023
  */
-@EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class MagicTreasuresTags {
     private static final String CURIOS_MODID = "curios";
     // NeoForge 1.21 common tags use the "c" namespace (1.20.1 Forge used "forge")
@@ -177,72 +173,5 @@ public class MagicTreasuresTags {
 			items.add(holder.value());
 		}
 		return items;
-	}
-
-	@SubscribeEvent
-	public static void registerTags(TagsUpdatedEvent event) {
-		MagicTreasures.LOGGER.info("in tags updated event");
-		
-		// clear any registries
-		JewelryRegistry.clear();
-
-        /*
-         * register all jewelry items by looking up the jewelry type tags.
-         */
-		// process all items in the JewelryType tags
-        List<IJewelryType> types = MagicTreasuresApi.getJewelryTypes();
-        types.forEach(type -> {
-        	TagKey<Item> tagKey = TagRegistry.getJewelryTypeTag(type);
-			if (tagKey != null) {
-				// get the tag
-				List<Item> tag = items(tagKey);
-				// for each item in the tag
-				for (Iterator<Item> iterator = tag.iterator(); iterator.hasNext();) {
-					Item jewelry = iterator.next();
-					JewelryRegistry.register(jewelry);
-					MagicTreasures.LOGGER.debug("registering jewelry -> {} ", ModUtil.getName(jewelry));
-				}
-			}
-        });
-
-        // process all items in the JewelryStoneTier tags
-        List<JewelryStoneTier> tiers = MagicTreasuresApi.getJewelryStoneTiers();
-        tiers.forEach(tier -> {
-            TagKey<Item> tagKey = TagRegistry.getJewelryStoneTierTag(tier);
-            if (tagKey != null) {
-                // get the tag
-                List<Item> tag = items(tagKey);
-                // for each item in the tag
-                for (Item stone : tag) {
-                    // register the stone with the StoneRegistry
-                    StoneRegistry.register(stone);
-                    // register the stone with the tier in the StoneRegistry
-                    StoneRegistry.register(stone, tier);
-                    MagicTreasures.LOGGER.debug("registering stone to tier -> {} <--> {} ", ModUtil.getName(stone), tier.getName());
-                }
-            }
-        });
-
-        // registry stones by rarity
-        List<IRarity> rarities = MagicTreasuresApi.getRarities();
-        rarities.forEach(rarity -> {
-            TagKey<Item> tagKey = TagRegistry.getStoneRarityTag(rarity);
-            if (tagKey != null) {
-                List<Item> tag = items(tagKey);
-                for (Item stone : tag) {
-                    StoneRegistry.register(rarity, stone);
-                    MagicTreasures.LOGGER.debug("registering stone to rarity -> {} <--> {} ", ModUtil.getName(stone), rarity.getName());
-                }
-            }
-            // register jewelry by rarity
-            MagicTreasuresApi.getJewelryRarityTag(rarity)
-                    .ifPresent(key -> {
-                        List<Item> tag = items(key);
-                        tag.forEach(item -> {
-                            JewelryRegistry.register(rarity, item);
-                            MagicTreasures.LOGGER.debug("registering jewelry to rarity -> {} <--> {} ", ModUtil.getName(item), rarity.getName());
-                        });
-                    });
-        });
 	}
 }

@@ -2,12 +2,8 @@ package mod.gottsch.neo.magic_treasures.core.spell.cost;
 
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
-import mod.gottsch.neo.magic_treasures.core.capability.GenericJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.neo.magic_treasures.core.spell.ICastSpellContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
@@ -32,26 +28,13 @@ public class CostEvaluator implements ICostEvaluator {
 	/** every successful cast costs at least this much, so durability (1 per cast) can't outlast mana */
 	private static final double MIN_COST = 1.0;
 
-	/**
-	 * 2.0 generic jewelry: the computed cost factor (material x stone tier). 1.x jewelry keeps its 1.x behaviour,
-	 * which recomputes material x stone tier and so ignores an item's own cost override (e.g. Maldritch's First
-	 * Amulet's 0.95); presets restore overrides in M8.
-	 */
-	private static double costFactor(IJewelryHandler handler) {
-		if (handler instanceof GenericJewelryHandler) {
-			return handler.getSpellCostFactor();
-		}
-		Optional<Item> stone = StoneRegistry.get(handler.getStone());
-		JewelryStoneTier stoneTier = StoneRegistry.getStoneTier(stone.orElseGet(() -> Items.AIR)).orElse(JewelryStoneTiers.NONE);
-		return handler.getMaterial().getSpellCostFactor() * stoneTier.getSpellCostFactor();
-	}
-
 	@Override
 	public double apply(Level level, Random random, ICoords coords, ICastSpellContext context, double amount) {
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		// calculate the new amount for cost
-		double newAmount = amount * costFactor(handler);
+		// the computed cost factor: material x stone tier, or a preset's override
+		double newAmount = amount * handler.getSpellCostFactor();
 		newAmount = SetEquipment.modify(context.getPlayer(), context.getJewelry(), context.getEntity().getSpell(), SpellStat.COST, newAmount);
 		newAmount = Math.max(MIN_COST, newAmount);
 

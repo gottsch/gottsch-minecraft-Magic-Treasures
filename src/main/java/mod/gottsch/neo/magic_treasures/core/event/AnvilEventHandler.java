@@ -58,20 +58,10 @@ public class AnvilEventHandler {
 				event.setMaterialCost(1);
 				event.setCost(1);
 
-				// 2.0 generic jewelry knows gems from the gemstone registry; 1.x jewelry from the all_stones tag
-				boolean generic = leftStack.getItem() instanceof GenericJewelry;
-				boolean gem = generic ? JewelryDataIndex.isGemstone(rightStack) : rightStack.is(MagicTreasuresTags.Items.STONES);
+				// a gem is any enabled gemstone's item (the gemstone registry, not a tag)
+				boolean gem = JewelryDataIndex.isGemstone(rightStack);
 				// add a stone to jewelry
 				if (!handler.hasStone() && gem) {
-					/*
-					 TODO need a better way of constructing a new jewelry item than using its registry name.
-					 When using items from different mods, following the naming structure may not work.
-					 ie. this ONLY works for items that use Magic Treasures naming convention AND don't
-					 overlap in the tiers. What if 2 items have the same make-up ex copper, topaz, ring
-					 */
-
-					// TODO somehow interrogate leftStack to determine if it is a standard naming or not. - might end up being a capability property OR a tag??
-					// TODO addStone should return an Optional
 					resultOutStack.set(generator.addStone(leftStack, rightStack));
 				}
 				// remove a stone from jewelry
@@ -89,9 +79,8 @@ public class AnvilEventHandler {
 					Optional<ItemStack> resultStack = generator.recharge(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
 				}
-				// repair jewelry
-				else if (handler.getRepairs() > 0 && (rightStack.is(MagicTreasuresTags.Items.JEWELRY)
-						|| (rightStack.getItem() instanceof GenericJewelry && JewelryHandler.get(rightStack).isPresent()))) {
+				// repair jewelry: sacrifice another piece of jewelry
+				else if (handler.getRepairs() > 0 && JewelryHandler.get(rightStack).isPresent()) {
 					Optional<ItemStack> resultStack = generator.repair(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
 				}

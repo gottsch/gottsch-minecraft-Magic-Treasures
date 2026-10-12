@@ -62,7 +62,7 @@ public class AdvancementEventHandler {
         if (!handler.get().hasStone() && (right.is(MagicTreasuresTags.Items.STONES) || JewelryDataIndex.isGemstone(right))) {
             action = MagicTreasuresCriteria.ADD_GEM;
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)) {
-            return;
+            action = MagicTreasuresCriteria.REMOVE_GEM;
         } else if (handler.get().getSpells().isEmpty() && right.is(MagicTreasuresTags.Items.SPELL_SCROLLS)) {
             action = MagicTreasuresCriteria.IMBUE;
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.RECHARGERS)) {

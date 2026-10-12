@@ -52,9 +52,8 @@ public class JewelrySet {
     private final NavigableMap<Integer, SetBonus> tiers;
 
     /**
-     * One piece of a set: an item (1.x jewelry, the Rootstaff, the Barkskin Vest), a 2.0 jewelry preset (matched by
-     * the stack's {@code jewelry_identity} preset id), or both: a named 1.x piece also matches its preset (same id),
-     * so old and converted pieces count alike until M9.
+     * One piece of a set: an item (the Rootstaff, the Barkskin Vest, the Skull Belt) or a jewelry preset (matched by
+     * the stack's {@code jewelry_identity} preset id).
      */
     public record Piece(Optional<Supplier<? extends Item>> item, Optional<ResourceLocation> preset) {
 
@@ -174,12 +173,6 @@ public class JewelrySet {
 
         public Builder piece(Supplier<? extends Item> item) {
             pieces.add(Piece.of(item));
-            return this;
-        }
-
-        /** a registered item that is also a preset of the same id (the named jewelry): either one counts */
-        public Builder piece(DeferredItem<? extends Item> item) {
-            pieces.add(new Piece(Optional.of(item), Optional.of(item.getId())));
             return this;
         }
 

@@ -17,202 +17,33 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item.generator;
 
-
 import mod.gottsch.neo.magic_treasures.core.capability.GenericJewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.neo.magic_treasures.core.registry.JewelryRegistry;
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.neo.magic_treasures.core.spell.ISpell;
 import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.registries.BuiltInRegistries;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Optional;
 
 /**
- * @author Mark Gottschling May 6, 2024
+ * The anvil's jewelry results. Every result is a copy of the input with its identity or state changed; since M9 there
+ * are no per-combination items to look up by name (the 1.x {@code Namer} path went with them).
  *
+ * @author Mark Gottschling May 6, 2024
  */
 public class JewelryGenerator {
-    public static final Namer STANDARD_NAMER = new Namer();
-
-    /**
-     *
-     */
-    public JewelryGenerator() {
-    }
-
-    public ItemStack addStone(ItemStack jewelry, ItemStack stone) {
-        return addStone(jewelry, stone, STANDARD_NAMER);
-    }
-
-    public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
-        if (jewelry.getItem() instanceof GenericJewelry) {
-            return addGenericGem(jewelry, stone);
-        }
-        IJewelryHandler sourceHandler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
-
-        // ensure a valid stone stack
-        if (stone == null || stone == ItemStack.EMPTY || !sourceHandler.acceptsAffixer(stone)
-            // TODO
-//            || sourceHandler.getJewelryMaterial().acceptsAffixer(stone)
-//                || stoneHandler.canAffix(jewelry.getItem())
-        ) {
-            return ItemStack.EMPTY;
-        }
-
-        ResourceLocation location = ModUtil.asLocation(namer.name(jewelry, stone));
-
-        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
-
-        // get the dest capability handlers
-        IJewelryHandler destHandler = JewelryHandler.get(destJewelry).orElseThrow(IllegalStateException::new);
-
-        int mana = 0;
-        int recharges = 0;
-
-        Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone.getItem());
-
-        if (stoneTier.isPresent() && stoneTier.get().canAffix(jewelry)) {
-
-            // ensure stone is set
-            destHandler.setStone(ModUtil.getName(stone.getItem()));
-            // update mana
-            mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
-            mana = Math.round(mana * destHandler.getJewelrySizeTier().getManaMultiplier());
-
-            // update recharges
-            recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
-        }
-
-        // update mana
-        destHandler.setMaxMana(sourceHandler.getMaxMana() + mana);
-        destHandler.setMana(sourceHandler.getMana() + mana);
-
-        // update recharges
-        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() + recharges);
-        destHandler.setRecharges(sourceHandler.getRecharges() + recharges);
-
-        // update repairs
-        destHandler.setRepairs(sourceHandler.getRepairs());
-
-        // update uses and item damage
-        destJewelry.setDamageValue(jewelry.getDamageValue());
-        destHandler.setUses(sourceHandler.getUses());
-
-        // transfer spells
-        destHandler.setSpells(sourceHandler.getSpells());
-
-        return destJewelry;
-    }
-
-    public Optional<ItemStack> removeStone(ItemStack jewelry) {
-        return removeStone(jewelry, STANDARD_NAMER);
-    }
-
-    public Optional<ItemStack> removeStone(ItemStack jewelry, Namer namer) {
-        if (jewelry.getItem() instanceof GenericJewelry) {
-            return removeGenericGem(jewelry);
-        }
-        ResourceLocation location = ModUtil.asLocation(namer.name(jewelry));
-        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
-
-        IJewelryHandler sourceHandler = null;
-        IJewelryHandler destHandler = null;
-        try {
-            sourceHandler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
-            destHandler = JewelryHandler.get(destJewelry).orElseThrow(IllegalStateException::new);
-        } catch(Exception e) {
-            return Optional.empty();
-        }
-
-        // get the stone item from the sourceHandler
-        Item stone = BuiltInRegistries.ITEM.get(sourceHandler.getStone());
-
-        int mana = 0;
-        int recharges = 0;
-        if (stone != null) {
-            Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone);
-
-            // remove the stone
-            destHandler.setStone(null);
-
-            if (stoneTier.isPresent()) {
-                // get stone mana
-                mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
-                mana = Math.round(mana * destHandler.getJewelrySizeTier().getManaMultiplier());
-
-                // get stone recharges
-                recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
-            }
-        }
-
-        // NOTE at this point, destHandler contains the correct max values (it is the item w/o the gem)
-        // remove mana
-//        destHandler.setMaxMana(sourceHandler.getMaxMana() - mana);
-        destHandler.setMana(Math.min(sourceHandler.getMana(), destHandler.getMaxMana()));
-
-        // remove recharges
-//        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() - recharges);
-        destHandler.setRecharges(Math.min(sourceHandler.getRecharges(), destHandler.getMaxRecharges()));
-
-        // update repairs
-        destHandler.setRepairs(sourceHandler.getRepairs());
-
-        // update uses and item damage
-//        destJewelry.setDamageValue(jewelry.getDamageValue());
-        destHandler.setUses(sourceHandler.getUses());
-
-        // transfer spells
-        destHandler.setSpells(sourceHandler.getSpells());
-
-        return Optional.of(destJewelry);
-    }
-
-    public Optional<ItemStack> addSpells(ItemStack jewelry, ItemStack spellStack) {
-        if (!spellStack.is(MagicTreasuresTags.Items.SPELL_SCROLLS)) return Optional.empty();
-
-        ItemStack destStack = resultStack(jewelry);
-
-        IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
-        ISpell spell = ((SpellScroll)spellStack.getItem()).getSpell();
-        if (handler.getMaxLevel() >= spell.getLevel()) {
-            handler.addSpell(spell.entity());
-            return Optional.of(destStack);
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * The anvil's result stack, holding the input's values. 1.x jewelry is rebuilt as a new stack of the same item;
-     * 2.0 generic jewelry is a copy, because its identity and state are all it has.
-     */
-    private ItemStack resultStack(ItemStack jewelry) {
-        if (jewelry.getItem() instanceof GenericJewelry) {
-            return jewelry.copy();
-        }
-        ItemStack destStack = new ItemStack(jewelry.getItem());
-        copyStack(jewelry, destStack);
-        return destStack;
-    }
 
     /*
-     * 2.0 generic jewelry: the result is a copy of the input, and the gem is set on (or cleared from) its identity.
+     * The result is a copy of the input, and the gem is set on (or cleared from) its identity.
      * The max values follow from the identity, so there is no item to look up by name. Adding is allowed when the
      * stone is an enabled gemstone, the rules allow it on this material (the material's accepts_gems and gems limit,
      * the gem's affixes_to) and no preset forbids gems. As in 1.x, the gem's extra mana and recharges are added to
      * the current values; on removal the current values are capped at the new max.
      */
-    private ItemStack addGenericGem(ItemStack jewelry, ItemStack stone) {
+    public ItemStack addStone(ItemStack jewelry, ItemStack stone) {
         IJewelryHandler source = JewelryHandler.get(jewelry).orElse(null);
         if (source == null || stone == null || stone.isEmpty() || source.hasStone() || !source.acceptsAffixer(stone)) {
             return ItemStack.EMPTY;
@@ -228,7 +59,7 @@ public class JewelryGenerator {
         return result;
     }
 
-    private Optional<ItemStack> removeGenericGem(ItemStack jewelry) {
+    public Optional<ItemStack> removeStone(ItemStack jewelry) {
         if (JewelryHandler.get(jewelry).filter(h -> h instanceof GenericJewelryHandler g && g.presetAcceptsGems()).isEmpty()) {
             return Optional.empty();
         }
@@ -243,33 +74,22 @@ public class JewelryGenerator {
         return dest.map(handler -> result);
     }
 
-    private void copyStack(ItemStack sourceStack, ItemStack destStack) {
-        IJewelryHandler handler = JewelryHandler.get(sourceStack).orElseThrow(IllegalStateException::new);
-        IJewelryHandler destHandler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
+    public Optional<ItemStack> addSpells(ItemStack jewelry, ItemStack spellStack) {
+        if (!spellStack.is(MagicTreasuresTags.Items.SPELL_SCROLLS)) return Optional.empty();
 
-        // copy over current state
-        copyHandlers(handler, destHandler);
+        ItemStack destStack = jewelry.copy();
 
-        // update the itemstack
-        destStack.setDamageValue(sourceStack.getDamageValue());
-    }
-
-    private void copyHandlers(IJewelryHandler handler, IJewelryHandler destHandler) {
-        destHandler.setStone(handler.getStone());
-
-        destHandler.setBaseName(handler.getBaseName());
-        destHandler.setMaxMana(handler.getMaxMana());
-        destHandler.setMaxRecharges(handler.getMaxRecharges());
-        destHandler.setMaxRepairs(handler.getMaxRepairs());
-        destHandler.setMana(handler.getMana());
-        destHandler.setRecharges(handler.getRecharges());
-        destHandler.setRepairs(handler.getRepairs());
-        destHandler.setSpells(handler.getSpells());
-        destHandler.setUses(handler.getUses());
+        IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
+        ISpell spell = ((SpellScroll)spellStack.getItem()).getSpell();
+        if (handler.getMaxLevel() >= spell.getLevel()) {
+            handler.addSpell(spell.entity());
+            return Optional.of(destStack);
+        }
+        return Optional.empty();
     }
 
     public Optional<ItemStack> recharge(ItemStack jewelry) {
-        ItemStack destStack = resultStack(jewelry);
+        ItemStack destStack = jewelry.copy();
 
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         if (handler.getRecharges() > 0) {
@@ -281,7 +101,7 @@ public class JewelryGenerator {
     }
 
     public Optional<ItemStack> repair(ItemStack jewelry) {
-        ItemStack destStack = resultStack(jewelry);
+        ItemStack destStack = jewelry.copy();
 
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
         if (handler.getRepairs() > 0) {
@@ -291,122 +111,4 @@ public class JewelryGenerator {
         }
         return Optional.empty();
     }
-
-    public static class Namer {
-        public String name(ItemStack jewelry, ItemStack stone) {
-            StringBuffer buffer = new StringBuffer();
-
-            IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
-           return buffer.append((handler.getJewelrySizeTier() != JewelrySizeTier.REGULAR ? (handler.getJewelrySizeTier().getName() + "_") : ""))
-                   .append(handler.getMaterial().getName()).append("_")
-                   .append(ModUtil.getName(stone.getItem()).getPath()).append("_")
-                   .append(StringUtils.isNotBlank(handler.getBaseName()) ? handler.getBaseName() : handler.getJewelryType().getName())
-                   .toString().toLowerCase();
-//                   .append(handler.getJewelryType().getName()).toString().toLowerCase();
-        }
-
-        public String name(ItemStack jewelry) {
-            StringBuilder buffer = new StringBuilder();
-
-            IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
-           return buffer.append((handler.getJewelrySizeTier() != JewelrySizeTier.REGULAR ? (handler.getJewelrySizeTier().getName() + "_") : ""))
-                    .append(handler.getMaterial().getName()).append("_")
-                    .append(
-//                      handler.getJewelryType().getName()
-                        StringUtils.isNotBlank(handler.getBaseName()) ? handler.getBaseName() : handler.getJewelryType().getName()
-                    ).toString().toLowerCase();
-        }
-    }
-
-//    public static class NamingRules {
-//        private boolean useSize = true;
-//        private boolean useMaterial = true;
-//        private boolean useStone = true;
-//        private boolean useType = true;
-//
-//        private boolean useBaseName;
-//        private String baseName = "";
-//
-//        public NamingRules() {
-//            // default constructor which uses the main attributes to build generic jewelry ex. gold_ring
-//        }
-//
-//        public NamingRules(Builder builder) {
-//            this.useSize = builder.useSize;
-//            this.useMaterial = builder.useMaterial;
-//            this.useStone = builder.useStone;
-//            this.useType = builder.useType;
-//            this.useBaseName = builder.useBaseName;
-//            this.baseName = builder.baseName;
-//        }
-//
-//        public static class Builder {
-//            public boolean useSize = true;
-//            public boolean useMaterial = true;
-//            public boolean useStone = true;
-//            public boolean useType = true;
-//
-//            public boolean useBaseName;
-//            public String baseName = "";
-//
-//            public Builder() {}
-//
-//            public NamingRules build() {
-//                return new NamingRules(this);
-//            }
-//
-//            public Builder with(Consumer<Builder> builder)  {
-//                builder.accept(this);
-//                return this;
-//            }
-//        }
-//
-//        public boolean isUseSize() {
-//            return useSize;
-//        }
-//
-//        public void setUseSize(boolean useSize) {
-//            this.useSize = useSize;
-//        }
-//
-//        public boolean isUseMaterial() {
-//            return useMaterial;
-//        }
-//
-//        public void setUseMaterial(boolean useMaterial) {
-//            this.useMaterial = useMaterial;
-//        }
-//
-//        public boolean isUseStone() {
-//            return useStone;
-//        }
-//
-//        public void setUseStone(boolean useStone) {
-//            this.useStone = useStone;
-//        }
-//
-//        public boolean isUseType() {
-//            return useType;
-//        }
-//
-//        public void setUseType(boolean useType) {
-//            this.useType = useType;
-//        }
-//
-//        public boolean isUseBaseName() {
-//            return useBaseName;
-//        }
-//
-//        public void setUseBaseName(boolean useBaseName) {
-//            this.useBaseName = useBaseName;
-//        }
-//
-//        public String getBaseName() {
-//            return baseName;
-//        }
-//
-//        public void setBaseName(String baseName) {
-//            this.baseName = baseName;
-//        }
-//    }
 }

@@ -48,8 +48,8 @@ import java.util.Optional;
  * (two packs both using {@code c:ingots/iron}), the first by id that the rules allow wins.
  * <p>
  * <b>An ordinary recipe for the same grid wins.</b> Vanilla takes the first matching recipe from an unordered
- * collection, so without this the 1.x shapeless recipes (kept until M9) and this one would be a coin flip. Stepping
- * aside also lets a pack replace one material's crafting with a recipe of its own.
+ * collection, so two recipes for one grid would be a coin flip (the 1.x shapeless recipes were, until M9 deleted
+ * them). Stepping aside lets a pack replace one material's crafting with a recipe of its own.
  *
  * @author Mark Gottschling on 10/12/2026
  */

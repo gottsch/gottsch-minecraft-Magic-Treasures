@@ -22,7 +22,6 @@ import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryRules;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryStats;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.SpellFactors;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
-import mod.gottsch.neo.magic_treasures.core.registry.JewelryStoneTierRegistry;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellRegistry;
 import net.minecraft.core.Holder;
@@ -47,6 +46,19 @@ import java.util.function.UnaryOperator;
  * anvil code calls them, and M5 replaces it.
  */
 public class GenericJewelryHandler extends AbstractJewelryHandler {
+    /*
+     * the 1.x constants that IJewelryHandler's typed getters return, for built-in ids (a pack's id gets NONE); until
+     * M10 reworks the interface
+     */
+    private static final java.util.Map<ResourceLocation, JewelryMaterial> LEGACY_MATERIALS = java.util.stream.Stream.of(
+            JewelryMaterials.WOOD, JewelryMaterials.IRON, JewelryMaterials.COPPER, JewelryMaterials.SILVER, JewelryMaterials.GOLD,
+            JewelryMaterials.BONE, JewelryMaterials.BLOOD, JewelryMaterials.SHADOW, JewelryMaterials.ATIUM)
+            .collect(java.util.stream.Collectors.toMap(JewelryMaterial::getId, m -> m));
+    private static final java.util.Map<ResourceLocation, JewelryStoneTier> LEGACY_TIERS = java.util.stream.Stream.of(
+            JewelryStoneTiers.TIER1, JewelryStoneTiers.TIER2, JewelryStoneTiers.TIER3, JewelryStoneTiers.TIER4,
+            JewelryStoneTiers.TIER5, JewelryStoneTiers.TIER6, JewelryStoneTiers.SKELETONS_HEART)
+            .collect(java.util.stream.Collectors.toMap(JewelryStoneTier::getName, t -> t));
+
 
     private GenericJewelryHandler(ItemStack stack) {
         super(stack);
@@ -131,7 +143,7 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
      */
     @Override
     public JewelryMaterial getMaterial() {
-        return MagicTreasuresApi.getJewelryMaterial(identity().material()).orElse(JewelryMaterials.NONE);
+        return LEGACY_MATERIALS.getOrDefault(identity().material(), JewelryMaterials.NONE);
     }
 
     @Override
@@ -150,7 +162,7 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
     @Override
     public JewelryStoneTier getStoneTier() {
         return gemstone().flatMap(gem -> gem.value().tier().unwrapKey())
-                .flatMap(key -> JewelryStoneTierRegistry.get(key.location()))
+                .map(key -> LEGACY_TIERS.getOrDefault(key.location(), JewelryStoneTiers.NONE))
                 .orElse(JewelryStoneTiers.NONE);
     }
 

@@ -35,6 +35,8 @@ public class MagicTreasuresCriteria {
     public static final String IMBUE = "imbue";
     public static final String RECHARGE = "recharge";
     public static final String EXTRACT_GEM = "extract_gem";
+    /** a gem removed on the anvil with shears (the gem is lost, the jewelry kept) */
+    public static final String REMOVE_GEM = "remove_gem";
     public static final String FULL_SET = "full_set";
 
     public static final DeferredRegister<CriterionTrigger<?>> TRIGGERS =

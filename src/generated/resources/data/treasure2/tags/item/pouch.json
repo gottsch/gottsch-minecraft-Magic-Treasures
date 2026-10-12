@@ -2,9 +2,6 @@
   "values": [
     "#magictreasures:jewelry/stones/all_stones",
     "#magictreasures:jewelry/stones/rechargers",
-    "#magictreasures:jewelry/all_jewelry",
-    "magictreasures:ring",
-    "magictreasures:necklace",
-    "magictreasures:bracelet"
+    "#magictreasures:jewelry/all_jewelry"
   ]
 }

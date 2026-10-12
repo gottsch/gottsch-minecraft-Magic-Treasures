@@ -43,13 +43,12 @@ import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import java.util.Optional;
 
 /**
+ * The base of jewelry items: lore and the tooltip, through the stack's {@link IJewelryHandler}. Since M9 the only
+ * jewelry items are {@link GenericJewelry} (the 1.x items with built-in defaults are gone).
  * Created by Mark Gottschling on 5/29/2023
  */
 public class Jewelry extends Item implements IJewelry{
     private String loreKey;
-
-    // cached result of jewelryDefaults(). the builder holds no tag-dependent data until build() is called.
-    private JewelryHandler.Builder defaults;
 
     /**
      *
@@ -60,52 +59,10 @@ public class Jewelry extends Item implements IJewelry{
     }
 
     /**
-     * The builder for this item's default JewelryData. Items override this to set their material,
-     * size, stone, spells etc. JewelryHandler.get(stack) builds the default data from it the first time
-     * a stack is accessed (replaces the 1.20.1 initCapabilities override).
-     */
-    public JewelryHandler.Builder jewelryDefaults() {
-        return new JewelryHandler.Builder(JewelryType.UNKNOWN, JewelryMaterials.NONE, JewelrySizeTier.UNKNOWN);
-    }
-
-    private JewelryHandler.Builder getDefaults() {
-        if (defaults == null) {
-            defaults = jewelryDefaults();
-        }
-        return defaults;
-    }
-
-    /**
      * whether the affixer (gem, spell scroll etc.) may be applied to this jewelry. not persisted.
      */
     public boolean acceptsAffixer(ItemStack affixer) {
-        return getDefaults().acceptsAffixer.test(affixer);
-    }
-
-    /**
-     * Applies Curse of Vanishing to jewelry whose defaults ask for it. In 1.20.1 this was done in
-     * initCapabilities; in 1.21 enchantments are registry data, so it needs a level. Curios calls
-     * inventoryTick for curio slots too.
-     */
-    @Override
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(stack, level, entity, slot, selected);
-        if (!level.isClientSide() && getDefaults().vanishingCurse) {
-            Holder<Enchantment> curse = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.VANISHING_CURSE);
-            if (stack.getEnchantments().getLevel(curse) == 0) {
-                stack.enchant(curse, 1);
-            }
-        }
-    }
-
-    /**
-     * NOTE called every frame while rendered, so this reads the component directly rather than through
-     * a handler (and doesn't create it).
-     */
-    @Override
-    public boolean isFoil(ItemStack stack) {
-        JewelryData data = stack.get(MagicTreasuresDataComponents.JEWELRY);
-        return data != null ? !data.spells().isEmpty() : !getDefaults().spells.isEmpty();
+        return true;
     }
 
     @Override
