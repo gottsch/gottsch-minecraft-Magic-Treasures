@@ -17,8 +17,11 @@
  */
 package mod.gottsch.neo.magic_treasures.core.set;
 
+import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
+import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -87,14 +90,28 @@ public final class JewelrySets {
         return Collections.unmodifiableList(SETS);
     }
 
+    /** the set an item piece belongs to (1.x jewelry, armor, weapons) */
     public static synchronized Optional<JewelrySet> get(Item item) {
         if (byItem == null) {
             Map<Item, JewelrySet> map = new IdentityHashMap<>();
             for (JewelrySet set : SETS) {
-                set.getPieces().forEach(piece -> map.put(piece, set));
+                set.getItems().forEach(piece -> map.put(piece, set));
             }
             byItem = map;
         }
         return Optional.ofNullable(byItem.get(item));
+    }
+
+    /** the set a stack belongs to: by its item, or by its 2.0 jewelry preset */
+    public static Optional<JewelrySet> get(ItemStack stack) {
+        Optional<JewelrySet> byItemSet = get(stack.getItem());
+        if (byItemSet.isPresent()) {
+            return byItemSet;
+        }
+        JewelryIdentity identity = stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
+        if (identity == null || identity.preset().isEmpty()) {
+            return Optional.empty();
+        }
+        return SETS.stream().filter(set -> set.getPresets().contains(identity.preset().get())).findFirst();
     }
 }

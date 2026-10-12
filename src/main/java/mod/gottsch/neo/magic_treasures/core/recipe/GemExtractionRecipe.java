@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures.core.recipe;
 
+import mod.gottsch.neo.magic_treasures.core.capability.GenericJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
@@ -82,6 +83,8 @@ public class GemExtractionRecipe extends CustomRecipe {
         // read a copy: JewelryHandler.get writes default jewelry data onto a stack that has none yet
         return JewelryHandler.get(jewelry.copy())
                 .filter(IJewelryHandler::hasStone)
+                // a 2.0 preset can say "extractable": false
+                .filter(handler -> !(handler instanceof GenericJewelryHandler generic) || generic.gemExtractable())
                 .map(handler -> BuiltInRegistries.ITEM.get(handler.getStone()))
                 .filter(item -> item != Items.AIR)
                 .map(ItemStack::new)

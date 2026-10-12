@@ -24,6 +24,13 @@ public final class JewelryRules {
         return gem.map(g -> allowsGem(material, g)).orElse(!limits.requiresGem());
     }
 
+    /** as {@link #allowsGem(Holder, Holder)}, and also within a preset's own gem rules */
+    public static boolean allowsGem(Holder<JewelryMaterialDef> material, Holder<GemstoneDef> gem,
+            Optional<? extends Holder<JewelryPresetDef>> preset) {
+        return allowsGem(material, gem)
+                && preset.map(p -> p.value().acceptsGems() && p.value().rules().allowsGem(gem)).orElse(true);
+    }
+
     /** whether this gem may be set in this material, checked from both sides */
     public static boolean allowsGem(Holder<JewelryMaterialDef> material, Holder<GemstoneDef> gem) {
         return material.value().acceptsGems()

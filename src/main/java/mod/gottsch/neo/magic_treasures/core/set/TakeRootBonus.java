@@ -46,7 +46,7 @@ public class TakeRootBonus implements SetBonus {
         JewelrySet pieces = set.get();
         for (WornJewelry.Piece piece : WornJewelry.pieces(player)) {
             IJewelryHandler handler = piece.handler();
-            if (pieces.contains(piece.stack().getItem()) && !handler.isInfinite() && handler.getUses() < handler.getMaxUses()) {
+            if (pieces.contains(piece.stack()) && !handler.isInfinite() && handler.getUses() < handler.getMaxUses()) {
                 handler.setUses(handler.getUses() + 1);
             }
         }

@@ -1,0 +1,19 @@
+{
+  "type": "bracelet",
+  "accepts_gems": false,
+  "loot": {},
+  "lore": "tooltip.magictreasures.jewelry.strongmans_bracers.lore",
+  "material": "magictreasures:wood",
+  "name": "item.magictreasures.strongmans_bracers",
+  "overrides": {
+    "max_level": 2,
+    "max_mana": 50.0,
+    "max_recharges": 1,
+    "max_uses": 100
+  },
+  "rarity": "common",
+  "spells": [
+    "magictreasures:quick_strength"
+  ],
+  "texture": "magictreasures:item/jewelry/wood_bracelet"
+}

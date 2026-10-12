@@ -1,0 +1,18 @@
+{
+  "type": "necklace",
+  "gem": "magictreasures:jadeite",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.medics_token",
+  "overrides": {
+    "infinite": true,
+    "max_mana": 300.0,
+    "max_recharges": 1
+  },
+  "rarity": "scarce",
+  "spells": [
+    "magictreasures:greater_healing"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/medics_token"
+}

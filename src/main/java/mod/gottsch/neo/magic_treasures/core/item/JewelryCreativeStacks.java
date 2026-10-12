@@ -89,14 +89,21 @@ public final class JewelryCreativeStacks {
         return entries;
     }
 
+    /**
+     * A pack's material is always shown. A built-in material is shown only if it has a rarity (not the unplanned
+     * blood, shadow and atium), with no gem, MT's or vanilla gems, or a pack's gem; never Treasure2's duplicates.
+     */
     private static boolean inTab(Holder.Reference<JewelryMaterialDef> material, Optional<Holder.Reference<GemstoneDef>> gem) {
-        boolean packMaterial = !BUILT_IN.contains(material.key().location().getNamespace());
-        boolean packGem = gem.map(g -> !BUILT_IN.contains(g.key().location().getNamespace())).orElse(false);
-        if (packMaterial || packGem) {
+        if (!BUILT_IN.contains(material.key().location().getNamespace())) {
             return true;
         }
-        return material.value().rarity().isPresent()
-                && gem.map(g -> TAB_GEM_NAMESPACES.contains(g.key().location().getNamespace())).orElse(true);
+        if (material.value().rarity().isEmpty()) {
+            return false;
+        }
+        return gem.map(g -> {
+            String namespace = g.key().location().getNamespace();
+            return TAB_GEM_NAMESPACES.contains(namespace) || !BUILT_IN.contains(namespace);
+        }).orElse(true);
     }
 
     private static Optional<GenericJewelry> item(String type) {

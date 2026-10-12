@@ -24,6 +24,7 @@ import mod.gottsch.neo.magic_treasures.core.jewelry.data.SpellFactors;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.registry.JewelryStoneTierRegistry;
 import mod.gottsch.neo.magic_treasures.core.spell.SpellEntity;
+import mod.gottsch.neo.magic_treasures.core.spell.SpellRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -64,15 +65,21 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
         if (!stack.has(MagicTreasuresDataComponents.JEWELRY_STATE.get())) {
             JewelryStats stats = JewelryStats.of(identity);
             if (stats.known()) {
-                stack.set(MagicTreasuresDataComponents.JEWELRY_STATE.get(), fullState(stats));
+                stack.set(MagicTreasuresDataComponents.JEWELRY_STATE.get(), fullState(identity, stats));
             }
         }
         return Optional.of(new GenericJewelryHandler(stack));
     }
 
-    /** full uses, mana, repairs and recharges; spells come from presets in M8 */
-    public static JewelryState fullState(JewelryStats stats) {
-        return new JewelryState(stats.maxUses(), stats.maxMana(), stats.maxRepairs(), stats.maxRecharges(), List.of());
+    /** full uses, mana, repairs and recharges, and a preset's spells (unknown spell ids are skipped) */
+    public static JewelryState fullState(JewelryIdentity identity, JewelryStats stats) {
+        List<SpellData> spells = identity.preset().flatMap(JewelryDataIndex::preset)
+                .map(preset -> preset.value().spells().stream()
+                        .flatMap(id -> SpellRegistry.get(id).stream())
+                        .map(spell -> spell.entity().toData())
+                        .toList())
+                .orElse(List.of());
+        return new JewelryState(stats.maxUses(), stats.maxMana(), stats.maxRepairs(), stats.maxRecharges(), spells);
     }
 
     /** write one spell's persisted state back to the stack (used by bound SpellEntity instances) */
@@ -320,9 +327,17 @@ public class GenericJewelryHandler extends AbstractJewelryHandler {
             return true;
         }
         Optional<Holder.Reference<JewelryMaterialDef>> material = JewelryDataIndex.material(identity().material());
-        return material.isPresent()
-                && JewelryRules.allowsGem(material.get(), gem.get())
-                && preset().map(p -> p.value().acceptsGems()).orElse(true);
+        return material.isPresent() && JewelryRules.allowsGem(material.get(), gem.get(), preset());
+    }
+
+    /** false when a preset says {@code "accepts_gems": false}: no gem may be set or removed with the anvil */
+    public boolean presetAcceptsGems() {
+        return preset().map(p -> p.value().acceptsGems()).orElse(true);
+    }
+
+    /** false when a preset says {@code "extractable": false}: the pliers can't take its gem out */
+    public boolean gemExtractable() {
+        return preset().map(p -> p.value().extractable()).orElse(true);
     }
 
     /** the 1.x base name (castle_ring etc.) is the preset's path */

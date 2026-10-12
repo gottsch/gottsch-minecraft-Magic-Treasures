@@ -29,6 +29,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
+import mod.gottsch.neo.magic_treasures.core.set.JewelrySet;
 import mod.gottsch.neo.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
@@ -89,7 +90,7 @@ public class MagicTreasuresClientEvents {
 	 */
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event) {
-		JewelrySets.get(event.getItemStack().getItem()).ifPresent(set -> {
+		JewelrySets.get(event.getItemStack()).ifPresent(set -> {
 			Player player = event.getEntity();
 			List<ItemStack> worn = player == null ? List.of() : SetEquipment.getWornItems(player);
 			int count = set.countWorn(worn);
@@ -98,9 +99,9 @@ public class MagicTreasuresClientEvents {
 			lines.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
 			lines.add(Component.translatable(LangUtil.tooltip("set.header"), set.getName(), count, set.size())
 					.withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
-			for (Item piece : set.getPieces()) {
-				boolean isWorn = worn.stream().anyMatch(stack -> stack.is(piece));
-				lines.add(Component.literal(LangUtil.INDENT2).append(piece.getDescription())
+			for (JewelrySet.Piece piece : set.getPieces()) {
+				boolean isWorn = worn.stream().anyMatch(piece::matches);
+				lines.add(Component.literal(LangUtil.INDENT2).append(piece.name())
 						.withStyle(isWorn ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
 			}
 			for (int pieces : set.getTiers().keySet()) {

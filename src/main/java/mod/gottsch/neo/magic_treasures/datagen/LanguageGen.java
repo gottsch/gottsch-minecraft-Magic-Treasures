@@ -182,6 +182,8 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("gemstone.cooldown_factor"), "Cooldown Time: %s");
         add(LangUtil.tooltip("gemstone.effect_amount_factor"), "Effect Amount: %s");
         add(LangUtil.tooltip("gemstone.range_factor"), "Range: %s");
+        add(LangUtil.tooltip("gemstone.duration_factor"), "Duration: %s");
+        add(LangUtil.tooltip("gemstone.affixes_to"), "Only fits: %s");
 
         // gemstone tier names
 //        add(LangUtil.tooltip("gemstone.tier.tier1.name"), "Tier 1");
@@ -217,6 +219,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.modifier.cost"), "Cost %s");
         add(LangUtil.tooltip("jewelry.modifier.cooldown"), "Cooldown %s");
         add(LangUtil.tooltip("jewelry.modifier.effect"), "Effect %s");
+        add(LangUtil.tooltip("jewelry.modifier.duration"), "Duration %s");
         add(LangUtil.tooltip("jewelry.modifier.range"), "Range %s");
         add(LangUtil.tooltip("spell.stat.absorb"), "%s absorb");
         add(LangUtil.tooltip("spell.stat.armor"), "%s armor");

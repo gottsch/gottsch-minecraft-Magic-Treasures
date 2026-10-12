@@ -9,11 +9,17 @@ import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryRules;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryStats;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.item.TooltipFlag;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -54,6 +60,21 @@ public class GenericJewelry extends Jewelry {
         return state != null && !state.spells().isEmpty();
     }
 
+    /** a preset with vanishing_curse gets Curse of Vanishing when first carried (as 1.x jewelry, see Jewelry) */
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (level.isClientSide()) {
+            return;
+        }
+        JewelryIdentity identity = stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
+        if (identity != null && identity.preset().flatMap(JewelryDataIndex::preset).map(p -> p.value().vanishingCurse()).orElse(false)) {
+            Holder<Enchantment> curse = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.VANISHING_CURSE);
+            if (stack.getEnchantments().getLevel(curse) == 0) {
+                stack.enchant(curse, 1);
+            }
+        }
+    }
+
     @Override
     public boolean acceptsAffixer(ItemStack affixer) {
         // the generic handler decides from the identity and the rules
@@ -76,7 +97,9 @@ public class GenericJewelry extends Jewelry {
         }
         Optional<String> presetName = identity.preset().flatMap(JewelryDataIndex::preset).flatMap(p -> p.value().name());
         if (presetName.isPresent()) {
-            return Component.translatable(presetName.get()).withStyle(ChatFormatting.YELLOW);
+            // a datapack can ship without its resource pack's lang file: read the preset's path, not the raw key
+            return Component.translatableWithFallback(presetName.get(), words(identity.preset().get().getPath()))
+                    .withStyle(ChatFormatting.YELLOW);
         }
         return name(identity);
     }
@@ -112,8 +135,13 @@ public class GenericJewelry extends Jewelry {
         String affix = JewelryDataIndex.style(identity.style()).map(s -> s.value().affix(identity.style()))
                 .orElse(identity.style().getPath());
         String key = "item." + MagicTreasures.MOD_ID + "." + (affix.isEmpty() ? "" : affix + "_")
-                + identity.material().getPath() + "_" + identity.gem().map(g -> g.getPath() + "_").orElse("") + identity.type();
+                + identity.material().getPath() + "_" + identity.gem().map(g -> g.getPath() + "_").orElse("") + baseName(identity);
         return Language.getInstance().has(key) ? Optional.of(key) : Optional.empty();
+    }
+
+    /** the type, or a preset's base_name (castle_ring, hawk_ring), as the last part of 1.x names and textures */
+    public static String baseName(JewelryIdentity identity) {
+        return identity.preset().flatMap(JewelryDataIndex::preset).flatMap(p -> p.value().baseName()).orElse(identity.type());
     }
 
     private static Component styleName(ResourceLocation id) {
@@ -168,9 +196,11 @@ public class GenericJewelry extends Jewelry {
         return presetLore(stack).isPresent();
     }
 
+    /** the preset's lore key, if the current language has it (a lore line with no translation is left out) */
     private static Optional<String> presetLore(ItemStack stack) {
         JewelryIdentity identity = stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
         return identity == null ? Optional.empty()
-                : identity.preset().flatMap(JewelryDataIndex::preset).flatMap(p -> p.value().lore());
+                : identity.preset().flatMap(JewelryDataIndex::preset).flatMap(p -> p.value().lore())
+                        .filter(key -> Language.getInstance().has(key));
     }
 }

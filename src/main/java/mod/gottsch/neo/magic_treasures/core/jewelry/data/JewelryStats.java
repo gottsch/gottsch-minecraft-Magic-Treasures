@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The computed stats of a generic piece of jewelry: everything that follows from its identity, nothing that changes
  * in play. Uses the 1.x formulas ({@code JewelryHandler.Builder.build()} and the jewelry rarity tags), with the
- * size's numbers now coming from the style.
+ * size's numbers now coming from the style. A preset's {@code overrides} replace computed values.
  * <p>
  * An unknown or disabled material or style gives {@link #NONE}: the stack keeps its ids and shows as unknown, but
  * can't cast. An unknown or disabled gem is ignored ({@code gemKnown} false): the piece works as if it had no gem.
@@ -63,6 +63,18 @@ public record JewelryStats(
         int maxRepairs = material.repairs() + style.repairs();
         int maxRecharges = material.recharges() + tier.map(StoneTierDef::recharges).orElse(0);
         SpellFactors factors = tier.map(t -> multiply(material.factors(), t.factors())).orElse(material.factors());
+
+        // a preset's overrides replace computed values, as the 1.x builder's explicit values did
+        Optional<PresetOverrides> overrides = identity.preset().flatMap(JewelryDataIndex::preset).map(p -> p.value().overrides());
+        if (overrides.isPresent()) {
+            PresetOverrides o = overrides.get();
+            maxUses = o.infinite() ? Integer.MAX_VALUE : o.maxUses().orElse(maxUses);
+            maxMana = o.maxMana().orElse(maxMana);
+            maxLevel = o.maxLevel().orElse(maxLevel);
+            maxRepairs = o.maxRepairs().orElse(maxRepairs);
+            maxRecharges = o.maxRecharges().orElse(maxRecharges);
+            factors = o.factors().apply(factors);
+        }
 
         return new JewelryStats(true, identity.gem().isEmpty() || gem.isPresent(), maxUses, maxLevel, maxMana,
                 maxRepairs, maxRecharges, factors, rarity(identity, material, style, gem));

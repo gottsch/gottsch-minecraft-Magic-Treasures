@@ -25,6 +25,8 @@ public final class MagicTreasuresRegistries {
     public static final class Tags {
         /** Metal materials; a gem can say {@code "affixes_to": "#magictreasures:metals"}. */
         public static final TagKey<JewelryMaterialDef> METALS = TagKey.create(JEWELRY_MATERIAL, id("metals"));
+        /** the gems a castle ring takes: rubies and sapphires (MT's and Treasure2's) */
+        public static final TagKey<GemstoneDef> CASTLE_RING_GEMS = TagKey.create(GEMSTONE, id("castle_ring_gems"));
 
         private Tags() {}
     }

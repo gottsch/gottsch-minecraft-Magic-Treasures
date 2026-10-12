@@ -151,6 +151,11 @@ public final class JewelryDataIndex {
         return Optional.ofNullable(snapshot.gemstonesByItem().get(item));
     }
 
+    /** whether the stack is an enabled gemstone's item (the 2.0 test; 1.x jewelry still uses the all_stones tag) */
+    public static boolean isGemstone(net.minecraft.world.item.ItemStack stack) {
+        return !stack.isEmpty() && gemstone(stack.getItem()).isPresent();
+    }
+
     public static Optional<Holder.Reference<JewelryPresetDef>> preset(ResourceLocation id) {
         return Optional.ofNullable(snapshot.presets().get(id));
     }

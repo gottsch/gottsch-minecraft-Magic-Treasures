@@ -18,6 +18,7 @@
 package mod.gottsch.neo.magic_treasures.core.item.generator;
 
 
+import mod.gottsch.neo.magic_treasures.core.capability.GenericJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
@@ -205,8 +206,11 @@ public class JewelryGenerator {
     }
 
     /*
-     * 2.0 generic jewelry. A minimal stand-in until M5 reworks the anvil: the gem is set on the identity, and the
-     * max values follow from it. As in 1.x, the gem's extra mana and recharges are added to the current values.
+     * 2.0 generic jewelry: the result is a copy of the input, and the gem is set on (or cleared from) its identity.
+     * The max values follow from the identity, so there is no item to look up by name. Adding is allowed when the
+     * stone is an enabled gemstone, the rules allow it on this material (the material's accepts_gems and gems limit,
+     * the gem's affixes_to) and no preset forbids gems. As in 1.x, the gem's extra mana and recharges are added to
+     * the current values; on removal the current values are capped at the new max.
      */
     private ItemStack addGenericGem(ItemStack jewelry, ItemStack stone) {
         IJewelryHandler source = JewelryHandler.get(jewelry).orElse(null);
@@ -225,6 +229,9 @@ public class JewelryGenerator {
     }
 
     private Optional<ItemStack> removeGenericGem(ItemStack jewelry) {
+        if (JewelryHandler.get(jewelry).filter(h -> h instanceof GenericJewelryHandler g && g.presetAcceptsGems()).isEmpty()) {
+            return Optional.empty();
+        }
         ItemStack result = jewelry.copy();
         Optional<IJewelryHandler> dest = JewelryHandler.get(result);
         dest.ifPresent(handler -> {

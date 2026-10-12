@@ -35,6 +35,10 @@ public class MagicTreasuresRecipes {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<GemExtractionRecipe>> GEM_EXTRACTION =
             SERIALIZERS.register("gem_extraction", () -> new SimpleCraftingRecipeSerializer<>(GemExtractionRecipe::new));
 
+    /** 2.0: recipe scroll + 4 of a material's ingredient -> generic jewelry */
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<JewelryRecipe>> JEWELRY =
+            SERIALIZERS.register("jewelry", () -> new SimpleCraftingRecipeSerializer<>(JewelryRecipe::new));
+
     public static void register(IEventBus bus) {
         SERIALIZERS.register(bus);
     }

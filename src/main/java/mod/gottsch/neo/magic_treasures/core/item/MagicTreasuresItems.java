@@ -83,9 +83,9 @@ public class MagicTreasuresItems {
 	}
 
 	// recipe scrolls
-	public static DeferredItem<Item> RING_RECIPE = Registration.ITEMS.register("ring_recipe", () -> new JewelryRecipeScroll(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
-	public static DeferredItem<Item> NECKLACE_RECIPE = Registration.ITEMS.register("necklace_recipe", () -> new JewelryRecipeScroll(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
-	public static DeferredItem<Item> BRACELET_RECIPE = Registration.ITEMS.register("bracelet_recipe", () -> new JewelryRecipeScroll(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static DeferredItem<Item> RING_RECIPE = Registration.ITEMS.register("ring_recipe", () -> new JewelryRecipeScroll("ring", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static DeferredItem<Item> NECKLACE_RECIPE = Registration.ITEMS.register("necklace_recipe", () -> new JewelryRecipeScroll("necklace", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static DeferredItem<Item> BRACELET_RECIPE = Registration.ITEMS.register("bracelet_recipe", () -> new JewelryRecipeScroll("bracelet", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 //	public static DeferredItem<Item> BELT_RECIPE = Registration.ITEMS.register("belt_recipe", () -> new JewelryRecipeScroll(magic_treasures_PROPS_SUPPLIER.get()));
 
 	// 2.0 generic jewelry: one item per type; what the piece is lives in the jewelry_identity component
@@ -93,6 +93,13 @@ public class MagicTreasuresItems {
 	public static DeferredItem<Item> NECKLACE = Registration.ITEMS.register("necklace", () -> new GenericJewelry("necklace", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 	public static DeferredItem<Item> BRACELET = Registration.ITEMS.register("bracelet", () -> new GenericJewelry("bracelet", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 	public static final List<DeferredItem<Item>> GENERIC_JEWELRY = List.of(RING, NECKLACE, BRACELET);
+
+	/** the 1.x named pieces; 2.0 has a preset of the same id for each (M8) */
+	public static List<DeferredItem<Item>> namedJewelry() {
+		return List.of(SILBROS_RING_OF_VITALITY, STRONGMANS_BRACERS, SILBROS_ACORN, PEASANTS_FORTUNE, AMULET_OF_DEFENCE,
+				MALDRITCHS_FIRST_AMULET, AQUA_RING, JOURNEYMANS_BANDS, MEDICS_TOKEN, ADEPHAGIAS_BOUNTY, SALANDAARS_WARD,
+				ANGELS_RING, RING_OF_FORTITUDE, RING_LIFE_DEATH, EYE_OF_THE_PHOENIX);
+	}
 
 	// recharge scroll
 	public static DeferredItem<Item> RECHARGE_SCROLL =Registration.ITEMS.register("recharge_scroll", () -> new Item(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
@@ -399,7 +406,7 @@ public class MagicTreasuresItems {
 //	});
 
 	// TODO move to MagicTreasuresAffixes or Jewelry class
-    static Predicate<ItemStack> castleRingAffixer = p -> {
+    public static final Predicate<ItemStack> castleRingAffixer = p -> {
 		return p.is(MagicTreasuresTags.Items.CASTLE_RING_RUBY)
 				| p.is(MagicTreasuresTags.Items.CASTLE_RING_SAPPHIRE);
 	};

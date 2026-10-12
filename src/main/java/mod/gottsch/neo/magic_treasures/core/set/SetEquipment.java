@@ -151,7 +151,7 @@ public final class SetEquipment {
 
     /** How many worn armor pieces (and shields) of {@code jewelry}'s set resonate with it; 0 if it's in no set. */
     public static int countResonating(Player player, ItemStack jewelry) {
-        Optional<JewelrySet> set = JewelrySets.get(jewelry.getItem());
+        Optional<JewelrySet> set = JewelrySets.get(jewelry);
         if (set.isEmpty()) {
             return 0;
         }

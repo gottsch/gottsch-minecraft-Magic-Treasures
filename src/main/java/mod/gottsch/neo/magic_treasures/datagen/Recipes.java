@@ -21,6 +21,7 @@ import net.minecraft.data.recipes.SpecialRecipeBuilder;
 import net.minecraft.world.item.Items;
 import mod.gottsch.neo.magic_treasures.core.recipe.MagicTreasuresRecipes;
 import mod.gottsch.neo.magic_treasures.core.recipe.GemExtractionRecipe;
+import mod.gottsch.neo.magic_treasures.core.recipe.JewelryRecipe;
 
 /**
  * 
@@ -50,7 +51,10 @@ public class Recipes extends RecipeProvider {
 			// jewelry + pliers -> the jewelry's gem
 			SpecialRecipeBuilder.special(GemExtractionRecipe::new).save(recipe, MagicTreasures.MOD_ID + ":gem_extraction");
 
-			// recipe scrolls
+			// 2.0: recipe scroll + 4 of any material's ingredient -> generic jewelry (materials from the registry)
+			SpecialRecipeBuilder.special(JewelryRecipe::new).save(recipe, MagicTreasures.MOD_ID + ":jewelry");
+
+			// recipe scrolls -> 1.x items. TODO M9: delete; until then these win over the generic recipe (see JewelryRecipe)
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("iron_ring")).findFirst().get().get())
 					.requires(MagicTreasuresItems.RING_RECIPE.get())
 					.requires(Ingredient.of(Tags.Items.INGOTS_IRON), 4)

@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures.core.event;
 
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
@@ -58,7 +59,7 @@ public class AdvancementEventHandler {
             return;
         }
         String action = null;
-        if (!handler.get().hasStone() && right.is(MagicTreasuresTags.Items.STONES)) {
+        if (!handler.get().hasStone() && (right.is(MagicTreasuresTags.Items.STONES) || JewelryDataIndex.isGemstone(right))) {
             action = MagicTreasuresCriteria.ADD_GEM;
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)) {
             return;
@@ -75,7 +76,8 @@ public class AdvancementEventHandler {
     /** A gem was crafted out of jewelry with the pliers ({@code GemExtractionRecipe}). */
     @SubscribeEvent
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player) || !event.getCrafting().is(MagicTreasuresTags.Items.STONES)) {
+        if (!(event.getEntity() instanceof ServerPlayer player)
+                || !(event.getCrafting().is(MagicTreasuresTags.Items.STONES) || JewelryDataIndex.isGemstone(event.getCrafting()))) {
             return;
         }
         Container container = event.getInventory();

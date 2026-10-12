@@ -6,7 +6,9 @@ import com.google.gson.JsonParseException;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryPresetDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryRules;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryStyleDef;
 import net.minecraft.client.Minecraft;
@@ -146,9 +148,15 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
             ResourceLocation material = identity.material();
             List<StyleArt> chain = styleChain(identity.style());
 
-            // 1. preset art
+            // 1. preset art: its texture, else <ns>:item/jewelry/<path>. A preset with a base_name (castle_ring)
+            // has art per gem, which rule 2 finds; its path alone would show the gemless art.
             if (identity.preset().isPresent()) {
-                TextureAtlasSprite sprite = find.apply(jewelryTexture(identity.preset().get().getNamespace(), identity.preset().get().getPath()));
+                ResourceLocation preset = identity.preset().get();
+                Optional<JewelryPresetDef> def = JewelryDataIndex.preset(preset).map(Holder::value);
+                Optional<ResourceLocation> texture = def.flatMap(JewelryPresetDef::texture).or(() ->
+                        def.flatMap(JewelryPresetDef::baseName).isPresent() ? Optional.empty()
+                                : Optional.of(jewelryTexture(preset.getNamespace(), preset.getPath())));
+                TextureAtlasSprite sprite = texture.map(find).orElse(null);
                 if (sprite != null) {
                     return List.of(new Layer(sprite, LAYER_BASE));
                 }
@@ -157,7 +165,7 @@ public class JewelryModel implements IUnbakedGeometry<JewelryModel> {
             // 2. full-combination art, as named by the 1.x JewelryBuilder
             String affix = chain.get(0).affix();
             String combo = (affix.isEmpty() ? "" : affix + "_") + material.getPath() + "_"
-                    + identity.gem().map(gem -> gem.getPath() + "_").orElse("") + type;
+                    + identity.gem().map(gem -> gem.getPath() + "_").orElse("") + GenericJewelry.baseName(identity);
             TextureAtlasSprite full = find.apply(jewelryTexture(material.getNamespace(), combo));
             if (full != null) {
                 return List.of(new Layer(full, LAYER_BASE));

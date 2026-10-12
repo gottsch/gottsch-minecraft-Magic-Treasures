@@ -18,10 +18,14 @@
 package mod.gottsch.neo.magic_treasures.core.set;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.component.JewelryIdentity;
+import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Supplier;
@@ -43,10 +48,47 @@ import java.util.function.Supplier;
  */
 public class JewelrySet {
     private final ResourceLocation id;
-    private final List<Supplier<? extends Item>> pieces;
+    private final List<Piece> pieces;
     private final NavigableMap<Integer, SetBonus> tiers;
 
-    private JewelrySet(ResourceLocation id, List<Supplier<? extends Item>> pieces, NavigableMap<Integer, SetBonus> tiers) {
+    /**
+     * One piece of a set: an item (1.x jewelry, the Rootstaff, the Barkskin Vest), a 2.0 jewelry preset (matched by
+     * the stack's {@code jewelry_identity} preset id), or both: a named 1.x piece also matches its preset (same id),
+     * so old and converted pieces count alike until M9.
+     */
+    public record Piece(Optional<Supplier<? extends Item>> item, Optional<ResourceLocation> preset) {
+
+        public static Piece of(Supplier<? extends Item> item) {
+            return new Piece(Optional.of(item), Optional.empty());
+        }
+
+        public static Piece preset(ResourceLocation preset) {
+            return new Piece(Optional.empty(), Optional.of(preset));
+        }
+
+        public boolean matches(ItemStack stack) {
+            if (stack.isEmpty()) {
+                return false;
+            }
+            if (item.isPresent() && stack.is(item.get().get())) {
+                return true;
+            }
+            JewelryIdentity identity = stack.get(MagicTreasuresDataComponents.JEWELRY_IDENTITY.get());
+            return preset.isPresent() && identity != null && identity.preset().equals(preset);
+        }
+
+        /** the item's name, or the preset's (its path, until its data is loaded) */
+        public Component name() {
+            if (item.isPresent()) {
+                return item.get().get().getDescription();
+            }
+            ResourceLocation id = preset.orElseThrow();
+            return JewelryDataIndex.preset(id).flatMap(p -> p.value().name()).<Component>map(Component::translatable)
+                    .orElseGet(() -> Component.literal(id.getPath()));
+        }
+    }
+
+    private JewelrySet(ResourceLocation id, List<Piece> pieces, NavigableMap<Integer, SetBonus> tiers) {
         this.id = id;
         this.pieces = List.copyOf(pieces);
         this.tiers = Collections.unmodifiableNavigableMap(tiers);
@@ -56,11 +98,20 @@ public class JewelrySet {
         return id;
     }
 
-    /** The pieces' items. Suppliers, because sets are declared before items finish registering. */
-    public List<Item> getPieces() {
+    public List<Piece> getPieces() {
+        return pieces;
+    }
+
+    /** The item pieces' items. Suppliers, because sets are declared before items finish registering. */
+    public List<Item> getItems() {
         List<Item> items = new ArrayList<>(pieces.size());
-        pieces.forEach(piece -> items.add(piece.get()));
+        pieces.forEach(piece -> piece.item().ifPresent(item -> items.add(item.get())));
         return items;
+    }
+
+    /** the preset pieces' ids */
+    public List<ResourceLocation> getPresets() {
+        return pieces.stream().flatMap(piece -> piece.preset().stream()).toList();
     }
 
     public int size() {
@@ -72,16 +123,24 @@ public class JewelrySet {
         return tiers;
     }
 
+    /** whether an item piece is this item (armor and weapons; presets aren't items) */
     public boolean contains(Item item) {
-        return pieces.stream().anyMatch(piece -> piece.get() == item);
+        return pieces.stream().anyMatch(piece -> piece.item().map(s -> s.get() == item).orElse(false));
+    }
+
+    /** whether any piece, item or preset, matches this stack */
+    public boolean contains(ItemStack stack) {
+        return pieces.stream().anyMatch(piece -> piece.matches(stack));
     }
 
     /** How many of this set's pieces are among {@code worn}; each piece counts once. */
     public int countWorn(Collection<ItemStack> worn) {
-        Set<Item> found = new HashSet<>();
+        Set<Piece> found = new HashSet<>();
         for (ItemStack stack : worn) {
-            if (!stack.isEmpty() && contains(stack.getItem())) {
-                found.add(stack.getItem());
+            for (Piece piece : pieces) {
+                if (piece.matches(stack)) {
+                    found.add(piece);
+                }
             }
         }
         return found.size();
@@ -106,7 +165,7 @@ public class JewelrySet {
 
     public static class Builder {
         private final ResourceLocation id;
-        private final List<Supplier<? extends Item>> pieces = new ArrayList<>();
+        private final List<Piece> pieces = new ArrayList<>();
         private final TreeMap<Integer, SetBonus> tiers = new TreeMap<>();
 
         private Builder(ResourceLocation id) {
@@ -114,7 +173,19 @@ public class JewelrySet {
         }
 
         public Builder piece(Supplier<? extends Item> item) {
-            pieces.add(item);
+            pieces.add(Piece.of(item));
+            return this;
+        }
+
+        /** a registered item that is also a preset of the same id (the named jewelry): either one counts */
+        public Builder piece(DeferredItem<? extends Item> item) {
+            pieces.add(new Piece(Optional.of(item), Optional.of(item.getId())));
+            return this;
+        }
+
+        /** a 2.0 jewelry preset, e.g. magictreasures:angels_ring (M8) */
+        public Builder piece(ResourceLocation preset) {
+            pieces.add(Piece.preset(preset));
             return this;
         }
 

@@ -17,6 +17,8 @@
  */
 package mod.gottsch.neo.magic_treasures.core.event;
 
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.generator.JewelryGenerator;
@@ -56,8 +58,11 @@ public class AnvilEventHandler {
 				event.setMaterialCost(1);
 				event.setCost(1);
 
+				// 2.0 generic jewelry knows gems from the gemstone registry; 1.x jewelry from the all_stones tag
+				boolean generic = leftStack.getItem() instanceof GenericJewelry;
+				boolean gem = generic ? JewelryDataIndex.isGemstone(rightStack) : rightStack.is(MagicTreasuresTags.Items.STONES);
 				// add a stone to jewelry
-				if (!handler.hasStone() && rightStack.is(MagicTreasuresTags.Items.STONES)) {
+				if (!handler.hasStone() && gem) {
 					/*
 					 TODO need a better way of constructing a new jewelry item than using its registry name.
 					 When using items from different mods, following the naming structure may not work.
@@ -85,7 +90,8 @@ public class AnvilEventHandler {
 					resultStack.ifPresent(resultOutStack::set);
 				}
 				// repair jewelry
-				else if (handler.getRepairs() > 0 && rightStack.is(MagicTreasuresTags.Items.JEWELRY)) {
+				else if (handler.getRepairs() > 0 && (rightStack.is(MagicTreasuresTags.Items.JEWELRY)
+						|| (rightStack.getItem() instanceof GenericJewelry && JewelryHandler.get(rightStack).isPresent()))) {
 					Optional<ItemStack> resultStack = generator.repair(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
 				}

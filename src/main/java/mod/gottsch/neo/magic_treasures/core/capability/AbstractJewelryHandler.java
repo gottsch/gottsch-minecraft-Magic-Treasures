@@ -81,6 +81,7 @@ public abstract class AbstractJewelryHandler implements IJewelryHandler {
         addModifier(modifiers, "cost", getSpellCostFactor());
         addModifier(modifiers, "cooldown", getSpellCooldownFactor());
         addModifier(modifiers, "effect", getSpellEffectAmountFactor());
+        addModifier(modifiers, "duration", getSpellDurationFactor());
         addModifier(modifiers, "range", getSpellRangeFactor());
         if (!modifiers.isEmpty()) {
             tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));

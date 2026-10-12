@@ -174,7 +174,65 @@ public final class LegacyDataCheck {
         check(problems, "combination rules", "combinations of the 1.x materials and gems", 387, allowed);
 
         checkStats(problems);
+        checkPresets(problems);
         return problems;
+    }
+
+    /**
+     * M8 checkpoint: every 1.x named, hawk and castle item, as the preset a 2.0 stack would carry (the castle ring is
+     * one preset whose gem varies), must compute the item's own 1.x stats, rarity and spells.
+     */
+    private static void checkPresets(List<String> problems) {
+        List<DeferredItem<Item>> items = new ArrayList<>(MagicTreasuresItems.namedJewelry());
+        for (DeferredItem<Item> deferred : MagicTreasuresItems.STANDARD_JEWELRY) {
+            JewelryData data = JewelryHandler.get(new ItemStack(deferred.get())).map(h -> h.getStack().get(MagicTreasuresDataComponents.JEWELRY.get())).orElse(null);
+            if (data != null && data.baseName().isPresent()) {
+                items.add(deferred);
+            }
+        }
+        int compared = 0;
+        for (DeferredItem<Item> deferred : items) {
+            ItemStack stack = new ItemStack(deferred.get());
+            if (JewelryHandler.get(stack).isEmpty()) {
+                continue;
+            }
+            JewelryData old = stack.get(MagicTreasuresDataComponents.JEWELRY.get());
+            String what = "preset of " + deferred.getId();
+            // the castle family; Ring of Fortitude also has base name castle_ring but is a named piece of its own
+            boolean castle = !MagicTreasuresItems.namedJewelry().contains(deferred)
+                    && old.baseName().map("castle_ring"::equals).orElse(false);
+            ResourceLocation presetId = castle ? mt("silver_castle_ring") : deferred.getId();
+            Optional<Holder.Reference<JewelryPresetDef>> preset = JewelryDataIndex.preset(presetId);
+            if (preset.isEmpty()) {
+                problems.add(what + ": preset " + presetId + " missing");
+                continue;
+            }
+            JewelryPresetDef def = preset.get().value();
+            Optional<ResourceLocation> gem = def.gem();
+            if (castle && old.stone().isPresent() && !old.stone().get().equals(BuiltInRegistries.ITEM.getKey(Items.AIR))) {
+                gem = JewelryDataIndex.gemstone(BuiltInRegistries.ITEM.get(old.stone().get())).map(h -> h.key().location());
+            }
+            JewelryIdentity identity = new JewelryIdentity(def.type(), def.material(), gem, def.style(), Optional.of(presetId));
+            JewelryStats stats = JewelryStats.compute(identity);
+            JewelryData.Stats oldStats = old.stats();
+            JewelryData.Factors oldFactors = old.factors();
+            check(problems, what, "known", true, stats.known());
+            check(problems, what, "max_uses", oldStats.maxUses(), stats.maxUses());
+            check(problems, what, "max_level", oldStats.maxLevel(), stats.maxLevel());
+            check(problems, what, "max_mana", oldStats.maxMana(), stats.maxMana());
+            check(problems, what, "max_repairs", oldStats.maxRepairs(), stats.maxRepairs());
+            check(problems, what, "max_recharges", oldStats.maxRecharges(), stats.maxRecharges());
+            check(problems, what, "factors", new SpellFactors(oldFactors.spellCost(), oldFactors.spellEffectAmount(),
+                    oldFactors.spellDuration(), oldFactors.spellCooldown(), oldFactors.spellRange()), stats.factors());
+            check(problems, what, "spells", old.spells().stream().map(s -> s.name()).toList(), def.spells());
+            Holder<Item> item = deferred.get().builtInRegistryHolder();
+            Optional<MagicTreasuresRarity> tagRarity = JEWELRY_RARITY_TAGS.entrySet().stream()
+                    .filter(e -> item.is(e.getValue())).map(Map.Entry::getKey).findFirst();
+            check(problems, what, "rarity", tagRarity, Optional.of(stats.rarity()));
+            compared++;
+        }
+        // 15 named + 13 hawk + 3 castle
+        check(problems, "presets", "1.x named, hawk and castle items compared", 31, compared);
     }
 
     private static final Map<MagicTreasuresRarity, TagKey<Item>> JEWELRY_RARITY_TAGS = Map.of(
