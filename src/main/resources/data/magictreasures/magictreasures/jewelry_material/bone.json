@@ -10,5 +10,10 @@
   "mana": 50,
   "max_level": 7,
   "rarity": "scarce",
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords"
+  ],
   "uses": 200
 }

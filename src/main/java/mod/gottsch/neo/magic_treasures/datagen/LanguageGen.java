@@ -118,6 +118,7 @@ public class LanguageGen extends LanguageProvider {
         add(GenericJewelry.NAME_KEY + ".gem", "%2$s %3$s %4$s");
         add(GenericJewelry.NAME_KEY + ".style", "%1$s %2$s %4$s");
         add(GenericJewelry.NAME_KEY + ".style.gem", "%1$s %2$s %3$s %4$s");
+        add("jewelry_style.magictreasures.fine", "Fine");
         add("jewelry_style.magictreasures.great", "Great");
         add("jewelry_style.magictreasures.lords", "Lords");
         for (String material : List.of("wood", "iron", "copper", "silver", "gold", "bone", "blood", "shadow", "atium")) {

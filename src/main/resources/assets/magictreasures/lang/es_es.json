@@ -550,6 +550,7 @@
   "jewelry.magictreasures.name.gem": "%4$s de %2$s con %3$s",
   "jewelry.magictreasures.name.style": "%1$s %4$s de %2$s",
   "jewelry.magictreasures.name.style.gem": "%1$s %4$s de %2$s con %3$s",
+  "jewelry_style.magictreasures.fine": "Fino",
   "jewelry_style.magictreasures.great": "Gran",
   "jewelry_style.magictreasures.lords": "Señorial",
   "material.magictreasures.atium": "atium",

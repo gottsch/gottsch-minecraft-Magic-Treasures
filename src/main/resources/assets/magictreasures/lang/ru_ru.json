@@ -550,6 +550,7 @@
   "jewelry.magictreasures.name.gem": "%4$s из %2$s (%3$s)",
   "jewelry.magictreasures.name.style": "%4$s из %2$s [%1$s]",
   "jewelry.magictreasures.name.style.gem": "%4$s из %2$s (%3$s) [%1$s]",
+  "jewelry_style.magictreasures.fine": "изящное",
   "jewelry_style.magictreasures.great": "великое",
   "jewelry_style.magictreasures.lords": "лордское",
   "material.magictreasures.atium": "атиума",

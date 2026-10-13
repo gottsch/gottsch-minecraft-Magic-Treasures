@@ -1,5 +1,5 @@
 {
-  "color": "#2E2B36",
+  "color": "#4A4263",
   "factors": {
     "cost": 1.1,
     "effect": 1.5
@@ -8,5 +8,10 @@
   "max_level": 9,
   "repairs": 3,
   "spells": 2,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords"
+  ],
   "uses": 275
 }
