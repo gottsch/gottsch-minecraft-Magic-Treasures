@@ -10,5 +10,11 @@
   "max_level": 3,
   "rarity": "common",
   "repairs": 3,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords",
+    "magictreasures:fine"
+  ],
   "uses": 200
 }

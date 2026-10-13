@@ -11,5 +11,11 @@
   "max_level": 10,
   "repairs": 3,
   "spells": 2,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords",
+    "magictreasures:fine"
+  ],
   "uses": 325
 }

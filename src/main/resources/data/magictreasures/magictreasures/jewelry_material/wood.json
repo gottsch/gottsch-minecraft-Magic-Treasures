@@ -3,6 +3,9 @@
   "mana": 20,
   "max_level": 2,
   "rarity": "common",
-  "styles": "magictreasures:regular",
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:carved"
+  ],
   "uses": 40
 }

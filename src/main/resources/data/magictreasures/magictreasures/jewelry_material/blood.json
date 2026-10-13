@@ -6,5 +6,11 @@
   "mana": 100,
   "max_level": 8,
   "repairs": 2,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords",
+    "magictreasures:fine"
+  ],
   "uses": 250
 }
