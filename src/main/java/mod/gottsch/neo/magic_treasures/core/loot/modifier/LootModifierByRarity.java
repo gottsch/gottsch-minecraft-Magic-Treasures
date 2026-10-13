@@ -28,6 +28,9 @@ import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.neo.magic_treasures.core.item.set.SetArmor;
+import mod.gottsch.neo.magic_treasures.core.item.set.SetShield;
+import mod.gottsch.neo.magic_treasures.core.item.set.SiphonWeapon;
 import mod.gottsch.neo.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
@@ -129,10 +132,12 @@ public class LootModifierByRarity extends LootModifier {
 			if (rarity.getCode() >= MagicTreasuresRarity.RARE.getCode()) {
 				lootList.add(new ItemStack(MagicTreasuresItems.SKULL_BELT.get()));
 			}
-			// set weapons and armor
+			// set weapons, armor and shields: every one in a set (jewelry and mana wells have their own rules above)
 			if (rarity.getCode() >= MagicTreasuresRarity.UNCOMMON.getCode()) {
-				lootList.add(new ItemStack(MagicTreasuresItems.ROOTSTAFF.get()));
-				lootList.add(new ItemStack(MagicTreasuresItems.BARKSKIN_VEST.get()));
+				JewelrySets.getAll().stream()
+						.flatMap(set -> set.getItems().stream())
+						.filter(item -> item instanceof SiphonWeapon || item instanceof SetArmor || item instanceof SetShield)
+						.forEach(item -> lootList.add(new ItemStack(item)));
 			}
 			// grab random loot from the loot list (without replacement)
 			for (int index = 0; index < count && !lootList.isEmpty(); index++) {

@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item.generator;
 
+import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
@@ -103,6 +104,12 @@ public class JewelryGenerator {
         ItemStack destStack = jewelry.copy();
 
         IJewelryHandler handler = JewelryHandler.get(destStack).orElseThrow(IllegalStateException::new);
+        // Tempered (Sal'andaar's full set): this repair uses the stamp instead of a repair
+        if (destStack.has(MagicTreasuresDataComponents.TEMPERED.get())) {
+            handler.setUses(handler.getMaxUses());
+            destStack.remove(MagicTreasuresDataComponents.TEMPERED.get());
+            return Optional.of(destStack);
+        }
         if (handler.getRepairs() > 0) {
             handler.setUses(handler.getMaxUses());
             handler.setRepairs(Math.max(0, handler.getRepairs() - 1));

@@ -46,7 +46,13 @@ public final class JewelrySets {
     public static final JewelrySet SALANDAARS_ANVILWORK = register(JewelrySet.builder("salandaars_anvilwork")
             .piece(preset("salandaars_ward"))
             .piece(preset("ring_of_fortitude"))
+            .piece(preset("smiths_cuff"))
+            .piece(MagicTreasuresItems.STONEMARK_HAMMER)
+            .piece(MagicTreasuresItems.SMITHS_HELM)
+            .piece(MagicTreasuresItems.ANVIL_SHIELD)
             .bonus(2, SpellStatBonus.multiply(SpellStat.COST, 0.9, WARD_SPELLS))
+            .bonus(4, SpellStatBonus.multiply(SpellStat.EFFECT, 1.15, WARD_SPELLS))
+            .bonus(6, new TemperedBonus(() -> JewelrySets.SALANDAARS_ANVILWORK))
             .build());
 
     public static final JewelrySet SILBROS_GROVE = register(JewelrySet.builder("silbros_grove")

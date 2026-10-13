@@ -138,7 +138,7 @@ public final class SetEquipment {
             return value;
         }
         for (SetBonus bonus : getActiveBonuses(player)) {
-            value = bonus.modify(stat, spell, value);
+            value = bonus.modify(player, stat, spell, value);
         }
         if (stat == SpellStat.EFFECT && jewelry != null) {
             int resonating = countResonating(player, jewelry);
@@ -167,6 +167,19 @@ public final class SetEquipment {
     /** Set armor and shields resonate; jewelry and weapons don't. */
     public static boolean isResonant(Item item) {
         return item instanceof ArmorItem || item instanceof ShieldItem;
+    }
+
+    /**
+     * Whether a bonus of {@code type} is on for the player: for bonuses other systems check (death, a drain), which
+     * are plain marker classes. Uses the per-tick cache, so it's cheap to ask often.
+     */
+    public static boolean isActive(Player player, Class<? extends SetBonus> type) {
+        for (SetBonus bonus : getActiveBonuses(player)) {
+            if (bonus.includes(type)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** About once a second, from the spell tick: lets active bonuses act on their own. */

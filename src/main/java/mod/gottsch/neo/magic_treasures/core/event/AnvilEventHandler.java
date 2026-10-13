@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures.core.event;
 
+import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
@@ -80,7 +81,8 @@ public class AnvilEventHandler {
 					resultStack.ifPresent(resultOutStack::set);
 				}
 				// repair jewelry: sacrifice another piece of jewelry
-				else if (handler.getRepairs() > 0 && JewelryHandler.get(rightStack).isPresent()) {
+				else if ((handler.getRepairs() > 0 || leftStack.has(MagicTreasuresDataComponents.TEMPERED.get()))
+						&& JewelryHandler.get(rightStack).isPresent()) {
 					Optional<ItemStack> resultStack = generator.repair(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
 				}

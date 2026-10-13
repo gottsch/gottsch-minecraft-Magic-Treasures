@@ -22,6 +22,8 @@ import mod.gottsch.neo.magic_treasures.core.client.hud.JewelryHud;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryColors;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryModel;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.neo.magic_treasures.core.item.set.SetShield;
+import mod.gottsch.neo.magic_treasures.core.setup.Registration;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import mod.gottsch.neo.magic_treasures.core.client.particle.ArcaneSparkParticle;
@@ -31,9 +33,12 @@ import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltip;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -45,6 +50,19 @@ import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
  */
 @EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MagicTreasuresClientSetup {
+
+	/**
+	 * Vanilla registers the {@code blocking} item property for its own shield only, so a set shield's
+	 * {@code blocking} model override would never fire without this (Dungeons2's Mirror Shield hit the same).
+	 */
+	@SubscribeEvent
+	public static void onClientSetup(FMLClientSetupEvent event) {
+		event.enqueueWork(() -> Registration.ITEMS.getEntries().stream()
+				.filter(item -> item.get() instanceof SetShield)
+				.forEach(item -> ItemProperties.register(item.get(), ResourceLocation.withDefaultNamespace("blocking"),
+						(stack, level, entity, seed) ->
+								entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F)));
+	}
 
 	@SubscribeEvent
 	public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {

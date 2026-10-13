@@ -377,6 +377,10 @@ public class GenericJewelryHandler implements IJewelryHandler {
                     getMaxUses() > 0 ? (double) getUses() / getMaxUses() : 0, DURABILITY_BAR_RGB));
         }
 
+        if (stack.has(MagicTreasuresDataComponents.TEMPERED.get())) {
+            tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.tempered")).withStyle(ChatFormatting.GOLD));
+        }
+
         // spells: name, flavor line and stat chips each, with a blank line between spells
         List<SpellEntity> spells = getSpells();
         if (!spells.isEmpty()) {

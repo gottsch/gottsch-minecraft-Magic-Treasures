@@ -21,6 +21,7 @@ import com.google.common.collect.Lists;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.neo.magic_treasures.core.item.set.SetArmor;
+import mod.gottsch.neo.magic_treasures.core.item.set.SetShield;
 import mod.gottsch.neo.magic_treasures.core.item.set.SetMaterials;
 import mod.gottsch.neo.magic_treasures.core.item.set.SiphonWeapon;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
@@ -122,6 +123,17 @@ public class MagicTreasuresItems {
 
 	public static DeferredItem<Item> BARKSKIN_VEST = Registration.ITEMS.register("barkskin_vest", () ->
 			new SetArmor(SetMaterials.BARKSKIN, ArmorItem.Type.CHESTPLATE, 15, "set_piece.barkskin_vest.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+
+	// Sal'andaar's Anvilwork: heavy and slow (1 + 2 tier + 4 = 7 damage), siphon 2
+	public static DeferredItem<Item> STONEMARK_HAMMER = Registration.ITEMS.register("stonemark_hammer", () ->
+			new SiphonWeapon(SetMaterials.SMITHS_STEEL, 4, -3.0F, 2, "set_piece.stonemark_hammer.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+
+	public static DeferredItem<Item> SMITHS_HELM = Registration.ITEMS.register("smiths_helm", () ->
+			new SetArmor(SetMaterials.SMITHS_STEEL_ARMOR, ArmorItem.Type.HELMET, 25, "set_piece.smiths_helm.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+
+	public static DeferredItem<Item> ANVIL_SHIELD = Registration.ITEMS.register("anvil_shield", () ->
+			new SetShield(SetMaterials.SMITHS_STEEL_SHIELD_DURABILITY, SetMaterials.SMITHS_STEEL_REPAIR, "set_piece.anvil_shield.lore",
+					MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	/*
 	 * M9: the 418 1.x jewelry item ids (the M0 table), kept registered so old stacks load; each converts to generic

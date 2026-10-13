@@ -1,0 +1,23 @@
+{
+  "type": "bracelet",
+  "accepts_gems": false,
+  "loot": {},
+  "lore": "tooltip.magictreasures.jewelry.smiths_cuff.lore",
+  "material": "magictreasures:silver",
+  "name": "item.magictreasures.smiths_cuff",
+  "overrides": {
+    "factors": {
+      "cost": 0.9
+    },
+    "max_level": 6,
+    "max_mana": 350.0,
+    "max_recharges": 3,
+    "max_repairs": 3,
+    "max_uses": 400
+  },
+  "rarity": "rare",
+  "spells": [
+    "magictreasures:reflection"
+  ],
+  "style": "magictreasures:great"
+}

@@ -86,6 +86,11 @@ public class LanguageGen extends LanguageProvider {
         // other special items
         add(MagicTreasuresItems.ROOTSTAFF.get(), "Rootstaff");
         add(MagicTreasuresItems.BARKSKIN_VEST.get(), "Barkskin Vest");
+        add(MagicTreasuresItems.STONEMARK_HAMMER.get(), "Stonemark Hammer");
+        add(MagicTreasuresItems.SMITHS_HELM.get(), "Smith's Helm");
+        add(MagicTreasuresItems.ANVIL_SHIELD.get(), "Anvil Shield");
+        // a 2.0-only preset (no 1.x item id, so not in the legacy names above)
+        add("item.magictreasures.smiths_cuff", "Smith's Cuff");
 
 
 
@@ -285,7 +290,9 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("set_piece.siphon"), "Siphon: full-strength hits restore %s mana to your worn jewelry");
         add(LangUtil.tooltip("set_piece.resonance"), "Resonance: +%s%% effect to this set's jewelry spells");
         add("set.magictreasures.salandaars_anvilwork", "Sal'andaar's Anvilwork");
-        add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10%% less mana");
+        add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10% less mana");
+        add("set.magictreasures.salandaars_anvilwork.bonus.4", "Ward spells are 15%% stronger");
+        add("set.magictreasures.salandaars_anvilwork.bonus.6", "Tempered: worn set jewelry's next anvil repair is free");
         add("set.magictreasures.silbros_grove", "Silbro's Grove");
         add("set.magictreasures.silbros_grove.bonus.2", "Healing spells heal 15%% more, 25%% more often");
         add("set.magictreasures.silbros_grove.bonus.4", "Standing on grass, moss or leaves slowly heals you");
@@ -356,6 +363,11 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.strongmans_bracers.lore"), "Silbro grew these for a woodcutter who wore out every axe.~Living wood holds strength as well as mana.");
         add(LangUtil.tooltip("jewelry.silbros_acorn.lore"), "Silbro gave an acorn from his oldest oak to anyone who went hungry.~Planted, it feeds a village; worn, it feeds you.");
         add(LangUtil.tooltip("set_piece.rootstaff.lore"), "Silbro never cut a staff; he asked a root to grow straight.~Every blow it lands sends a little mana home.");
+        add(LangUtil.tooltip("jewelry.smiths_cuff.lore"), "Smiths wear a cuff to keep sparks off the wrist.~Sal'andaar's sends the blow back to whoever struck it.");
+        add(LangUtil.tooltip("set_piece.stonemark_hammer.lore"), "Every piece Sal'andaar forged bears this hammer's mark.~Each blow it lands sends a little mana home.");
+        add(LangUtil.tooltip("set_piece.smiths_helm.lore"), "Hammered from the last of the good steel, in one night.~It rings softly when his other work is near.");
+        add(LangUtil.tooltip("set_piece.anvil_shield.lore"), "Cut from a cracked anvil he couldn't bear to scrap.~It still takes a blow better than anything else he made.");
+        add(LangUtil.tooltip("jewelry.tempered"), "Tempered: next anvil repair is free");
         add(LangUtil.tooltip("set_piece.barkskin_vest.lore"), "Bark from a living tree, which grew it back the next spring.~It hums when Silbro's other pieces are near.");
         add(LangUtil.tooltip("jewelry.maldritchs_first_amulet.lore"), "Maldritch is a powerful lich, but he wasn't always one.~This is his first amulet when he was a mere apprentice.");
 

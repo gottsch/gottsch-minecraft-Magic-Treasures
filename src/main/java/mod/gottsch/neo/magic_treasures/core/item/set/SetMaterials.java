@@ -18,8 +18,12 @@
 package mod.gottsch.neo.magic_treasures.core.item.set;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.neo.magic_treasures.core.tag.MagicTreasuresTags;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -30,6 +34,7 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -57,8 +62,49 @@ public final class SetMaterials {
                     List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, "barkskin"))),
                     0.0F, 0.0F));
 
+    /*
+     * #12: the other three sets. Numbers are for scale; Mark tunes them in game (plan D9).
+     */
+
+    /** Sal'andaar's smith's steel (Stonemark Hammer): a little better than iron. */
+    public static final Tier SMITHS_STEEL = new SetTier(450, 6.5F, 2.0F, BlockTags.INCORRECT_FOR_IRON_TOOL, 14,
+            () -> Ingredient.of(Tags.Items.INGOTS_IRON));
+
+    /** Sal'andaar's smith's steel (Smith's Helm): diamond's protection, less toughness, enchants poorly. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SMITHS_STEEL_ARMOR = armor("smiths_steel",
+            defense(3, 8, 6, 3), 1.0F, 9, SoundEvents.ARMOR_EQUIP_IRON, () -> Ingredient.of(Tags.Items.INGOTS_IRON));
+
+    /** Anvil Shield durability: the vanilla shield's 336, a bit more for smith's steel. */
+    public static final int SMITHS_STEEL_SHIELD_DURABILITY = 450;
+    public static final Supplier<Ingredient> SMITHS_STEEL_REPAIR = () -> Ingredient.of(Tags.Items.INGOTS_IRON);
+
+    /** Maldritch's bone (Bone Scythe): stone-level, but takes enchantments well. */
+    public static final Tier BONE = new SetTier(300, 5.0F, 1.5F, BlockTags.INCORRECT_FOR_STONE_TOOL, 18,
+            () -> Ingredient.of(Tags.Items.BONES));
+
+    /** Maldritch's bone (Lich's Cowl): chainmail's protection; his set leans on its weapon and death bonus. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BONE_ARMOR = armor("bone",
+            defense(2, 5, 4, 1), 0.0F, 18, SoundEvents.ARMOR_EQUIP_CHAIN, () -> Ingredient.of(Tags.Items.BONES));
+
+    /** Selene's moon silver (Moonglaive): iron-level, enchants best of the three. */
+    public static final Tier MOON_SILVER = new SetTier(400, 6.0F, 2.0F, BlockTags.INCORRECT_FOR_IRON_TOOL, 20,
+            () -> Ingredient.of(MagicTreasuresTags.Items.INGOTS_SILVER));
+
+    /** Selene's pearls (Pearl Circlet): diamond's protection and toughness, and enchants best of any set material. */
+    public static final DeferredHolder<ArmorMaterial, ArmorMaterial> PEARL_ARMOR = armor("pearl",
+            defense(3, 8, 6, 3), 2.0F, 25, SoundEvents.ARMOR_EQUIP_GOLD,
+            () -> Ingredient.of(MagicTreasuresItems.WHITE_PEARL.get(), MagicTreasuresItems.BLACK_PEARL.get()));
+
     public static void register(IEventBus eventBus) {
         ARMOR_MATERIALS.register(eventBus);
+    }
+
+    /** an armor material whose worn texture is {@code textures/models/armor/<name>_layer_1.png} */
+    private static DeferredHolder<ArmorMaterial, ArmorMaterial> armor(String name, Map<ArmorItem.Type, Integer> defense,
+            float toughness, int enchantmentValue, Holder<SoundEvent> sound, Supplier<Ingredient> repair) {
+        return ARMOR_MATERIALS.register(name, () -> new ArmorMaterial(defense, enchantmentValue, sound, repair,
+                List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, name))),
+                toughness, 0.0F));
     }
 
     private static Map<ArmorItem.Type, Integer> defense(int helmet, int chest, int legs, int boots) {

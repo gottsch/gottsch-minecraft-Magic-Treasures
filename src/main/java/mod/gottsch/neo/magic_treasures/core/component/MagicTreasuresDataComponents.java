@@ -19,6 +19,8 @@ package mod.gottsch.neo.magic_treasures.core.component;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Unit;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -57,6 +59,15 @@ public class MagicTreasuresDataComponents {
                     .persistent(JewelryState.CODEC)
                     .networkSynchronized(JewelryState.STREAM_CODEC)
                     .cacheEncoding());
+
+    /**
+     * Sal'andaar's Anvilwork, full set: the piece's next anvil repair is free (keeps its repairs). Stamped on worn set
+     * jewelry by TemperedBonus; the anvil removes it.
+     */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> TEMPERED =
+            DATA_COMPONENTS.registerComponentType("tempered", builder -> builder
+                    .persistent(Unit.CODEC)
+                    .networkSynchronized(StreamCodec.unit(Unit.INSTANCE)));
 
     /** a mana well's mana and recharges; the item sets a full default, so every well has it */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<ManaWellData>> MANA_WELL =
