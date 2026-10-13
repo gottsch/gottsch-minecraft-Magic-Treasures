@@ -21,6 +21,7 @@ import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.hud.JewelryHud;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryColors;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryModel;
+import mod.gottsch.neo.magic_treasures.core.client.model.SmithsHelmModel;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.item.set.SetShield;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
@@ -33,6 +34,13 @@ import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltip;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -62,6 +70,29 @@ public class MagicTreasuresClientSetup {
 				.forEach(item -> ItemProperties.register(item.get(), ResourceLocation.withDefaultNamespace("blocking"),
 						(stack, level, entity, seed) ->
 								entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F)));
+	}
+
+	/** models of set armor that isn't the plain armor box */
+	@SubscribeEvent
+	public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(SmithsHelmModel.LAYER, SmithsHelmModel::createBodyLayer);
+	}
+
+	/** the Smith's Helm is drawn with its own model (horns, raised top) instead of vanilla's helmet box */
+	@SubscribeEvent
+	public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+		event.registerItem(new IClientItemExtensions() {
+			private SmithsHelmModel model;
+
+			@Override
+			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot,
+					HumanoidModel<?> original) {
+				if (model == null) {
+					model = new SmithsHelmModel(Minecraft.getInstance().getEntityModels().bakeLayer(SmithsHelmModel.LAYER));
+				}
+				return model;
+			}
+		}, MagicTreasuresItems.SMITHS_HELM.get());
 	}
 
 	@SubscribeEvent
