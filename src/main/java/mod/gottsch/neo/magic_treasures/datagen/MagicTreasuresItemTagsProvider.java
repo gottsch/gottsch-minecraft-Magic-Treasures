@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.LegacyConversion;
 import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.item.Jewelry;
 import java.util.Optional;
@@ -72,7 +73,8 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 				// shears only: the anvil uses up the tool, so no axes
 				.addTag(Tags.Items.TOOLS_SHEAR);
 
-		// M9: the 1.x per-item tags (type, material, size, rarity, Curios) went with the 1.x items. Generic jewelry is in
+		// M9: the 1.x per-item tags (type, material, size, rarity) went with the 1.x items; their Curios slot tags are
+		// kept (below). Generic jewelry is in
 		// the type tags, so all_jewelry (anvil repair, Treasure2 pouch, the root advancement) holds it
 		tag(MagicTreasuresTags.Items.RINGS).add(MagicTreasuresItems.RING.get());
 		tag(MagicTreasuresTags.Items.NECKLACES).add(MagicTreasuresItems.NECKLACE.get());
@@ -136,6 +138,21 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		tag(MagicTreasuresTags.Items.CURIOUS_RING).add(MagicTreasuresItems.RING.get());
 		tag(MagicTreasuresTags.Items.CURIOUS_NECKLACE).add(MagicTreasuresItems.NECKLACE.get());
 		tag(MagicTreasuresTags.Items.CURIOUS_BRACELET).add(MagicTreasuresItems.BRACELET.get());
+
+		// the 1.x items keep their Curios slots, so a piece worn in 1.x stays in its slot and converts there. Without
+		// them, Curios moves it out (into the inventory, or onto the ground if that's full) when the player loads,
+		// a second before the conversion runs. Optional, so the tags still load once the legacy ids are dropped.
+		Map<String, TagKey<Item>> curiosSlots = Map.of(
+				"ring", MagicTreasuresTags.Items.CURIOUS_RING,
+				"necklace", MagicTreasuresTags.Items.CURIOUS_NECKLACE,
+				"bracelet", MagicTreasuresTags.Items.CURIOUS_BRACELET);
+		LegacyConversion.idsByType().forEach((type, ids) -> {
+			TagKey<Item> slot = curiosSlots.get(type);
+			if (slot == null) {
+				throw new IllegalStateException("legacy jewelry type with no Curios slot: " + type);
+			}
+			ids.forEach(id -> tag(slot).addOptional(id));
+		});
 
 		// ores
 		tag(MagicTreasuresTags.Items.ORE_SILVER).add(MagicTreasuresItems.SILVER_ORE_BLOCKITEM.get());

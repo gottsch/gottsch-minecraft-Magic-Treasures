@@ -62,6 +62,29 @@ public final class LegacyConversion {
         }
     }
 
+    /**
+     * The 1.x item ids by jewelry type ({@code ring}, {@code necklace}, {@code bracelet}), read straight from the
+     * table. Datagen puts them in the Curios slot tags: Curios moves an item its slot doesn't accept out of the slot
+     * when a player loads, before the conversion has run.
+     */
+    public static Map<String, java.util.List<ResourceLocation>> idsByType() {
+        try (InputStream in = LegacyConversion.class.getResourceAsStream(TABLE)) {
+            if (in == null) {
+                throw new IllegalStateException("legacy jewelry table " + TABLE + " not found");
+            }
+            Map<String, java.util.List<ResourceLocation>> byType = new java.util.TreeMap<>();
+            for (Map.Entry<String, JsonElement> entry : JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8))
+                    .getAsJsonObject().entrySet()) {
+                String type = entry.getValue().getAsJsonObject().get("type").getAsString();
+                byType.computeIfAbsent(type, t -> new java.util.ArrayList<>()).add(ResourceLocation.parse(entry.getKey()));
+            }
+            byType.values().forEach(ids -> ids.sort(null));
+            return byType;
+        } catch (java.io.IOException e) {
+            throw new java.io.UncheckedIOException(e);
+        }
+    }
+
     /** whether the item is one of the 418 1.x jewelry items */
     public static boolean isLegacy(Item item) {
         return table().containsKey(item);

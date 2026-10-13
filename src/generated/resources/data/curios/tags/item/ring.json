@@ -1,5 +1,669 @@
 {
   "values": [
-    "magictreasures:ring"
+    "magictreasures:ring",
+    {
+      "id": "magictreasures:angels_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:aqua_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:peasants_fortune",
+      "required": false
+    },
+    {
+      "id": "magictreasures:ring_of_fortitude",
+      "required": false
+    },
+    {
+      "id": "magictreasures:ring_of_life_death",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silbros_ring_of_vitality",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_castle_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_ruby_castle_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_sapphire_castle_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_white_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_black_pearl_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_diamond_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_hawk_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_jadeite_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_onyx_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_ruby_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_sapphire_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_topaz_ring",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_white_pearl_ring",
+      "required": false
+    }
   ]
 }

@@ -1,5 +1,605 @@
 {
   "values": [
-    "magictreasures:necklace"
+    "magictreasures:necklace",
+    {
+      "id": "magictreasures:amulet_of_defence",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:bone_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:copper_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:eye_of_the_phoenix",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:gold_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_bone_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_copper_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_gold_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_iron_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:great_silver_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:iron_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_bone_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_copper_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_gold_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_iron_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:lords_silver_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:maldritchs_first_amulet",
+      "required": false
+    },
+    {
+      "id": "magictreasures:medics_token",
+      "required": false
+    },
+    {
+      "id": "magictreasures:salandaars_ward",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silbros_acorn",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:silver_white_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_black_pearl_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_diamond_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_jadeite_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_onyx_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_ruby_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_sapphire_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_topaz_necklace",
+      "required": false
+    },
+    {
+      "id": "magictreasures:wood_white_pearl_necklace",
+      "required": false
+    }
   ]
 }
