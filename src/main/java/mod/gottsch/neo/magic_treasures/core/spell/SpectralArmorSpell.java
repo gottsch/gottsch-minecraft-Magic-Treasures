@@ -27,6 +27,8 @@ import java.util.List;
  */
 public class
 SpectralArmorSpell extends Spell {
+	/** the most damage spectral armor can take off a hit: vanilla armor's own ceiling */
+	public static final double MAX_REDUCTION = 0.8;
 	public static String SPECTRAL_ARMOR_TYPE = "spectral_armor";
 
 	private static final Class<?> REGISTERED_EVENT = LivingDamageEvent.Pre.class;
@@ -77,7 +79,7 @@ SpectralArmorSpell extends Spell {
 						if (amount > 0D) {
 							// NOTE each effectAmount integer reduces by 4% just like vanilla armor, ie Leather Chest = 3 points or 12% reduction
 							// calculate the new amount
-							double newAmount = amount - (amount * effectAmount(context) * 0.04);
+							double newAmount = amount - (amount * reduction(effectAmount(context)));
 							// cost eval
 							double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
 							MagicTreasures.LOGGER.debug("cost (mana) incurred to jewelry -> {}", cost);
@@ -107,13 +109,13 @@ SpectralArmorSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("armor", percent(tooltipEffectAmount(jewelry) * 0.04), ChatFormatting.LIGHT_PURPLE));
+		return List.of(chip("armor", percent(reduction(tooltipEffectAmount(jewelry))), ChatFormatting.LIGHT_PURPLE));
 	}
 
 	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.spectral_armor.rate"),
-				LangUtil.asPercentString(modifyEffectAmount(jewelry) * 4.0));
+				LangUtil.asPercentString(reduction(modifyEffectAmount(jewelry)) * 100));
 	}
 
 	@Override
@@ -124,6 +126,11 @@ SpectralArmorSpell extends Spell {
 	/*
 	 * 
 	 */
+	/** each point of effect takes 4% off, like a vanilla armor point, up to {@link #MAX_REDUCTION} */
+	private static double reduction(double effectAmount) {
+		return Math.min(effectAmount * 0.04, MAX_REDUCTION);
+	}
+
 	public static class Builder extends Spell.Builder {
 
 		public Builder(ResourceLocation name, int level, IRarity rarity) {

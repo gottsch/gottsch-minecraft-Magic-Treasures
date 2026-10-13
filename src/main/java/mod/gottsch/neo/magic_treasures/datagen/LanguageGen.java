@@ -291,7 +291,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("set_piece.resonance"), "Resonance: +%s%% effect to this set's jewelry spells");
         add("set.magictreasures.salandaars_anvilwork", "Sal'andaar's Anvilwork");
         add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10% less mana");
-        add("set.magictreasures.salandaars_anvilwork.bonus.4", "Ward spells are 15%% stronger");
+        add("set.magictreasures.salandaars_anvilwork.bonus.4", "Ward spells recover 15%% faster");
         add("set.magictreasures.salandaars_anvilwork.bonus.6", "Tempered: worn set jewelry's next anvil repair is free");
         add("set.magictreasures.silbros_grove", "Silbro's Grove");
         add("set.magictreasures.silbros_grove.bonus.2", "Healing spells heal 15%% more, 25%% more often");

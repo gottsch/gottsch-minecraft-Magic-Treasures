@@ -51,7 +51,7 @@ public final class JewelrySets {
             .piece(MagicTreasuresItems.SMITHS_HELM)
             .piece(MagicTreasuresItems.ANVIL_SHIELD)
             .bonus(2, SpellStatBonus.multiply(SpellStat.COST, 0.9, WARD_SPELLS))
-            .bonus(4, SpellStatBonus.multiply(SpellStat.EFFECT, 1.15, WARD_SPELLS))
+            .bonus(4, SpellStatBonus.multiply(SpellStat.COOLDOWN, 0.85, WARD_SPELLS))
             .bonus(6, new TemperedBonus(() -> JewelrySets.SALANDAARS_ANVILWORK))
             .build());
 
