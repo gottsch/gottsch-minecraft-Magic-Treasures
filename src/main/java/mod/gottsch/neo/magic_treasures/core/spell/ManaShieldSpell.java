@@ -28,10 +28,11 @@ import java.util.List;
  */
 public class ManaShieldSpell extends Spell {
 	/**
-	 * The most of a hit a mana shield can take: set bonuses and resonance multiply the effect, and without a ceiling a
-	 * full set pushed it past 100% (no damage at all).
+	 * The most of a hit a mana shield can take. Set bonuses and resonance multiply the effect; past 100% the old code
+	 * passed negative damage on and charged mana for more than the hit. A full block is fine: the shield's cooldown
+	 * still lets the next hits through.
 	 */
-	public static final double MAX_ABSORB = 0.9;
+	public static final double MAX_ABSORB = 1.0;
 
 	public static String SHIELDING_TYPE = "mana_shield";
 
@@ -100,7 +101,8 @@ public class ManaShieldSpell extends Spell {
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
-							SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_BLUE.get(), 10);
+							// a flat blue ring around the player: the shield going up (each ward spell has its own shape and colour)
+							SpellEffects.ring(world, context.getPlayer(), MagicTreasuresParticles.SPARK_BLUE.get(), 0.9, 20);
 							result = true;
 						}
 					}

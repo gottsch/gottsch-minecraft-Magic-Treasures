@@ -1,6 +1,7 @@
 
 package mod.gottsch.neo.magic_treasures.core.spell;
 
+import net.minecraft.core.particles.ParticleTypes;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
@@ -91,7 +92,8 @@ SpectralArmorSpell extends Spell {
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
-							SpellEffects.burst(world, player, MagicTreasuresParticles.SPARK_ASH.get(), 8);
+							// it fires on every hit, so it stays quiet: a few dark smoke puffs
+							SpellEffects.burst(world, SpellEffects.chest(player), ParticleTypes.SMOKE, 3, 0.2);
 							result = true;
 						}
 					}
