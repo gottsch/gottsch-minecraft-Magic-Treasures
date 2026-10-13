@@ -11,3 +11,10 @@ Get the pack from Pixeltier: https://pixeltier.itch.io/ultimate-fantasy-rpg-icon
 | `textures/item/set/rootstaff.png` | `magic weapons/_uniques/serpent_vine_wand.png` | mirrored, redrawn at 32x32 with a longer shaft |
 | `textures/item/set/barkskin_vest.png` | `armor/coat_armor_moss.png` | recolored: bark brown body and collar, green lining |
 | `textures/models/armor/barkskin_layer_1.png` | `armor/coat_armor_moss.png` | moss colors only; the worn texture is drawn for Magic Treasures |
+| `textures/item/jewelry/fine_*_ring.png` (plain bands) | `rings/ring_gold.png` | recolored to each metal's palette (iron, copper, silver, gold, blood, atium) |
+| `textures/item/jewelry/fine_*_*_ring.png` (with gems) | `rings/ring_gold.png`, gem from `rings/_uniques/azure_stone_ring.png` | band recolored per metal; the azure stone cut out and recolored to each gem's palette |
+| `textures/item/jewelry/carved_wood_*ring.png` | `rings/_uniques/rootbound_ring.png`, gem from `rings/_uniques/azure_stone_ring.png` | recolored to the wood palette, root strands lightened; gems as for Fine |
+| `textures/item/jewelry/carved_bone_*ring.png` | `rings/_uniques/crows_ring.png`, gem from `rings/_uniques/azure_stone_ring.png` | crow removed and the band's top redrawn; recolored to the bone palette; gems as for Fine |
+| `textures/item/jewelry/wreathed_shadow_*ring.png` | `rings/_uniques/ghost_ring.png`, gem from `rings/_uniques/azure_stone_ring.png` | recolored to the violet shadow palette; gems as for Fine, onyx and black pearl lightened |
+| `textures/item/jewelry/ring/_base_{fine,carved,wreathed}.png` | `rings/ring_gold.png`, `rings/_uniques/crows_ring.png`, `rings/_uniques/ghost_ring.png` | greyscale versions of the bands above, tinted in game |
+| `textures/item/jewelry/ring/gem/_overlay_{fine,carved,wreathed}.png` | `rings/_uniques/azure_stone_ring.png` | the stone only, greyscale, tinted in game |
