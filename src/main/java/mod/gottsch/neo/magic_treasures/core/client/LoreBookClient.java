@@ -25,6 +25,8 @@ import java.util.List;
 
 /**
  * Opens a lore book on the vanilla book screen. Client-only: called from {@code LoreBook.use} on the client side.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public final class LoreBookClient {
     private LoreBookClient() {}

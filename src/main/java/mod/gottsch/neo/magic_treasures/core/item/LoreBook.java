@@ -45,6 +45,8 @@ import java.util.Optional;
  * One item for every lore book. Which story it is sits on the stack ({@code magictreasures:lore_book}, the book's id
  * in the {@code lore_book} registry); the title, author and pages are lang keys named after that id (see
  * {@link LoreBookDef}). Right-click opens the vanilla book screen, read-only: the text can't be edited or copied.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public class LoreBook extends Item {
 

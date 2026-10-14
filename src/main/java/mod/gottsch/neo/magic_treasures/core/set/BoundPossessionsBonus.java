@@ -20,6 +20,8 @@ package mod.gottsch.neo.magic_treasures.core.set;
 /**
  * Maldritch's Remains, full set: bound possessions. Die wearing the full set and its pieces stay with you; everything
  * else drops as usual, so grave mods keep working. A marker: {@code BoundPossessionsHandler} does the work on death.
+ *
+ * @author Mark Gottschling on 10/13/2026
  */
 public class BoundPossessionsBonus implements SetBonus {
 }

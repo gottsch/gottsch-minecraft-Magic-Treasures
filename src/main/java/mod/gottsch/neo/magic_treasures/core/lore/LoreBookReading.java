@@ -36,6 +36,8 @@ import java.util.function.Supplier;
 /**
  * Which lore books a player has read: a data attachment on the player, saved with them and kept through death, so the
  * Archivist and per-character advancements can ask "has this player read all of X?".
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public final class LoreBookReading {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =

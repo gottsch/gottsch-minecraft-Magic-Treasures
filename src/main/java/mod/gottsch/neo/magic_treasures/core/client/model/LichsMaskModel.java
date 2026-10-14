@@ -37,6 +37,8 @@ import net.minecraft.world.entity.LivingEntity;
  * <p>
  * Built like {@link SmithsHelmModel}: every humanoid part, all empty, with the mask's box under {@code head}. The
  * texture is the bone material's worn layer, {@code textures/models/armor/bone_layer_1.png}, 64x64 to match.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public class LichsMaskModel extends HumanoidModel<LivingEntity> {
     public static final ModelLayerLocation LAYER =

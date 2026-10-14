@@ -43,6 +43,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
  * and given back on respawn. They're kept in the dead player's persistent data, so a logout on the death screen
  * doesn't lose them. Pieces in Curios slots stay there through {@link CuriosBoundPossessions}. Grave mods only see the
  * drops, so they keep working for everything else.
+ *
+ * @author Mark Gottschling on 10/13/2026
  */
 @EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = EventBusSubscriber.Bus.GAME)
 public class BoundPossessionsHandler {

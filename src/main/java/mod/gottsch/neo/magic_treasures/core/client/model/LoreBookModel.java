@@ -59,6 +59,8 @@ import java.util.function.Function;
  * Built like {@link JewelryModel}: baked on first use, cached per texture. Textures under
  * {@code textures/item/lore_book/} of any namespace are stitched by the directory source in
  * {@code assets/minecraft/atlases/blocks.json}, so a pack's book needs no model file.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public class LoreBookModel implements IUnbakedGeometry<LoreBookModel> {
     public static final ResourceLocation LOADER_ID = ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, "lore_book");

@@ -25,6 +25,8 @@ import net.minecraft.world.level.Level;
  * Moonlit (Selene's Tides, full set): every spell costs 25% less at night. Night is the clock's night (13000 to 23000
  * ticks), not the sky's darkness, so a daytime thunderstorm doesn't count; dimensions with a fixed time (the Nether,
  * the End) never have one.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public class MoonlitBonus implements SetBonus {
     private static final double COST = 0.75;

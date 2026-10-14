@@ -44,6 +44,8 @@ import java.util.Optional;
  * @param texture   its icon, an item texture ({@code magictreasures:item/lore_book/old_binder}); when empty, the
  *                  icon is {@code <namespace>:item/lore_book/<path>}, and the shared default if that doesn't exist
  * @param disabled  a pack can switch a built-in book off
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public record LoreBookDef(MagicTreasuresRarity rarity, int pages, Optional<String> character,
                           Optional<ResourceLocation> texture, boolean disabled) {

@@ -42,6 +42,8 @@ import java.util.Set;
  *     <li>{@code all}: {@code true} when they've read every book there is.</li>
  * </ul>
  * "Every" means every enabled book in the {@code lore_book} registry, so a pack's books count too.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public class LoreBookTrigger extends SimpleCriterionTrigger<LoreBookTrigger.TriggerInstance> {
 

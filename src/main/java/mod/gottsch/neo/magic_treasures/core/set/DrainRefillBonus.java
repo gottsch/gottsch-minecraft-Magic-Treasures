@@ -23,6 +23,8 @@ import net.minecraft.world.entity.player.Player;
 /**
  * Maldritch's Remains, 4 pieces: life you drain also refills a little mana. After a drain spell heals the player,
  * half the health it took goes back into the jewelry that cast it.
+ *
+ * @author Mark Gottschling on 10/13/2026
  */
 public class DrainRefillBonus implements SetBonus {
     /** the share of drained health that comes back as mana */

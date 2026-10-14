@@ -29,6 +29,8 @@ import java.util.function.Supplier;
 /**
  * Tidewalker (Selene's Tides, 4 pieces): the tide refills her pearls. In water, the player swims with Dolphin's Grace,
  * and every worn jewelry piece of the set gets back 1 mana every 5 seconds: a slow mana source only her set has.
+ *
+ * @author Mark Gottschling on 10/14/2026
  */
 public class TidewalkerBonus implements SetBonus {
     private static final int MANA_INTERVAL_TICKS = 100;

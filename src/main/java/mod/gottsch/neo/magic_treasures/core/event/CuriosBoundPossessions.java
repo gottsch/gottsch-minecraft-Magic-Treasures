@@ -27,6 +27,8 @@ import top.theillusivec4.curios.api.type.capability.ICurio;
  * Bound possessions in Curios slots: Maldritch's pieces stay in them when a player dies with the full set on
  * ({@link BoundPossessionsHandler} marks that death first). Curios is optional: call {@link #register} only when it's
  * loaded, or loading this class fails with NoClassDefFoundError.
+ *
+ * @author Mark Gottschling on 10/13/2026
  */
 public final class CuriosBoundPossessions {
     private CuriosBoundPossessions() {}
