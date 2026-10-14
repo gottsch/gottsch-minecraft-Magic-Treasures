@@ -79,7 +79,7 @@ public final class SetMaterials {
     public static final Supplier<Ingredient> SMITHS_STEEL_REPAIR = () -> Ingredient.of(Tags.Items.INGOTS_IRON);
 
     /** Maldritch's bone (Bone Scythe): stone-level, but takes enchantments well. */
-    public static final Tier BONE = new SetTier(300, 5.0F, 1.5F, BlockTags.INCORRECT_FOR_STONE_TOOL, 18,
+    public static final Tier BONE = new SetTier(300, 5.0F, 2.0F, BlockTags.INCORRECT_FOR_STONE_TOOL, 18,
             () -> Ingredient.of(Tags.Items.BONES));
 
     /** Maldritch's bone (Lich's Cowl): chainmail's protection; his set leans on its weapon and death bonus. */

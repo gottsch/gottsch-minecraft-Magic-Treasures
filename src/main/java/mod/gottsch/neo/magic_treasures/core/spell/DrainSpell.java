@@ -25,6 +25,7 @@ import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.neo.magic_treasures.core.set.DrainRefillBonus;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -105,6 +106,8 @@ public class DrainSpell extends CooldownSpell {
 				player.setHealth(Mth.clamp(player.getHealth() + (float)drainedHealth.get(), 0.0F, player.getMaxHealth()));
 				//					entity.setMana(MathHelper.clamp(entity.getMana() - 1D,  0D, entity.getMana()));
 				applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+				// Maldritch's Remains, 4 pieces: some of the drained life comes back as mana
+				DrainRefillBonus.refill(player, handler, drainedHealth.get());
 				result = true;
 			}                
 		}

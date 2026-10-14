@@ -19,6 +19,7 @@ package mod.gottsch.neo.magic_treasures.core.integration;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
+import mod.gottsch.neo.magic_treasures.core.event.CuriosBoundPossessions;
 import mod.gottsch.neo.magic_treasures.core.event.HotbarEquipmentSpellHandler;
 import mod.gottsch.neo.magic_treasures.core.event.IEquipmentSpellHandler;
 import mod.gottsch.neo.magic_treasures.core.event.SpellEventHandler;
@@ -55,6 +56,7 @@ public class MagicTreasuresIntegrations {
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				MagicTreasures.LOGGER.warn("Unable to load Curios compatibility class -> {}", className);
 			}
+			CuriosBoundPossessions.register();
 		}
 		if (equipmentSpellHandler == null) {
 			MagicTreasures.LOGGER.debug("equipmentHandler is null");

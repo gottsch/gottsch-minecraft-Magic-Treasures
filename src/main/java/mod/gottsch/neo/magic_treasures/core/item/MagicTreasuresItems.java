@@ -118,15 +118,16 @@ public class MagicTreasuresItems {
 
 
 	// set weapons and armor: no spells; siphon (weapons) and resonance (armor)
+	// Silbro's Grove: quick (1 + 1 tier + 5 = 7 damage, a diamond sword's), siphon 2
 	public static DeferredItem<Item> ROOTSTAFF = Registration.ITEMS.register("rootstaff", () ->
-			new SiphonWeapon(SetMaterials.LIVING_WOOD, 3, -2.4F, 2, "set_piece.rootstaff.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+			new SiphonWeapon(SetMaterials.LIVING_WOOD, 5, -2.4F, 2, "set_piece.rootstaff.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	public static DeferredItem<Item> BARKSKIN_VEST = Registration.ITEMS.register("barkskin_vest", () ->
 			new SetArmor(SetMaterials.BARKSKIN, ArmorItem.Type.CHESTPLATE, 15, "set_piece.barkskin_vest.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
-	// Sal'andaar's Anvilwork: heavy and slow (1 + 2 tier + 4 = 7 damage), siphon 2
+	// Sal'andaar's Anvilwork: heavy and slow (1 + 2 tier + 8 = 11 damage, out-hits a netherite axe), siphon 2
 	public static DeferredItem<Item> STONEMARK_HAMMER = Registration.ITEMS.register("stonemark_hammer", () ->
-			new SiphonWeapon(SetMaterials.SMITHS_STEEL, 4, -3.0F, 2, "set_piece.stonemark_hammer.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+			new SiphonWeapon(SetMaterials.SMITHS_STEEL, 8, -3.1F, 2, "set_piece.stonemark_hammer.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	public static DeferredItem<Item> SMITHS_HELM = Registration.ITEMS.register("smiths_helm", () ->
 			new SetArmor(SetMaterials.SMITHS_STEEL_ARMOR, ArmorItem.Type.HELMET, 25, "set_piece.smiths_helm.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
@@ -134,6 +135,13 @@ public class MagicTreasuresItems {
 	public static DeferredItem<Item> ANVIL_SHIELD = Registration.ITEMS.register("anvil_shield", () ->
 			new SetShield(SetMaterials.SMITHS_STEEL_SHIELD_DURABILITY, SetMaterials.SMITHS_STEEL_REPAIR, "set_piece.anvil_shield.lore",
 					MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+
+	// Maldritch's Remains: long-handled (1 + 2 tier + 6 = 9 damage, a trident's), siphon 3, the strongest
+	public static DeferredItem<Item> BONE_SCYTHE = Registration.ITEMS.register("bone_scythe", () ->
+			new SiphonWeapon(SetMaterials.BONE, 6, -2.8F, 3, "set_piece.bone_scythe.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+
+	public static DeferredItem<Item> LICHS_COWL = Registration.ITEMS.register("lichs_cowl", () ->
+			new SetArmor(SetMaterials.BONE_ARMOR, ArmorItem.Type.HELMET, 15, "set_piece.lichs_cowl.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	/*
 	 * M9: the 418 1.x jewelry item ids (the M0 table), kept registered so old stacks load; each converts to generic
