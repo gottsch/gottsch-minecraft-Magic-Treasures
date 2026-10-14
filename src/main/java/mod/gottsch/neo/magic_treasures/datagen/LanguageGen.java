@@ -89,6 +89,8 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.STONEMARK_HAMMER.get(), "Stonemark Hammer");
         add(MagicTreasuresItems.BONE_SCYTHE.get(), "Bone Scythe");
         add(MagicTreasuresItems.LICHS_MASK.get(), "Lich's Mask");
+        add(MagicTreasuresItems.MOONGLAIVE.get(), "Moonglaive");
+        add(MagicTreasuresItems.PEARL_CIRCLET.get(), "Pearl Circlet");
         add(MagicTreasuresItems.SMITHS_HELM.get(), "Smith's Helm");
         add(MagicTreasuresItems.ANVIL_SHIELD.get(), "Anvil Shield");
         // a 2.0-only preset (no 1.x item id, so not in the legacy names above)
@@ -304,7 +306,9 @@ public class LanguageGen extends LanguageProvider {
         add("set.magictreasures.maldritchs_remains.bonus.4", "Drained life also refills the casting jewelry's mana");
         add("set.magictreasures.maldritchs_remains.bonus.5", "Bound possessions: the set's worn pieces stay with you when you die");
         add("set.magictreasures.selenes_tides", "Selene's Tides");
-        add("set.magictreasures.selenes_tides.bonus.2", "Water Breathing and Night Vision last 50%% longer");
+        add("set.magictreasures.selenes_tides.bonus.2", "Water Breathing and Night Vision last 50% longer");
+        add("set.magictreasures.selenes_tides.bonus.4", "Tidewalker: in water, swim with Dolphin's Grace and the tide refills your set jewelry's mana");
+        add("set.magictreasures.selenes_tides.bonus.5", "Moonlit: spells cost 25%% less at night");
         add(LangUtil.tooltip("spell.flavor.blessing_of_the_phoenix"), "Rise unburnt from the flames, as the phoenix does.");
         add(LangUtil.tooltip("spell.flavor.cat_sight"), "See in the dark as clearly as a cat.");
         add(LangUtil.tooltip("spell.flavor.cheat_death"), "Turns aside one killing blow.");
@@ -370,6 +374,8 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.smiths_cuff.lore"), "Smiths wear a cuff to keep sparks off the wrist.~Sal'andaar's sends the blow back to whoever struck it.");
         add(LangUtil.tooltip("set_piece.stonemark_hammer.lore"), "Every piece Sal'andaar forged bears this hammer's mark.~Each blow it lands sends a little mana home.");
         add(LangUtil.tooltip("set_piece.bone_scythe.lore"), "Maldritch cut it from his own bones, so it would never leave him.~Every blow it lands draws mana out of the wound.");
+        add(LangUtil.tooltip("set_piece.moonglaive.lore"), "Selene's blade waxes and wanes, but never dulls.~Every blow it lands draws the tide of mana home.");
+        add(LangUtil.tooltip("set_piece.pearl_circlet.lore"), "The pearls were her first, and her best.~They catch the light of her other work, as the sea catches the moon.");
         add(LangUtil.tooltip("set_piece.lichs_mask.lore"), "He wears it so the living see a man, not what he became.~It whispers when his other bones are near.");
         add(LangUtil.tooltip("set_piece.smiths_helm.lore"), "Hammered from the last of the good steel, in one night.~It rings softly when his other work is near.");
         add(LangUtil.tooltip("set_piece.anvil_shield.lore"), "Cut from a cracked anvil he couldn't bear to scrap.~It still takes a blow better than anything else he made.");

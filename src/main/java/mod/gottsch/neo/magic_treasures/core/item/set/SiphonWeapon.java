@@ -17,10 +17,16 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item.set;
 
+import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.TooltipFlag;
@@ -35,11 +41,27 @@ public class SiphonWeapon extends SwordItem {
     private final int siphonMana;
     private final String loreKey;
 
+    /** the reach a polearm adds in the main hand */
+    private static final ResourceLocation REACH_ID = ResourceLocation.fromNamespaceAndPath(MagicTreasures.MOD_ID, "set_weapon_reach");
+
     /** {@code attackDamage} and {@code attackSpeed} as for a vanilla sword: added to the tier's bonus and the player's base */
     public SiphonWeapon(Tier tier, int attackDamage, float attackSpeed, int siphonMana, String loreKey, Properties properties) {
-        super(tier, properties.attributes(SwordItem.createAttributes(tier, attackDamage, attackSpeed)));
+        this(tier, attackDamage, attackSpeed, 0.0, siphonMana, loreKey, properties);
+    }
+
+    /** As above, plus {@code reach} blocks of attack reach while held (a polearm) */
+    public SiphonWeapon(Tier tier, int attackDamage, float attackSpeed, double reach, int siphonMana, String loreKey, Properties properties) {
+        super(tier, properties.attributes(withReach(SwordItem.createAttributes(tier, attackDamage, attackSpeed), reach)));
         this.siphonMana = siphonMana;
         this.loreKey = loreKey;
+    }
+
+    private static ItemAttributeModifiers withReach(ItemAttributeModifiers attributes, double reach) {
+        if (reach <= 0) {
+            return attributes;
+        }
+        return attributes.withModifierAdded(Attributes.ENTITY_INTERACTION_RANGE,
+                new AttributeModifier(REACH_ID, reach, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND);
     }
 
     /** Mana a full-strength hit puts back into the worn jewelry. */

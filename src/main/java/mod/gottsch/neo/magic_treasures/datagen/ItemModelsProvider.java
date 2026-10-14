@@ -106,11 +106,13 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// set weapons and armor (the Rootstaff's model is hand-made in src/main: it's drawn bigger in hand)
 		singleTexture(MagicTreasuresItems.BARKSKIN_VEST.getId().getPath()
 				, mcLoc("item/generated"), "layer0", modLoc("item/set/barkskin_vest"));
-		// the Stonemark Hammer's, Bone Scythe's and Anvil Shield's models are hand-made in src/main (handheld; shield elements)
+		// the Stonemark Hammer's, Bone Scythe's, Moonglaive's and Anvil Shield's models are hand-made in src/main (handheld; shield elements)
 		singleTexture(MagicTreasuresItems.SMITHS_HELM.getId().getPath()
 				, mcLoc("item/generated"), "layer0", modLoc("item/set/smiths_helm"));
 		singleTexture(MagicTreasuresItems.LICHS_MASK.getId().getPath()
 				, mcLoc("item/generated"), "layer0", modLoc("item/set/lichs_mask"));
+		singleTexture(MagicTreasuresItems.PEARL_CIRCLET.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/pearl_circlet"));
 
 		// belts
 		singleTexture(MagicTreasuresItems.SKULL_BELT.getId().getPath()

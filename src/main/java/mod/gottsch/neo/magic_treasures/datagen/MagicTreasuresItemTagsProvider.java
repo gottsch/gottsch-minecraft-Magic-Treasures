@@ -71,9 +71,11 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 
 		// set weapons and armor: vanilla's tags decide which enchantments 1.21 offers them
 		tag(ItemTags.SWORDS).add(MagicTreasuresItems.ROOTSTAFF.get(), MagicTreasuresItems.STONEMARK_HAMMER.get(),
-				MagicTreasuresItems.BONE_SCYTHE.get());
+				MagicTreasuresItems.BONE_SCYTHE.get(),
+				MagicTreasuresItems.MOONGLAIVE.get());
 		tag(ItemTags.CHEST_ARMOR).add(MagicTreasuresItems.BARKSKIN_VEST.get());
-		tag(ItemTags.HEAD_ARMOR).add(MagicTreasuresItems.SMITHS_HELM.get(), MagicTreasuresItems.LICHS_MASK.get());
+		tag(ItemTags.HEAD_ARMOR).add(MagicTreasuresItems.SMITHS_HELM.get(), MagicTreasuresItems.LICHS_MASK.get(),
+				MagicTreasuresItems.PEARL_CIRCLET.get());
 		tag(ItemTags.DURABILITY_ENCHANTABLE).add(MagicTreasuresItems.ANVIL_SHIELD.get());
 
 		// jewelry tools

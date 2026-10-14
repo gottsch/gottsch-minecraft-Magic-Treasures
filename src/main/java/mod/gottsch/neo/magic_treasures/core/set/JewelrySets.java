@@ -83,7 +83,11 @@ public final class JewelrySets {
             .piece(preset("aqua_ring"))
             .piece(preset("journeyman_bands"))
             .piece(preset("eye_of_the_phoenix"))
+            .piece(MagicTreasuresItems.MOONGLAIVE)
+            .piece(MagicTreasuresItems.PEARL_CIRCLET)
             .bonus(2, SpellStatBonus.multiply(SpellStat.DURATION, 1.5, "water_breathing", "night_vision"))
+            .bonus(4, new TidewalkerBonus(() -> JewelrySets.SELENES_TIDES))
+            .bonus(5, new MoonlitBonus())
             .build());
 
     private JewelrySets() {}
