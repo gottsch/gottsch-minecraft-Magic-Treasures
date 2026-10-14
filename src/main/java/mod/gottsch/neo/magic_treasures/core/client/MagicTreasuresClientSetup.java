@@ -22,6 +22,7 @@ import mod.gottsch.neo.magic_treasures.core.client.hud.JewelryHud;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryColors;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryModel;
 import mod.gottsch.neo.magic_treasures.core.client.model.LichsMaskModel;
+import mod.gottsch.neo.magic_treasures.core.client.model.LoreBookModel;
 import mod.gottsch.neo.magic_treasures.core.client.model.SmithsHelmModel;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.item.set.SetShield;
@@ -131,6 +132,7 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
 		event.register(JewelryModel.LOADER_ID, JewelryModel.Loader.INSTANCE);
+		event.register(LoreBookModel.LOADER_ID, LoreBookModel.Loader.INSTANCE);
 	}
 
 	/** tints the composed model's fallback layers */

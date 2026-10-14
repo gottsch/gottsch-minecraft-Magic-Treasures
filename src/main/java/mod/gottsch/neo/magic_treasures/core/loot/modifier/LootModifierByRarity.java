@@ -17,6 +17,8 @@
  */
 package mod.gottsch.neo.magic_treasures.core.loot.modifier;
 
+import mod.gottsch.neo.magic_treasures.core.item.LoreBook;
+import mod.gottsch.neo.magic_treasures.api.MagicTreasuresRegistries;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -139,6 +141,10 @@ public class LootModifierByRarity extends LootModifier {
 						.filter(item -> item instanceof SiphonWeapon || item instanceof SetArmor || item instanceof SetShield)
 						.forEach(item -> lootList.add(new ItemStack(item)));
 			}
+			// lore books of this rarity, from the registry
+			context.getLevel().registryAccess().registry(MagicTreasuresRegistries.LORE_BOOK).ifPresent(books -> books.holders()
+					.filter(book -> !book.value().disabled() && book.value().rarity().getCode() == rarity.getCode())
+					.forEach(book -> lootList.add(LoreBook.of(MagicTreasuresItems.LORE_BOOK.get(), book.key().location()))));
 			// grab random loot from the loot list (without replacement)
 			for (int index = 0; index < count && !lootList.isEmpty(); index++) {
 				ItemStack stack = lootList.remove(context.getRandom().nextInt(lootList.size()));
@@ -146,6 +152,10 @@ public class LootModifierByRarity extends LootModifier {
 				// set pieces drop one per chest
 				if (JewelrySets.get(stack).isPresent()) {
 					lootList.removeIf(other -> JewelrySets.get(other).isPresent());
+				}
+				// and lore books one per chest too
+				if (stack.is(MagicTreasuresItems.LORE_BOOK.get())) {
+					lootList.removeIf(other -> other.is(MagicTreasuresItems.LORE_BOOK.get()));
 				}
 			}
 		}

@@ -54,6 +54,10 @@ public class MagicTreasuresCriteria {
     public static final DeferredHolder<CriterionTrigger<?>, JewelryTrigger> JEWELRY =
             TRIGGERS.register("jewelry", JewelryTrigger::new);
 
+    /** a lore book read; checks what the player has read so far (see LoreBookTrigger) */
+    public static final DeferredHolder<CriterionTrigger<?>, LoreBookTrigger> LORE_BOOK =
+            TRIGGERS.register("lore_book", LoreBookTrigger::new);
+
     public static void register(IEventBus bus) {
         TRIGGERS.register(bus);
     }

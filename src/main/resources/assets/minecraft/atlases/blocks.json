@@ -4,6 +4,11 @@
       "type": "minecraft:directory",
       "source": "item/jewelry",
       "prefix": "item/jewelry/"
+    },
+    {
+      "type": "minecraft:directory",
+      "source": "item/lore_book",
+      "prefix": "item/lore_book/"
     }
   ]
 }

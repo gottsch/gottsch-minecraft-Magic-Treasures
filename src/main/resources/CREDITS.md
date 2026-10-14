@@ -21,5 +21,10 @@ Get the pack from Pixeltier: https://pixeltier.itch.io/ultimate-fantasy-rpg-icon
 | `textures/item/set/anvil_shield.png`, `anvil_shield_back.png` | `shields/wankel_shield_silver.png` | front: made symmetrical (right half mirrored, caps centred), gem changed to a ruby, silver plates recolored to the Sal'andaar steel palette; back drawn for Magic Treasures on the same outline; the shield's item model is built from the sprite's outline |
 | `textures/item/set/smiths_helm.png` | `head/_uniques/steel_horn_helm.png` | recolored to the Sal'andaar steel palette (the worn helm's), the dark cap made steel, horns to the worn helm's bone; the worn helm itself is drawn for Magic Treasures |
 | `textures/item/set/lichs_mask.png` | `head/guard_mask_night.png` | recolored to the Wreathed shadow palette (violet, like the Bone Scythe's blade); the worn mask (`textures/models/armor/bone_layer_1.png`) is Mark's own |
-| `textures/item/set/moonglaive.png` | `polearms/_uniques/moonhook_glaive.png` | mirrored (the pack's weapons point top-left) |
+| `textures/item/set/moonglaive.png` | `polearms/_uniques/moonhook_glaive.png` | mirrored (the pack's weapons point top-left), redrawn at 32x32 with a longer shaft (Mark) |
 | `textures/item/set/pearl_circlet.png` | `head/gem_circlet_white.png` | unchanged; the worn band (`textures/models/armor/pearl_layer_1.png`) is drawn for Magic Treasures in its colours |
+| `textures/item/lore_book/_default.png` | `magic tomes/_uniques/old_binder.png` | bottom-right corner pixel removed, to round it like the other three |
+| `textures/item/lore_book/silbros_journal_1.png` | `magic tomes/_uniques/meteor_manual.png` | bottom-right corner pixel removed, to round it like the other three |
+| `textures/item/lore_book/smiths_ledger.png` | `magic tomes/_uniques/book_of_keys.png` | bottom-right corner pixel removed, to round it like the other three |
+| `textures/item/lore_book/maldritchs_notes_1.png` | `magic tomes/_uniques/golden_skull_tome.png` | bottom-right corner pixel removed, to round it like the other three |
+| `textures/item/lore_book/selenes_account.png` | `magic tomes/_uniques/tome_of_sight.png` | bottom-right corner pixel removed, to round it like the other three |

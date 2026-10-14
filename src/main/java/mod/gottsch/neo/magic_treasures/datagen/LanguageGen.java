@@ -90,11 +90,46 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.BONE_SCYTHE.get(), "Bone Scythe");
         add(MagicTreasuresItems.LICHS_MASK.get(), "Lich's Mask");
         add(MagicTreasuresItems.MOONGLAIVE.get(), "Moonglaive");
+        add(MagicTreasuresItems.LORE_BOOK.get(), "Lore Book");
+        add(LangUtil.tooltip("lore_book.author"), "by %s");
+        // lore books: title, author and pages per story (see LoreBookDef)
+        add("lore_book.magictreasures.silbros_journal_1.title", "Silbro's Journal, I");
+        add("lore_book.magictreasures.silbros_journal_1.author", "Silbro");
+        add("lore_book.magictreasures.silbros_journal_1.page.1", "Spring.\n\nThe smiths in the valley laughed when I told them wood could hold magic. They are right, in their way. Dead wood cannot. Cut a branch and the magic runs out of it like sap.");
+        add("lore_book.magictreasures.silbros_journal_1.page.2", "So I did not cut the willow by the mill. I sat with it instead, and asked.\n\nA tree answers slowly. It took the whole of that first summer before I felt it lean toward my hand.");
+        add("lore_book.magictreasures.silbros_journal_1.page.3", "Second summer.\n\nA root has curled around my finger while I slept. I have not moved it. It is warm, which roots are not meant to be, and when I set a little healing into it, the healing stayed.");
+        add("lore_book.magictreasures.silbros_journal_1.page.4", "Third summer.\n\nThe ring is grown. It holds mana as well as any silver ring I have seen at the forge, and when I cracked it on a stone it mended itself, once.\n\nI do not think it will do that twice.");
+        add("lore_book.magictreasures.silbros_journal_1.page.5", "I showed it to Sal'andaar. He turned it over for a long time and said only, \"Show me how.\"\n\nI told him the truth: you cannot make it. You can only wait to be given it.\n\nHe did not like that answer.");
+        add("lore_book.magictreasures.silbros_journal_1.page.6", "It is a little pleased with itself, I think.\n\nSo am I.\n\n- S.");
+        add("lore_book.magictreasures.smiths_ledger.title", "The Runesmith's Ledger");
+        add("lore_book.magictreasures.smiths_ledger.author", "Sal'andaar");
+        add("lore_book.magictreasures.smiths_ledger.page.1", "Ledger of S. Stone, runesmith.\n\nThree horseshoes, a mended plough. 4 copper.\n\nA ward set in a farmer's ring, against fevers. 1 silver. He paid in eggs. Wrote it down as a silver anyway.");
+        add("lore_book.magictreasures.smiths_ledger.page.2", "Took on two apprentices.\n\nBren: strong, slow, honest.\n\nMaldritch: best hands I've had. Learns a weld in a day that took me a year.\n\nAsks too much about the dead.");
+        add("lore_book.magictreasures.smiths_ledger.page.3", "Silbro sent another ring that grew itself. Sent him back a horseshoe that didn't.\n\nHe'll know what I meant.");
+        add("lore_book.magictreasures.smiths_ledger.page.4", "The coat is done. Took the winter. Spells slide off it like rain off oilcloth.\n\nTested it on myself. Then on Maldritch, at his asking. He laughed the whole time.\n\nShould not have let him.");
+        add("lore_book.magictreasures.smiths_ledger.page.5", "Maldritch gone three days. Came back with a bone charm that holds mana.\n\nBone doesn't hold mana. I know what does, and so does he.\n\nWe did not speak of it.");
+        add("lore_book.magictreasures.smiths_ledger.page.6", "Bren has left. Says he won't work beside \"that one\".\n\nOrders are down. Folk in the market cross the street.\n\nThe ward for the reeve's door: no charge.");
+        add("lore_book.magictreasures.maldritchs_notes_1.title", "Maldritch's Notes, I");
+        add("lore_book.magictreasures.maldritchs_notes_1.author", "Maldritch");
+        add("lore_book.magictreasures.maldritchs_notes_1.page.1", "Master Stone says magic is set, not made. A hammer closes it into metal like a weld.\n\nI have watched him do it a hundred times and I still cannot see the moment it happens.\n\nI will.");
+        add("lore_book.magictreasures.maldritchs_notes_1.page.2", "A summer with the druid. Silbro talks to willows and they listen. He let me hold a ring he grew. It was warm.\n\nIf a living thing can hold magic, it is already full of it. Why wait to be given?");
+        add("lore_book.magictreasures.maldritchs_notes_1.page.3", "Mother is sick. The healers' charms do nothing.\n\nSilbro came himself and sat with her three days. He was kind. He was patient.\n\nShe died on the fourth.");
+        add("lore_book.magictreasures.maldritchs_notes_1.page.4", "He said some things cannot be mended, only let go.\n\nI have decided he is wrong.\n\nThe gentle way is too slow.");
+        add("lore_book.magictreasures.maldritchs_notes_1.page.5", "A rabbit. Bone holds nothing; everyone knows that. But I closed a ward around the life as it left, the way Master Stone closes a weld, and the bone kept it.\n\nIt was warm, like the willow ring.");
+        add("lore_book.magictreasures.maldritchs_notes_1.page.6", "I have told no one. Master Stone would not understand. Silbro would understand too well.\n\nI am not doing anything wrong. I am only learning faster.");
+        add("lore_book.magictreasures.selenes_account.title", "Selene's Account");
+        add("lore_book.magictreasures.selenes_account.author", "Selene Tidewalker");
+        add("lore_book.magictreasures.selenes_account.page.1", "They will tell you there were three: the runesmith, the druid, and the one we don't name in harbours.\n\nThere were four. I sold the other three their pearls, and I am the one still here to write it down.");
+        add("lore_book.magictreasures.selenes_account.page.2", "Sal'andaar thought magic was a thing you hammered shut. Silbro thought it was a thing you were given.\n\nThey argued for forty years and were both right, which neither of them could stand.");
+        add("lore_book.magictreasures.selenes_account.page.3", "Pearls are grown, you know. An oyster takes a grain of grit, a wound, and wraps it in light, year after year.\n\nSilbro understood at once. Sal'andaar asked what the oyster charged.");
+        add("lore_book.magictreasures.selenes_account.page.4", "I made bands for my couriers, so they could run the coast roads by night and see the ruts before they fell in them.\n\nHalf the letters between the runesmith and the druid went by my runners. I read none of them. Mostly.");
+        add("lore_book.magictreasures.selenes_account.page.5", "And the boy. Maldritch. Clever hands, frightened eyes. He asked me once how long a pearl lives.\n\nI told him: longer than the oyster.\n\nI have wondered since if that was the worst thing I ever said.");
+        add("lore_book.magictreasures.selenes_account.page.6", "I have kept their papers, what I could find. Read them as you find them.\n\nYou will not find them all. I have seen to that.\n\n- S. T.");
         add(MagicTreasuresItems.PEARL_CIRCLET.get(), "Pearl Circlet");
-        add(MagicTreasuresItems.SMITHS_HELM.get(), "Smith's Helm");
+        add(MagicTreasuresItems.SMITHS_HELM.get(), "Runesmith's Helm");
         add(MagicTreasuresItems.ANVIL_SHIELD.get(), "Anvil Shield");
         // a 2.0-only preset (no 1.x item id, so not in the legacy names above)
-        add("item.magictreasures.smiths_cuff", "Smith's Cuff");
+        add("item.magictreasures.smiths_cuff", "Runesmith's Cuff");
 
 
 
@@ -218,6 +253,18 @@ public class LanguageGen extends LanguageProvider {
         add("advancements.magictreasures.maldritchs_remains.description", "Wear every piece of Maldritch's Remains at once");
         add("advancements.magictreasures.selenes_tides.title", "Selene's Tides");
         add("advancements.magictreasures.selenes_tides.description", "Wear every piece of Selene's Tides at once");
+        add("advancements.magictreasures.first_pages.title", "First Pages");
+        add("advancements.magictreasures.first_pages.description", "Read a lore book");
+        add("advancements.magictreasures.archivist.title", "Archivist");
+        add("advancements.magictreasures.archivist.description", "Read every lore book");
+        add("advancements.magictreasures.silbros_seasons.title", "Silbro's Seasons");
+        add("advancements.magictreasures.silbros_seasons.description", "Read all of Silbro's journals");
+        add("advancements.magictreasures.the_smiths_hand.title", "The Runesmith's Hand");
+        add("advancements.magictreasures.the_smiths_hand.description", "Read everything Sal'andaar wrote");
+        add("advancements.magictreasures.maldritchs_descent.title", "Maldritch's Descent");
+        add("advancements.magictreasures.maldritchs_descent.description", "Read all of Maldritch's notes");
+        add("advancements.magictreasures.the_tidewalkers_tale.title", "The Tidewalker's Tale");
+        add("advancements.magictreasures.the_tidewalkers_tale.description", "Read everything Selene wrote");
         add("advancements.magictreasures.collector_of_legends.title", "Collector of Legends");
         add("advancements.magictreasures.collector_of_legends.description", "Wear each of the four named sets whole");
         add(LangUtil.tooltip("tools.jewelry_pliers"), "Craft with jewelry to remove its gem. The jewelry is destroyed.");

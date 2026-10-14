@@ -20,6 +20,7 @@ package mod.gottsch.neo.magic_treasures.core.component;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Unit;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -75,4 +76,10 @@ public class MagicTreasuresDataComponents {
                     .persistent(ManaWellData.CODEC)
                     .networkSynchronized(ManaWellData.STREAM_CODEC)
                     .cacheEncoding());
+
+    /** a lore book's story: its id in the {@code magictreasures:lore_book} registry */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> LORE_BOOK =
+            DATA_COMPONENTS.registerComponentType("lore_book", builder -> builder
+                    .persistent(ResourceLocation.CODEC)
+                    .networkSynchronized(ResourceLocation.STREAM_CODEC));
 }

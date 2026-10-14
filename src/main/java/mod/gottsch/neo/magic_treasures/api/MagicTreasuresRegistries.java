@@ -6,6 +6,7 @@ import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryMaterialDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryPresetDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryStyleDef;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.StoneTierDef;
+import mod.gottsch.neo.magic_treasures.core.lore.LoreBookDef;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -21,6 +22,8 @@ public final class MagicTreasuresRegistries {
     public static final ResourceKey<Registry<StoneTierDef>> STONE_TIER = key("stone_tier");
     public static final ResourceKey<Registry<GemstoneDef>> GEMSTONE = key("gemstone");
     public static final ResourceKey<Registry<JewelryPresetDef>> JEWELRY_PRESET = key("jewelry_preset");
+    /** the lore books (see {@link LoreBookDef}) */
+    public static final ResourceKey<Registry<LoreBookDef>> LORE_BOOK = key("lore_book");
 
     public static final class Tags {
         /** Metal materials; a gem can say {@code "affixes_to": "#magictreasures:metals"}. */
