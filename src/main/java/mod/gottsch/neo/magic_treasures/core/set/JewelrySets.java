@@ -73,7 +73,7 @@ public final class JewelrySets {
             .piece(preset("ring_of_life_death"))
             .piece(MagicTreasuresItems.SKULL_BELT)
             .piece(MagicTreasuresItems.BONE_SCYTHE)
-            .piece(MagicTreasuresItems.LICHS_COWL)
+            .piece(MagicTreasuresItems.LICHS_MASK)
             .bonus(2, SpellStatBonus.add(SpellStat.RANGE, 1.0, "drain"))
             .bonus(4, new DrainRefillBonus())
             .bonus(5, new BoundPossessionsBonus())

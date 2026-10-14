@@ -21,6 +21,7 @@ import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.hud.JewelryHud;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryColors;
 import mod.gottsch.neo.magic_treasures.core.client.model.JewelryModel;
+import mod.gottsch.neo.magic_treasures.core.client.model.LichsMaskModel;
 import mod.gottsch.neo.magic_treasures.core.client.model.SmithsHelmModel;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.item.set.SetShield;
@@ -76,9 +77,10 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
 		event.registerLayerDefinition(SmithsHelmModel.LAYER, SmithsHelmModel::createBodyLayer);
+		event.registerLayerDefinition(LichsMaskModel.LAYER, LichsMaskModel::createBodyLayer);
 	}
 
-	/** the Smith's Helm is drawn with its own model (horns, raised top) instead of vanilla's helmet box */
+	/** set helmets drawn with their own model instead of vanilla's helmet box: the Smith's Helm (horns, raised top), the Lich's Mask (a closer fit) */
 	@SubscribeEvent
 	public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
 		event.registerItem(new IClientItemExtensions() {
@@ -93,6 +95,18 @@ public class MagicTreasuresClientSetup {
 				return model;
 			}
 		}, MagicTreasuresItems.SMITHS_HELM.get());
+		event.registerItem(new IClientItemExtensions() {
+			private LichsMaskModel model;
+
+			@Override
+			public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot,
+					HumanoidModel<?> original) {
+				if (model == null) {
+					model = new LichsMaskModel(Minecraft.getInstance().getEntityModels().bakeLayer(LichsMaskModel.LAYER));
+				}
+				return model;
+			}
+		}, MagicTreasuresItems.LICHS_MASK.get());
 	}
 
 	@SubscribeEvent

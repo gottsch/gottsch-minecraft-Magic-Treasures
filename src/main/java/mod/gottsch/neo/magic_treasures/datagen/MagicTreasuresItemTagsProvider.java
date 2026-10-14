@@ -73,7 +73,7 @@ public class MagicTreasuresItemTagsProvider extends ItemTagsProvider {
 		tag(ItemTags.SWORDS).add(MagicTreasuresItems.ROOTSTAFF.get(), MagicTreasuresItems.STONEMARK_HAMMER.get(),
 				MagicTreasuresItems.BONE_SCYTHE.get());
 		tag(ItemTags.CHEST_ARMOR).add(MagicTreasuresItems.BARKSKIN_VEST.get());
-		tag(ItemTags.HEAD_ARMOR).add(MagicTreasuresItems.SMITHS_HELM.get(), MagicTreasuresItems.LICHS_COWL.get());
+		tag(ItemTags.HEAD_ARMOR).add(MagicTreasuresItems.SMITHS_HELM.get(), MagicTreasuresItems.LICHS_MASK.get());
 		tag(ItemTags.DURABILITY_ENCHANTABLE).add(MagicTreasuresItems.ANVIL_SHIELD.get());
 
 		// jewelry tools

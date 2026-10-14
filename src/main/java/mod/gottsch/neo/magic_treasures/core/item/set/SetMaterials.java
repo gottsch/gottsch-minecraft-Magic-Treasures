@@ -82,7 +82,7 @@ public final class SetMaterials {
     public static final Tier BONE = new SetTier(300, 5.0F, 2.0F, BlockTags.INCORRECT_FOR_STONE_TOOL, 18,
             () -> Ingredient.of(Tags.Items.BONES));
 
-    /** Maldritch's bone (Lich's Cowl): chainmail's protection; his set leans on its weapon and death bonus. */
+    /** Maldritch's bone (Lich's Mask): chainmail's protection; his set leans on its weapon and death bonus. */
     public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BONE_ARMOR = armor("bone",
             defense(2, 5, 4, 1), 0.0F, 18, SoundEvents.ARMOR_EQUIP_CHAIN, () -> Ingredient.of(Tags.Items.BONES));
 

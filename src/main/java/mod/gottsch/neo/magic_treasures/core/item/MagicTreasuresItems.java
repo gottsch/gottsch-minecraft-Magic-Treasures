@@ -140,8 +140,8 @@ public class MagicTreasuresItems {
 	public static DeferredItem<Item> BONE_SCYTHE = Registration.ITEMS.register("bone_scythe", () ->
 			new SiphonWeapon(SetMaterials.BONE, 6, -2.8F, 3, "set_piece.bone_scythe.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
-	public static DeferredItem<Item> LICHS_COWL = Registration.ITEMS.register("lichs_cowl", () ->
-			new SetArmor(SetMaterials.BONE_ARMOR, ArmorItem.Type.HELMET, 15, "set_piece.lichs_cowl.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	public static DeferredItem<Item> LICHS_MASK = Registration.ITEMS.register("lichs_mask", () ->
+			new SetArmor(SetMaterials.BONE_ARMOR, ArmorItem.Type.HELMET, 15, "set_piece.lichs_mask.lore", MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	/*
 	 * M9: the 418 1.x jewelry item ids (the M0 table), kept registered so old stacks load; each converts to generic

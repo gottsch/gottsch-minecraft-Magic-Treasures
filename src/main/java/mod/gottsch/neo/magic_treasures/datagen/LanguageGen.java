@@ -88,7 +88,7 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.BARKSKIN_VEST.get(), "Barkskin Vest");
         add(MagicTreasuresItems.STONEMARK_HAMMER.get(), "Stonemark Hammer");
         add(MagicTreasuresItems.BONE_SCYTHE.get(), "Bone Scythe");
-        add(MagicTreasuresItems.LICHS_COWL.get(), "Lich's Cowl");
+        add(MagicTreasuresItems.LICHS_MASK.get(), "Lich's Mask");
         add(MagicTreasuresItems.SMITHS_HELM.get(), "Smith's Helm");
         add(MagicTreasuresItems.ANVIL_SHIELD.get(), "Anvil Shield");
         // a 2.0-only preset (no 1.x item id, so not in the legacy names above)
@@ -370,7 +370,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.smiths_cuff.lore"), "Smiths wear a cuff to keep sparks off the wrist.~Sal'andaar's sends the blow back to whoever struck it.");
         add(LangUtil.tooltip("set_piece.stonemark_hammer.lore"), "Every piece Sal'andaar forged bears this hammer's mark.~Each blow it lands sends a little mana home.");
         add(LangUtil.tooltip("set_piece.bone_scythe.lore"), "Maldritch cut it from his own bones, so it would never leave him.~Every blow it lands draws mana out of the wound.");
-        add(LangUtil.tooltip("set_piece.lichs_cowl.lore"), "He took to the hood when his face stopped being a face.~It whispers when his other bones are near.");
+        add(LangUtil.tooltip("set_piece.lichs_mask.lore"), "He wears it so the living see a man, not what he became.~It whispers when his other bones are near.");
         add(LangUtil.tooltip("set_piece.smiths_helm.lore"), "Hammered from the last of the good steel, in one night.~It rings softly when his other work is near.");
         add(LangUtil.tooltip("set_piece.anvil_shield.lore"), "Cut from a cracked anvil he couldn't bear to scrap.~It still takes a blow better than anything else he made.");
         add(LangUtil.tooltip("jewelry.tempered"), "Tempered: next anvil repair is free");

@@ -109,8 +109,8 @@ public class ItemModelsProvider extends ItemModelProvider {
 		// the Stonemark Hammer's, Bone Scythe's and Anvil Shield's models are hand-made in src/main (handheld; shield elements)
 		singleTexture(MagicTreasuresItems.SMITHS_HELM.getId().getPath()
 				, mcLoc("item/generated"), "layer0", modLoc("item/set/smiths_helm"));
-		singleTexture(MagicTreasuresItems.LICHS_COWL.getId().getPath()
-				, mcLoc("item/generated"), "layer0", modLoc("item/set/lichs_cowl"));
+		singleTexture(MagicTreasuresItems.LICHS_MASK.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/lichs_mask"));
 
 		// belts
 		singleTexture(MagicTreasuresItems.SKULL_BELT.getId().getPath()
