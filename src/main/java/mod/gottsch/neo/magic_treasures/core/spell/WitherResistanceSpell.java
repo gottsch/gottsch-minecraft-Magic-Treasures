@@ -84,7 +84,7 @@ public class WitherResistanceSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
+		return List.of(chip("wither_resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override

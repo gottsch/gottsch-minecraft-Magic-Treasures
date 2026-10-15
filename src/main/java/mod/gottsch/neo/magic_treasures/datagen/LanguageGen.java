@@ -332,7 +332,9 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.stat.mana"), "%s mana");
         add(LangUtil.tooltip("spell.stat.range"), "%s range");
         add(LangUtil.tooltip("spell.stat.reflect"), "%s reflect");
-        add(LangUtil.tooltip("spell.stat.resist"), "%s resist");
+        add(LangUtil.tooltip("spell.stat.fire_resist"), "%s fire resist");
+        add(LangUtil.tooltip("spell.stat.magic_resist"), "%s magic resist");
+        add(LangUtil.tooltip("spell.stat.wither_resist"), "%s wither resist");
         add(LangUtil.tooltip("spell.stat.stacks"), "stacks");
         add(LangUtil.tooltip("spell.stat.seconds"), "%ss");
         // sets
@@ -341,7 +343,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("set_piece.siphon"), "Siphon: full-strength hits restore %s mana to your worn jewelry");
         add(LangUtil.tooltip("set_piece.resonance"), "Resonance: +%s%% effect to this set's jewelry spells");
         add("set.magictreasures.salandaars_anvilwork", "Sal'andaar's Anvilwork");
-        add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10% less mana");
+        add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10%% less mana");
         add("set.magictreasures.salandaars_anvilwork.bonus.4", "Ward spells recover 15%% faster");
         add("set.magictreasures.salandaars_anvilwork.bonus.6", "Tempered: worn set jewelry's next anvil repair is free");
         add("set.magictreasures.silbros_grove", "Silbro's Grove");
@@ -353,7 +355,7 @@ public class LanguageGen extends LanguageProvider {
         add("set.magictreasures.maldritchs_remains.bonus.4", "Drained life also refills the casting jewelry's mana");
         add("set.magictreasures.maldritchs_remains.bonus.5", "Bound possessions: the set's worn pieces stay with you when you die");
         add("set.magictreasures.selenes_tides", "Selene's Tides");
-        add("set.magictreasures.selenes_tides.bonus.2", "Water Breathing and Night Vision last 50% longer");
+        add("set.magictreasures.selenes_tides.bonus.2", "Water Breathing and Night Vision last 50%% longer");
         add("set.magictreasures.selenes_tides.bonus.4", "Tidewalker: in water, swim with Dolphin's Grace and the tide refills your set jewelry's mana");
         add("set.magictreasures.selenes_tides.bonus.5", "Moonlit: spells cost 25%% less at night");
         add(LangUtil.tooltip("spell.flavor.blessing_of_the_phoenix"), "Rise unburnt from the flames, as the phoenix does.");

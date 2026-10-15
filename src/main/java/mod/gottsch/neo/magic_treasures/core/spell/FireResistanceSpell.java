@@ -2,6 +2,7 @@
 package mod.gottsch.neo.magic_treasures.core.spell;
 
 import mod.gottsch.neo.gottschcore.enums.IRarity;
+import net.minecraft.tags.DamageTypeTags;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
@@ -49,9 +50,8 @@ public class FireResistanceSpell extends Spell {
 		boolean result = false;
 
 		LivingDamageEvent.Pre damageEvent = (LivingDamageEvent.Pre)event;
-		// exit if not fire damage
-		if (!damageEvent.getSource().is(DamageTypes.IN_FIRE)
-			&& !damageEvent.getSource().is(DamageTypes.ON_FIRE)) {
+		// exit if not fire damage: vanilla's fire tag, as Fire Resistance uses (fire, burning, lava, magma, fireballs)
+		if (!damageEvent.getSource().is(DamageTypeTags.IS_FIRE)) {
 			return result;
 		}
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
@@ -86,7 +86,7 @@ public class FireResistanceSpell extends Spell {
 
 	@Override
 	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
+		return List.of(chip("fire_resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override
