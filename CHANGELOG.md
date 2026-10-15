@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed the Frequency spell modifier: those three spells use Cooldown now. Materials and gems always had the same Frequency and Cooldown values, so no numbers change. Silbro's Grove's "25% more often" bonus now lowers their cooldown.
 
 ### Fixed
+- Fire Ward and Blessing of the Phoenix now block every kind of fire damage vanilla's Fire Resistance does: lava, magma blocks and fireballs too, not only fire and burning. The tooltip chips of the three resistance spells now say what they resist ("100% fire resist", "magic resist", "wither resist") instead of just "resist".
 - Removed a duplicate raw-silver smelting recipe (`minecraft:silver_ingot_from_raw`, left over from an old recipe id). Smelting and blasting raw silver work as before, and the silver recipes now show up in the recipe book once you pick up raw silver.
 
 ## [1.4.0] - 2026-10-10

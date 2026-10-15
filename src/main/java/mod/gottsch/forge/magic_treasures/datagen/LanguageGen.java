@@ -332,7 +332,9 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.stat.mana"), "%s mana");
         add(LangUtil.tooltip("spell.stat.range"), "%s range");
         add(LangUtil.tooltip("spell.stat.reflect"), "%s reflect");
-        add(LangUtil.tooltip("spell.stat.resist"), "%s resist");
+        add(LangUtil.tooltip("spell.stat.fire_resist"), "%s fire resist");
+        add(LangUtil.tooltip("spell.stat.magic_resist"), "%s magic resist");
+        add(LangUtil.tooltip("spell.stat.wither_resist"), "%s wither resist");
         add(LangUtil.tooltip("spell.stat.stacks"), "stacks");
         add(LangUtil.tooltip("spell.stat.seconds"), "%ss");
         // sets
