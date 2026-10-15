@@ -33,15 +33,26 @@ public record GemstoneDef(
 
     public static final int DEFAULT_COLOR = 0xFFFFFF;
 
-    public static final Codec<GemstoneDef> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            ResourceLocation.CODEC.fieldOf("item").forGetter(GemstoneDef::item),
-            // RegistryFileCodec reads a string as a reference and an object as an inline (direct) holder
-            RegistryFileCodec.create(MagicTreasuresRegistries.STONE_TIER, StoneTierDef.CODEC).fieldOf("tier").forGetter(GemstoneDef::tier),
-            DataCodecs.RARITY.optionalFieldOf("rarity").forGetter(GemstoneDef::rarity),
-            DataCodecs.COLOR.optionalFieldOf("color", DEFAULT_COLOR).forGetter(GemstoneDef::color),
-            RegistryCodecs.homogeneousList(MagicTreasuresRegistries.JEWELRY_MATERIAL).optionalFieldOf("affixes_to").forGetter(GemstoneDef::affixesTo),
-            Codec.BOOL.optionalFieldOf("disabled", false).forGetter(GemstoneDef::disabled)
-    ).apply(instance, GemstoneDef::new));
+    public static final Codec<GemstoneDef> CODEC = codec(false);
+    /** what the client receives on Forge 1.20.1: references to other jewelry registries as ids (NetworkHolderSet) */
+    public static final Codec<GemstoneDef> NETWORK_CODEC = codec(true);
+
+    /** {@code network}: refer to other jewelry registries by id (see NetworkHolderSet) */
+    private static Codec<GemstoneDef> codec(boolean network) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                ResourceLocation.CODEC.fieldOf("item").forGetter(GemstoneDef::item),
+                // RegistryFileCodec reads a string as a reference and an object as an inline (direct) holder. On the
+                // network the tier goes inline: 1.20.1's client can't look up another datapack registry while decoding,
+                // and the client only reads the tier's values
+                (network ? StoneTierDef.CODEC.<Holder<StoneTierDef>>xmap(Holder::direct, Holder::value)
+                        : RegistryFileCodec.create(MagicTreasuresRegistries.STONE_TIER, StoneTierDef.CODEC))
+                        .fieldOf("tier").forGetter(GemstoneDef::tier),
+                DataCodecs.RARITY.optionalFieldOf("rarity").forGetter(GemstoneDef::rarity),
+                DataCodecs.COLOR.optionalFieldOf("color", DEFAULT_COLOR).forGetter(GemstoneDef::color),
+                DataCodecs.holderSet(MagicTreasuresRegistries.JEWELRY_MATERIAL, network).optionalFieldOf("affixes_to").forGetter(GemstoneDef::affixesTo),
+                Codec.BOOL.optionalFieldOf("disabled", false).forGetter(GemstoneDef::disabled)
+        ).apply(instance, GemstoneDef::new));
+    }
 
     /** Whether this gem may be set in the given material. The material's own {@code accepts_gems} is checked separately. */
     public boolean affixesTo(Holder<JewelryMaterialDef> material) {

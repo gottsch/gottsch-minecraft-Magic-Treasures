@@ -50,23 +50,30 @@ public record JewelryPresetDef(
         Optional<Loot> loot,
         boolean disabled) {
 
-    public static final Codec<JewelryPresetDef> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            Codec.STRING.fieldOf("type").forGetter(JewelryPresetDef::type),
-            ResourceLocation.CODEC.fieldOf("material").forGetter(JewelryPresetDef::material),
-            ResourceLocation.CODEC.optionalFieldOf("gem").forGetter(JewelryPresetDef::gem),
-            ResourceLocation.CODEC.optionalFieldOf("style", JewelryRules.REGULAR).forGetter(JewelryPresetDef::style),
-            Codec.STRING.optionalFieldOf("name").forGetter(JewelryPresetDef::name),
-            Codec.STRING.optionalFieldOf("lore").forGetter(JewelryPresetDef::lore),
-            ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(JewelryPresetDef::texture),
-            Codec.STRING.optionalFieldOf("base_name").forGetter(JewelryPresetDef::baseName),
-            DataCodecs.RARITY.optionalFieldOf("rarity").forGetter(JewelryPresetDef::rarity),
-            ResourceLocation.CODEC.listOf().optionalFieldOf("spells", List.of()).forGetter(JewelryPresetDef::spells),
-            PresetOverrides.CODEC.optionalFieldOf("overrides", PresetOverrides.NONE).forGetter(JewelryPresetDef::overrides),
-            Rules.MAP_CODEC.forGetter(JewelryPresetDef::rules),
-            Codec.BOOL.optionalFieldOf("vanishing_curse", false).forGetter(JewelryPresetDef::vanishingCurse),
-            Loot.CODEC.optionalFieldOf("loot").forGetter(JewelryPresetDef::loot),
-            Codec.BOOL.optionalFieldOf("disabled", false).forGetter(JewelryPresetDef::disabled)
-    ).apply(instance, JewelryPresetDef::new));
+    public static final Codec<JewelryPresetDef> CODEC = codec(false);
+    /** what the client receives on Forge 1.20.1: references to other jewelry registries as ids (NetworkHolderSet) */
+    public static final Codec<JewelryPresetDef> NETWORK_CODEC = codec(true);
+
+    /** {@code network}: refer to other jewelry registries by id (see NetworkHolderSet) */
+    private static Codec<JewelryPresetDef> codec(boolean network) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                Codec.STRING.fieldOf("type").forGetter(JewelryPresetDef::type),
+                ResourceLocation.CODEC.fieldOf("material").forGetter(JewelryPresetDef::material),
+                ResourceLocation.CODEC.optionalFieldOf("gem").forGetter(JewelryPresetDef::gem),
+                ResourceLocation.CODEC.optionalFieldOf("style", JewelryRules.REGULAR).forGetter(JewelryPresetDef::style),
+                Codec.STRING.optionalFieldOf("name").forGetter(JewelryPresetDef::name),
+                Codec.STRING.optionalFieldOf("lore").forGetter(JewelryPresetDef::lore),
+                ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(JewelryPresetDef::texture),
+                Codec.STRING.optionalFieldOf("base_name").forGetter(JewelryPresetDef::baseName),
+                DataCodecs.RARITY.optionalFieldOf("rarity").forGetter(JewelryPresetDef::rarity),
+                ResourceLocation.CODEC.listOf().optionalFieldOf("spells", List.of()).forGetter(JewelryPresetDef::spells),
+                PresetOverrides.CODEC.optionalFieldOf("overrides", PresetOverrides.NONE).forGetter(JewelryPresetDef::overrides),
+                Rules.mapCodec(network).forGetter(JewelryPresetDef::rules),
+                Codec.BOOL.optionalFieldOf("vanishing_curse", false).forGetter(JewelryPresetDef::vanishingCurse),
+                Loot.CODEC.optionalFieldOf("loot").forGetter(JewelryPresetDef::loot),
+                Codec.BOOL.optionalFieldOf("disabled", false).forGetter(JewelryPresetDef::disabled)
+        ).apply(instance, JewelryPresetDef::new));
+    }
 
     public boolean acceptsGems() {
         return rules.acceptsGems();
@@ -86,11 +93,18 @@ public record JewelryPresetDef(
     public record Rules(boolean acceptsGems, boolean extractable, Optional<HolderSet<GemstoneDef>> gems) {
         public static final Rules DEFAULT = new Rules(true, true, Optional.empty());
 
-        public static final MapCodec<Rules> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-                Codec.BOOL.optionalFieldOf("accepts_gems", true).forGetter(Rules::acceptsGems),
-                Codec.BOOL.optionalFieldOf("extractable", true).forGetter(Rules::extractable),
-                RegistryCodecs.homogeneousList(MagicTreasuresRegistries.GEMSTONE).optionalFieldOf("gems").forGetter(Rules::gems)
-        ).apply(instance, Rules::new));
+        public static final MapCodec<Rules> MAP_CODEC = mapCodec(false);
+        /** what the client receives on Forge 1.20.1: references to other jewelry registries as ids (NetworkHolderSet) */
+        public static final MapCodec<Rules> NETWORK_MAP_CODEC = mapCodec(true);
+
+        /** {@code network}: refer to other jewelry registries by id (see NetworkHolderSet) */
+        static MapCodec<Rules> mapCodec(boolean network) {
+            return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    Codec.BOOL.optionalFieldOf("accepts_gems", true).forGetter(Rules::acceptsGems),
+                    Codec.BOOL.optionalFieldOf("extractable", true).forGetter(Rules::extractable),
+                    DataCodecs.holderSet(MagicTreasuresRegistries.GEMSTONE, network).optionalFieldOf("gems").forGetter(Rules::gems)
+            ).apply(instance, Rules::new));
+        }
 
         public boolean allowsGem(Holder<GemstoneDef> gem) {
             return gems.map(set -> set.contains(gem)).orElse(true);

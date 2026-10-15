@@ -43,6 +43,8 @@ public final class JewelryDataIndex {
     }
 
     private static volatile Snapshot snapshot = Snapshot.EMPTY;
+    /** the registries the index was built from; NetworkHolderSet resolves against them */
+    private static volatile RegistryAccess access;
     /** changes on every build and clear, so caches derived from the data (the item model) know to reset */
     private static volatile int generation;
 
@@ -65,6 +67,7 @@ public final class JewelryDataIndex {
     // client keeps the last server's entries until the next server's registries arrive and rebuild it.
 
     public static void build(RegistryAccess access) {
+        JewelryDataIndex.access = access;
         Map<ResourceLocation, Holder.Reference<JewelryMaterialDef>> materials =
                 enabled(access, MagicTreasuresRegistries.JEWELRY_MATERIAL, JewelryMaterialDef::disabled);
         Map<ResourceLocation, Holder.Reference<JewelryStyleDef>> styles =
@@ -111,7 +114,13 @@ public final class JewelryDataIndex {
 
     public static void clear() {
         snapshot = Snapshot.EMPTY;
+        access = null;
         generation++;
+    }
+
+    /** the registries the index was last built from; empty before the first build or after a clear */
+    public static Optional<RegistryAccess> registryAccess() {
+        return Optional.ofNullable(access);
     }
 
     public static int generation() {

@@ -28,12 +28,19 @@ public record MaterialLimits(
 
     public static final MaterialLimits NONE = new MaterialLimits(Optional.empty(), Optional.empty(), Optional.empty(), false);
 
-    public static final MapCodec<MaterialLimits> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            Codec.STRING.listOf().optionalFieldOf("types").forGetter(MaterialLimits::types),
-            RegistryCodecs.homogeneousList(MagicTreasuresRegistries.JEWELRY_STYLE).optionalFieldOf("styles").forGetter(MaterialLimits::styles),
-            RegistryCodecs.homogeneousList(MagicTreasuresRegistries.GEMSTONE).optionalFieldOf("gems").forGetter(MaterialLimits::gems),
-            Codec.BOOL.optionalFieldOf("requires_gem", false).forGetter(MaterialLimits::requiresGem)
-    ).apply(instance, MaterialLimits::new));
+    public static final MapCodec<MaterialLimits> MAP_CODEC = mapCodec(false);
+    /** what the client receives on Forge 1.20.1: references to other jewelry registries as ids (NetworkHolderSet) */
+    public static final MapCodec<MaterialLimits> NETWORK_MAP_CODEC = mapCodec(true);
+
+    /** {@code network}: refer to other jewelry registries by id (see NetworkHolderSet) */
+    static MapCodec<MaterialLimits> mapCodec(boolean network) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+                Codec.STRING.listOf().optionalFieldOf("types").forGetter(MaterialLimits::types),
+                DataCodecs.holderSet(MagicTreasuresRegistries.JEWELRY_STYLE, network).optionalFieldOf("styles").forGetter(MaterialLimits::styles),
+                DataCodecs.holderSet(MagicTreasuresRegistries.GEMSTONE, network).optionalFieldOf("gems").forGetter(MaterialLimits::gems),
+                Codec.BOOL.optionalFieldOf("requires_gem", false).forGetter(MaterialLimits::requiresGem)
+        ).apply(instance, MaterialLimits::new));
+    }
 
     public boolean allowsType(String type) {
         return types.map(list -> list.contains(type)).orElse(true);

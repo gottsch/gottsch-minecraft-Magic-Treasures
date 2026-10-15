@@ -17,12 +17,13 @@ public final class JewelryDataRegistries {
     private JewelryDataRegistries() {}
 
     @SubscribeEvent
+    // the second codec is the network one: on 1.20.1 it can't refer to other datapack registries (NetworkHolderSet)
     public static void onNewDataPackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(MagicTreasuresRegistries.JEWELRY_MATERIAL, JewelryMaterialDef.CODEC, JewelryMaterialDef.CODEC);
+        event.dataPackRegistry(MagicTreasuresRegistries.JEWELRY_MATERIAL, JewelryMaterialDef.CODEC, JewelryMaterialDef.NETWORK_CODEC);
         event.dataPackRegistry(MagicTreasuresRegistries.JEWELRY_STYLE, JewelryStyleDef.CODEC, JewelryStyleDef.CODEC);
         event.dataPackRegistry(MagicTreasuresRegistries.STONE_TIER, StoneTierDef.CODEC, StoneTierDef.CODEC);
-        event.dataPackRegistry(MagicTreasuresRegistries.GEMSTONE, GemstoneDef.CODEC, GemstoneDef.CODEC);
-        event.dataPackRegistry(MagicTreasuresRegistries.JEWELRY_PRESET, JewelryPresetDef.CODEC, JewelryPresetDef.CODEC);
+        event.dataPackRegistry(MagicTreasuresRegistries.GEMSTONE, GemstoneDef.CODEC, GemstoneDef.NETWORK_CODEC);
+        event.dataPackRegistry(MagicTreasuresRegistries.JEWELRY_PRESET, JewelryPresetDef.CODEC, JewelryPresetDef.NETWORK_CODEC);
         event.dataPackRegistry(MagicTreasuresRegistries.LORE_BOOK, LoreBookDef.CODEC, LoreBookDef.CODEC);
     }
 }

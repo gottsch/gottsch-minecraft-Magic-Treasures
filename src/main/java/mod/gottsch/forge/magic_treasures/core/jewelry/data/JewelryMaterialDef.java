@@ -36,19 +36,26 @@ public record JewelryMaterialDef(
 
     public static final int DEFAULT_COLOR = 0xFFFFFF;
 
-    public static final Codec<JewelryMaterialDef> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            DataCodecs.INGREDIENT.optionalFieldOf("ingredient").forGetter(JewelryMaterialDef::ingredient),
-            DataCodecs.RARITY.optionalFieldOf("rarity").forGetter(JewelryMaterialDef::rarity),
-            DataCodecs.COLOR.optionalFieldOf("color", DEFAULT_COLOR).forGetter(JewelryMaterialDef::color),
-            Codec.INT.fieldOf("uses").forGetter(JewelryMaterialDef::uses),
-            Codec.INT.fieldOf("mana").forGetter(JewelryMaterialDef::mana),
-            Codec.INT.optionalFieldOf("repairs", 0).forGetter(JewelryMaterialDef::repairs),
-            Codec.INT.optionalFieldOf("recharges", 0).forGetter(JewelryMaterialDef::recharges),
-            Codec.INT.optionalFieldOf("max_level", 1).forGetter(JewelryMaterialDef::maxLevel),
-            Codec.INT.optionalFieldOf("spells", 1).forGetter(JewelryMaterialDef::spells),
-            SpellFactors.CODEC.optionalFieldOf("factors", SpellFactors.NONE).forGetter(JewelryMaterialDef::factors),
-            Codec.BOOL.optionalFieldOf("accepts_gems", true).forGetter(JewelryMaterialDef::acceptsGems),
-            MaterialLimits.MAP_CODEC.forGetter(JewelryMaterialDef::limits),
-            Codec.BOOL.optionalFieldOf("disabled", false).forGetter(JewelryMaterialDef::disabled)
-    ).apply(instance, JewelryMaterialDef::new));
+    public static final Codec<JewelryMaterialDef> CODEC = codec(false);
+    /** what the client receives on Forge 1.20.1: references to other jewelry registries as ids (NetworkHolderSet) */
+    public static final Codec<JewelryMaterialDef> NETWORK_CODEC = codec(true);
+
+    /** {@code network}: refer to other jewelry registries by id (see NetworkHolderSet) */
+    private static Codec<JewelryMaterialDef> codec(boolean network) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+                DataCodecs.INGREDIENT.optionalFieldOf("ingredient").forGetter(JewelryMaterialDef::ingredient),
+                DataCodecs.RARITY.optionalFieldOf("rarity").forGetter(JewelryMaterialDef::rarity),
+                DataCodecs.COLOR.optionalFieldOf("color", DEFAULT_COLOR).forGetter(JewelryMaterialDef::color),
+                Codec.INT.fieldOf("uses").forGetter(JewelryMaterialDef::uses),
+                Codec.INT.fieldOf("mana").forGetter(JewelryMaterialDef::mana),
+                Codec.INT.optionalFieldOf("repairs", 0).forGetter(JewelryMaterialDef::repairs),
+                Codec.INT.optionalFieldOf("recharges", 0).forGetter(JewelryMaterialDef::recharges),
+                Codec.INT.optionalFieldOf("max_level", 1).forGetter(JewelryMaterialDef::maxLevel),
+                Codec.INT.optionalFieldOf("spells", 1).forGetter(JewelryMaterialDef::spells),
+                SpellFactors.CODEC.optionalFieldOf("factors", SpellFactors.NONE).forGetter(JewelryMaterialDef::factors),
+                Codec.BOOL.optionalFieldOf("accepts_gems", true).forGetter(JewelryMaterialDef::acceptsGems),
+                MaterialLimits.mapCodec(network).forGetter(JewelryMaterialDef::limits),
+                Codec.BOOL.optionalFieldOf("disabled", false).forGetter(JewelryMaterialDef::disabled)
+        ).apply(instance, JewelryMaterialDef::new));
+    }
 }

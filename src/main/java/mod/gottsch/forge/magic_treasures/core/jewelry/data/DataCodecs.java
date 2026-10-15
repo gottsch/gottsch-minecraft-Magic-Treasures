@@ -1,6 +1,10 @@
 package mod.gottsch.forge.magic_treasures.core.jewelry.data;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryCodecs;
+import net.minecraft.resources.ResourceKey;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -30,6 +34,14 @@ public final class DataCodecs {
      */
     public static final Codec<Ingredient> INGREDIENT = Codec.PASSTHROUGH.comapFlatMap(DataCodecs::parseIngredient,
             ingredient -> new Dynamic<>(JsonOps.INSTANCE, ingredient.toJson()));
+
+    /**
+     * A holder set of a jewelry registry: as a datapack writes it, or (network) as ids and tags for the client, since
+     * 1.20.1 can't send references between datapack registries (see NetworkHolderSet).
+     */
+    public static <T> Codec<HolderSet<T>> holderSet(ResourceKey<? extends Registry<T>> registry, boolean network) {
+        return network ? NetworkHolderSet.codec(registry) : RegistryCodecs.homogeneousList(registry);
+    }
 
     private DataCodecs() {}
 
