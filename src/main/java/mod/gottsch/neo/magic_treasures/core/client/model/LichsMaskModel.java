@@ -31,7 +31,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
- * The Lich's Mask as worn: a violet mask with gold eye trim on a head box that sits closer than vanilla's helmet:
+ * The Lich's Mask as worn: a violet mask on a head box that sits closer than vanilla's helmet:
  * inflated 0.55, just outside a skin's hat layer at 0.5 (vanilla uses 1.0; the Blockbench model has 0.25). From Mark's
  * Blockbench model ({@code blockbench\magic treasures\lichs_mask_new.bbmodel}, "Modded Entity").
  * <p>
