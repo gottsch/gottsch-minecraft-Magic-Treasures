@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:first_pages",
+  "display": {
+    "icon": {
+      "item": "magictreasures:lore_book",
+      "nbt": "{\"magictreasures:lore_book\":\"magictreasures:maldritchs_notes_1\"}"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.maldritchs_descent.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.maldritchs_descent.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "read": {
+      "trigger": "magictreasures:lore_book",
+      "conditions": {
+        "character": "maldritch"
+      }
+    }
+  }
+}

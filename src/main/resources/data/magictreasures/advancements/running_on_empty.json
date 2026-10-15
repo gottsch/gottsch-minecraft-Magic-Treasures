@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:spellbound",
+  "display": {
+    "icon": {
+      "item": "magictreasures:skull_belt"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.running_on_empty.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.running_on_empty.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "mana_well": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "mana_well"
+      }
+    }
+  }
+}

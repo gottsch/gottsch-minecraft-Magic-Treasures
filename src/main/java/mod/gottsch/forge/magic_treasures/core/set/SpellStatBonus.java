@@ -18,6 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.set;
 
 import mod.gottsch.forge.magic_treasures.core.spell.ISpell;
+import net.minecraft.world.entity.player.Player;
 
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class SpellStatBonus implements SetBonus {
     }
 
     @Override
-    public double modify(SpellStat stat, ISpell spell, double value) {
+    public double modify(Player player, SpellStat stat, ISpell spell, double value) {
         if (stat != this.stat || !spellTypes.contains(spell.getType())) {
             return value;
         }

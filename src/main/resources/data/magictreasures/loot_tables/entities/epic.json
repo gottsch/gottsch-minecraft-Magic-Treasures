@@ -7,11 +7,15 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:gold_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["epic", "legendary", "mythical"]
+              "rarities": [
+                "epic",
+                "legendary",
+                "mythical"
+              ]
             },
             {
               "function": "magictreasures:imbue_randomly",
@@ -40,11 +44,14 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:gold_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["rare","epic"]
+              "rarities": [
+                "rare",
+                "epic"
+              ]
             },
             {
               "function": "magictreasures:imbue_randomly",
@@ -58,24 +65,30 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:gold_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["legendary", "mythical"]
+              "rarities": [
+                "legendary",
+                "mythical"
+              ]
             }
           ]
         },
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:gold_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["rare", "epic"]
+              "rarities": [
+                "rare",
+                "epic"
+              ]
             }
-          ]          
+          ]
         },
         {
           "entryName": "random_spell",
@@ -99,7 +112,12 @@
             {
               "function": "magictreasures:random_gemstone",
               "count": 1,
-              "gemstones": ["ruby", "white_pearl", "sapphire", "black_pearl"]
+              "gemstones": [
+                "ruby",
+                "white_pearl",
+                "sapphire",
+                "black_pearl"
+              ]
             }
           ]
         }

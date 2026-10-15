@@ -25,15 +25,15 @@ import mod.gottsch.forge.magic_treasures.core.spell.SpellEffects;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 
 /**
  * Siphon: a full-strength hit with a set weapon puts mana back into the worn jewelry piece that has the least left.
  * Mana wells only refill at the anvil, so they get nothing.
  */
-@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID)
+@Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class SiphonEventHandler {
     /** a hit this charged or more counts as full strength; spam-clicking siphons nothing */
     private static final float FULL_STRENGTH = 0.9F;
@@ -48,10 +48,8 @@ public class SiphonEventHandler {
                 || player.getAttackStrengthScale(0.5F) < FULL_STRENGTH) {
             return;
         }
-        WornJewelry.lowestMana(player).ifPresent(context -> {
-            double max = context.getCapability().getMaxMana();
-            context.getCapability().setMana(Math.min(max, context.getCapability().getMana() + weapon.getSiphonMana()));
-            WornJewelry.sync(player, context);
+        WornJewelry.lowestMana(player).ifPresent(handler -> {
+            handler.setMana(Math.min(handler.getMaxMana(), handler.getMana() + weapon.getSiphonMana()));
             SpellEffects.arc(player.level(), target, player, MagicTreasuresParticles.SPARK_BLUE.get());
         });
     }

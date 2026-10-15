@@ -1,0 +1,58 @@
+{
+  "name": "Материалы",
+  "icon": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:iron\"}}",
+  "category": "magictreasures:guide",
+  "sortnum": 3,
+  "pages": [
+    "Материал задаёт базовые использования, ману, починки и наибольший уровень заклинания, а некоторые материалы ещё и меняют заклинания. Стиль и камень добавляются к этому.",
+    {
+      "type": "patchouli:spotlight",
+      "title": "Дерево",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:wood\"}]",
+      "text": "Самый слабый материал. Встречается только в добыче и только в обычном стиле.$(br2)$(l)Макс. уровень:$() $(4)2$()$(br)$(l)Использования:$() $(1)40$()$(br)$(l)Мана:$() $(1)20$()$(br)$(l)Починки:$() $(6)0$()",
+      "anchor": "wood_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Железо",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:iron\"}]",
+      "text": "Очень прочное и легко чинится.$(br2)$(l)Макс. уровень:$() $(4)3$()$(br)$(l)Использования:$() $(1)200$()$(br)$(l)Мана:$() $(1)50$()$(br)$(l)Починки:$() $(6)3$()$(br)$(l)Длительность:$() $(3)+25%$()",
+      "anchor": "iron_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Медь",
+      "item": "magictreasures:necklace[magictreasures:jewelry_identity={type:\"necklace\",material:\"magictreasures:copper\",style:\"magictreasures:great\"}]",
+      "text": "Уровень выше, чем у железа, но менее прочное.$(br2)$(l)Макс. уровень:$() $(4)4$()$(br)$(l)Использования:$() $(1)75$()$(br)$(l)Мана:$() $(1)50$()$(br)$(l)Починки:$() $(6)1$()$(br)$(l)Перезарядка:$() $(3)-5%$()",
+      "anchor": "copper_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Серебро",
+      "item": "magictreasures:bracelet[magictreasures:jewelry_identity={type:\"bracelet\",material:\"magictreasures:silver\"}]",
+      "text": "Заклинания стоят меньше маны.$(br2)$(l)Макс. уровень:$() $(4)5$()$(br)$(l)Использования:$() $(1)150$()$(br)$(l)Мана:$() $(1)75$()$(br)$(l)Починки:$() $(6)2$()$(br)$(l)Стоимость:$() $(3)-5%$()",
+      "anchor": "silver_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Золото",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:gold\",style:\"magictreasures:great\"}]",
+      "text": "Лучший из обычных металлов.$(br2)$(l)Макс. уровень:$() $(4)6$()$(br)$(l)Использования:$() $(1)150$()$(br)$(l)Мана:$() $(1)100$()$(br)$(l)Починки:$() $(6)2$()$(br)$(l)Стоимость:$() $(3)-7.5%$()$(br)$(l)Перезарядка:$() $(3)-4%$()",
+      "anchor": "gold_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Кость",
+      "item": "magictreasures:necklace[magictreasures:jewelry_identity={type:\"necklace\",material:\"magictreasures:bone\",style:\"magictreasures:great\"}]",
+      "text": "Заклинания на 25% сильнее, но костяные украшения нельзя чинить.$(br2)$(l)Макс. уровень:$() $(4)7$()$(br)$(l)Использования:$() $(1)200$()$(br)$(l)Мана:$() $(1)50$()$(br)$(l)Починки:$() $(6)0$()$(br)$(l)Стоимость:$() $(3)+5%$()$(br)$(l)Эффект:$() $(3)+25%$()",
+      "anchor": "bone_jewelry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Кровь",
+      "item": "magictreasures:ring[magictreasures:jewelry_identity={type:\"ring\",material:\"magictreasures:blood\",gem:\"magictreasures:ruby\",style:\"magictreasures:lords\",preset:\"magictreasures:ring_of_life_death\"}]",
+      "text": "Кровь (HemalSteel) очень редка: Кольцо жизни и смерти — единственное украшение из неё.$(br2)$(l)Макс. уровень:$() $(4)8$()$(br)$(l)Использования:$() $(1)250$()$(br)$(l)Мана:$() $(1)100$()$(br)$(l)Починки:$() $(6)2$()$(br)$(l)Стоимость:$() $(3)-10%$()",
+      "anchor": "blood_jewelry"
+    }
+  ]
+}

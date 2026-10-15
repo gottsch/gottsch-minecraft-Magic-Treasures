@@ -7,11 +7,14 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:gold_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["scarce", "rare"]
+              "rarities": [
+                "scarce",
+                "rare"
+              ]
             },
             {
               "function": "magictreasures:imbue_randomly",
@@ -36,13 +39,17 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:silver_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["uncommon", "scarce", "rare"]
+              "rarities": [
+                "uncommon",
+                "scarce",
+                "rare"
+              ]
             }
-          ]          
+          ]
         },
         {
           "entryName": "random_spell",
@@ -66,7 +73,12 @@
             {
               "function": "magictreasures:random_gemstone",
               "count": 1,
-              "gemstones": ["diamond", "jadeite", "ruby", "white_pearl"]
+              "gemstones": [
+                "minecraft:diamond",
+                "jadeite",
+                "ruby",
+                "white_pearl"
+              ]
             }
           ]
         }

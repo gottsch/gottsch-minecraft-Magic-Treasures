@@ -45,13 +45,10 @@ public class TakeRootBonus implements SetBonus {
             return;
         }
         JewelrySet pieces = set.get();
-        // jewelry: its uses live in the capability, so the client hears about them through a sync
-        for (SpellContext context : WornJewelry.contexts(player)) {
-            IJewelryHandler handler = context.getCapability();
-            if (pieces.contains(context.getItemStack().getItem()) && !handler.isInfinite()
-                    && handler.getUses() < handler.getMaxUses()) {
+        for (WornJewelry.Piece piece : WornJewelry.pieces(player)) {
+            IJewelryHandler handler = piece.handler();
+            if (pieces.contains(piece.stack()) && !handler.isInfinite() && handler.getUses() < handler.getMaxUses()) {
                 handler.setUses(handler.getUses() + 1);
-                WornJewelry.sync(player, context);
             }
         }
         // the weapon and armor: plain item damage, which vanilla syncs

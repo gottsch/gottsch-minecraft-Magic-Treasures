@@ -19,6 +19,16 @@ package mod.gottsch.forge.magic_treasures.core.client;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.client.hud.JewelryHud;
+import mod.gottsch.forge.magic_treasures.core.client.model.JewelryColors;
+import mod.gottsch.forge.magic_treasures.core.client.model.JewelryModel;
+import mod.gottsch.forge.magic_treasures.core.client.model.LichsMaskModel;
+import mod.gottsch.forge.magic_treasures.core.client.model.LoreBookModel;
+import mod.gottsch.forge.magic_treasures.core.client.model.SmithsHelmModel;
+import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.forge.magic_treasures.core.item.set.SetShield;
+import mod.gottsch.forge.magic_treasures.core.setup.Registration;
+import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import mod.gottsch.forge.magic_treasures.core.client.particle.ArcaneSparkParticle;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.RichTooltips;
@@ -26,7 +36,18 @@ import mod.gottsch.forge.magic_treasures.core.client.tooltip.IconTitleTooltip;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
@@ -40,6 +61,27 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class MagicTreasuresClientSetup {
+
+	/**
+	 * Vanilla registers the {@code blocking} item property for its own shield only, so a set shield's
+	 * {@code blocking} model override would never fire without this (Dungeons2's Mirror Shield hit the same).
+	 */
+	@SubscribeEvent
+	public static void onClientSetup(FMLClientSetupEvent event) {
+		event.enqueueWork(() -> Registration.ITEMS.getEntries().stream()
+				.filter(item -> item.get() instanceof SetShield)
+				.forEach(item -> ItemProperties.register(item.get(), new ResourceLocation("blocking"),
+						(stack, level, entity, seed) ->
+								entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F)));
+	}
+
+	/** models of set armor that isn't the plain armor box */
+	@SubscribeEvent
+	public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+		event.registerLayerDefinition(SmithsHelmModel.LAYER, SmithsHelmModel::createBodyLayer);
+		event.registerLayerDefinition(LichsMaskModel.LAYER, LichsMaskModel::createBodyLayer);
+	}
+
 
 	@SubscribeEvent
 	public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
@@ -57,5 +99,19 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterGuiOverlays(RegisterGuiOverlaysEvent event) {
 		event.registerAboveAll(JewelryHud.ID, new JewelryHud());
+	}
+
+	/** the composed model of 2.0 generic jewelry */
+	@SubscribeEvent
+	public static void onRegisterGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+		// 1.20.1 registers by path, in the active mod's namespace
+		event.register(JewelryModel.LOADER_ID.getPath(), JewelryModel.Loader.INSTANCE);
+		event.register(LoreBookModel.LOADER_ID.getPath(), LoreBookModel.Loader.INSTANCE);
+	}
+
+	/** tints the composed model's fallback layers */
+	@SubscribeEvent
+	public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
+		MagicTreasuresItems.GENERIC_JEWELRY.forEach(item -> event.register(new JewelryColors(), item.get()));
 	}
 }

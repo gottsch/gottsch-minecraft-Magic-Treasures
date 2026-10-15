@@ -20,13 +20,12 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
-import mod.gottsch.forge.magic_treasures.core.network.SpellUpdateS2C;
 import mod.gottsch.forge.magic_treasures.core.spell.cost.ICostEvaluator;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -43,15 +42,6 @@ public interface ISpell {
     SpellEntity entity();
 
     boolean serverUpdate(Level level, Random random, ICoords coords, Event event, ICastSpellContext context);
-
-    default public boolean clientUpdate(ItemStack jewelry, SpellEntity entity, SpellUpdateS2C message) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        handler.setMana(message.getMana());
-        if (entity instanceof CooldownSpellEntity cooldownEntity && message.getCooldownExpireTime() >= 0) {
-            cooldownEntity.setCooldownExpireTime(message.getCooldownExpireTime());
-        }
-        return true;
-    }
 
     @SuppressWarnings("deprecation")
     void addInformation(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flagIn, SpellEntity entity);

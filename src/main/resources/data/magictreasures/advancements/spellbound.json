@@ -1,8 +1,8 @@
 {
-  "parent": "magictreasures:set_in_stone",
+  "parent": "magictreasures:root",
   "display": {
     "icon": {
-      "item": "magictreasures:red_spell_scroll"
+      "item": "magictreasures:lesser_healing_scroll"
     },
     "title": {
       "translate": "advancements.magictreasures.spellbound.title"

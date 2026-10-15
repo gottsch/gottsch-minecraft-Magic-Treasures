@@ -58,11 +58,17 @@ minecraft {
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
+            // Curios is on the runtime classpath, so its mixins need the same remapping as the client run
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             args '--nogui'
         }
 
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id
+            // Curios is on the runtime classpath, so its mixins need the same remapping as the client run
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         data {

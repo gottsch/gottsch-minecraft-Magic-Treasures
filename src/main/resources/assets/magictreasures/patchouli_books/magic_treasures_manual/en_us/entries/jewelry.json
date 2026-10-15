@@ -1,78 +1,35 @@
 {
   "name": "Jewelry",
-  "icon": "magictreasures:gold_ring",
+  "icon": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",gem:\"magictreasures:ruby\"}}",
   "category": "magictreasures:guide",
   "sortnum": 2,
   "pages": [
-    "There are three types of jewelry that can be worn - Rings, Necklaces, and Bracelets. Jewelry comes in different sizes and materials. Each jewelry item has its own # of uses, mana and # of repairs which can be affected by material and size. Jewelry can be upgraded by affixing gems to them using an anvil. Spells can be imbued into them as well using an anvil. You can only add one spell to a jewelry item, though some special pieces can be found that contain more.",
+    "There are three types of jewelry: rings, necklaces and bracelets. Each piece is made of a material, comes in a style, and can have a gem. Together they set its uses, mana, repairs, recharges and the highest spell level it can hold.$(br2)Set a gem and add a spell at an anvil. A piece holds one spell; some named pieces hold more.",
     {
       "type": "patchouli:text",
-      "title": "Jewelry Sizes",
-      "text":"Jewelry has three different sizes - regular (unnamed), Great and Lords, and each grants different buffs to the item.$(br)Regular is the default size and does not have a prefix.$(br2)$(l)$(n)Great$():$(br)$(l)Uses: $()$(3)+100%$()$(br)$(l)Mana: $()$(3)+50%$()$(br)$(l)Repairs: $()$(3)+1$()$(br2)$(l)$(n)Lords$():$(br)$(l)Uses: $()$(3)+200%$()$(br)$(l)Mana: $()$(3)+100%$()$(br)$(l)Repairs: $()$(3)+2$()",
-      "anchor": "jewelry_size"
+      "title": "Crafting Jewelry",
+      "text": "Craft a ring, necklace or bracelet from its recipe scroll and four of a material: iron, copper, silver or gold ingots, or bones.$(br2)Crafted jewelry is the regular style, with no gem. Wood jewelry, Great and Lord's jewelry, and jewelry with a gem already set are found as loot.",
+      "anchor": "crafting"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Jewelry Styles",
+      "text": "Jewelry comes in three styles. Regular is the plain one, with no word in its name. The others multiply the material's uses and mana, and add to its level and repairs.",
+      "anchor": "jewelry_style"
     },
     {
       "type": "patchouli:spotlight",
-      "title": "Wood Jewelry",
-      "item": {
-        "item": "magictreasures:wood_ring"
-      },
-      "text": "Wood jewelry is the least powerful material.$(br2)$(l)Max Level:$() $(4)2$()$(br)$(l)Uses:$() $(1)40$()$(br)$(l)Mana:$() $(1)20$()$(br)$(l)Repairs:$() $(6)0$()$(br)",
-      "anchor": "wood_jewelry"
+      "title": "Great",
+      "item": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",style:\"magictreasures:great\"}}",
+      "text": "$(l)Uses:$() $(3)×2$()$(br)$(l)Mana:$() $(3)×1.5$()$(br)$(l)Max Level:$() $(3)+1$()$(br)$(l)Repairs:$() $(3)+1$()",
+      "anchor": "great"
     },
     {
       "type": "patchouli:spotlight",
-      "title": "Iron Jewelry",
-      "item": {
-        "item": "magictreasures:iron_ring"
-      },
-      "text": "Iron jewelry is very durability, having a high number of uses and very repairable.$(br2)$(l)Max Level:$() $(4)3$()$(br)$(l)Uses:$() $(1)200$()$(br)$(l)Mana:$() $(1)50$()$(br)$(l)Repairs:$() $(6)3$()$(br)$(l)Spell Duration:$() $(3)+25%$()$(br)",
-      "anchor": "iron_jewelry"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "title": "Copper Jewelry",
-      "item": {
-        "item": "magictreasures:great_copper_necklace"
-      },
-      "text": "Copper jewelry has a higher level than iron, but not as durable.$(br2)$(l)Max Level:$() $(4)4$()$(br)$(l)Uses:$() $(1)75$()$(br)$(l)Mana:$() $(1)50$()$(br)$(l)Repairs:$() $(6)1$()$(br)$(l)Spell Cooldown:$() $(3)-5%$()$(br)",
-      "anchor": "copper_jewelry"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "title": "Silver Jewelry",
-      "item": {
-        "item": "magictreasures:silver_bracelet"
-      },
-      "text": "Silver jewelry costs less mana to cast spells.$(br2)$(l)Max Level:$() $(4)5$()$(br)$(l)Uses:$() $(1)150$()$(br)$(l)Mana:$() $(1)75$()$(br)$(l)Repairs:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-5%$()$(br)",
-      "anchor": "silver_jewelry"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "title": "Gold Jewelry",
-      "item": {
-        "item": "magictreasures:great_gold_ring"
-      },
-      "text": "Gold jewelry is the best of the standard metals.$(br2)$(l)Max Level:$() $(4)6$()$(br)$(l)Uses:$() $(1)150$()$(br)$(l)Mana:$() $(1)100$()$(br)$(l)Repairs:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)-7.5%$()$(br)$(l)Spell Cooldown:$() $(3)-4%$()$(br)",
-      "anchor": "gold_jewelry"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "title": "Bone Jewelry",
-      "item": {
-        "item": "magictreasures:great_bone_necklace"
-      },
-      "text": "Bone jewelry effects are 25% more powerful however, the jewelry cannot be repaired.$(br2)$(l)Max Level:$() $(4)7$()$(br)$(l)Uses:$() $(1)200$()$(br)$(l)Mana:$() $(1)50$()$(br)$(l)Repairs:$() $(6)0$()$(br)$(l)Spell Cost:$() $(3)+5%$()$(br)$(l)Spell Effect:$() $(3)+25%$()$(br)",
-      "anchor": "bone_jewelry"
-    },
-    {
-      "type": "patchouli:spotlight",
-      "title": "Blood Jewelry",
-      "item": {
-        "item": "magictreasures:ring_of_life_death"
-      },
-      "text": "Blood (or HemalSteel) jewelry is very rare.$(br)Currently there is only one ring of this material.$(br2)$(l)Max Level:$() $(4)8$()$(br)$(l)Uses:$() $(1)250$()$(br)$(l)Mana:$() $(1)100$()$(br)$(l)Repairs:$() $(6)2$()$(br)$(l)Spell Cost:$() $(3)+5%$()$(br)$(l)Spell Effect:$() $(3)+25%$()$(br)",
-      "anchor": "blood_jewelry"
+      "title": "Lord's",
+      "item": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",style:\"magictreasures:lords\"}}",
+      "text": "$(l)Uses:$() $(3)×3$()$(br)$(l)Mana:$() $(3)×2$()$(br)$(l)Max Level:$() $(3)+2$()$(br)$(l)Repairs:$() $(3)+2$()$(br)$(br)Rings and necklaces only.",
+      "anchor": "lords"
     }
   ]
 }

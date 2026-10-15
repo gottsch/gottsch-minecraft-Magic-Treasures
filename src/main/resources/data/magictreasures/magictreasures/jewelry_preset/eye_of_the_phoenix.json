@@ -1,0 +1,20 @@
+{
+  "type": "necklace",
+  "gem": "magictreasures:black_pearl",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.eye_of_the_phoenix",
+  "overrides": {
+    "infinite": true,
+    "max_level": 7,
+    "max_mana": 300.0,
+    "max_recharges": 3,
+    "max_repairs": 3
+  },
+  "rarity": "epic",
+  "spells": [
+    "magictreasures:blessing_of_the_phoenix"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/eye_of_the_phoenix"
+}

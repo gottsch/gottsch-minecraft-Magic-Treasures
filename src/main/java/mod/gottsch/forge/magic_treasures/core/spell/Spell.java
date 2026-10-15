@@ -21,7 +21,7 @@ import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.forge.magic_treasures.core.spell.cost.CostEvaluator;
 import mod.gottsch.forge.magic_treasures.core.spell.cost.ICostEvaluator;
@@ -32,6 +32,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -131,7 +132,7 @@ public abstract class Spell implements ISpell {
             return getCostEvaluator().apply(level, random, coords, context, amount);
         }
         else {
-            IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+            IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
             MagicTreasures.LOGGER.debug("Spell does not have a cost eval.");
             handler.setMana(Mth.clamp(handler.getMana() - 1.0,  0D, handler.getMana()));
         }
@@ -158,17 +159,17 @@ public abstract class Spell implements ISpell {
     }
 
     public double modifySpellCost(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifySpellCost(getSpellCost());
    }
 
     public double modifyEffectAmount(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifyEffectAmount(getEffectAmount());
    }
 
     public long modifyCooldown(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifyCooldown(getCooldown());
    }
 
@@ -178,7 +179,7 @@ public abstract class Spell implements ISpell {
     }
 
     public double modifyRange(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifyRange(getRange());
    }
 
@@ -210,7 +211,7 @@ public abstract class Spell implements ISpell {
     }
 
     private IJewelryHandler getHandler(ItemStack jewelry) {
-        return  jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        return  JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
     }
 
     @SuppressWarnings("deprecation")

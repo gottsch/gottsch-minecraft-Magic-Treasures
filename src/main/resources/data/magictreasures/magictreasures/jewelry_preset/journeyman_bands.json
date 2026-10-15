@@ -1,0 +1,19 @@
+{
+  "type": "bracelet",
+  "gem": "magictreasures:jadeite",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.journeyman_bands",
+  "overrides": {
+    "infinite": true,
+    "max_mana": 100.0,
+    "max_recharges": 0
+  },
+  "rarity": "scarce",
+  "spells": [
+    "magictreasures:speed",
+    "magictreasures:night_vision"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/great_gold_jadeite_bracelet"
+}

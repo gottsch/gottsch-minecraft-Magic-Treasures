@@ -19,15 +19,20 @@ package mod.gottsch.forge.magic_treasures.core.set;
 
 import mod.gottsch.forge.magic_treasures.core.spell.ISpell;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 
 /**
  * What a set gives while enough of its pieces are worn. A bonus can change spell numbers during a cast, act on its own
- * about once a second, or both.
+ * about once a second, or both. A bonus that other systems check (on death, after a drain) can also be a plain marker:
+ * those systems ask {@link SetEquipment#isActive} whether it's on.
  */
 public interface SetBonus {
 
-    /** Changes one of {@code spell}'s numbers for this cast; returns {@code value} unchanged when it doesn't apply. */
-    default double modify(SpellStat stat, ISpell spell, double value) {
+    /**
+     * Changes one of {@code spell}'s numbers for this cast by {@code player}; returns {@code value} unchanged when it
+     * doesn't apply.
+     */
+    default double modify(Player player, SpellStat stat, ISpell spell, double value) {
         return value;
     }
 
@@ -35,13 +40,18 @@ public interface SetBonus {
     default void tick(ServerPlayer player) {
     }
 
+    /** Whether this bonus is, or contains, a bonus of {@code type}. */
+    default boolean includes(Class<? extends SetBonus> type) {
+        return type.isInstance(this);
+    }
+
     /** Several bonuses as one tier: each changes the number in turn, and each ticks. */
     static SetBonus of(SetBonus... bonuses) {
         return new SetBonus() {
             @Override
-            public double modify(SpellStat stat, ISpell spell, double value) {
+            public double modify(Player player, SpellStat stat, ISpell spell, double value) {
                 for (SetBonus bonus : bonuses) {
-                    value = bonus.modify(stat, spell, value);
+                    value = bonus.modify(player, stat, spell, value);
                 }
                 return value;
             }
@@ -51,6 +61,16 @@ public interface SetBonus {
                 for (SetBonus bonus : bonuses) {
                     bonus.tick(player);
                 }
+            }
+
+            @Override
+            public boolean includes(Class<? extends SetBonus> type) {
+                for (SetBonus bonus : bonuses) {
+                    if (bonus.includes(type)) {
+                        return true;
+                    }
+                }
+                return false;
             }
         };
     }

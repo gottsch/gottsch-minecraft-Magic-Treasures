@@ -17,7 +17,12 @@
  */
 package mod.gottsch.forge.magic_treasures.core.item.set;
 
+import mod.gottsch.forge.magic_treasures.core.client.model.SetArmorModels;
 import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -28,6 +33,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Set armor. It carries no spell; while worn it resonates with its set's jewelry, adding to their spells' effect
@@ -39,6 +45,19 @@ public class SetArmor extends ArmorItem {
     public SetArmor(ArmorMaterial material, Type type, String loreKey, Properties properties) {
         super(material, type, properties);
         this.loreKey = loreKey;
+    }
+
+    /** the Smith's Helm and Lich's Mask have their own worn model (see SetArmorModels; client only) */
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
+            @Override
+            public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack stack, EquipmentSlot slot,
+                                                          HumanoidModel<?> original) {
+                HumanoidModel<?> model = SetArmorModels.get(SetArmor.this);
+                return model != null ? model : original;
+            }
+        });
     }
 
     @Override

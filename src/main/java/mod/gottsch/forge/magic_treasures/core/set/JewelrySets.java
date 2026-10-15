@@ -17,8 +17,14 @@
  */
 package mod.gottsch.forge.magic_treasures.core.set;
 
+import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import net.minecraft.resources.ResourceLocation;
+import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
+import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.forge.magic_treasures.core.component.StackData;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,15 +45,21 @@ public final class JewelrySets {
     private static final String[] WARD_SPELLS = {"magic_resistance", "mana_shield", "reflection", "spectral_armor"};
 
     public static final JewelrySet SALANDAARS_ANVILWORK = register(JewelrySet.builder("salandaars_anvilwork")
-            .piece(MagicTreasuresItems.SALANDAARS_WARD)
-            .piece(MagicTreasuresItems.RING_OF_FORTITUDE)
+            .piece(preset("salandaars_ward"))
+            .piece(preset("ring_of_fortitude"))
+            .piece(preset("smiths_cuff"))
+            .piece(MagicTreasuresItems.STONEMARK_HAMMER)
+            .piece(MagicTreasuresItems.SMITHS_HELM)
+            .piece(MagicTreasuresItems.ANVIL_SHIELD)
             .bonus(2, SpellStatBonus.multiply(SpellStat.COST, 0.9, WARD_SPELLS))
+            .bonus(4, SpellStatBonus.multiply(SpellStat.COOLDOWN, 0.85, WARD_SPELLS))
+            .bonus(6, new TemperedBonus(() -> JewelrySets.SALANDAARS_ANVILWORK))
             .build());
 
     public static final JewelrySet SILBROS_GROVE = register(JewelrySet.builder("silbros_grove")
-            .piece(MagicTreasuresItems.SILBROS_RING_OF_VITALITY)
-            .piece(MagicTreasuresItems.STRONGMANS_BRACERS)
-            .piece(MagicTreasuresItems.SILBROS_ACORN)
+            .piece(preset("silbros_ring_of_vitality"))
+            .piece(preset("strongmans_bracers"))
+            .piece(preset("silbros_acorn"))
             .piece(MagicTreasuresItems.ROOTSTAFF)
             .piece(MagicTreasuresItems.BARKSKIN_VEST)
             // 25% more often: a 10 s wait becomes 8 s
@@ -58,17 +70,25 @@ public final class JewelrySets {
             .build());
 
     public static final JewelrySet MALDRITCHS_REMAINS = register(JewelrySet.builder("maldritchs_remains")
-            .piece(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET)
-            .piece(MagicTreasuresItems.RING_LIFE_DEATH)
+            .piece(preset("maldritchs_first_amulet"))
+            .piece(preset("ring_of_life_death"))
             .piece(MagicTreasuresItems.SKULL_BELT)
+            .piece(MagicTreasuresItems.BONE_SCYTHE)
+            .piece(MagicTreasuresItems.LICHS_MASK)
             .bonus(2, SpellStatBonus.add(SpellStat.RANGE, 1.0, "drain"))
+            .bonus(4, new DrainRefillBonus())
+            .bonus(5, new BoundPossessionsBonus())
             .build());
 
     public static final JewelrySet SELENES_TIDES = register(JewelrySet.builder("selenes_tides")
-            .piece(MagicTreasuresItems.AQUA_RING)
-            .piece(MagicTreasuresItems.JOURNEYMANS_BANDS)
-            .piece(MagicTreasuresItems.EYE_OF_THE_PHOENIX)
+            .piece(preset("aqua_ring"))
+            .piece(preset("journeyman_bands"))
+            .piece(preset("eye_of_the_phoenix"))
+            .piece(MagicTreasuresItems.MOONGLAIVE)
+            .piece(MagicTreasuresItems.PEARL_CIRCLET)
             .bonus(2, SpellStatBonus.multiply(SpellStat.DURATION, 1.5, "water_breathing", "night_vision"))
+            .bonus(4, new TidewalkerBonus(() -> JewelrySets.SELENES_TIDES))
+            .bonus(5, new MoonlitBonus())
             .build());
 
     private JewelrySets() {}
@@ -87,14 +107,33 @@ public final class JewelrySets {
         return Collections.unmodifiableList(SETS);
     }
 
+    /** the set an item piece belongs to (1.x jewelry, armor, weapons) */
     public static synchronized Optional<JewelrySet> get(Item item) {
         if (byItem == null) {
             Map<Item, JewelrySet> map = new IdentityHashMap<>();
             for (JewelrySet set : SETS) {
-                set.getPieces().forEach(piece -> map.put(piece, set));
+                set.getItems().forEach(piece -> map.put(piece, set));
             }
             byItem = map;
         }
         return Optional.ofNullable(byItem.get(item));
+    }
+
+    /** the set a stack belongs to: by its item, or by its 2.0 jewelry preset */
+    public static Optional<JewelrySet> get(ItemStack stack) {
+        Optional<JewelrySet> byItemSet = get(stack.getItem());
+        if (byItemSet.isPresent()) {
+            return byItemSet;
+        }
+        JewelryIdentity identity = StackData.get(stack, MagicTreasuresDataComponents.JEWELRY_IDENTITY);
+        if (identity == null || identity.preset().isEmpty()) {
+            return Optional.empty();
+        }
+        return SETS.stream().filter(set -> set.getPresets().contains(identity.preset().get())).findFirst();
+    }
+
+    /** a set piece that is a 2.0 preset (M9: the 1.x named items are gone; M8's presets have the same ids) */
+    private static ResourceLocation preset(String path) {
+        return new ResourceLocation(MagicTreasures.MOD_ID, path);
     }
 }

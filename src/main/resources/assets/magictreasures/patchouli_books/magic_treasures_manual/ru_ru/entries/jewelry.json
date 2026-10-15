@@ -1,0 +1,35 @@
+{
+  "name": "Украшения",
+  "icon": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",gem:\"magictreasures:ruby\"}}",
+  "category": "magictreasures:guide",
+  "sortnum": 2,
+  "pages": [
+    "Есть три вида украшений: кольца, ожерелья и браслеты. Каждое сделано из материала, имеет стиль и может нести камень. Вместе они задают его использования, ману, починки, перезарядки и наибольший уровень заклинания.$(br2)Вставьте камень и добавьте заклинание на наковальне. В украшении одно заклинание; у некоторых именных украшений их больше.",
+    {
+      "type": "patchouli:text",
+      "title": "Создание украшений",
+      "text": "Создайте кольцо, ожерелье или браслет из свитка-рецепта и четырёх единиц материала: слитков железа, меди, серебра или золота либо костей.$(br2)Созданное украшение обычного стиля и без камня. Деревянные, великие и лордские украшения, а также украшения с камнем можно найти только в добыче.",
+      "anchor": "crafting"
+    },
+    {
+      "type": "patchouli:text",
+      "title": "Стили украшений",
+      "text": "У украшений три стиля. Обычный — простой, без слова в названии. Остальные умножают использования и ману материала и добавляют к его уровню и починкам.",
+      "anchor": "jewelry_style"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Великое",
+      "item": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",style:\"magictreasures:great\"}}",
+      "text": "$(l)Использования:$() $(3)×2$()$(br)$(l)Мана:$() $(3)×1.5$()$(br)$(l)Макс. уровень:$() $(3)+1$()$(br)$(l)Починки:$() $(3)+1$()",
+      "anchor": "great"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "title": "Лордское",
+      "item": "magictreasures:ring{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",style:\"magictreasures:lords\"}}",
+      "text": "$(l)Использования:$() $(3)×3$()$(br)$(l)Мана:$() $(3)×2$()$(br)$(l)Макс. уровень:$() $(3)+2$()$(br)$(l)Починки:$() $(3)+2$()$(br)$(br)Только кольца и ожерелья.",
+      "anchor": "lords"
+    }
+  ]
+}

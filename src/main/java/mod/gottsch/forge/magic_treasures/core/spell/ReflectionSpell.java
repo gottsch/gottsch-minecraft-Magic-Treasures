@@ -2,11 +2,12 @@
 package mod.gottsch.forge.magic_treasures.core.spell;
 
 
+import net.minecraft.core.particles.ParticleTypes;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -53,7 +54,7 @@ public class ReflectionSpell extends CooldownSpell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (hasMana(handler, context) && player.isAlive()) {
 			if (((LivingHurtEvent)event).getEntity() instanceof Player) {
@@ -68,13 +69,9 @@ public class ReflectionSpell extends CooldownSpell {
 				}
 				boolean flag = attacker.hurt(world.damageSources().magic(), (float) reflectedAmount);
 				MagicTreasures.LOGGER.debug("reflected damage {} onto mob -> {} was successful -> {}", reflectedAmount, attacker.getName(), flag);
-				// a ripple around the player and a burst on the attacker read at melee range; add the arc only when
-				// the attacker is far enough away for it to be a visible line
-				SpellEffects.ring(world, player, MagicTreasuresParticles.SPARK_CYAN.get(), 0.9, 16);
-				SpellEffects.burst(world, attacker, MagicTreasuresParticles.SPARK_CYAN.get(), 6);
-				if (player.distanceTo(attacker) > 2.5F) {
-					SpellEffects.arc(world, player, attacker, MagicTreasuresParticles.SPARK_CYAN.get());
-				}
+				// the blow going back: a gold line to the attacker and crit stars on it
+				SpellEffects.arc(world, player, attacker, MagicTreasuresParticles.SPARK_GOLD.get());
+				SpellEffects.burst(world, attacker, ParticleTypes.CRIT, 8);
 
 				applyCost(world, random, coords, context, Math.min(modifySpellCost(jewelry), reflectedAmount));
 

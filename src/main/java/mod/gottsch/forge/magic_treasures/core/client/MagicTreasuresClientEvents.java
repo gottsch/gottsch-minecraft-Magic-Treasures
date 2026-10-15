@@ -29,6 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.TooltipMarkers;
+import mod.gottsch.forge.magic_treasures.core.set.JewelrySet;
 import mod.gottsch.forge.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
@@ -74,6 +75,8 @@ public class MagicTreasuresClientEvents {
 			IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 		}
 		RichTooltips.apply(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH);
+		// a tooltip taller than the screen loses its top: drop the icon header if that's what tips it over
+		IconTitleTooltips.fitToScreen(event);
 	}
 
 	/** Widen dividers and bars to the finished tooltip, and keep it off the bottom of the screen. */
@@ -89,7 +92,7 @@ public class MagicTreasuresClientEvents {
 	 */
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event) {
-		JewelrySets.get(event.getItemStack().getItem()).ifPresent(set -> {
+		JewelrySets.get(event.getItemStack()).ifPresent(set -> {
 			Player player = event.getEntity();
 			List<ItemStack> worn = player == null ? List.of() : SetEquipment.getWornItems(player);
 			int count = set.countWorn(worn);
@@ -98,9 +101,9 @@ public class MagicTreasuresClientEvents {
 			lines.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
 			lines.add(Component.translatable(LangUtil.tooltip("set.header"), set.getName(), count, set.size())
 					.withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
-			for (Item piece : set.getPieces()) {
-				boolean isWorn = worn.stream().anyMatch(stack -> stack.is(piece));
-				lines.add(Component.literal(LangUtil.INDENT2).append(piece.getDescription())
+			for (JewelrySet.Piece piece : set.getPieces()) {
+				boolean isWorn = worn.stream().anyMatch(piece::matches);
+				lines.add(Component.literal(LangUtil.INDENT2).append(piece.name())
 						.withStyle(isWorn ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
 			}
 			for (int pieces : set.getTiers().keySet()) {

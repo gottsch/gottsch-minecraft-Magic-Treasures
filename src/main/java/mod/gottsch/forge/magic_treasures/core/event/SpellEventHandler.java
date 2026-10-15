@@ -21,9 +21,7 @@ import mod.gottsch.forge.gottschcore.spatial.Coords;
 import mod.gottsch.forge.gottschcore.world.WorldInfo;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
-import mod.gottsch.forge.magic_treasures.core.network.MagicTreasuresNetworking;
-import mod.gottsch.forge.magic_treasures.core.network.SpellUpdateS2C;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.spell.*;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -42,8 +40,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.advancement.JewelryTrigger;
 import mod.gottsch.forge.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.forge.magic_treasures.core.item.ManaWell;
+import mod.gottsch.forge.magic_treasures.core.set.JewelrySet;
+import mod.gottsch.forge.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
 
 /**
@@ -89,15 +90,27 @@ public class SpellEventHandler {
 				SetEquipment.tick(player);
 			}
 			// once a second is plenty for an advancement; the trigger is a no-op once it is granted
-			if (player.tickCount % 20 == 0 && getEquipmentSpellHandler() != null
-					&& getEquipmentSpellHandler().isWearingFullSet(player)) {
-				MagicTreasuresCriteria.JEWELRY.trigger(player, MagicTreasuresCriteria.FULL_SET);
+			if (player.tickCount % 20 == 0) {
+				checkWornAdvancements(player);
+			}
+		}
+	}
+
+	/** Dressed to the Nines, and every named set worn whole (Fully Adorned, the per-set advancements). */
+	private void checkWornAdvancements(ServerPlayer player) {
+		if (getEquipmentSpellHandler() != null && getEquipmentSpellHandler().isDressed(player)) {
+			MagicTreasuresCriteria.JEWELRY.trigger(player, MagicTreasuresCriteria.DRESSED);
+		}
+		for (JewelrySet set : JewelrySets.getAll()) {
+			if (SetEquipment.countWorn(player, set) >= set.size()) {
+				MagicTreasuresCriteria.JEWELRY.trigger(player, MagicTreasuresCriteria.FULL_SET,
+						JewelryTrigger.Details.set(set.getId()));
 			}
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 */
 	@SubscribeEvent
@@ -173,7 +186,7 @@ public class SpellEventHandler {
 		// check each hand
 		for (InteractionHand hand : InteractionHand.values()) {
 			ItemStack heldStack = player.getItemInHand(hand);
-			if (heldStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
+			if (JewelryHandler.get(heldStack).isPresent()) {
 				contexts.addAll(getSpellsFromStack(event, hand, "", heldStack));
 			}
 		}
@@ -196,7 +209,7 @@ public class SpellEventHandler {
 	 */
 	private List<SpellContext> getSpellsFromStack(Event event, InteractionHand hand, String slot, ItemStack itemStack) {
 		final List<SpellContext> contexts = new ArrayList<>(5);
-		IJewelryHandler handler = itemStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalSelectorException::new);
+		IJewelryHandler handler = JewelryHandler.get(itemStack).orElseThrow(IllegalSelectorException::new);
 
 		int index = 0;
 		for (int i = 0; i < handler.getSpells().size(); i++) {
@@ -275,13 +288,6 @@ public class SpellEventHandler {
 			if (context.getEntity().getSpell().serverUpdate(player.level(), random, coords, event, castContext)) {
 //				MagicTreasures.LOGGER.debug("spell {} successfully updated.", spell.getName().toString());
 				processUsage(player.level(), player, event, context);
-				
-				// TODO would be nice if ALL spells processed during event could sent 1 bundled message instead of individual messages
-
-				// send state message to client
-				SpellUpdateS2C message = new SpellUpdateS2C(player.getUUID(), context);
-//				MagicTreasures.LOGGER.debug("sending message to client -> {}", message);
-				MagicTreasuresNetworking.channel.send(PacketDistributor.PLAYER.with(() -> player), message);
 			}
 //			else {
 //				MagicTreasures.LOGGER.debug("spell.serverUpdate failed for some reason.");
@@ -294,7 +300,7 @@ public class SpellEventHandler {
 		// TODO call capability.getDecrementor.apply() or something like that.
 		ItemStack stack = context.getItemStack();
 		// get capability
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
+		JewelryHandler.get(stack).ifPresent(handler -> {
 			if (handler.isInfinite()) {
 				return;
 			}

@@ -17,7 +17,7 @@
  */
 package mod.gottsch.forge.magic_treasures.core.event;
 
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellContext;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellEntity;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,8 +28,6 @@ import net.minecraftforge.eventbus.api.Event;
 import java.util.ArrayList;
 import java.util.List;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.forge.magic_treasures.core.item.JewelryType;
 import mod.gottsch.forge.magic_treasures.core.item.ManaWell;
 import java.util.HashSet;
 import java.util.Optional;
@@ -43,8 +41,8 @@ import net.minecraft.world.entity.player.Player;
  */
 public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	private static final int MAX_HOTBAR_JEWELRY = 4;
-	/** the jewelry types that make a full set */
-	private static final Set<IJewelryType> FULL_SET_TYPES = Set.of(JewelryType.RING, JewelryType.NECKLACE, JewelryType.BRACELET);
+	/** the jewelry types that must all be active to be dressed (plus a belt) */
+	private static final Set<String> DRESSED_TYPES = Set.of("ring", "necklace", "bracelet");
 
 	@Override
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player) {
@@ -56,8 +54,8 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			hotbarSlotStr.set(String.valueOf(hotbarSlot));
 			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
 			if (inventoryStack != player.getItemInHand(InteractionHand.MAIN_HAND)
-					&& inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
-				inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
+					&& JewelryHandler.get(inventoryStack).isPresent()) {
+				JewelryHandler.get(inventoryStack).ifPresent(cap -> {
 
 					AtomicInteger index = new AtomicInteger();
 					// requires indexed for-loop
@@ -99,7 +97,7 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			if (inventoryStack == player.getItemInHand(InteractionHand.MAIN_HAND)) {
 				continue;
 			}
-			Optional<IJewelryHandler> cap = inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve();
+			Optional<IJewelryHandler> cap = JewelryHandler.get(inventoryStack);
 			if (cap.isEmpty()) {
 				continue;
 			}
@@ -121,26 +119,33 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	}
 
 	/**
-	 * Without an equipment mod the hotbar stands in for the jewelry slots, so a full set is a ring, a necklace and a
-	 * bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and
-	 * only the first MAX_HOTBAR_JEWELRY pieces).
+	 * Without an equipment mod the hotbar stands in for the jewelry slots, so being dressed is a ring, a necklace and
+	 * a bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and
+	 * only the first MAX_HOTBAR_JEWELRY pieces), plus a belt: a mana well on the hotbar or in either hand (a held
+	 * well pays for spells too).
 	 */
 	@Override
-	public boolean isWearingFullSet(ServerPlayer player) {
-		Set<IJewelryType> types = new HashSet<>();
+	public boolean isDressed(ServerPlayer player) {
+		boolean belt = !getManaWells(player).isEmpty()
+				|| player.getMainHandItem().getItem() instanceof ManaWell
+				|| player.getOffhandItem().getItem() instanceof ManaWell;
+		if (!belt) {
+			return false;
+		}
+		Set<String> types = new HashSet<>();
 		int jewelryCount = 0;
 		for (int hotbarSlot = 0; hotbarSlot < 9 && jewelryCount < MAX_HOTBAR_JEWELRY; hotbarSlot++) {
 			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
 			if (inventoryStack == player.getItemInHand(InteractionHand.MAIN_HAND)) {
 				continue;
 			}
-			Optional<IJewelryHandler> cap = inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve();
+			Optional<IJewelryHandler> cap = JewelryHandler.get(inventoryStack);
 			if (cap.isPresent()) {
-				types.add(cap.get().getJewelryType());
+				types.add(cap.get().getType());
 				jewelryCount++;
 			}
 		}
-		return types.containsAll(FULL_SET_TYPES);
+		return types.containsAll(DRESSED_TYPES);
 	}
 
 	/**
@@ -158,7 +163,7 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			}
 			if (inventoryStack.getItem() instanceof ManaWell) {
 				worn.add(inventoryStack);
-			} else if (jewelryCount < MAX_HOTBAR_JEWELRY && inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
+			} else if (jewelryCount < MAX_HOTBAR_JEWELRY && JewelryHandler.get(inventoryStack).isPresent()) {
 				worn.add(inventoryStack);
 				jewelryCount++;
 			}

@@ -17,11 +17,14 @@
  */
 package mod.gottsch.forge.magic_treasures.core.event;
 
+import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import mod.gottsch.forge.magic_treasures.core.advancement.JewelryTrigger;
 import mod.gottsch.forge.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.item.JewelryPliers;
+import mod.gottsch.forge.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.forge.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -53,29 +56,36 @@ public class AdvancementEventHandler {
         }
         ItemStack left = event.getLeft();
         ItemStack right = event.getRight();
-        Optional<IJewelryHandler> handler = left.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve();
+        Optional<IJewelryHandler> handler = JewelryHandler.get(left);
         if (handler.isEmpty()) {
             return;
         }
         String action = null;
-        if (!handler.get().hasStone() && right.is(MagicTreasuresTags.Items.STONES)) {
+        JewelryTrigger.Details details = JewelryTrigger.Details.NONE;
+        if (!handler.get().hasStone() && (right.is(MagicTreasuresTags.Items.STONES) || JewelryDataIndex.isGemstone(right))) {
             action = MagicTreasuresCriteria.ADD_GEM;
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)) {
-            return;
+            action = MagicTreasuresCriteria.REMOVE_GEM;
         } else if (handler.get().getSpells().isEmpty() && right.is(MagicTreasuresTags.Items.SPELL_SCROLLS)) {
             action = MagicTreasuresCriteria.IMBUE;
+            if (right.getItem() instanceof SpellScroll scroll) {
+                details = JewelryTrigger.Details.level(scroll.getSpell().getLevel());
+            }
         } else if (handler.get().hasStone() && right.is(MagicTreasuresTags.Items.RECHARGERS)) {
             action = MagicTreasuresCriteria.RECHARGE;
+        } else if (JewelryHandler.get(right).isPresent()) {
+            action = MagicTreasuresCriteria.REPAIR;
         }
         if (action != null) {
-            MagicTreasuresCriteria.JEWELRY.trigger(player, action);
+            MagicTreasuresCriteria.JEWELRY.trigger(player, action, details);
         }
     }
 
     /** A gem was crafted out of jewelry with the pliers ({@code GemExtractionRecipe}). */
     @SubscribeEvent
     public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
-        if (!(event.getEntity() instanceof ServerPlayer player) || !event.getCrafting().is(MagicTreasuresTags.Items.STONES)) {
+        if (!(event.getEntity() instanceof ServerPlayer player)
+                || !(event.getCrafting().is(MagicTreasuresTags.Items.STONES) || JewelryDataIndex.isGemstone(event.getCrafting()))) {
             return;
         }
         Container container = event.getInventory();

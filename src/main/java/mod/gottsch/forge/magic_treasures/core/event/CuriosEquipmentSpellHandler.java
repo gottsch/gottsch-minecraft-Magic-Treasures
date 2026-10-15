@@ -17,7 +17,7 @@
  */
 package mod.gottsch.forge.magic_treasures.core.event;
 
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellContext;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellEntity;
 import net.minecraft.server.level.ServerPlayer;
@@ -60,7 +60,7 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 					for (int slotIndex = 0; slotIndex < stacksHandler.getStacks().getSlots(); slotIndex++) {
 					final int curiosSlotIndex = slotIndex;
 					ItemStack curiosStack = stacksHandler.getStacks().getStackInSlot(slotIndex);
-					curiosStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
+					JewelryHandler.get(curiosStack).ifPresent(cap -> {
 
 							AtomicInteger index = new AtomicInteger();
 							// requires indexed for-loop
@@ -91,55 +91,38 @@ public class CuriosEquipmentSpellHandler implements IEquipmentSpellHandler {
 		return contexts;
 	}
 
-	@Override
-	public List<SpellContext> getWornJewelryContexts(ServerPlayer player) {
-		List<SpellContext> contexts = new ArrayList<>();
-		CuriosApi.getCuriosInventory(player).ifPresent(itemHandler -> CURIOS_SLOTS.forEach(slot ->
-				itemHandler.getStacksHandler(slot).ifPresent(stacksHandler -> {
-					for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
-						final int slotIndex = i;
-						ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
-						stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
-							if (cap.getSpells().isEmpty()) {
-								return;
-							}
-							contexts.add(new SpellContext.Builder().with($ -> {
-								$.slotProviderId = CURIOS_ID;
-								$.slot = slot;
-								$.slotIndex = slotIndex;
-								$.itemStack = stack;
-								$.capability = cap;
-								$.index = 0;
-								$.entity = cap.getSpells().get(0);
-							}).build());
-						});
-					}
-				})));
-		return contexts;
-	}
-
-	/** the slots that make a full set */
-	private static final List<String> FULL_SET_SLOTS = Arrays.asList("ring", "necklace", "bracelet");
+	/** the jewelry slots that must each hold jewelry to be dressed (plus anything in the belt slot) */
+	private static final List<String> DRESSED_SLOTS = Arrays.asList("ring", "necklace", "bracelet");
 
 	@Override
-	public boolean isWearingFullSet(ServerPlayer player) {
+	public boolean isDressed(ServerPlayer player) {
 		Optional<ICuriosItemHandler> inventory = CuriosApi.getCuriosInventory(player).resolve();
 		if (inventory.isEmpty()) {
 			return false;
 		}
-		for (String slot : FULL_SET_SLOTS) {
+		for (String slot : DRESSED_SLOTS) {
 			Optional<ICurioStacksHandler> stacks = inventory.get().getStacksHandler(slot);
 			if (stacks.isEmpty() || !hasJewelry(stacks.get())) {
 				return false;
 			}
 		}
-		return true;
+		// the belt slot only takes belts (curios:belt), so anything there counts
+		Optional<ICurioStacksHandler> belt = inventory.get().getStacksHandler("belt");
+		if (belt.isEmpty()) {
+			return false;
+		}
+		for (int i = 0; i < belt.get().getStacks().getSlots(); i++) {
+			if (!belt.get().getStacks().getStackInSlot(i).isEmpty()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static boolean hasJewelry(ICurioStacksHandler stacksHandler) {
 		for (int i = 0; i < stacksHandler.getStacks().getSlots(); i++) {
 			ItemStack stack = stacksHandler.getStacks().getStackInSlot(i);
-			if (!stack.isEmpty() && stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
+			if (!stack.isEmpty() && JewelryHandler.get(stack).isPresent()) {
 				return true;
 			}
 		}

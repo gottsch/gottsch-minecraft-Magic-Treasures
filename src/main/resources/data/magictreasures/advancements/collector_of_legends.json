@@ -1,0 +1,48 @@
+{
+  "parent": "magictreasures:fully_adorned",
+  "display": {
+    "icon": {
+      "item": "minecraft:nether_star"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.collector_of_legends.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.collector_of_legends.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "silbros_grove": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:silbros_grove"
+      }
+    },
+    "salandaars_anvilwork": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:salandaars_anvilwork"
+      }
+    },
+    "maldritchs_remains": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:maldritchs_remains"
+      }
+    },
+    "selenes_tides": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:selenes_tides"
+      }
+    }
+  }
+}

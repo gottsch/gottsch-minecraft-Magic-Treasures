@@ -18,7 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.client.hud;
 
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.capability.ManaWellHandler;
 import mod.gottsch.forge.magic_treasures.core.config.Config;
 import mod.gottsch.forge.magic_treasures.core.set.JewelrySet;
@@ -47,7 +47,9 @@ import java.util.Optional;
 
 /**
  * The jewelry HUD: one icon per worn piece that casts or pays for spells, with a mana bar under it and vanilla's
- * cooldown sweep over it, and a line for each set with a piece worn.
+ * cooldown sweep over it, and a line for each set with a piece worn. A piece with several spells has its icon split
+ * into one column per spell, in spell order, each with its own sweep (Ring of Life and Death: Cheat Death on the left,
+ * Greater Drain on the right).
  * <p>
  * "Worn" is {@link SetEquipment#getWornItems}, the same rule spells and sets use. The HUD only shows while at least
  * one worn piece has a spell. Mana wells show beside the jewelry they pay for.
@@ -67,7 +69,8 @@ public final class JewelryHud implements IGuiOverlay {
 	/** vanilla's cooldown overlay: translucent white */
 	private static final int COOLDOWN = 0x7FFFFFFF;
 
-	private record Piece(ItemStack stack, float mana, int manaColor, float cooldown) {}
+	/** {@code cooldowns}: per spell, in spell order, how much of its cooldown is left (0 to 1); empty for a mana well */
+	private record Piece(ItemStack stack, float mana, int manaColor, float[] cooldowns) {}
 
 	@Override
 	public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight) {
@@ -110,11 +113,18 @@ public final class JewelryHud implements IGuiOverlay {
 
 	private static void renderPiece(GuiGraphics graphics, Piece piece, int x, int y) {
 		graphics.renderItem(piece.stack(), x, y);
-		if (piece.cooldown() > 0) {
+		float[] cooldowns = piece.cooldowns();
+		for (int i = 0; i < cooldowns.length; i++) {
+			if (cooldowns[i] <= 0) {
+				continue;
+			}
+			// one column per spell; columns after the first leave a 1px gap so side-by-side sweeps read apart
+			int left = x + i * ICON / cooldowns.length + (i > 0 ? 1 : 0);
+			int right = x + (i + 1) * ICON / cooldowns.length;
 			// same overlay vanilla draws over an item on cooldown (an ender pearl after a throw)
-			int top = y + Mth.floor(ICON * (1.0F - piece.cooldown()));
-			int bottom = top + Mth.ceil(ICON * piece.cooldown());
-			graphics.fill(RenderType.guiOverlay(), x, top, x + ICON, bottom, COOLDOWN);
+			int top = y + Mth.floor(ICON * (1.0F - cooldowns[i]));
+			int bottom = top + Mth.ceil(ICON * cooldowns[i]);
+			graphics.fill(RenderType.guiOverlay(), left, top, right, bottom, COOLDOWN);
 		}
 		int barY = y + ICON + BAR_GAP;
 		graphics.fill(x, barY, x + ICON, barY + BAR_HEIGHT, BAR_BACK);
@@ -130,16 +140,16 @@ public final class JewelryHud implements IGuiOverlay {
 		List<Piece> wells = new ArrayList<>();
 		double now = player.level().getGameTime() + partialTick;
 		for (ItemStack stack : worn) {
-			Optional<IJewelryHandler> handler = stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve();
+			Optional<IJewelryHandler> handler = JewelryHandler.get(stack);
 			if (handler.isPresent()) {
 				if (!handler.get().getSpells().isEmpty()) {
 					jewelry.add(new Piece(stack, fraction(handler.get().getMana(), handler.get().getMaxMana()), JEWELRY_MANA,
-							cooldown(player, stack, handler.get(), now)));
+							cooldowns(player, stack, handler.get(), now)));
 				}
 				continue;
 			}
 			ManaWellHandler.get(stack).ifPresent(well ->
-					wells.add(new Piece(stack, fraction(well.getMana(), well.getMaxMana()), WELL_MANA, 0)));
+					wells.add(new Piece(stack, fraction(well.getMana(), well.getMaxMana()), WELL_MANA, new float[0])));
 		}
 		if (jewelry.isEmpty()) {
 			return List.of();
@@ -148,10 +158,12 @@ public final class JewelryHud implements IGuiOverlay {
 		return jewelry;
 	}
 
-	/** How much of the longest running cooldown on the jewelry is left, 0 to 1. */
-	private static float cooldown(Player player, ItemStack stack, IJewelryHandler handler, double now) {
-		float result = 0;
-		for (SpellEntity entity : handler.getSpells()) {
+	/** For each spell on the jewelry, in order, how much of its cooldown is left, 0 to 1 (0 for a spell without one). */
+	private static float[] cooldowns(Player player, ItemStack stack, IJewelryHandler handler, double now) {
+		List<SpellEntity> spells = handler.getSpells();
+		float[] result = new float[spells.size()];
+		for (int i = 0; i < spells.size(); i++) {
+			SpellEntity entity = spells.get(i);
 			if (!(entity instanceof CooldownSpellEntity cooldownEntity) || !(entity.getSpell() instanceof Spell spell)) {
 				continue;
 			}
@@ -162,7 +174,7 @@ public final class JewelryHud implements IGuiOverlay {
 			// the full length this cast was given, set bonuses included, as the cast worked it out
 			double total = SetEquipment.modify(player, stack, spell, SpellStat.COOLDOWN, spell.modifyCooldown(stack));
 			if (total > 0) {
-				result = Math.max(result, (float) Math.min(1.0, remaining / total));
+				result[i] = (float) Math.min(1.0, remaining / total);
 			}
 		}
 		return result;

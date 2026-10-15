@@ -17,6 +17,8 @@
  */
 package mod.gottsch.forge.magic_treasures.core.loot.modifier;
 
+import mod.gottsch.forge.magic_treasures.core.item.LoreBook;
+import mod.gottsch.forge.magic_treasures.api.MagicTreasuresRegistries;
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -27,12 +29,13 @@ import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.forge.magic_treasures.core.config.Config;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.forge.magic_treasures.core.item.set.SetArmor;
+import mod.gottsch.forge.magic_treasures.core.item.set.SetShield;
+import mod.gottsch.forge.magic_treasures.core.item.set.SiphonWeapon;
 import mod.gottsch.forge.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.forge.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.forge.magic_treasures.core.rarity.MagicTreasuresRarity;
-import mod.gottsch.forge.magic_treasures.core.registry.JewelryRegistry;
-import mod.gottsch.forge.magic_treasures.core.registry.StoneRegistry;
-import net.minecraft.world.item.Item;
+import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryLoot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -42,6 +45,7 @@ import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -99,37 +103,56 @@ public class LootModifierByRarity extends LootModifier {
 				&& RandomHelper.checkProbability(context.getLevel().getRandom(), localChance * 100)) {
 
 			IRarity rarity = MagicTreasuresApi.getRarity(this.rarity).orElse(MagicTreasuresRarity.NONE);
-			List<Item> lootList = JewelryRegistry.get(rarity);
-			lootList.addAll(StoneRegistry.get(rarity));
-			lootList.addAll(
-					MagicTreasuresItems.ALL_SPELL_SCROLLS.stream()
-							.map(RegistryObject::get)
-							.filter(scroll -> ((SpellScroll)scroll).getSpell().getRarity() == rarity)
-							.toList()
-			);
+			// 2.0: jewelry and gems of exactly this rarity from the registries (as 1.x's rarity tags; no fallback here,
+			// the other entries fill the list); a preset with loot weight n is in the list n times
+			List<ItemStack> lootList = new ArrayList<>();
+			JewelryLoot.jewelry().stream()
+					.filter(candidate -> candidate.rarity().getCode().equals(rarity.getCode()))
+					.forEach(candidate -> {
+						for (int i = 0; i < candidate.weight(); i++) {
+							lootList.add(candidate.stack());
+						}
+					});
+			JewelryLoot.gemstones().stream()
+					.filter(gem -> gem.value().rarity().map(r -> r.getCode().equals(rarity.getCode())).orElse(false))
+					.forEach(gem -> lootList.add(new ItemStack(JewelryLoot.item(gem))));
+			MagicTreasuresItems.ALL_SPELL_SCROLLS.stream()
+					.map(RegistryObject::get)
+					.filter(scroll -> ((SpellScroll)scroll).getSpell().getRarity() == rarity)
+					.forEach(scroll -> lootList.add(new ItemStack(scroll)));
 			// add some recipes
 			if (rarity.getCode() > MagicTreasuresRarity.UNCOMMON.getCode()) {
-				lootList.add(MagicTreasuresItems.RING_RECIPE.get());
-				lootList.add(MagicTreasuresItems.BRACELET_RECIPE.get());
-				lootList.add(MagicTreasuresItems.NECKLACE_RECIPE.get());
-//				lootList.add(MagicTreasuresItems.BELT_RECIPE.get());
+				lootList.add(new ItemStack(MagicTreasuresItems.RING_RECIPE.get()));
+				lootList.add(new ItemStack(MagicTreasuresItems.BRACELET_RECIPE.get()));
+				lootList.add(new ItemStack(MagicTreasuresItems.NECKLACE_RECIPE.get()));
+//				lootList.add(new ItemStack(MagicTreasuresItems.BELT_RECIPE.get()));
 			}
 			// mana wells
 			if (rarity.getCode() >= MagicTreasuresRarity.RARE.getCode()) {
-				lootList.add(MagicTreasuresItems.SKULL_BELT.get());
+				lootList.add(new ItemStack(MagicTreasuresItems.SKULL_BELT.get()));
 			}
-			// set weapons and armor
+			// set weapons, armor and shields: every one in a set (jewelry and mana wells have their own rules above)
 			if (rarity.getCode() >= MagicTreasuresRarity.UNCOMMON.getCode()) {
-				lootList.add(MagicTreasuresItems.ROOTSTAFF.get());
-				lootList.add(MagicTreasuresItems.BARKSKIN_VEST.get());
+				JewelrySets.getAll().stream()
+						.flatMap(set -> set.getItems().stream())
+						.filter(item -> item instanceof SiphonWeapon || item instanceof SetArmor || item instanceof SetShield)
+						.forEach(item -> lootList.add(new ItemStack(item)));
 			}
+			// lore books of this rarity, from the registry
+			context.getLevel().registryAccess().registry(MagicTreasuresRegistries.LORE_BOOK).ifPresent(books -> books.holders()
+					.filter(book -> !book.value().disabled() && book.value().rarity().getCode() == rarity.getCode())
+					.forEach(book -> lootList.add(LoreBook.of(MagicTreasuresItems.LORE_BOOK.get(), book.key().location()))));
 			// grab random loot from the loot list (without replacement)
 			for (int index = 0; index < count && !lootList.isEmpty(); index++) {
-				Item item = lootList.remove(context.getRandom().nextInt(lootList.size()));
-				generatedLoot.add(new ItemStack(item));
+				ItemStack stack = lootList.remove(context.getRandom().nextInt(lootList.size()));
+				generatedLoot.add(stack);
 				// set pieces drop one per chest
-				if (JewelrySets.get(item).isPresent()) {
+				if (JewelrySets.get(stack).isPresent()) {
 					lootList.removeIf(other -> JewelrySets.get(other).isPresent());
+				}
+				// and lore books one per chest too
+				if (stack.is(MagicTreasuresItems.LORE_BOOK.get())) {
+					lootList.removeIf(other -> other.is(MagicTreasuresItems.LORE_BOOK.get()));
 				}
 			}
 		}

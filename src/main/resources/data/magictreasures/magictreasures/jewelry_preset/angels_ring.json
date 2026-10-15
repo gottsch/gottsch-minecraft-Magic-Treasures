@@ -1,0 +1,18 @@
+{
+  "type": "ring",
+  "gem": "magictreasures:white_pearl",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.angels_ring",
+  "overrides": {
+    "max_level": 8,
+    "max_mana": 400.0,
+    "max_recharges": 3
+  },
+  "rarity": "rare",
+  "spells": [
+    "magictreasures:regeneration"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/angels_ring"
+}

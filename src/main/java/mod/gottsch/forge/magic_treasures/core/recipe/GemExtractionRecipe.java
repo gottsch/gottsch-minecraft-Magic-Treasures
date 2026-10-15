@@ -18,7 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.recipe;
 
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.item.JewelryPliers;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -71,7 +71,7 @@ public class GemExtractionRecipe extends CustomRecipe {
             }
             if (!hasPliers && stack.getItem() instanceof JewelryPliers) {
                 hasPliers = true;
-            } else if (jewelry.isEmpty() && stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).isPresent()) {
+            } else if (jewelry.isEmpty() && JewelryHandler.get(stack).isPresent()) {
                 jewelry = stack;
             } else {
                 return ItemStack.EMPTY;
@@ -80,8 +80,10 @@ public class GemExtractionRecipe extends CustomRecipe {
         if (!hasPliers || jewelry.isEmpty()) {
             return ItemStack.EMPTY;
         }
-        return jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve()
+        return JewelryHandler.get(jewelry)
                 .filter(IJewelryHandler::hasStone)
+                // a 2.0 preset can say "extractable": false
+                .filter(IJewelryHandler::gemExtractable)
                 .map(handler -> BuiltInRegistries.ITEM.get(handler.getStone()))
                 .filter(item -> item != Items.AIR)
                 .map(ItemStack::new)

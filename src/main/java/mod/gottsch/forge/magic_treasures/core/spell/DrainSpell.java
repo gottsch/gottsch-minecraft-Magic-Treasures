@@ -24,8 +24,8 @@ import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
-import mod.gottsch.forge.magic_treasures.core.network.SpellUpdateS2C;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.set.DrainRefillBonus;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -64,12 +64,6 @@ public class DrainSpell extends CooldownSpell {
 	}
 
 	@Override
-	public boolean clientUpdate(ItemStack jewelry, SpellEntity entity, SpellUpdateS2C message) {
-		// TODO
-		return super.clientUpdate(jewelry, entity, message);
-	}
-
-	@Override
 	public Class<?> getRegisteredEvent() {
 		return REGISTERED_EVENT;
 	}
@@ -82,7 +76,7 @@ public class DrainSpell extends CooldownSpell {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 		if (hasMana(handler, context) && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
 			// get player position
 			double px = player.getX();
@@ -111,6 +105,8 @@ public class DrainSpell extends CooldownSpell {
 				player.setHealth(Mth.clamp(player.getHealth() + (float)drainedHealth.get(), 0.0F, player.getMaxHealth()));
 				//					entity.setMana(MathHelper.clamp(entity.getMana() - 1D,  0D, entity.getMana()));
 				applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+				// Maldritch's Remains, 4 pieces: some of the drained life comes back as mana
+				DrainRefillBonus.refill(player, handler, drainedHealth.get());
 				result = true;
 			}
 		}
