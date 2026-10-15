@@ -9,7 +9,7 @@ import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
@@ -48,9 +48,8 @@ public class FireResistanceSpell extends Spell {
 		boolean result = false;
 
 		LivingDamageEvent.Pre damageEvent = (LivingDamageEvent.Pre)event;
-		// exit if not fire damage
-		if (!damageEvent.getSource().is(DamageTypes.IN_FIRE)
-			&& !damageEvent.getSource().is(DamageTypes.ON_FIRE)) {
+		// exit if not fire damage: vanilla's fire tag, as Fire Resistance uses (fire, burning, lava, magma, fireballs)
+		if (!damageEvent.getSource().is(DamageTypeTags.IS_FIRE)) {
 			return result;
 		}
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
