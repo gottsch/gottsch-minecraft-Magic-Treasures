@@ -2,5 +2,11 @@
   "rarity": "scarce",
   "pages": 6,
   "character": "silbro",
-  "texture": "magictreasures:item/lore_book/silbros_journal_1"
+  "texture": "magictreasures:item/lore_book/silbros_journal_1",
+  "illustrations": [
+    {
+      "after": 2,
+      "preset": "magictreasures:strongmans_bracers"
+    }
+  ]
 }

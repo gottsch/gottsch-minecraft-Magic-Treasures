@@ -2,5 +2,15 @@
   "rarity": "rare",
   "pages": 5,
   "character": "selene",
-  "texture": "magictreasures:item/lore_book/selenes_account"
+  "texture": "magictreasures:item/lore_book/selenes_account",
+  "illustrations": [
+    {
+      "after": 1,
+      "item": "magictreasures:white_pearl"
+    },
+    {
+      "after": 3,
+      "preset": "magictreasures:journeyman_bands"
+    }
+  ]
 }

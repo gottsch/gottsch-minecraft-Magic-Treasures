@@ -17,33 +17,33 @@
  */
 package mod.gottsch.forge.magic_treasures.core.client;
 
+import mod.gottsch.forge.magic_treasures.core.lore.LoreBookDef;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.inventory.BookViewScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
- * Opens a lore book on the vanilla book screen. Client-only: called from {@code LoreBook.use} on the client side.
+ * Opens a lore book in Magic Treasures' reader ({@link LoreBookScreen}). Client-only: called from
+ * {@code LoreBook.use} on the client side.
  *
  * @author Mark Gottschling on 10/14/2026
  */
 public final class LoreBookClient {
     private LoreBookClient() {}
 
-    public static void open(List<Component> pages) {
-        // 1.20.1's BookAccess is an interface (1.21.1 made it a record of the pages)
-        Minecraft.getInstance().setScreen(new BookViewScreen(new BookViewScreen.BookAccess() {
-            @Override
-            public int getPageCount() {
-                return pages.size();
-            }
-
-            @Override
-            public FormattedText getPageRaw(int index) {
-                return pages.get(index);
-            }
-        }));
+    public static void open(ResourceLocation id, ItemStack book, LoreBookDef def) {
+        Map<Integer, List<ItemStack>> pictures = new TreeMap<>();
+        for (LoreBookDef.Illustration illustration : def.illustrations()) {
+            illustration.stack().ifPresent(stack -> pictures.computeIfAbsent(illustration.after(), k -> new ArrayList<>()).add(stack));
+        }
+        Minecraft.getInstance().setScreen(new LoreBookScreen(id, book.copyWithCount(1),
+                Component.translatable(LoreBookDef.titleKey(id)), Component.translatable(LoreBookDef.authorKey(id)),
+                def.pageText(id), pictures));
     }
 }
