@@ -23,7 +23,7 @@ import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import mod.gottsch.forge.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.forge.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.forge.magic_treasures.core.item.IJewelryType;

@@ -15,7 +15,7 @@ import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.forge.magic_treasures.core.component.JewelryState;
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import mod.gottsch.forge.magic_treasures.core.item.GenericJewelry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

@@ -5,7 +5,7 @@ import mod.gottsch.forge.magic_treasures.core.advancement.JewelryTrigger;
 import mod.gottsch.forge.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryStats;
 import mod.gottsch.forge.magic_treasures.core.jewelry.data.LegacyConversion;
 import net.minecraft.server.level.ServerPlayer;

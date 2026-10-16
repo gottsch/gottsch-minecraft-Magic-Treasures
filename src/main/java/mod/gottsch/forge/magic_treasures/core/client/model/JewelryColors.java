@@ -2,7 +2,7 @@ package mod.gottsch.forge.magic_treasures.core.client.model;
 
 import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.world.item.ItemStack;

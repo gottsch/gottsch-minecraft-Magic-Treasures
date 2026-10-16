@@ -19,7 +19,7 @@ package mod.gottsch.forge.magic_treasures.core.set;
 
 import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;

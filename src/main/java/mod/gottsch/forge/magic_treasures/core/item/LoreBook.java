@@ -20,7 +20,7 @@ package mod.gottsch.forge.magic_treasures.core.item;
 import mod.gottsch.forge.magic_treasures.api.MagicTreasuresRegistries;
 import mod.gottsch.forge.magic_treasures.core.client.LoreBookClient;
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import mod.gottsch.forge.magic_treasures.core.lore.LoreBookDef;
 import mod.gottsch.forge.magic_treasures.core.lore.LoreBookReading;
 import net.minecraft.server.level.ServerPlayer;

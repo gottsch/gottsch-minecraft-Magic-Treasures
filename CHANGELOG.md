@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Lore books: the stories of Sal'andaar, Silbro, Maldritch and Selene, found in chests (one per chest, from the chest's rarity). Right-click to read; they can't be edited or copied. The first four: Silbro's Journal I, The Runesmith's Ledger, Maldritch's Notes I and Selene's Account. New advancements: First Pages (read one), Archivist (read them all) and a hidden one for each of the four authors. Books are data (`data/<namespace>/magictreasures/lore_book/`, text in lang files, icon at `textures/item/lore_book/<id>.png`), so packs can add their own.
 
 ### Changed
+- Requires GottschCore 2.10.0 or later (its new codec-backed NBT helpers keep the jewelry data on the item).
 - Redesigned jewelry tooltips. The header shows the jewelry's type, gem and max spell level under its name. Mana and durability are short bars, each spell has a one-line description and a small box for each of its numbers (effect, range, cooldown, mana cost and so on), and the jewelry's modifiers sit in two columns with full names. Dashed lines are now drawn lines, long text wraps, and Hold [SHIFT] shows the material, gem, repairs and recharges.
 - The "+" after a spell's name is now a green "stacks" box: that spell's effect adds up with the same spell on other jewelry you wear.
 - New lore for Silbro's Ring of Vitality, and Strongman's Bracers has lore (it's Silbro's work too).

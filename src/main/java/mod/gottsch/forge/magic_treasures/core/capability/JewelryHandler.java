@@ -18,7 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.capability;
 
 import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.magic_treasures.core.component.StackData;
+import mod.gottsch.forge.gottschcore.nbt.StackData;
 import mod.gottsch.forge.magic_treasures.core.component.SpellData;
 import net.minecraft.world.item.ItemStack;
 
