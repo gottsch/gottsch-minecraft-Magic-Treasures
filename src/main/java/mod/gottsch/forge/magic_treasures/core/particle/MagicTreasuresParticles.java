@@ -39,6 +39,9 @@ public class MagicTreasuresParticles {
 	public static final RegistryObject<SimpleParticleType> SPARK_GOLD = spark("gold");
 	public static final RegistryObject<SimpleParticleType> SPARK_ORANGE = spark("orange");
 	public static final RegistryObject<SimpleParticleType> SPARK_ASH = spark("ash");
+	/** a small cyan spark, for trails: the Ring of Swords' swords */
+	public static final RegistryObject<SimpleParticleType> MOTE_CYAN =
+			Registration.PARTICLES.register("mote_cyan", () -> new SimpleParticleType(false) {});
 
 	private static RegistryObject<SimpleParticleType> spark(String color) {
 		return Registration.PARTICLES.register("spark_" + color, () -> new SimpleParticleType(false) {});

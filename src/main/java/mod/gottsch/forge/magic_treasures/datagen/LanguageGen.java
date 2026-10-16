@@ -17,6 +17,7 @@
  */
 package mod.gottsch.forge.magic_treasures.datagen;
 
+import mod.gottsch.forge.magic_treasures.core.entity.MagicTreasuresEntities;
 import java.util.List;
 import java.util.Map;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
@@ -139,6 +140,8 @@ public class LanguageGen extends LanguageProvider {
 
         // belts
         add(MagicTreasuresItems.SKULL_BELT.get(), WordUtils.capitalizeFully("Skull Belt"));
+        add(MagicTreasuresItems.SPECTRAL_SWORD.get(), "Spectral Sword");
+        add(MagicTreasuresEntities.ORBITING_SWORD.get(), "Spectral Sword");
 
         // scrolls
         Registration.ITEMS.getEntries().forEach(o -> {
@@ -332,6 +335,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.stat.mana"), "%s mana");
         add(LangUtil.tooltip("spell.stat.range"), "%s range");
         add(LangUtil.tooltip("spell.stat.reflect"), "%s reflect");
+        add(LangUtil.tooltip("spell.stat.swords"), "%s swords");
         add(LangUtil.tooltip("spell.stat.fire_resist"), "%s fire resist");
         add(LangUtil.tooltip("spell.stat.magic_resist"), "%s magic resist");
         add(LangUtil.tooltip("spell.stat.wither_resist"), "%s wither resist");
@@ -373,6 +377,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.flavor.greater_healing"), "A deep, steady mending of wounds.");
         add(LangUtil.tooltip("spell.flavor.greater_invisibility"), "Vanish from sight for longer.");
         add(LangUtil.tooltip("spell.flavor.greater_night_vision"), "Night is no darker than day.");
+        add(LangUtil.tooltip("spell.flavor.greater_ring_of_swords"), "A whirl of spirit blades that cut down all who come near.");
         add(LangUtil.tooltip("spell.flavor.greater_speed"), "Your feet barely touch the ground.");
         add(LangUtil.tooltip("spell.flavor.greater_strength"), "Your blows land with greater force.");
         add(LangUtil.tooltip("spell.flavor.greater_water_breathing"), "Breathe beneath the waves for a long while.");
@@ -395,6 +400,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.flavor.quick_strength"), "A short burst of strength.");
         add(LangUtil.tooltip("spell.flavor.reflection"), "Turns part of each blow back on the attacker.");
         add(LangUtil.tooltip("spell.flavor.regeneration"), "Your wounds close almost as fast as they open.");
+        add(LangUtil.tooltip("spell.flavor.ring_of_swords"), "Blades of spirit wheel about you when foes draw near.");
         add(LangUtil.tooltip("spell.flavor.salandaars_magic_coat"), "Sal'andaar's own coat against hostile magic.");
         add(LangUtil.tooltip("spell.flavor.satiety"), "Keeps hunger at bay.");
         add(LangUtil.tooltip("spell.flavor.shadow_armor"), "Shadows gather to soften each blow.");
@@ -469,6 +475,11 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.name.disembodied_armor"), "Disembodied Armor");
 
         add(LangUtil.tooltip("spell.spectral_armor.rate"), "Reduces %s mob damage.");
+
+        ///// ring of swords /////
+        add(LangUtil.tooltip("spell.name.ring_of_swords"), "Ring of Swords");
+        add(LangUtil.tooltip("spell.name.greater_ring_of_swords"), "Greater Ring of Swords");
+        add(LangUtil.tooltip("spell.ring_of_swords.rate"), "Summons %s swords that circle you, %s dmg a hit, for %s seconds.");
 
         ///// drain /////
         add(LangUtil.tooltip("spell.name.drain"), "Drain");

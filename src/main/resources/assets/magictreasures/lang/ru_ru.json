@@ -810,5 +810,15 @@
   "tooltip.magictreasures.spell.water_breathing.rate": "Даёт водное дыхание на %s с. Перезарядка: %s с.",
   "tooltip.magictreasures.spell.wither_resistance.rate": "Блокирует %s урона от иссушения.",
   "tooltip.magictreasures.spell_scroll.usage": "Положите на наковальню вместе с бижутерией чтобы соединить их.",
-  "tooltip.magictreasures.tools.jewelry_pliers": "Соедините с украшением на верстаке, чтобы извлечь камень. Украшение будет уничтожено."
+  "tooltip.magictreasures.tools.jewelry_pliers": "Соедините с украшением на верстаке, чтобы извлечь камень. Украшение будет уничтожено.",
+  "item.magictreasures.ring_of_swords_scroll": "Свиток кольца мечей",
+  "item.magictreasures.greater_ring_of_swords_scroll": "Свиток великого кольца мечей",
+  "item.magictreasures.spectral_sword": "Призрачный меч",
+  "entity.magictreasures.orbiting_sword": "Призрачный меч",
+  "tooltip.magictreasures.spell.name.ring_of_swords": "Кольцо мечей",
+  "tooltip.magictreasures.spell.name.greater_ring_of_swords": "Великое кольцо мечей",
+  "tooltip.magictreasures.spell.flavor.ring_of_swords": "Призрачные клинки кружат вокруг вас, когда враги подходят близко.",
+  "tooltip.magictreasures.spell.flavor.greater_ring_of_swords": "Вихрь призрачных клинков сражает всех, кто подойдёт.",
+  "tooltip.magictreasures.spell.ring_of_swords.rate": "Призывает мечи (%s), кружащие вокруг вас: %s урона за удар, на %s с.",
+  "tooltip.magictreasures.spell.stat.swords": "мечей: %s"
 }

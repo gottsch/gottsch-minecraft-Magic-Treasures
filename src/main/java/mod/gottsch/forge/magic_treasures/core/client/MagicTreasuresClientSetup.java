@@ -30,6 +30,8 @@ import mod.gottsch.forge.magic_treasures.core.setup.Registration;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import mod.gottsch.forge.magic_treasures.core.client.particle.ArcaneSparkParticle;
+import mod.gottsch.forge.magic_treasures.core.client.renderer.OrbitingSwordRenderer;
+import mod.gottsch.forge.magic_treasures.core.entity.MagicTreasuresEntities;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.ClientIconTitleTooltip;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.RichTooltips;
 import mod.gottsch.forge.magic_treasures.core.client.tooltip.IconTitleTooltip;
@@ -75,6 +77,11 @@ public class MagicTreasuresClientSetup {
 								entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F)));
 	}
 
+	@SubscribeEvent
+	public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(MagicTreasuresEntities.ORBITING_SWORD.get(), OrbitingSwordRenderer::new);
+	}
+
 	/** models of set armor that isn't the plain armor box */
 	@SubscribeEvent
 	public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -86,6 +93,7 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
 		MagicTreasuresParticles.sparks().forEach(spark -> event.registerSpriteSet(spark.get(), ArcaneSparkParticle.Provider::new));
+		event.registerSpriteSet(MagicTreasuresParticles.MOTE_CYAN.get(), sprites -> new ArcaneSparkParticle.Provider(sprites, 0.35F));
 	}
 
 	@SubscribeEvent

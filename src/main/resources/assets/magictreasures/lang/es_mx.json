@@ -810,5 +810,15 @@
   "tooltip.magictreasures.spell.water_breathing.rate": "Otorga el efecto Respiración acuática durante %s segundos. Enfriamiento: %s segundos.",
   "tooltip.magictreasures.spell.wither_resistance.rate": "Resiste %s del daño de Wither.",
   "tooltip.magictreasures.spell_scroll.usage": "Colócalo en un yunque junto con una joya de Magic Treasures para combinarlos.",
-  "tooltip.magictreasures.tools.jewelry_pliers": "Combínalos con una joya en la mesa de crafteo para quitarle la gema. La joya se destruye."
+  "tooltip.magictreasures.tools.jewelry_pliers": "Combínalos con una joya en la mesa de crafteo para quitarle la gema. La joya se destruye.",
+  "item.magictreasures.ring_of_swords_scroll": "Pergamino de anillo de espadas",
+  "item.magictreasures.greater_ring_of_swords_scroll": "Pergamino de anillo de espadas mayor",
+  "item.magictreasures.spectral_sword": "Espada espectral",
+  "entity.magictreasures.orbiting_sword": "Espada espectral",
+  "tooltip.magictreasures.spell.name.ring_of_swords": "Anillo de espadas",
+  "tooltip.magictreasures.spell.name.greater_ring_of_swords": "Anillo de espadas mayor",
+  "tooltip.magictreasures.spell.flavor.ring_of_swords": "Hojas espirituales giran a tu alrededor cuando se acercan enemigos.",
+  "tooltip.magictreasures.spell.flavor.greater_ring_of_swords": "Un torbellino de hojas espirituales que abate a todo el que se acerca.",
+  "tooltip.magictreasures.spell.ring_of_swords.rate": "Invoca %s espadas que giran a tu alrededor, %s de daño por golpe, durante %s segundos.",
+  "tooltip.magictreasures.spell.stat.swords": "%s espadas"
 }

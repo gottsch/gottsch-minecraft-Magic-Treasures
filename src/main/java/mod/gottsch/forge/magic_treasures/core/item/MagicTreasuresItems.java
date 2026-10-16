@@ -119,6 +119,9 @@ public class MagicTreasuresItems {
 
 	public static RegistryObject<Item> SKULL_BELT = Registration.ITEMS.register("skull_belt", () -> new ManaWell(MAGIC_TREASURES_PROPS_SUPPLIER.get(), 250, 2));
 
+	// not a real item: the look of a Ring of Swords sword (its renderer draws this stack). Kept out of the creative tab
+	public static RegistryObject<Item> SPECTRAL_SWORD = Registration.ITEMS.register("spectral_sword", () -> new Item(new Item.Properties().stacksTo(1)));
+
 
 	// set weapons and armor: no spells; siphon (weapons) and resonance (armor)
 	// Silbro's Grove: a staff, quick (1 + 1 tier + 5 = 7 damage, a diamond sword's, +0.5 reach), siphon 2

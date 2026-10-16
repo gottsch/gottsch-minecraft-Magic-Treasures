@@ -51,6 +51,7 @@ public class MagicTreasuresCreativeModeTabs {
 				// M9: the 418 1.x jewelry items stay registered (old stacks must load) but leave the tab; generic ones replace them
 				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB) && !MagicTreasuresItems.GENERIC_JEWELRY.contains(item)
 						&& !item.equals(MagicTreasuresItems.LORE_BOOK)
+						&& !item.equals(MagicTreasuresItems.SPECTRAL_SWORD)
 						&& !LegacyConversion.isLegacy(item.get())) {
 						output.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
 					}

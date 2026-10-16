@@ -124,7 +124,7 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 
 		SpellEntity spellEntity = spell.entity();
 		JewelryHandler.get(stack).ifPresent(handler -> {
-			handler.getSpells().add(spellEntity);
+			handler.addSpell(spellEntity);
 		});
 
 		return stack;
