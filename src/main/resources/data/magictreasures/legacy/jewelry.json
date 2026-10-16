@@ -1396,8 +1396,8 @@
   },
   "magictreasures:journeyman_bands": {
     "type": "bracelet",
-    "gem": "magictreasures:jadeite",
-    "material": "magictreasures:gold",
+    "gem": "magictreasures:white_pearl",
+    "material": "magictreasures:silver",
     "preset": "magictreasures:journeyman_bands",
     "style": "magictreasures:great"
   },
