@@ -28,3 +28,4 @@ Get the pack from Pixeltier: https://pixeltier.itch.io/ultimate-fantasy-rpg-icon
 | `textures/item/lore_book/smiths_ledger.png` | `magic tomes/_uniques/book_of_keys.png` | bottom-right corner pixel removed, to round it like the other three |
 | `textures/item/lore_book/maldritchs_notes_1.png` | `magic tomes/_uniques/golden_skull_tome.png` | bottom-right corner pixel removed, to round it like the other three |
 | `textures/item/lore_book/selenes_account.png` | `magic tomes/_uniques/tome_of_sight.png` | bottom-right corner pixel removed, to round it like the other three |
+| `textures/item/spectral_sword.png` | `swords/knight_sword_white.png` | mirrored (tip top-right, like vanilla swords), recolored pale spectral cyan and made partly see-through; the Ring of Swords' summoned sword |

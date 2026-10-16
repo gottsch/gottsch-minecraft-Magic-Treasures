@@ -21,6 +21,7 @@ import mod.gottsch.neo.magic_treasures.core.lore.LoreBookReading;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.neo.magic_treasures.core.entity.MagicTreasuresEntities;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
@@ -55,6 +56,7 @@ public class Registration {
         BLOCKS.register(eventBus);
         SetMaterials.register(eventBus);
         ITEMS.register(eventBus);
+        MagicTreasuresEntities.register(eventBus);
         MagicTreasuresConfiguredFeatures.FEATURES.register(eventBus);
         MagicTreasuresLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
         MagicTreasuresLootFunctions.LOOT_FUNCTIONS.register(eventBus);

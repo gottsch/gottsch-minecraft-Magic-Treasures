@@ -52,6 +52,8 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import mod.gottsch.neo.magic_treasures.core.client.renderer.OrbitingSwordRenderer;
+import mod.gottsch.neo.magic_treasures.core.entity.MagicTreasuresEntities;
 
 /**
  * Client-only mod-bus registrations.
@@ -72,6 +74,11 @@ public class MagicTreasuresClientSetup {
 				.forEach(item -> ItemProperties.register(item.get(), ResourceLocation.withDefaultNamespace("blocking"),
 						(stack, level, entity, seed) ->
 								entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F)));
+	}
+
+	@SubscribeEvent
+	public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(MagicTreasuresEntities.ORBITING_SWORD.get(), OrbitingSwordRenderer::new);
 	}
 
 	/** models of set armor that isn't the plain armor box */
@@ -113,6 +120,7 @@ public class MagicTreasuresClientSetup {
 	@SubscribeEvent
 	public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
 		MagicTreasuresParticles.sparks().forEach(spark -> event.registerSpriteSet(spark.get(), ArcaneSparkParticle.Provider::new));
+		event.registerSpriteSet(MagicTreasuresParticles.MOTE_CYAN.get(), sprites -> new ArcaneSparkParticle.Provider(sprites, 0.35F));
 	}
 
 	@SubscribeEvent

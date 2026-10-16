@@ -31,6 +31,8 @@ public class MagicTreasuresSpells {
     public static final String SPEED = "speed";
     public static final String NIGHT_VISION = "night_vision";
     public static final String WATER_BREATHING = "water_breathing";
+    public static final String RING_OF_SWORDS = "ring_of_swords";
+    public static final String GREATER_RING_OF_SWORDS = "greater_ring_of_swords";
 
     // TODO need to change variable name
     // default spell
@@ -329,6 +331,35 @@ public class MagicTreasuresSpells {
             $.range = 6.0;
             $.effectStackable = true;
         })	.build());
+
+        // ring of swords (#5): swords circle the wearer when a mob comes within range. a sword loses hp equal to the
+        // damage it lands and shatters at 0. cooldown from the summon, longer than the duration, so a ring never
+        // replaces a live one
+        // 4 swords x 2 hits x 4 dmg = 32 damage a ring
+        SpellRegistry.register(new RingOfSwordsSpell.Builder(ModUtil.asLocation(RING_OF_SWORDS), 5, MagicTreasuresRarity.SCARCE)
+                .withSwords(4)
+                .withSwordHp(8.0)
+                .with($ -> {
+                    $.spellCost = 10;
+                    $.effectAmount = 4.0; // damage per hit
+                    $.duration = 400; // 20 seconds
+                    $.cooldown = 600; // 30 seconds
+                    $.range = 6.0; // trigger range
+                    $.effectStackable = false;
+                })	.build());
+
+        // 6 swords x 3 hits x 6 dmg = 108 damage a ring
+        SpellRegistry.register(new RingOfSwordsSpell.Builder(ModUtil.asLocation(GREATER_RING_OF_SWORDS), 9, MagicTreasuresRarity.LEGENDARY)
+                .withSwords(6)
+                .withSwordHp(18.0)
+                .with($ -> {
+                    $.spellCost = 20;
+                    $.effectAmount = 6.0; // damage per hit
+                    $.duration = 500; // 25 seconds
+                    $.cooldown = 800; // 40 seconds
+                    $.range = 6.0; // trigger range
+                    $.effectStackable = false;
+                })	.build());
 
         // strength spells
         SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation(QUICK_STRENGTH), 1, MagicTreasuresRarity.COMMON)

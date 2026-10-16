@@ -118,6 +118,11 @@ public class ItemModelsProvider extends ItemModelProvider {
 		singleTexture(MagicTreasuresItems.SKULL_BELT.getId().getPath()
 				, mcLoc("item/generated"), "layer0", modLoc("item/skull_belt"));
 
+		// Ring of Swords' sword: see-through, so the translucent render type
+		singleTexture(MagicTreasuresItems.SPECTRAL_SWORD.getId().getPath()
+				, mcLoc("item/handheld"), "layer0", modLoc("item/spectral_sword"))
+				.renderType("minecraft:translucent");
+
 		/*
 		 * blocks
 		 */

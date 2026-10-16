@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "magictreasures:item/blue_spell_scroll"
+  }
+}
