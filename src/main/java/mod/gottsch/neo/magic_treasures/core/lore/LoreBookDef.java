@@ -18,11 +18,16 @@
 package mod.gottsch.neo.magic_treasures.core.lore;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.jewelry.data.DataCodecs;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,19 +49,47 @@ import java.util.Optional;
  * @param texture   its icon, an item texture ({@code magictreasures:item/lore_book/old_binder}); when empty, the
  *                  icon is {@code <namespace>:item/lore_book/<path>}, and the shared default if that doesn't exist
  * @param disabled  a pack can switch a built-in book off
+ * @param illustrations items the reader draws between sections, as pictures of what the text describes
  *
  * @author Mark Gottschling on 10/14/2026
  */
 public record LoreBookDef(MagicTreasuresRarity rarity, int pages, Optional<String> character,
-                          Optional<ResourceLocation> texture, boolean disabled) {
+                          Optional<ResourceLocation> texture, boolean disabled, List<Illustration> illustrations) {
 
     public static final Codec<LoreBookDef> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             DataCodecs.RARITY.fieldOf("rarity").forGetter(LoreBookDef::rarity),
             Codec.intRange(1, 50).fieldOf("pages").forGetter(LoreBookDef::pages),
             Codec.STRING.optionalFieldOf("character").forGetter(LoreBookDef::character),
             ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(LoreBookDef::texture),
-            Codec.BOOL.optionalFieldOf("disabled", false).forGetter(LoreBookDef::disabled)
+            Codec.BOOL.optionalFieldOf("disabled", false).forGetter(LoreBookDef::disabled),
+            Illustration.CODEC.listOf().optionalFieldOf("illustrations", List.of()).forGetter(LoreBookDef::illustrations)
     ).apply(instance, LoreBookDef::new));
+
+    /**
+     * A picture in the reader: an item ({@code "item"}) or a named jewelry piece ({@code "preset"}), drawn after
+     * section {@code after} (1 = after {@code page.1}; 0 = on the title page, under the title). The caption is the
+     * item's own name, so it translates with the item.
+     * <pre>
+     * "illustrations": [ { "after": 4, "item": "magictreasures:skull_belt" },
+     *                    { "after": 4, "preset": "magictreasures:ring_of_life_death" } ]
+     * </pre>
+     */
+    public record Illustration(int after, Optional<ResourceLocation> item, Optional<ResourceLocation> preset) {
+        public static final Codec<Illustration> CODEC = RecordCodecBuilder.<Illustration>create(instance -> instance.group(
+                Codec.intRange(0, 50).fieldOf("after").forGetter(Illustration::after),
+                ResourceLocation.CODEC.optionalFieldOf("item").forGetter(Illustration::item),
+                ResourceLocation.CODEC.optionalFieldOf("preset").forGetter(Illustration::preset)
+        ).apply(instance, Illustration::new)).validate(i -> i.item.isPresent() != i.preset.isPresent()
+                ? DataResult.success(i) : DataResult.error(() -> "an illustration needs one of \"item\" or \"preset\""));
+
+        /** the stack to draw; empty when the item or preset doesn't exist (a pack's, switched off) */
+        public Optional<ItemStack> stack() {
+            if (preset.isPresent()) {
+                return MagicTreasuresApi.createPreset(preset.get());
+            }
+            return item.flatMap(BuiltInRegistries.ITEM::getOptional).map(Item::getDefaultInstance);
+        }
+    }
 
     public static String titleKey(ResourceLocation id) {
         return key(id, "title");

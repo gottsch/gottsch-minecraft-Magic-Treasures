@@ -93,7 +93,8 @@ public class LoreBook extends Item {
         }
         if (level.isClientSide()) {
             // only the client has a screen; this branch never runs on a dedicated server, so the class never loads there
-            getDef(stack, level.registryAccess()).ifPresent(def -> LoreBookClient.open(def.pageText(getId(stack).get())));
+            ResourceLocation id = getId(stack).get();
+            getDef(stack, level.registryAccess()).ifPresent(def -> LoreBookClient.open(id, stack, def));
         } else if (player instanceof ServerPlayer serverPlayer && getDef(stack, level.registryAccess()).isPresent()) {
             LoreBookReading.markRead(serverPlayer, getId(stack).get());
         }

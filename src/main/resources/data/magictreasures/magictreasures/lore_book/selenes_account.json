@@ -1,5 +1,11 @@
 {
   "rarity": "scarce",
   "pages": 6,
-  "character": "selene"
+  "character": "selene",
+  "illustrations": [
+    {
+      "after": 4,
+      "preset": "magictreasures:journeyman_bands"
+    }
+  ]
 }
