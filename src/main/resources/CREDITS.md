@@ -31,3 +31,4 @@ Get the pack from Pixeltier: https://pixeltier.itch.io/ultimate-fantasy-rpg-icon
 | `textures/item/spectral_sword.png` | `swords/knight_sword_white.png` | mirrored (tip top-right, like vanilla swords), recolored pale spectral cyan and made partly see-through; the Ring of Swords' summoned sword |
 | `textures/item/lore_book/letters_across_the_valley_1.png` | `magic scrolls/scroll_plain.png` | unchanged |
 | `textures/item/lore_book/market_warning.png` | `magic scrolls/scroll_skull.png` | unchanged |
+| `textures/item/lore_book/couriers_letter.png` | `magic scrolls/scroll_wind.png` | unchanged |
