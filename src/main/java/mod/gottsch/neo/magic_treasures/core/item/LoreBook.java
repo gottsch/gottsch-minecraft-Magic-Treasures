@@ -17,12 +17,10 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item;
 
+import mod.gottsch.neo.gottschbooks.api.BookItem;
+import mod.gottsch.neo.gottschbooks.api.Books;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresRegistries;
-import mod.gottsch.neo.magic_treasures.core.client.LoreBookClient;
-import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
 import mod.gottsch.neo.magic_treasures.core.lore.LoreBookDef;
-import mod.gottsch.neo.magic_treasures.core.lore.LoreBookReading;
-import net.minecraft.server.level.ServerPlayer;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -30,39 +28,35 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * One item for every lore book. Which story it is sits on the stack ({@code magictreasures:lore_book}, the book's id
- * in the {@code lore_book} registry); the title, author and pages are lang keys named after that id (see
- * {@link LoreBookDef}). Right-click opens the vanilla book screen, read-only: the text can't be edited or copied.
+ * One item for every lore book. Which story it is sits on the stack (the {@code gottschbooks:book} component: the
+ * book's id, the same in MT's {@code lore_book} registry and in Gottsch Books' {@code book} registry). The text is
+ * {@code assets/magictreasures/books/<id>/<locale>/text.md}, read in Gottsch Books' reader; the item's name and
+ * author are lang keys named after the id (see {@link LoreBookDef}). Right-click opens the reader (see
+ * {@link BookItem}).
  *
  * @author Mark Gottschling on 10/14/2026
  */
-public class LoreBook extends Item {
+public class LoreBook extends BookItem {
 
     public LoreBook(Properties properties) {
-        super(properties.stacksTo(1));
+        super(properties);
     }
 
     /** a book of {@code id} */
     public static ItemStack of(Item item, ResourceLocation id) {
-        ItemStack stack = new ItemStack(item);
-        stack.set(MagicTreasuresDataComponents.LORE_BOOK.get(), id);
-        return stack;
+        return Books.of(item, id);
     }
 
     public static Optional<ResourceLocation> getId(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresDataComponents.LORE_BOOK.get()));
+        return Books.getId(stack);
     }
 
     /** the book's entry, from the registries {@code holders} (the level's, or the creative tab's) */
@@ -70,6 +64,14 @@ public class LoreBook extends Item {
         return getId(stack).flatMap(id -> holders.lookup(MagicTreasuresRegistries.LORE_BOOK)
                 .flatMap(books -> books.get(ResourceKey.create(MagicTreasuresRegistries.LORE_BOOK, id))))
                 .map(Holder::value);
+    }
+
+    /**
+     * Whether book {@code id} is in play: it has a {@code gottschbooks:book} entry that isn't disabled. That entry is
+     * the one switch for a book: it takes it out of loot and the creative tab, and out of the "read them all" count.
+     */
+    public static boolean enabled(ResourceLocation id, HolderLookup.Provider holders) {
+        return Books.getDef(id, holders).filter(def -> !def.disabled()).isPresent();
     }
 
     @Override
@@ -83,21 +85,5 @@ public class LoreBook extends Item {
         super.appendHoverText(stack, context, tooltip, flag);
         getId(stack).ifPresent(id -> tooltip.add(Component.translatable(LangUtil.tooltip("lore_book.author"),
                 Component.translatable(LoreBookDef.authorKey(id))).withStyle(ChatFormatting.GRAY)));
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (getId(stack).isEmpty()) {
-            return InteractionResultHolder.pass(stack);
-        }
-        if (level.isClientSide()) {
-            // only the client has a screen; this branch never runs on a dedicated server, so the class never loads there
-            ResourceLocation id = getId(stack).get();
-            getDef(stack, level.registryAccess()).ifPresent(def -> LoreBookClient.open(id, stack, def));
-        } else if (player instanceof ServerPlayer serverPlayer && getDef(stack, level.registryAccess()).isPresent()) {
-            LoreBookReading.markRead(serverPlayer, getId(stack).get());
-        }
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 }

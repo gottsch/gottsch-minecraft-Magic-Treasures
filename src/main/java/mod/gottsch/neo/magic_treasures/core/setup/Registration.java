@@ -17,7 +17,6 @@
  */
 package mod.gottsch.neo.magic_treasures.core.setup;
 
-import mod.gottsch.neo.magic_treasures.core.lore.LoreBookReading;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
@@ -63,7 +62,6 @@ public class Registration {
         MagicTreasuresParticles.register(eventBus);
         MagicTreasuresRecipes.register(eventBus);
         MagicTreasuresCriteria.register(eventBus);
-        LoreBookReading.register(eventBus);
         MagicTreasuresCreativeModeTabs.TABS.register(eventBus);
     }
 }

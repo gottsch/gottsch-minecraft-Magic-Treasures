@@ -63,7 +63,7 @@ public class MagicTreasuresCreativeModeTabs {
 				JewelryCreativeStacks.build(displayParams.holders()).forEach(entry -> output.accept(entry.stack(), entry.visibility()));
 				// one lore book per story, from the registry the client has
 				displayParams.holders().lookup(MagicTreasuresRegistries.LORE_BOOK).ifPresent(books -> books.listElements()
-						.filter(book -> !book.value().disabled())
+						.filter(book -> LoreBook.enabled(book.key().location(), displayParams.holders()))
 						.sorted(java.util.Comparator.comparing((net.minecraft.core.Holder.Reference<LoreBookDef> book) -> book.value().rarity().getCode())
 								.thenComparing(book -> book.key().location().toString()))
 						.forEach(book -> output.accept(LoreBook.of(MagicTreasuresItems.LORE_BOOK.get(), book.key().location()),

@@ -1,12 +1,4 @@
 {
   "rarity": "rare",
-  "pages": 4,
-  "character": "silbro",
-  "texture": "magictreasures:item/lore_book/silbros_journal_1",
-  "illustrations": [
-    {
-      "after": 3,
-      "preset": "magictreasures:silbros_ring_of_vitality"
-    }
-  ]
+  "texture": "magictreasures:item/lore_book/silbros_journal_1"
 }

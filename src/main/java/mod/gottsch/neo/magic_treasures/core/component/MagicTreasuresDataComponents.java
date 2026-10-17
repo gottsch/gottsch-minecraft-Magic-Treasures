@@ -77,9 +77,4 @@ public class MagicTreasuresDataComponents {
                     .networkSynchronized(ManaWellData.STREAM_CODEC)
                     .cacheEncoding());
 
-    /** a lore book's story: its id in the {@code magictreasures:lore_book} registry */
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> LORE_BOOK =
-            DATA_COMPONENTS.registerComponentType("lore_book", builder -> builder
-                    .persistent(ResourceLocation.CODEC)
-                    .networkSynchronized(ResourceLocation.STREAM_CODEC));
 }
