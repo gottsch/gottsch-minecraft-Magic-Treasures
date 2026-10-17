@@ -85,6 +85,14 @@ configurations {
 dependencies {
     implementation "gottsch:gottschcore-neoforge-${minecraft_version}:${gottschcore_version}"
 
+    // Gottsch Books, nested in the jar: the loader picks the highest nested/installed copy that fits every range
+    jarJar(implementation("gottsch:gottschbooks-neoforge-${minecraft_version}")) {
+        version {
+            strictly gottschbooks_version_range
+            prefer gottschbooks_version
+        }
+    }
+
     // Treasure2 (optional integration). Published to ~/.m2 from neoforge-Treasure-1.21.1 with publishToMavenLocal;
     // that project has no rootProject.name, so its artifactId is the folder name.
     compileOnly "gottsch:neoforge-Treasure-1.21.1:${treasure2_version}"
@@ -114,6 +122,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             mod_authors              : mod_authors,
             mod_description          : mod_description,
             gottschcore_version_range: gottschcore_version_range,
+            gottschbooks_version_range: gottschbooks_version_range,
             treasure2_version_range  : treasure2_version_range,
             curios_version_range     : curios_version_range
     ]
