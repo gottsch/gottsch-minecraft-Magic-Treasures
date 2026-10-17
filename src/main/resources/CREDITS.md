@@ -13,6 +13,8 @@ Get the pack from Pixeltier: https://pixeltier.itch.io/ultimate-fantasy-rpg-icon
 | `textures/models/armor/barkskin_layer_1.png` | `armor/coat_armor_moss.png` | moss colors only; the worn texture is drawn for Magic Treasures |
 | `textures/item/jewelry/fine_*_ring.png` (plain bands) | `rings/ring_gold.png` | recolored to each metal's palette (iron, copper, silver, gold, blood, atium) |
 | `textures/item/jewelry/fine_*_*_ring.png` (with gems) | `rings/ring_gold.png`, gem from `rings/_uniques/azure_stone_ring.png` | band recolored per metal; the azure stone cut out and recolored to each gem's palette |
+| `textures/item/jewelry/aqua_ring.png` | `rings/_uniques/wave_ring.png`, topaz from Magic Treasures' `silver_topaz_ring.png` | a small topaz in a setting drawn on the top of the band (the Aqua Ring is topaz in silver; the band keeps its sea colours) |
+| `textures/item/jewelry/journeyman_bands.png` | `rings/ring_silver.png`, `rings/ring_white.png` | the two rings overlapped at full size on a 32x32 canvas, with a two-pixel white pearl added on the inner wall of the front band |
 | `textures/item/jewelry/carved_wood_*ring.png` | `rings/_uniques/rootbound_ring.png`, gem from `rings/_uniques/azure_stone_ring.png` | recolored to the wood palette, root strands lightened; gems as for Fine |
 | `textures/item/jewelry/carved_bone_*ring.png` | `rings/_uniques/crows_ring.png`, gem from `rings/_uniques/azure_stone_ring.png` | crow removed and the band's top redrawn; recolored to the bone palette; gems as for Fine |
 | `textures/item/jewelry/wreathed_shadow_*ring.png` | `rings/_uniques/ghost_ring.png`, gem from `rings/_uniques/azure_stone_ring.png` | recolored to the violet shadow palette; gems as for Fine, onyx and black pearl lightened |

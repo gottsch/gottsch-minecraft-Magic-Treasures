@@ -41,9 +41,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 			"strongmans_bracers", "wood_bracelet",
 			"maldritchs_first_amulet", "bone_onyx_necklace",
 			"peasants_fortune", "great_iron_ring",
-			"aqua_ring", "silver_topaz_ring",
-			"amulet_of_defence", "copper_topaz_necklace",
-			"journeyman_bands", "great_gold_jadeite_bracelet");
+			"amulet_of_defence", "copper_topaz_necklace");
 
 
 	public ItemModelsProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
