@@ -17,6 +17,9 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 /**
  * 
@@ -58,7 +61,7 @@ public class CheatDeathSpell extends CooldownSpell {
 		CooldownSpellEntity entity = (CooldownSpellEntity) context.getEntity();
 		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && player.isAlive()) {
+		if (hasMana(handler, context) && player.isAlive()) {
 			if (((LivingDamageEvent.Pre)event).getEntity() instanceof Player) {
 				// get the source and amount
 				double damage = ((LivingDamageEvent.Pre)event).getNewDamage();
@@ -73,6 +76,8 @@ public class CheatDeathSpell extends CooldownSpell {
 					// reduce damage to 0
 					((LivingDamageEvent.Pre)event).setNewDamage(0F);
 
+					SpellEffects.burst(world, SpellEffects.chest(player), MagicTreasuresParticles.SPARK_GOLD.get(), 30, 0.8);
+					world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					result = true;
 				}
 			}

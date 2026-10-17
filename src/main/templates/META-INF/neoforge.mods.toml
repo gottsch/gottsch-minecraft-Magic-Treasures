@@ -1,6 +1,6 @@
 modLoader="javafml" #mandatory
 loaderVersion="${loader_version_range}"
-license="GNU GPLv3"
+license="GNU LGPLv3"
 issueTrackerURL="https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/issues" #optional
 
 [[mods]] #mandatory

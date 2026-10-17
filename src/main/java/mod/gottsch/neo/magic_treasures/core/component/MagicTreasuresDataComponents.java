@@ -40,4 +40,11 @@ public class MagicTreasuresDataComponents {
                     .persistent(JewelryData.CODEC)
                     .networkSynchronized(JewelryData.STREAM_CODEC)
                     .cacheEncoding());
+
+    /** a mana well's mana and recharges; the item sets a full default, so every well has it */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ManaWellData>> MANA_WELL =
+            DATA_COMPONENTS.registerComponentType("mana_well", builder -> builder
+                    .persistent(ManaWellData.CODEC)
+                    .networkSynchronized(ManaWellData.STREAM_CODEC)
+                    .cacheEncoding());
 }

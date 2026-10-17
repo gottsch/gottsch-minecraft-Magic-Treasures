@@ -33,6 +33,8 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import net.minecraft.core.particles.ParticleTypes;
 
 /**
  *
@@ -74,12 +76,13 @@ public class HealingSpell extends Spell {
         boolean result = false;
         IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
         if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
-            if (handler.getMana() > 0 && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
+            if (hasMana(handler, context) && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
 
                 // determine the actual amount of health (0.0 -> getAmount())
                 float amount = Math.min((float)handler.modifyEffectAmount(getEffectAmount()), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
                 context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
                 applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+                SpellEffects.burst(level, context.getPlayer(), ParticleTypes.HEART, 2);
                 result = true;
             }
         }

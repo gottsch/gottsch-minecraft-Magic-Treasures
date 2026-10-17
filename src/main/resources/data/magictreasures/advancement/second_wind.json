@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:spellbound",
+  "display": {
+    "icon": {
+      "id": "magictreasures:recharge_scroll"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.second_wind.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.second_wind.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "recharge": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "recharge"
+      }
+    }
+  }
+}

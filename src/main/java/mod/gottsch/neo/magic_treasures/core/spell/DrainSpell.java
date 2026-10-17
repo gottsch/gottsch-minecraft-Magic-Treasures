@@ -43,6 +43,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.List;
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -77,14 +78,14 @@ public class DrainSpell extends Spell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 		if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
-			if (handler.getMana() > 0 && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
+			if (hasMana(handler, context) && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
 				// get player position
 				double px = player.getX();
 				double py = player.getY();
 				double pz = player.getZ();
 
 				// calculate the new amount
-				double range = getRange();
+				double range = handler.modifyRange(getRange());
 				AtomicDouble drainedHealth = new AtomicDouble(0);
 				List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
 				if (mobs.isEmpty()) {
@@ -97,6 +98,7 @@ public class DrainSpell extends Spell {
 					MagicTreasures.LOGGER.debug("health drained from mob -> {} was successful -> {}", mob.getName(), flag);
 					if (flag) {
 						drainedHealth.addAndGet(effectAmount);
+						SpellEffects.arc(level, mob, player, MagicTreasuresParticles.SPARK_CRIMSON.get());
 					}
 				});
 

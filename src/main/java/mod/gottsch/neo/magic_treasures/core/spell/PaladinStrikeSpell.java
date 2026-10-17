@@ -21,6 +21,7 @@ import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * @author Mark Gottschling on May 16, 2024
@@ -60,7 +61,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && player.isAlive()) {
+		if (hasMana(handler, context) && player.isAlive()) {
 			DamageSource source = ((LivingIncomingDamageEvent) event).getSource();
 			if (source.getDirectEntity() instanceof Player) {
 
@@ -76,6 +77,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 					((LivingIncomingDamageEvent)event).setAmount((float) damageAmount);
 
 					applyCost(world, random, coords, context, modifySpellCost(jewelry));
+					SpellEffects.burst(world, ((LivingIncomingDamageEvent)event).getEntity(), MagicTreasuresParticles.SPARK_GOLD.get(), 10);
 					result = true;
 					MagicTreasures.LOGGER.debug("life strike damage {} onto mob -> {} ", damageAmount, source.getDirectEntity().getName());
 				}

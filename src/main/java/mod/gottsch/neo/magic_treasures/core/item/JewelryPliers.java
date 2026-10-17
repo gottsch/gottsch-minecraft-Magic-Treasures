@@ -39,7 +39,7 @@ public class JewelryPliers extends Item {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext worldIn, List<Component> tooltip, TooltipFlag flagIn) {
 		super.appendHoverText(stack, worldIn, tooltip, flagIn);	
-		tooltip.add(Component.translatable(LangUtil.tooltip("jewelry_pliers")));
+		tooltip.add(Component.translatable(LangUtil.tooltip("tools.jewelry_pliers")));
 	}
 
 	/**
@@ -61,9 +61,14 @@ public class JewelryPliers extends Item {
 		return true;
 	}
 
+	/**
+	 * The pliers come back from a gem extraction with 1 durability used, and break on their last use.
+	 */
 	@Override
 	public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
-		return itemStack.copy();
+		ItemStack pliers = itemStack.copy();
+		pliers.setDamageValue(pliers.getDamageValue() + 1);
+		return pliers.getDamageValue() >= pliers.getMaxDamage() ? ItemStack.EMPTY : pliers;
 	}
 
 }

@@ -53,7 +53,7 @@ public class InvisibilitySpell extends CooldownSpell {
 
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.INVISIBILITY)) {
 				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, handler.modifyDuration(getDuration()), getAmplifier()));
 			}

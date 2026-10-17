@@ -308,25 +308,25 @@ public class MagicTreasuresSpells {
         // harm spells
         SpellRegistry.register(new HarmSpell.Builder(ModUtil.asLocation(HARM), 2, MagicTreasuresRarity.COMMON).with($ -> {
             $.spellCost = 2; // cost = min(spellCost, reflected amount)
-            $.effectAmount = 2.0;
+            $.effectAmount = 3.0;
             $.cooldown = 200; // 10 seconds
-            $.range = 2.0;
+            $.range = 4.0;
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HarmSpell.Builder(ModUtil.asLocation("mind_jab"), 4, MagicTreasuresRarity.UNCOMMON).with($ -> {
             $.spellCost = 4; // cost = min(spellCost, reflected amount)
-            $.effectAmount = 3.0;
+            $.effectAmount = 4.5;
             $.cooldown = 180;
-            $.range = 2.5;
+            $.range = 5.0;
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HarmSpell.Builder(ModUtil.asLocation("mind_fist"), 6, MagicTreasuresRarity.RARE).with($ -> {
             $.spellCost = 5; // cost = min(spellCost, reflected amount)
-            $.effectAmount = 4.0;
+            $.effectAmount = 6.0;
             $.cooldown = 160;
-            $.range = 3.0;
+            $.range = 6.0;
             $.effectStackable = true;
         })	.build());
 

@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:root",
+  "display": {
+    "icon": {
+      "id": "magictreasures:ruby"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.set_in_stone.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.set_in_stone.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "add_gem": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "add_gem"
+      }
+    }
+  }
+}
