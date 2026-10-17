@@ -1,10 +1,14 @@
 {
   "rarity": "scarce",
-  "pages": 6,
+  "pages": 7,
   "character": "selene",
   "illustrations": [
     {
       "after": 4,
+      "item": "magictreasures:pearl_circlet"
+    },
+    {
+      "after": 5,
       "preset": "magictreasures:journeyman_bands"
     }
   ]
