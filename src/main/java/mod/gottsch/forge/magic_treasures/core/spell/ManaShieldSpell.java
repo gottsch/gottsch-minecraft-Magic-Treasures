@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -68,7 +69,7 @@ public class ManaShieldSpell extends Spell {
 
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
-				if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+				if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 					if (((LivingDamageEvent)event).getEntity() instanceof Player) {
 						// get the source and amount
 						double amount = ((LivingDamageEvent)event).getAmount();
@@ -82,9 +83,9 @@ public class ManaShieldSpell extends Spell {
 							double cost = applyCost(world, random, coords, context, amountToSpell);
 							MagicTreasures.LOGGER.debug("cost (mana) incurred to jewelry -> {}", cost);
 							if (cost < amountToSpell) {
-								newAmount =+ (amountToSpell - cost);
+								newAmount += (amountToSpell - cost);
 							}
-							MagicTreasures.LOGGER.debug("new amount to player -> {}", amountToPlayer);
+							MagicTreasures.LOGGER.debug("new amount to player -> {}", newAmount);
 							// update the newAmount with what comes back from cost eval
 							((LivingDamageEvent)event).setAmount((float) newAmount);
 
@@ -92,6 +93,7 @@ public class ManaShieldSpell extends Spell {
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
+							SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_BLUE.get(), 10);
 							result = true;
 						}
 					}
@@ -105,14 +107,14 @@ public class ManaShieldSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.mana_shield.rate"),
 				LangUtil.asPercentString(getEffectAmount() * 100),
-				MathUtil.r1d(getFrequency()/20.0));
+				MathUtil.r1d(getCooldown()/20.0));
 	}
 
 	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.mana_shield.rate"),
 				LangUtil.asPercentString(modifyEffectAmount(jewelry) * 100),
-				MathUtil.r1d(modifyFrequency(jewelry)/20.0));
+				MathUtil.r1d(modifyCooldown(jewelry)/20.0));
 	}
 
 	@Override

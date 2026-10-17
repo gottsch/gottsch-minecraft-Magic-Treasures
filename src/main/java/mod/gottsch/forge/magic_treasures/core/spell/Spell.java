@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
+import mod.gottsch.forge.magic_treasures.core.capability.ManaWellHandler;
 
 /**
  * Spells are a single instance within the mod like Blocks and Items.
@@ -95,6 +96,24 @@ public abstract class Spell implements ISpell {
     @Override
     public SpellEntity entity() {
         return new SpellEntity(this);
+    }
+
+    /**
+     * Whether this cast can be paid for: the jewelry has mana, or a worn/held mana well does.
+     */
+    protected boolean hasMana(IJewelryHandler handler, ICastSpellContext context) {
+        if (handler.getMana() > 0) {
+            return true;
+        }
+        if (context.getManaWells() == null) {
+            return false;
+        }
+        for (ItemStack well : context.getManaWells()) {
+            if (ManaWellHandler.get(well).map(h -> h.getMana() > 0).orElse(false)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

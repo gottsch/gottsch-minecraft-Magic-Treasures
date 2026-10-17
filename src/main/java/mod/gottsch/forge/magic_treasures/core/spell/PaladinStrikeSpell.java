@@ -21,6 +21,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * @author Mark Gottschling on May 16, 2024
@@ -60,7 +61,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		Player player = context.getPlayer();
 		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && player.isAlive()) {
+		if (hasMana(handler, context) && player.isAlive()) {
 			DamageSource source = ((LivingHurtEvent) event).getSource();
 			if (source.getDirectEntity() instanceof Player) {
 
@@ -76,6 +77,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 					((LivingHurtEvent)event).setAmount((float) damageAmount);
 
 					applyCost(world, random, coords, context, modifySpellCost(jewelry));
+					SpellEffects.burst(world, ((LivingHurtEvent)event).getEntity(), MagicTreasuresParticles.SPARK_GOLD.get(), 10);
 					result = true;
 					MagicTreasures.LOGGER.debug("life strike damage {} onto mob -> {} ", damageAmount, source.getDirectEntity().getName());
 				}

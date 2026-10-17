@@ -10,13 +10,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -48,10 +49,11 @@ public class MagicResistanceSpell extends Spell {
 		boolean result = false;
 
 		// exit if not magic damage
-		if (((LivingDamageEvent)event).getSource().is(DamageTypes.MAGIC) && context.getPlayer().hasEffect(MobEffects.POISON)) {
+		DamageSource source = ((LivingDamageEvent)event).getSource();
+		if (source.is(DamageTypes.MAGIC) || source.is(DamageTypes.INDIRECT_MAGIC)) {
 			IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-			if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+			if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 				// get the source and amount
 				double amount = ((LivingDamageEvent)event).getAmount();
 				// calculate the new amount
@@ -67,6 +69,7 @@ public class MagicResistanceSpell extends Spell {
 					newAmount = amountToPlayer;
 //				}
 				((LivingDamageEvent)event).setAmount((float) newAmount);
+				SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_BLUE.get(), 5);
 				result = true;
 			}    
 		}

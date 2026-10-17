@@ -130,7 +130,23 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("divider"), "--------------------");
 
         // tools
-        add(LangUtil.tooltip("tools.jewelry_pliers"), "Required for removing gemstones from jewelry.");
+        add(MagicTreasuresItems.JEWELRY_PLIERS.get(), "Jewelry Pliers");
+        add(LangUtil.tooltip("mana_well.usage"), "Wear or hold it. Spells draw from it when their jewelry runs out of mana.");
+
+        // advancements
+        add("advancements.magictreasures.root.title", "Magic Treasures");
+        add("advancements.magictreasures.root.description", "Find a piece of magic jewelry");
+        add("advancements.magictreasures.set_in_stone.title", "Set in Stone");
+        add("advancements.magictreasures.set_in_stone.description", "Set a gem into jewelry at an anvil");
+        add("advancements.magictreasures.spellbound.title", "Spellbound");
+        add("advancements.magictreasures.spellbound.description", "Imbue jewelry with a spell scroll at an anvil");
+        add("advancements.magictreasures.second_wind.title", "Second Wind");
+        add("advancements.magictreasures.second_wind.description", "Recharge jewelry at an anvil");
+        add("advancements.magictreasures.delicate_work.title", "Delicate Work");
+        add("advancements.magictreasures.delicate_work.description", "Pull a gem out of jewelry with Jewelry Pliers");
+        add("advancements.magictreasures.fully_adorned.title", "Fully Adorned");
+        add("advancements.magictreasures.fully_adorned.description", "Wear a magic ring, necklace and bracelet at once");
+        add(LangUtil.tooltip("tools.jewelry_pliers"), "Craft with jewelry to remove its gem. The jewelry is destroyed.");
 
         // gemstones
         add(LangUtil.tooltip("gemstone.usage"), "Place on an anvil with Magic Treasures jewelry to combine.");
@@ -210,7 +226,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.name.mana_tower_shield"), "Mana Tower Shield");
         add(LangUtil.tooltip("spell.name.mana_pavise_shield"), "Mana Pavise Shield");
 
-        add(LangUtil.tooltip("spell.mana_shield.rate"), "Absorbs %s damage.");
+        add(LangUtil.tooltip("spell.mana_shield.rate"), "Absorbs %s damage. Cooldown: %s seconds.");
 
         ///// spectral armor /////
         add(LangUtil.tooltip("spell.name.ghostly_armor"), "Ghostly Armor");
@@ -252,7 +268,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.name.reflection"), "Reflection");
         add(LangUtil.tooltip("spell.name.crushing_response"), "Crushing Response");
 
-        add(LangUtil.tooltip("spell.reflection.rate"), "Reflects %s damage back onto mob.");
+        add(LangUtil.tooltip("spell.reflection.rate"), "Reflects %s damage back onto mob. Cooldown: %s seconds.");
 
         ///// paladin strike /////
         add(LangUtil.tooltip("spell.name.paladin_strike"), "Paladin Strike");

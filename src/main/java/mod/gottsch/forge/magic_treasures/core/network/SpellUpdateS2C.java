@@ -36,9 +36,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.LogicalSidedProvider;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
-///////////////////////////////////
-// Comment out when running DataGen until I figure out why it's not working with Curios
-///////////////////////////////////
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
@@ -108,10 +105,6 @@ public class SpellUpdateS2C {
 			message.setPlayerId(buf.readUUID());	//1
 			message.setSpellName(buf.readUtf());	//2
 
-			Optional<ISpell> optionalSpell = SpellRegistry.get(ModUtil.asLocation(message.getSpellName()));
-			if (optionalSpell.isEmpty()) {
-				throw new RuntimeException(String.format("Unable to find spell %s in registry.", message.getSpellName()));
-			}
 //			SpellEntity entity = optionalSpell.get().entity();
 //			entity.setSpell(optionalSpell.get());
 
@@ -134,6 +127,12 @@ public class SpellUpdateS2C {
 		}
 		catch(Exception e) {
 			MagicTreasures.LOGGER.error("An error occurred attempting to read message: ", e);
+			return message;
+		}
+		// validate only after every field is read, so a bad spell name can't leave the buffer half-consumed
+		Optional<ISpell> optionalSpell = SpellRegistry.get(ModUtil.asLocation(message.getSpellName()));
+		if (optionalSpell.isEmpty()) {
+			MagicTreasures.LOGGER.warn("Ignoring spell update for unknown spell {}.", message.getSpellName());
 			return message;
 		}
 		message.setValid( true);
@@ -229,11 +228,8 @@ public class SpellUpdateS2C {
 				}
 
 				else if (CURIOS_ID.equals(message.getSlotProviderId())) {
-					///////////////////////////////////
-					// Comment out when running DataGen until I figure out why it's not working with Curios
-					///////////////////////////////////
 					MagicTreasures.LOGGER.debug("curios handler - updating slot spell...");
-					LazyOptional<ICuriosItemHandler> curiosHandler = CuriosApi.getCuriosHelper().getCuriosHandler(player);
+					LazyOptional<ICuriosItemHandler> curiosHandler = CuriosApi.getCuriosInventory(player);
 					curiosHandler.ifPresent(itemHandler -> {
 						Optional<ICurioStacksHandler> stacksOptional = itemHandler.getStacksHandler(message.getSlot());
 						stacksOptional.ifPresent(stacksHandler -> {

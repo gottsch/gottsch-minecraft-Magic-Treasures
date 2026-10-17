@@ -1,0 +1,26 @@
+{
+  "parent": "magictreasures:set_in_stone",
+  "display": {
+    "icon": {
+      "item": "magictreasures:red_spell_scroll"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.spellbound.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.spellbound.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "imbue": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "imbue"
+      }
+    }
+  }
+}

@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+import mod.gottsch.forge.magic_treasures.core.capability.ManaWellHandler;
 
 /**
  * 
@@ -87,6 +88,21 @@ public class AnvilEventHandler {
 				else if (handler.getRepairs() > 0 && rightStack.is(MagicTreasuresTags.Items.JEWELRY)) {
 					Optional<ItemStack> resultStack = generator.repair(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
+				}
+			});
+
+			// recharge a mana well (it has no jewelry handler, so it is handled on its own)
+			ManaWellHandler.get(leftStack).ifPresent(wellHandler -> {
+				if (wellHandler.getRecharges() > 0 && wellHandler.getMana() < wellHandler.getMaxMana()
+						&& rightStack.is(MagicTreasuresTags.Items.RECHARGERS)) {
+					ItemStack recharged = leftStack.copy();
+					ManaWellHandler.get(recharged).ifPresent(h -> {
+						h.setMana(h.getMaxMana());
+						h.setRecharges(h.getRecharges() - 1);
+					});
+					event.setMaterialCost(1);
+					event.setCost(1);
+					resultOutStack.set(recharged);
 				}
 			});
 			event.setOutput(resultOutStack.get());

@@ -27,6 +27,13 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.ArrayList;
 import java.util.List;
+import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.forge.magic_treasures.core.item.JewelryType;
+import mod.gottsch.forge.magic_treasures.core.item.ManaWell;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,6 +42,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 	private static final int MAX_HOTBAR_JEWELRY = 4;
+	/** the jewelry types that make a full set */
+	private static final Set<IJewelryType> FULL_SET_TYPES = Set.of(JewelryType.RING, JewelryType.NECKLACE, JewelryType.BRACELET);
 
 	@Override
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player) {
@@ -77,5 +86,44 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			}
 		}
 		return contexts;
+	}
+
+	/**
+	 * Without an equipment mod the hotbar stands in for the jewelry slots, so a full set is a ring, a necklace and a
+	 * bracelet among the jewelry that is active there (same rules as handleEquipmentSpells: not the main hand, and
+	 * only the first MAX_HOTBAR_JEWELRY pieces).
+	 */
+	@Override
+	public boolean isWearingFullSet(ServerPlayer player) {
+		Set<IJewelryType> types = new HashSet<>();
+		int jewelryCount = 0;
+		for (int hotbarSlot = 0; hotbarSlot < 9 && jewelryCount < MAX_HOTBAR_JEWELRY; hotbarSlot++) {
+			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
+			if (inventoryStack == player.getItemInHand(InteractionHand.MAIN_HAND)) {
+				continue;
+			}
+			Optional<IJewelryHandler> cap = inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).resolve();
+			if (cap.isPresent()) {
+				types.add(cap.get().getJewelryType());
+				jewelryCount++;
+			}
+		}
+		return types.containsAll(FULL_SET_TYPES);
+	}
+
+	/**
+	 * Mana wells on the hotbar. The main hand is skipped because SpellEventHandler already adds held wells.
+	 */
+	@Override
+	public List<ItemStack> getManaWells(ServerPlayer player) {
+		List<ItemStack> wells = new ArrayList<>(1);
+		for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
+			ItemStack inventoryStack = player.getInventory().getItem(hotbarSlot);
+			if (inventoryStack != player.getItemInHand(InteractionHand.MAIN_HAND)
+					&& inventoryStack.getItem() instanceof ManaWell) {
+				wells.add(inventoryStack);
+			}
+		}
+		return wells;
 	}
 }

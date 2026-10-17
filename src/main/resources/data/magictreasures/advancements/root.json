@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "magictreasures:gold_ruby_ring"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.root.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png"
+  },
+  "criteria": {
+    "has_jewelry": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "magictreasures:jewelry/all_jewelry"
+          }
+        ]
+      }
+    }
+  }
+}

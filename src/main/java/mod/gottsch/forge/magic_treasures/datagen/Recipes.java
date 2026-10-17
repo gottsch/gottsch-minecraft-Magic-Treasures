@@ -13,6 +13,11 @@ import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.world.item.Items;
+import mod.gottsch.forge.magic_treasures.core.recipe.MagicTreasuresRecipes;
+import mod.gottsch.forge.magic_treasures.core.recipe.GemExtractionRecipe;
 
 /**
  * 
@@ -29,6 +34,18 @@ public class Recipes extends RecipeProvider {
 		@Override
 		protected void buildRecipes(Consumer<FinishedRecipe> recipe) {
 			MagicTreasures.LOGGER.debug("build recipes is running...");
+
+			// jewelry pliers
+			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, MagicTreasuresItems.JEWELRY_PLIERS.get())
+					.pattern(" N ")
+					.pattern("I I")
+					.define('N', Tags.Items.NUGGETS_IRON)
+					.define('I', Tags.Items.INGOTS_IRON)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
+					.save(recipe);
+
+			// jewelry + pliers -> the jewelry's gem
+			SpecialRecipeBuilder.special(MagicTreasuresRecipes.GEM_EXTRACTION.get()).save(recipe, MagicTreasures.MOD_ID + ":gem_extraction");
 
 			// recipe scrolls
 			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("iron_ring")).findFirst().get().get())

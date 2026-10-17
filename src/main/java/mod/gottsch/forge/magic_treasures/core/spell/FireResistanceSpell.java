@@ -9,13 +9,14 @@ import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * This is essentially the same as Mana Shield except it resists fire damage only and doesn't have a cooldown.
@@ -47,14 +48,13 @@ public class FireResistanceSpell extends Spell {
 		boolean result = false;
 
 		LivingDamageEvent damageEvent = (LivingDamageEvent) event;
-		// exit if not fire damage
-		if (!damageEvent.getSource().is(DamageTypes.IN_FIRE)
-			&& !damageEvent.getSource().is(DamageTypes.ON_FIRE)) {
+		// exit if not fire damage: vanilla's fire tag, as Fire Resistance uses (fire, burning, lava, magma, fireballs)
+		if (!damageEvent.getSource().is(DamageTypeTags.IS_FIRE)) {
 			return result;
 		}
 		IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			// get the source and amount
 			double amount = ((LivingDamageEvent)event).getAmount();
 			// calculate the new amount
@@ -70,6 +70,7 @@ public class FireResistanceSpell extends Spell {
 				newAmount = amountToPlayer;
 //			}
 			((LivingDamageEvent)event).setAmount((float) newAmount);
+			SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_ORANGE.get(), 5);
 			result = true;
 		}    		
 		return result;

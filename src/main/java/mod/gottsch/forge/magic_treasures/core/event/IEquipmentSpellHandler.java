@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
+import net.minecraft.world.item.ItemStack;
 
 /**
  *
@@ -30,4 +31,17 @@ import java.util.List;
 public interface IEquipmentSpellHandler {
 
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player);
+
+	/**
+	 * Whether the player is wearing jewelry in every main jewelry slot (ring, necklace and bracelet) at once.
+	 * Only equipment mods with those slots can answer yes.
+	 */
+	default boolean isWearingFullSet(ServerPlayer player) {
+		return false;
+	}
+
+	/** Mana wells the player is wearing in this equipment mod's slots. */
+	default List<ItemStack> getManaWells(ServerPlayer player) {
+		return List.of();
+	}
 }

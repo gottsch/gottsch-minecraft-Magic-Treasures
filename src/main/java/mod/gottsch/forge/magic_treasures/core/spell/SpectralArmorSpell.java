@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
@@ -67,7 +68,7 @@ SpectralArmorSpell extends Spell {
 			double cooldown = modifyCooldown(jewelry);
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
-				if (handler.getMana() > 0 && player.isAlive()) {
+				if (hasMana(handler, context) && player.isAlive()) {
 					// TODO only execute if damage is coming from a Mob ie not Fire, Fall etc
 					if (((LivingDamageEvent)event).getEntity() instanceof Player) {
 						// get the source and amount
@@ -87,6 +88,7 @@ SpectralArmorSpell extends Spell {
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
+							SpellEffects.burst(world, player, MagicTreasuresParticles.SPARK_ASH.get(), 8);
 							result = true;
 						}
 					}

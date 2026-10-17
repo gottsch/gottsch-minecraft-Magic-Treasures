@@ -81,7 +81,7 @@ public class RandomGemstone extends LootItemConditionalFunction {
 
 	@Override
 	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.RANDOM_SPELL;
+		return MagicTreasuresLootFunctions.RANDOM_GEMSTONE.get();
 	}
 
 	@Override

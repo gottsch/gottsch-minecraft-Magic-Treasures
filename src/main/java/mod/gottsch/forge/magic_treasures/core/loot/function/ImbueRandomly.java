@@ -77,7 +77,7 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 
 	@Override
 	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.IMBUE_RANDOMLY;
+		return MagicTreasuresLootFunctions.IMBUE_RANDOMLY.get();
 	}
 
 	@Override

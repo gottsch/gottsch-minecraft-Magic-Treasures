@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "N": {
+      "tag": "forge:nuggets/iron"
+    }
+  },
+  "pattern": [
+    " N ",
+    "I I"
+  ],
+  "result": {
+    "item": "magictreasures:jewelry_pliers"
+  },
+  "show_notification": true
+}
