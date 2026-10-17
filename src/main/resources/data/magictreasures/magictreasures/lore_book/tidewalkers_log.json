@@ -1,0 +1,28 @@
+{
+  "rarity": "rare",
+  "pages": 8,
+  "character": "selene",
+  "texture": "magictreasures:item/lore_book/selenes_account",
+  "illustrations": [
+    {
+      "after": 1,
+      "item": "magictreasures:white_pearl"
+    },
+    {
+      "after": 2,
+      "preset": "magictreasures:aqua_ring"
+    },
+    {
+      "after": 4,
+      "preset": "magictreasures:journeyman_bands"
+    },
+    {
+      "after": 6,
+      "item": "magictreasures:moonglaive"
+    },
+    {
+      "after": 7,
+      "preset": "magictreasures:eye_of_the_phoenix"
+    }
+  ]
+}

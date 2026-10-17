@@ -5,7 +5,7 @@ import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -18,6 +18,8 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * 
@@ -25,6 +27,13 @@ import java.util.Random;
  *
  */
 public class ManaShieldSpell extends Spell {
+	/**
+	 * The most of a hit a mana shield can take. Set bonuses and resonance multiply the effect; past 100% the old code
+	 * passed negative damage on and charged mana for more than the hit. A full block is fine: the shield's cooldown
+	 * still lets the next hits through.
+	 */
+	public static final double MAX_ABSORB = 1.0;
+
 	public static String SHIELDING_TYPE = "mana_shield";
 
 	// before armor and potions
@@ -60,21 +69,21 @@ public class ManaShieldSpell extends Spell {
 	public boolean serverUpdate(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		// TODO extend CooldownSpell class and update
 		if (context.getEntity() instanceof CooldownSpellEntity spellEntity) {
-            double cooldown = handler.modifyCooldown(getCooldown());
+            double cooldown = cooldown(context);
 
 			// check if supports cooldown or if world time has exceeded the entity cooldown end time
 			if(cooldown <= 0.0 || (world.getGameTime() > spellEntity.getCooldownExpireTime())) {
-				if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+				if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 					if (((LivingDamageEvent)event).getEntity() instanceof Player) {
 						// get the source and amount
 						double amount = ((LivingDamageEvent)event).getAmount();
 						if (amount > 0D) {
 							// calculate the new amount
-							double amountToSpell = amount * handler.modifyEffectAmount(getEffectAmount());
+							double amountToSpell = amount * Math.min(effectAmount(context), MAX_ABSORB);
 							double amountToPlayer = amount - amountToSpell;
 							double newAmount = amountToPlayer;
 							MagicTreasures.LOGGER.debug("amount to jewelry -> {} amount to player -> {}", amountToSpell, amountToPlayer);
@@ -82,16 +91,18 @@ public class ManaShieldSpell extends Spell {
 							double cost = applyCost(world, random, coords, context, amountToSpell);
 							MagicTreasures.LOGGER.debug("cost (mana) incurred to jewelry -> {}", cost);
 							if (cost < amountToSpell) {
-								newAmount =+ (amountToSpell - cost);
+								newAmount += (amountToSpell - cost);
 							}
-							MagicTreasures.LOGGER.debug("new amount to player -> {}", amountToPlayer);
+							MagicTreasures.LOGGER.debug("new amount to player -> {}", newAmount);
 							// update the newAmount with what comes back from cost eval
-							((LivingDamageEvent)event).setAmount((float) newAmount);
+							((LivingDamageEvent)event).setAmount((float) Math.max(0.0, newAmount));
 
 							// set cooldown expire time if cooldown is activated
 							if (cooldown > 0.0) {
 								((CooldownSpellEntity) context.getEntity()).setCooldownExpireTime(Long.valueOf(world.getGameTime()).doubleValue() + cooldown);
 							}
+							// a flat blue ring around the player: the shield going up (each ward spell has its own shape and colour)
+							SpellEffects.ring(world, context.getPlayer(), MagicTreasuresParticles.SPARK_BLUE.get(), 0.9, 20);
 							result = true;
 						}
 					}
@@ -105,14 +116,20 @@ public class ManaShieldSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.mana_shield.rate"),
 				LangUtil.asPercentString(getEffectAmount() * 100),
-				MathUtil.r1d(getFrequency()/20.0));
+				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("absorb", percent(Math.min(tooltipEffectAmount(jewelry), MAX_ABSORB)), ChatFormatting.BLUE),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.mana_shield.rate"),
-				LangUtil.asPercentString(modifyEffectAmount(jewelry) * 100),
-				MathUtil.r1d(modifyFrequency(jewelry)/20.0));
+				LangUtil.asPercentString(Math.min(modifyEffectAmount(jewelry), MAX_ABSORB) * 100),
+				MathUtil.r1d(modifyCooldown(jewelry)/20.0));
 	}
 
 	@Override

@@ -1,0 +1,23 @@
+{
+  "type": "ring",
+  "accepts_gems": false,
+  "gem": "magictreasures:ruby",
+  "loot": {},
+  "material": "magictreasures:blood",
+  "name": "item.magictreasures.ring_of_life_death",
+  "overrides": {
+    "infinite": true,
+    "max_level": 9,
+    "max_mana": 1000.0,
+    "max_recharges": 0,
+    "max_repairs": 0
+  },
+  "rarity": "epic",
+  "spells": [
+    "magictreasures:cheat_death",
+    "magictreasures:greater_drain"
+  ],
+  "style": "magictreasures:lords",
+  "texture": "magictreasures:item/jewelry/ring_of_life_death",
+  "vanishing_curse": true
+}

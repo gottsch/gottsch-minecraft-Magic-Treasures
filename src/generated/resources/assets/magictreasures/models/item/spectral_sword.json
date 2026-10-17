@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/handheld",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "layer0": "magictreasures:item/spectral_sword"
+  }
+}

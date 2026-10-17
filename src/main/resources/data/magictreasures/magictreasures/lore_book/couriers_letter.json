@@ -1,0 +1,10 @@
+{
+  "rarity": "uncommon",
+  "pages": 3,
+  "illustrations": [
+    {
+      "after": 1,
+      "preset": "magictreasures:journeyman_bands"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:spellbound",
+  "display": {
+    "icon": {
+      "item": "magictreasures:healing_scroll"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.journeyman_enchanter.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.journeyman_enchanter.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "imbue": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "imbue",
+        "min_level": 3
+      }
+    }
+  }
+}

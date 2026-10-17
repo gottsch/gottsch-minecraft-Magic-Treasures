@@ -24,8 +24,8 @@ import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
-import mod.gottsch.forge.magic_treasures.core.network.SpellUpdateS2C;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.set.DrainRefillBonus;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -44,13 +44,14 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 import java.util.Random;
+import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 
 /**
  * 
  * @author Mark Gottschling on Dec 28, 2020
  *
  */
-public class DrainSpell extends Spell {
+public class DrainSpell extends CooldownSpell {
 	public static final String DRAIN_TYPE = "drain";
 	private static final Class<?> REGISTERED_EVENT = LivingTickEvent.class;
 
@@ -63,12 +64,6 @@ public class DrainSpell extends Spell {
 	}
 
 	@Override
-	public boolean clientUpdate(ItemStack jewelry, SpellEntity entity, SpellUpdateS2C message) {
-		// TODO
-		return super.clientUpdate(jewelry, entity, message);
-	}
-
-	@Override
 	public Class<?> getRegisteredEvent() {
 		return REGISTERED_EVENT;
 	}
@@ -77,43 +72,43 @@ public class DrainSpell extends Spell {
 	 * NOTE: it is assumed that only the allowable events are calling this action.
 	 */
 	@Override
-	public boolean serverUpdate(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
+	public boolean execute(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-		if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
-			if (handler.getMana() > 0 && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
-				// get player position
-				double px = player.getX();
-				double py = player.getY();
-				double pz = player.getZ();
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
+		if (hasMana(handler, context) && player.getHealth() < player.getMaxHealth() && player.isAlive()) {
+			// get player position
+			double px = player.getX();
+			double py = player.getY();
+			double pz = player.getZ();
 
-				// calculate the new amount
-				double range = getRange();
-				AtomicDouble drainedHealth = new AtomicDouble(0);
-				List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
-				if (mobs.isEmpty()) {
-					return result;
-				}
-				double effectAmount = handler.modifyEffectAmount(getEffectAmount());
-				mobs.forEach(mob -> {
-//					boolean flag = mob.attackEntityFrom(DamageSource.GENERIC, (float)getAmount());
-					boolean flag = mob.hurt(level.damageSources().generic(), (float)effectAmount);
-					MagicTreasures.LOGGER.debug("health drained from mob -> {} was successful -> {}", mob.getName(), flag);
-					if (flag) {
-						drainedHealth.addAndGet(effectAmount);
-					}
-				});
-
-				if (drainedHealth.get() > 0.0) {
-					player.setHealth(Mth.clamp(player.getHealth() + (float)drainedHealth.get(), 0.0F, player.getMaxHealth()));
-					//					entity.setMana(MathHelper.clamp(entity.getMana() - 1D,  0D, entity.getMana()));
-					applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
-					result = true;
-				}                
+			// calculate the new amount
+			double range = range(context);
+			AtomicDouble drainedHealth = new AtomicDouble(0);
+			List<Monster> mobs = level.getEntitiesOfClass(Monster.class, new AABB(px - range, py - range, pz - range, px + range, py + range, pz + range));
+			if (mobs.isEmpty()) {
+				return result;
 			}
+			double effectAmount = effectAmount(context);
+			mobs.forEach(mob -> {
+//					boolean flag = mob.attackEntityFrom(DamageSource.GENERIC, (float)getAmount());
+				boolean flag = mob.hurt(level.damageSources().generic(), (float)effectAmount);
+				MagicTreasures.LOGGER.debug("health drained from mob -> {} was successful -> {}", mob.getName(), flag);
+				if (flag) {
+					drainedHealth.addAndGet(effectAmount);
+					SpellEffects.arc(level, mob, player, MagicTreasuresParticles.SPARK_CRIMSON.get());
+				}
+			});
 
+			if (drainedHealth.get() > 0.0) {
+				player.setHealth(Mth.clamp(player.getHealth() + (float)drainedHealth.get(), 0.0F, player.getMaxHealth()));
+				//					entity.setMana(MathHelper.clamp(entity.getMana() - 1D,  0D, entity.getMana()));
+				applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+				// Maldritch's Remains, 4 pieces: some of the drained life comes back as mana
+				DrainRefillBonus.refill(player, handler, drainedHealth.get());
+				result = true;
+			}
 		}
 		return result;
 	}
@@ -123,7 +118,14 @@ public class DrainSpell extends Spell {
 		return Component.translatable(LangUtil.tooltip("spell.drain.rate"),
 				MathUtil.r1d(getEffectAmount()),
 				MathUtil.r1d(getRange()),
-				MathUtil.r1d(getFrequency()/20.0));
+				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("drain", number(tooltipEffectAmount(jewelry)), ChatFormatting.RED),
+			chip("range", number(tooltipRange(jewelry)), ChatFormatting.AQUA),
+			chip("every", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override
@@ -131,7 +133,7 @@ public class DrainSpell extends Spell {
 		return Component.translatable(LangUtil.tooltip("spell.drain.rate"),
 				MathUtil.r1d(modifyEffectAmount(jewelry)),
 				MathUtil.r1d(modifyRange(jewelry)),
-				MathUtil.r1d(modifyFrequency(jewelry)/20.0));
+				MathUtil.r1d(modifyCooldown(jewelry)/20.0));
 	}
 
 	@Override

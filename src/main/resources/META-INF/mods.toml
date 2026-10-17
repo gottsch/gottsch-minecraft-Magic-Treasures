@@ -5,7 +5,7 @@ modLoader="javafml" #mandatory
 loaderVersion="${loader_version_range}"
 
 # License
-license="GNU GPLv3"
+license="GNU LGPLv3"
 
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/issues" #optional
@@ -61,15 +61,15 @@ description=""
     modId="gottschcore"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[2.6.0,)"
-    ordering="BEFORE"
+    versionRange="[2.10.0,)"
+    ordering="AFTER"
     side="BOTH"
 [[dependencies.magictreasures]]
     modId="treasure2"
     mandatory=false
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[3.8.1,)"
-    ordering="BEFORE"
+    ordering="AFTER"
     side="BOTH"
 [[dependencies.magictreasures]]
     modId="configured"

@@ -17,6 +17,9 @@
  */
 package mod.gottsch.forge.magic_treasures.datagen;
 
+import java.util.Map;
+import mod.gottsch.forge.magic_treasures.core.item.Jewelry;
+import java.util.Optional;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
@@ -33,6 +36,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
  * Created by Mark Gottschling on 6/1/2023
  */
 public class ItemModelsProvider extends ItemModelProvider {
+	/** 1.x named pieces drawn with a combination's art (as their 1.x item models and the M8 presets' texture) */
+	private static final Map<String, String> LEGACY_BORROWED_ART = Map.of(
+			"strongmans_bracers", "wood_bracelet",
+			"maldritchs_first_amulet", "bone_onyx_necklace",
+			"peasants_fortune", "great_iron_ring",
+			"amulet_of_defence", "copper_topaz_necklace");
+
 
 	public ItemModelsProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
 		super(output, MagicTreasures.MOD_ID, existingFileHelper);
@@ -45,7 +55,7 @@ public class ItemModelsProvider extends ItemModelProvider {
 				mcLoc("item/generated"), "layer0", modLoc("item/magic_treasures_tab"));
 
 		// tools
-//		singleTexture(MagicTreasuresItems.JEWELRY_PLIERS.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/jewelry_pliers"));
+		singleTexture(MagicTreasuresItems.JEWELRY_PLIERS.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/jewelry_pliers"));
 
 		// ingots
 		singleTexture(MagicTreasuresItems.SILVER_INGOT.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/silver_ingot"));
@@ -73,11 +83,10 @@ public class ItemModelsProvider extends ItemModelProvider {
 		singleTexture(MagicTreasuresItems.WHITE_PEARL.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/gem/white_pearl"));
 		singleTexture(MagicTreasuresItems.BLACK_PEARL.getId().getPath(), mcLoc("item/generated"), "layer0", modLoc("item/gem/black_pearl"));
 		
-		// TODO this method does not distinguish between regular and special jewelry ie Gottsch Ring of the Moon.
-		MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
-			singleTexture(item.getId().getPath(),
-					modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/" + item.getId().getPath()));
-		});
+		// the 418 1.x item ids (M9: legacy items that convert when carried) keep their 1.x art, so unconverted stacks in
+		// chests, storage and item frames still look right. Named pieces that borrowed a combination's art keep it.
+		MagicTreasuresItems.LEGACY_JEWELRY.forEach((id, item) -> singleTexture(id.getPath(),
+				modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/" + LEGACY_BORROWED_ART.getOrDefault(id.getPath(), id.getPath()))));
 
 		// scrolls
 		SpellRegistry.values().forEach(spell -> {
@@ -92,49 +101,25 @@ public class ItemModelsProvider extends ItemModelProvider {
                             }));
 		});
 
-		// special / non-standard jewelry
-		singleTexture(MagicTreasuresItems.SILBROS_RING_OF_VITALITY.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/silbros_ring_of_vitality"));
-
-		singleTexture(MagicTreasuresItems.STRONGMANS_BRACERS.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/wood_bracelet"));
-
-		singleTexture(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/bone_onyx_necklace"));
-
-		singleTexture(MagicTreasuresItems.PEASANTS_FORTUNE.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/great_iron_ring"));
-
-		singleTexture(MagicTreasuresItems.AQUA_RING.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/silver_topaz_ring"));
-
-		singleTexture(MagicTreasuresItems.AMULET_OF_DEFENCE.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/copper_topaz_necklace"));
-
-		singleTexture(MagicTreasuresItems.JOURNEYMANS_BANDS.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/great_gold_jadeite_bracelet"));
-
-		singleTexture(MagicTreasuresItems.MEDICS_TOKEN.getId().getPath(), modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/medics_token"));
-		singleTexture(MagicTreasuresItems.ADEPHAGIAS_BOUNTY.getId().getPath(), modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/adephagias_bounty"));
-
-		singleTexture(MagicTreasuresItems.ANGELS_RING.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/angels_ring"));
-
-		singleTexture(MagicTreasuresItems.SALANDAARS_WARD.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/salandaars_ward"));
-
-		singleTexture(MagicTreasuresItems.RING_OF_FORTITUDE.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/ring_of_fortitude"));
-
-		singleTexture(MagicTreasuresItems.EYE_OF_THE_PHOENIX.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/eye_of_the_phoenix"));
-
-		singleTexture(MagicTreasuresItems.RING_LIFE_DEATH.getId().getPath()
-				, modLoc("item/jewelry"), "layer0", modLoc("item/jewelry/ring_of_life_death"));
+		// set weapons and armor (the Rootstaff's model is hand-made in src/main: it's drawn bigger in hand)
+		singleTexture(MagicTreasuresItems.BARKSKIN_VEST.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/barkskin_vest"));
+		// the Stonemark Hammer's, Bone Scythe's, Moonglaive's and Anvil Shield's models are hand-made in src/main (handheld; shield elements)
+		singleTexture(MagicTreasuresItems.SMITHS_HELM.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/smiths_helm"));
+		singleTexture(MagicTreasuresItems.LICHS_MASK.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/lichs_mask"));
+		singleTexture(MagicTreasuresItems.PEARL_CIRCLET.getId().getPath()
+				, mcLoc("item/generated"), "layer0", modLoc("item/set/pearl_circlet"));
 
 		// belts
 		singleTexture(MagicTreasuresItems.SKULL_BELT.getId().getPath()
 				, mcLoc("item/generated"), "layer0", modLoc("item/skull_belt"));
+
+		// Ring of Swords' sword: see-through, so the translucent render type
+		singleTexture(MagicTreasuresItems.SPECTRAL_SWORD.getId().getPath()
+				, mcLoc("item/handheld"), "layer0", modLoc("item/spectral_sword"))
+				.renderType("minecraft:translucent");
 
 		/*
 		 * blocks
@@ -154,30 +139,4 @@ public class ItemModelsProvider extends ItemModelProvider {
 		withExistingParent(MagicTreasuresItems.DEEPSLATE_SILVER_ORE_BLOCKITEM.getId().getPath(), modLoc("block/deepslate_silver_ore"));
 	}
 	
-	@Deprecated
-	private ResourceLocation buildLoc(Item item) {
-		StringBuilder loc = new StringBuilder("items/jewelry/");
-		
-		ItemStack stack = new ItemStack(item);
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(c -> {
-		if (c.getJewelrySizeTier() != JewelrySizeTier.REGULAR) {
-			loc .append(c.getJewelrySizeTier().getValue() + "_");
-		}
-		
-		// stone (can't get from key....)
-
-			if (c.hasStone()) {
-				loc.append(c.getStone().getPath()).append("_");
-			}
-			
-			// material
-			loc.append(c.getMaterial().getName() + "_");
-			
-			// type
-			loc.append(c.getJewelryType().getValue());
-			
-		});		
-		return mcLoc(loc.toString());
-	}
-
 }

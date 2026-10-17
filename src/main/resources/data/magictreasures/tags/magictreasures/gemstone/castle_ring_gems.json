@@ -1,0 +1,14 @@
+{
+  "values": [
+    "magictreasures:ruby",
+    "magictreasures:sapphire",
+    {
+      "id": "treasure2:ruby",
+      "required": false
+    },
+    {
+      "id": "treasure2:sapphire",
+      "required": false
+    }
+  ]
+}

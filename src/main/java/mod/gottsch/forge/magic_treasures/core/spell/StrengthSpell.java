@@ -4,7 +4,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import java.util.List;
 
 /**
  * @author Mark Gottschling on June 4, 2024
@@ -51,11 +52,11 @@ public class StrengthSpell extends CooldownSpell {
 	public boolean execute(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 
-		IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
-		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
+		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.DAMAGE_BOOST)) {
-				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, handler.modifyDuration(getDuration()), getAmplifier()));
+				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, duration(context), getAmplifier()));
 			}
 			applyCost(world, random, coords, context, handler.modifySpellCost(getSpellCost()));
        		result = true;
@@ -71,9 +72,15 @@ public class StrengthSpell extends CooldownSpell {
 	}
 
 	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("duration", seconds(tooltipDuration(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
+	}
+
+	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.strength.rate"),
-				MathUtil.r1d(modifyCooldown(jewelry) / 20.0),
+				MathUtil.r1d(modifyDuration(jewelry) / 20.0),
 				MathUtil.r1d(modifyCooldown(jewelry) / 20.0));
 	}
 

@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "treasure2:ruby"
+    }
+  ],
+  "color": "#D0203A",
+  "item": "treasure2:ruby",
+  "rarity": "rare",
+  "tier": "magictreasures:tier5"
+}

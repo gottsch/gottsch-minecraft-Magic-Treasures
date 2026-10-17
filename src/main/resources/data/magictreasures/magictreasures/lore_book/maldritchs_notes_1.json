@@ -1,0 +1,11 @@
+{
+  "rarity": "scarce",
+  "pages": 6,
+  "character": "maldritch",
+  "illustrations": [
+    {
+      "after": 5,
+      "preset": "magictreasures:maldritchs_first_amulet"
+    }
+  ]
+}

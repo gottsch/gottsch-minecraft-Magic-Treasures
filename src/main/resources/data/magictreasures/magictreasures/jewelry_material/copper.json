@@ -1,0 +1,20 @@
+{
+  "color": "#B65737",
+  "factors": {
+    "cooldown": 0.95
+  },
+  "ingredient": {
+    "tag": "forge:ingots/copper"
+  },
+  "mana": 50,
+  "max_level": 4,
+  "rarity": "uncommon",
+  "repairs": 1,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords",
+    "magictreasures:fine"
+  ],
+  "uses": 75
+}

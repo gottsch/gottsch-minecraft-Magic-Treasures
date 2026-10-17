@@ -1,0 +1,28 @@
+{
+  "parent": "magictreasures:fully_adorned",
+  "display": {
+    "icon": {
+      "item": "magictreasures:necklace",
+      "nbt": "{\"magictreasures:jewelry_identity\":{type:\"necklace\",material:\"magictreasures:gold\",gem:\"magictreasures:ruby\",preset:\"magictreasures:salandaars_ward\"}}"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.salandaars_anvilwork.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.salandaars_anvilwork.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_set": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:salandaars_anvilwork"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "treasure2:topaz"
+    }
+  ],
+  "color": "#D38F3C",
+  "item": "treasure2:topaz",
+  "rarity": "common",
+  "tier": "magictreasures:tier1"
+}

@@ -2,6 +2,7 @@
 package mod.gottsch.forge.magic_treasures.datagen;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import net.minecraft.resources.ResourceLocation;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.forge.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -13,6 +14,12 @@ import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.SpecialRecipeBuilder;
+import net.minecraft.world.item.Items;
+import mod.gottsch.forge.magic_treasures.core.recipe.MagicTreasuresRecipes;
+import mod.gottsch.forge.magic_treasures.core.recipe.GemExtractionRecipe;
+import mod.gottsch.forge.magic_treasures.core.recipe.JewelryRecipe;
 
 /**
  * 
@@ -30,96 +37,21 @@ public class Recipes extends RecipeProvider {
 		protected void buildRecipes(Consumer<FinishedRecipe> recipe) {
 			MagicTreasures.LOGGER.debug("build recipes is running...");
 
-			// recipe scrolls
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("iron_ring")).findFirst().get().get())
-					.requires(MagicTreasuresItems.RING_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_IRON), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.RING_RECIPE.get()))
+			// jewelry pliers
+			ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, MagicTreasuresItems.JEWELRY_PLIERS.get())
+					.pattern(" N ")
+					.pattern("I I")
+					.define('N', Tags.Items.NUGGETS_IRON)
+					.define('I', Tags.Items.INGOTS_IRON)
+					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(Items.IRON_INGOT))
 					.save(recipe);
 
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("copper_ring")).findFirst().get().get())
-					.requires(MagicTreasuresItems.RING_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_COPPER), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.RING_RECIPE.get()))
-					.save(recipe);
+			// jewelry + pliers -> the jewelry's gem
+			SpecialRecipeBuilder.special(MagicTreasuresRecipes.GEM_EXTRACTION.get()).save(recipe, MagicTreasures.MOD_ID + ":gem_extraction");
 
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("silver_ring")).findFirst().get().get())
-					.requires(MagicTreasuresItems.RING_RECIPE.get())
-					.requires(Ingredient.of(MagicTreasuresTags.Items.INGOTS_SILVER), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.RING_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("gold_ring")).findFirst().get().get())
-					.requires(MagicTreasuresItems.RING_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_GOLD), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.RING_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("bone_ring")).findFirst().get().get())
-					.requires(MagicTreasuresItems.RING_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.BONES), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.RING_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("iron_necklace")).findFirst().get().get())
-					.requires(MagicTreasuresItems.NECKLACE_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_IRON), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.NECKLACE_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("copper_necklace")).findFirst().get().get())
-					.requires(MagicTreasuresItems.NECKLACE_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_COPPER), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.NECKLACE_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("silver_necklace")).findFirst().get().get())
-					.requires(MagicTreasuresItems.NECKLACE_RECIPE.get())
-					.requires(Ingredient.of(MagicTreasuresTags.Items.INGOTS_SILVER), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.NECKLACE_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("gold_necklace")).findFirst().get().get())
-					.requires(MagicTreasuresItems.NECKLACE_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_GOLD), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.NECKLACE_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("bone_necklace")).findFirst().get().get())
-					.requires(MagicTreasuresItems.NECKLACE_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.BONES), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.NECKLACE_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("iron_bracelet")).findFirst().get().get())
-					.requires(MagicTreasuresItems.BRACELET_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_IRON), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.BRACELET_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("copper_bracelet")).findFirst().get().get())
-					.requires(MagicTreasuresItems.BRACELET_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_COPPER), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.BRACELET_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("silver_bracelet")).findFirst().get().get())
-					.requires(MagicTreasuresItems.BRACELET_RECIPE.get())
-					.requires(Ingredient.of(MagicTreasuresTags.Items.INGOTS_SILVER), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.BRACELET_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("gold_bracelet")).findFirst().get().get())
-					.requires(MagicTreasuresItems.BRACELET_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.INGOTS_GOLD), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.BRACELET_RECIPE.get()))
-					.save(recipe);
-
-			ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, MagicTreasuresItems.STANDARD_JEWELRY.stream().filter(o -> o.getId().getPath().equalsIgnoreCase("bone_bracelet")).findFirst().get().get())
-					.requires(MagicTreasuresItems.BRACELET_RECIPE.get())
-					.requires(Ingredient.of(Tags.Items.BONES), 4)
-					.unlockedBy(CRITERIA, InventoryChangeTrigger.TriggerInstance.hasItems(MagicTreasuresItems.BRACELET_RECIPE.get()))
-					.save(recipe);
+			// recipe scroll + 4 of any material's ingredient -> generic jewelry (materials from the registry); the 15
+			// 1.x shapeless recipes went in M9
+			SpecialRecipeBuilder.special(MagicTreasuresRecipes.JEWELRY.get()).save(recipe, MagicTreasures.MOD_ID + ":jewelry");
 
 			SimpleCookingRecipeBuilder.smelting(Ingredient.of(MagicTreasuresTags.Items.RAW_SILVER),
 							RecipeCategory.MISC,
@@ -127,6 +59,14 @@ public class Recipes extends RecipeProvider {
 					.group("silver_ingot")
 					.unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(MagicTreasuresItems.RAW_SILVER.get()).build()))
 					.save(recipe);
+
+			// until 2.0.0 this recipe was only a hand-added file in src/generated (no datagen code produced it)
+			SimpleCookingRecipeBuilder.blasting(Ingredient.of(MagicTreasuresTags.Items.RAW_SILVER),
+							RecipeCategory.MISC,
+							MagicTreasuresItems.SILVER_INGOT.get(), 1.0f, 100)
+					.group("silver_ingot")
+					.unlockedBy("has_ore", inventoryTrigger(ItemPredicate.Builder.item().of(MagicTreasuresItems.RAW_SILVER.get()).build()))
+					.save(recipe, new ResourceLocation(MagicTreasures.MOD_ID, "silver_ingot_from_blasting"));
 
 			// TODO Treasure2 doesn't use Tags for key recipes (ruby, sapphire)
 			// so need to add the recipes individually

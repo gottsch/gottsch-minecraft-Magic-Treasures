@@ -1,0 +1,24 @@
+{
+  "rarity": "scarce",
+  "pages": 9,
+  "character": "silbro",
+  "texture": "magictreasures:item/lore_book/silbros_journal_1",
+  "illustrations": [
+    {
+      "after": 2,
+      "preset": "magictreasures:strongmans_bracers"
+    },
+    {
+      "after": 3,
+      "preset": "magictreasures:silbros_acorn"
+    },
+    {
+      "after": 4,
+      "item": "magictreasures:rootstaff"
+    },
+    {
+      "after": 6,
+      "item": "magictreasures:barkskin_vest"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:dressed_to_the_nines",
+  "display": {
+    "icon": {
+      "item": "magictreasures:necklace",
+      "nbt": "{\"magictreasures:jewelry_identity\":{type:\"necklace\",material:\"magictreasures:gold\",gem:\"magictreasures:ruby\"}}"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.fully_adorned.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.fully_adorned.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_set": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set"
+      }
+    }
+  }
+}
