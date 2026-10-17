@@ -18,7 +18,7 @@
   },
   "criteria": {
     "read": {
-      "trigger": "magictreasures:lore_book",
+      "trigger": "gottschbooks:book_read",
       "conditions": {}
     }
   }

@@ -48,8 +48,6 @@ public final class MagicTreasuresDataComponents {
      */
     public static final TagComponent<Unit> TEMPERED = of("tempered", Codec.unit(Unit.INSTANCE));
 
-    /** a lore book's story: its id in the {@code magictreasures:lore_book} registry */
-    public static final TagComponent<ResourceLocation> LORE_BOOK = of("lore_book", ResourceLocation.CODEC);
 
     private static <T> TagComponent<T> of(String name, Codec<T> codec) {
         return TagComponent.of(MagicTreasures.MOD_ID, name, codec);

@@ -1,11 +1,3 @@
 {
-  "rarity": "uncommon",
-  "pages": 7,
-  "character": "silbro",
-  "illustrations": [
-    {
-      "after": 4,
-      "preset": "magictreasures:silbros_ring_of_vitality"
-    }
-  ]
+  "rarity": "uncommon"
 }

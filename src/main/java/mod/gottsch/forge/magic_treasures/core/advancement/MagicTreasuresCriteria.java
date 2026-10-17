@@ -45,8 +45,6 @@ public class MagicTreasuresCriteria {
 
     public static final JewelryTrigger JEWELRY = CriteriaTriggers.register(new JewelryTrigger());
 
-    /** a lore book read; checks what the player has read so far (see LoreBookTrigger) */
-    public static final LoreBookTrigger LORE_BOOK = CriteriaTriggers.register(new LoreBookTrigger());
 
     /** Loads the class, registering the triggers. Call from the mod constructor, before advancements load. */
     public static void init() {

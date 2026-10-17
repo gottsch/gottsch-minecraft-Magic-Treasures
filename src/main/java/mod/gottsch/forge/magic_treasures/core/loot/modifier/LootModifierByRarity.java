@@ -140,7 +140,8 @@ public class LootModifierByRarity extends LootModifier {
 			}
 			// lore books of this rarity, from the registry
 			context.getLevel().registryAccess().registry(MagicTreasuresRegistries.LORE_BOOK).ifPresent(books -> books.holders()
-					.filter(book -> !book.value().disabled() && book.value().rarity().getCode() == rarity.getCode())
+					.filter(book -> book.value().rarity().getCode() == rarity.getCode()
+							&& LoreBook.enabled(book.key().location(), context.getLevel().registryAccess()))
 					.forEach(book -> lootList.add(LoreBook.of(MagicTreasuresItems.LORE_BOOK.get(), book.key().location()))));
 			// grab random loot from the loot list (without replacement)
 			for (int index = 0; index < count && !lootList.isEmpty(); index++) {

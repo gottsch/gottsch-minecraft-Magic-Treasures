@@ -64,6 +64,14 @@ description=""
     versionRange="[2.10.0,)"
     ordering="AFTER"
     side="BOTH"
+# the lore book reader; nested by Jar-in-Jar
+[[dependencies.magictreasures]]
+    modId="gottschbooks"
+    mandatory=true
+    versionRange="${gottschbooks_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+
 [[dependencies.magictreasures]]
     modId="treasure2"
     mandatory=false

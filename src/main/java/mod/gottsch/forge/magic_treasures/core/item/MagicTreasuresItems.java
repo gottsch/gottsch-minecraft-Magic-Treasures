@@ -114,7 +114,7 @@ public class MagicTreasuresItems {
 
 	// belts
 	// a mana well: 250 mana, 2 recharges
-	// one item for every lore book; the story is a data component (see LoreBook)
+	// one item for every lore book; which story is on the stack (see LoreBook)
 	public static RegistryObject<Item> LORE_BOOK = Registration.ITEMS.register("lore_book", () -> new LoreBook(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
 
 	public static RegistryObject<Item> SKULL_BELT = Registration.ITEMS.register("skull_belt", () -> new ManaWell(MAGIC_TREASURES_PROPS_SUPPLIER.get(), 250, 2));
