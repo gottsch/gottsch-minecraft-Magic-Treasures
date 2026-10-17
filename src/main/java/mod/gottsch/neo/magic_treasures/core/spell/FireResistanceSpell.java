@@ -2,7 +2,6 @@
 package mod.gottsch.neo.magic_treasures.core.spell;
 
 import mod.gottsch.neo.gottschcore.enums.IRarity;
-import net.minecraft.tags.DamageTypeTags;
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
@@ -10,7 +9,7 @@ import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;

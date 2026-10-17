@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Russian: Journeyman's Bands has a Russian name, and the Maldritch's Remains bonus uses the Drain spell's name.
 
 ### Fixed
-- Fire Ward and Blessing of the Phoenix now block every kind of fire damage vanilla's Fire Resistance does: lava, magma blocks and fireballs too, not only fire and burning. The tooltip chips of the three resistance spells now say what they resist ("100% fire resist", "magic resist", "wither resist") instead of just "resist".
+- The tooltip chips of the three resistance spells now say what they resist ("100% fire resist", "magic resist", "wither resist") instead of just "resist".
 
 ## [1.4.0] - 2026-10-10
 
@@ -74,6 +74,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Harm, Mind Jab and Mind Fist play a sound when they cast, and target the nearest mob in range instead of an arbitrary one.
 - Passive spells now show when they work, with new glowing spark particles: Harm, Mind Jab and Mind Fist (violet arc to the mob), Drain (crimson arc from each drained mob), Reflection (cyan arc to each mob hit), Mana Shield and Magic Resistance (blue), Fire Resistance (orange), Wither Resistance and Spectral Armor (pale ash), Paladin Strike (gold, on the struck mob) and Cheat Death (big gold burst plus the totem sound). Healing shows small hearts. The sparks are adapted from gottsch's Monster Manual.
 - Rebalanced Harm, Mind Jab and Mind Fist so they strike mobs as they approach instead of only ones already in melee range. Damage: 2 / 3 / 4 to 3 / 4.5 / 6. Range: 2 / 2.5 / 3 to 4 / 5 / 6 blocks. Cooldown and cost are unchanged.
+
+### Fixed
+- Fire Ward and Blessing of the Phoenix now block every kind of fire damage vanilla's Fire Resistance does: lava, magma blocks and fireballs too, not only fire and burning.
 
 ## [1.3.2] - 2026-10-09
 
