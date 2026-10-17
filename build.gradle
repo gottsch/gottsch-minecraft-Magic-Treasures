@@ -18,10 +18,6 @@ repositories {
         name = "Curios"
         url = "https://maven.theillusivec4.top/"
     }
-    maven {
-        name = "BlameJared (Patchouli)"
-        url = "https://maven.blamejared.com"
-    }
 }
 
 base {
@@ -102,9 +98,6 @@ dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
     localRuntime "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
-    // Patchouli (guide book data only)
-    compileOnly "vazkii.patchouli:Patchouli:${patchouli_version}:api"
-    localRuntime "vazkii.patchouli:Patchouli:${patchouli_version}"
 }
 
 // Expands the declared properties in src/main/templates (neoforge.mods.toml).
