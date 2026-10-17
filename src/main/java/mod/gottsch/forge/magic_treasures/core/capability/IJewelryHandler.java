@@ -17,9 +17,10 @@
  */
 package mod.gottsch.forge.magic_treasures.core.capability;
 
-import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
-import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryStats;
-import mod.gottsch.forge.magic_treasures.core.rarity.MagicTreasuresRarity;
+import mod.gottsch.forge.magic_treasures.core.item.IJewelrySizeTier;
+import mod.gottsch.forge.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryMaterial;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellEntity;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -29,68 +30,21 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
- * A write-through view of a jewelry stack. What the piece <em>is</em> (its {@link JewelryIdentity}) and its
- * computed stats are read-only here; play state (uses, mana, repairs, recharges, spells) and the gem can be changed,
- * and every change is written straight back to the stack. Get one with {@code JewelryHandler.get(stack)}.
- *
  * Created by Mark Gottschling on 6/1/2023
  */
 public interface IJewelryHandler {
-    /** the jewelry stack this handler views */
-    ItemStack getStack();
+    JewelryMaterial getMaterial();
 
-    /*
-     * what the piece is
-     */
-    JewelryIdentity getIdentity();
+    public IJewelrySizeTier getJewelrySizeTier();
+    public IJewelryType getJewelryType();
 
-    /** the jewelry type: {@code "ring"}, {@code "necklace"}, {@code "bracelet"} */
-    String getType();
-
-    /** the {@code magictreasures:jewelry_material} id */
-    ResourceLocation getMaterial();
-
-    /** the {@code magictreasures:jewelry_style} id */
-    ResourceLocation getStyle();
-
-    /** the {@code magictreasures:gemstone} id, if the piece has a gem (see {@link #getStone()} for its item) */
-    Optional<ResourceLocation> getGem();
-
-    /** the {@code magictreasures:jewelry_preset} id, for named pieces */
-    Optional<ResourceLocation> getPreset();
-
-    /** max values, level, factors and rarity, computed from the identity and the datapack registries */
-    JewelryStats getStats();
-
-    MagicTreasuresRarity getRarity();
-
-    /*
-     * computed values
-     */
-    int getMaxUses();
-
-    double getMaxMana();
-
-    int getMaxRepairs();
-
-    int getMaxRecharges();
-
-    int getMaxLevel();
-
-    double getSpellCostFactor();
-
-    double getSpellEffectAmountFactor();
-
-    double getSpellDurationFactor();
-
-    double getSpellCooldownFactor();
-
-    double getSpellRangeFactor();
+    void appendSpecialHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag);
 
     double modifySpellCost(double cost);
+
+    double getSpellCostFactor();
 
     double modifyEffectAmount(double amount);
 
@@ -98,65 +52,92 @@ public interface IJewelryHandler {
 
     long modifyCooldown(long cooldown);
 
+    long modifyFrequency(long frequency);
+
     double modifyRange(double range);
 
-    /*
-     * play state
-     */
-    int getUses();
+    public Tag serializeNBT();
+    public void deserializeNBT(Tag tag);
 
-    void setUses(int uses);
+    int getMaxUses();
 
-    /** infinite pieces never lose uses (a preset's {@code "infinite": true}) */
+    void setMaxUses(int maxUses);
+
+    public int getUses();
+    public void setUses(int uses);
+
+    public double getMaxMana();
+    public void setMaxMana(double maxMana);
+
+    public double getMana();
+    public void setMana(double mana);
+
+    public int getMaxRepairs();
+    public void setMaxRepairs(int repairs);
+
+    public int getRepairs();
+    public void setRepairs(int repairs);
+
+    public int getMaxLevel();
+
+    // TODO maxStones
+
+    void setMaxLevel(int maxLevel);
+
+    ResourceLocation getStone();
+
+    void setStone(ResourceLocation stone);
+
+    boolean hasStone();
+
+    List<SpellEntity> getSpells();
+
+    void setSpells(List<SpellEntity> spells);
+
+    void setInfinite();
+
     boolean isInfinite();
 
-    double getMana();
+    // convenience method
+    JewelryStoneTier getStoneTier();
 
-    void setMana(double mana);
+    boolean isUpgradable();
 
-    int getRepairs();
-
-    void setRepairs(int repairs);
+    void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag);
 
     int getRecharges();
 
     void setRecharges(int recharges);
 
-    /**
-     * @return an unmodifiable list of spell entities bound to this stack. Use addSpell/setSpells to change it.
-     */
-    List<SpellEntity> getSpells();
+    int getMaxRecharges();
 
-    void setSpells(List<SpellEntity> spells);
+    void setMaxRecharges(int maxRecharges);
 
-    void addSpell(SpellEntity spell);
+    String getBaseName();
 
-    /*
-     * the gem
-     */
+    void setBaseName(String baseName);
 
-    /** the gem's <em>item</em> id, or null without a gem (a pack's gemstone id can differ from its item's) */
-    ResourceLocation getStone();
-
-    /** sets the gem by its item id; null or {@code minecraft:air} removes it; an item that isn't a gemstone is ignored */
-    void setStone(ResourceLocation item);
-
-    boolean hasStone();
-
-    /** whether the anvil may set this item as the gem (anything that isn't a gemstone is accepted) */
     boolean acceptsAffixer(ItemStack stack);
 
-    /** false when a preset says {@code "accepts_gems": false}: no gem may be set or removed with the anvil */
-    boolean presetAcceptsGems();
+    double getSpellRangeFactor();
 
-    /** false when a preset says {@code "extractable": false}: the pliers can't take its gem out */
-    boolean gemExtractable();
+    void setSpellRangeFactor(double spellRangeFactor);
 
-    /*
-     * tooltip
-     */
-    void appendHoverText(ItemStack stack, Level context, List<Component> tooltip, TooltipFlag flag);
+    double getSpellCooldownFactor();
 
-    /** The tooltip header's second line: type, gem and max spell level. */
-    Component getSubtitle();
+    void setSpellCooldownFactor(double spellCooldownFactor);
+
+    double getSpellDurationFactor();
+
+    void setSpellDurationFactor(double spellDurationFactor);
+
+    double getSpellFrequencyFactor();
+
+    void setSpellFrequencyFactor(double spellFrequencyFactor);
+
+    double getSpellEffectAmountFactor();
+
+    void setSpellEffectAmountFactor(double spellEffectAmountFactor);
+
+    void setSpellCostFactor(double spellCostFactor);
 }

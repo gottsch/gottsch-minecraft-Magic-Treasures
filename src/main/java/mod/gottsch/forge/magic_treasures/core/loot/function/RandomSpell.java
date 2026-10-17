@@ -75,7 +75,7 @@ public class RandomSpell extends LootItemConditionalFunction {
 
 	@Override
 	public LootItemFunctionType getType() {
-		return MagicTreasuresLootFunctions.RANDOM_SPELL.get();
+		return MagicTreasuresLootFunctions.RANDOM_SPELL;
 	}
 
 	@Override

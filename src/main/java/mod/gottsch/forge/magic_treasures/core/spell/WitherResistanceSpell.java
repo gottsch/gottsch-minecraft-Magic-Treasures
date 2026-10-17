@@ -4,7 +4,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -17,8 +17,6 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
-import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
-import java.util.List;
 
 /**
  * 
@@ -51,14 +49,14 @@ public class WitherResistanceSpell extends Spell {
 
 		// exit if not fire damage
 		if (((LivingDamageEvent)event).getSource().is(DamageTypes.WITHER)) {
-			IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
+			IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-			if (hasMana(handler, context) && context.getPlayer().isAlive()) {
+			if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
 				// get the source and amount
 				double amount = ((LivingDamageEvent)event).getAmount();
 				// calculate the new amount
 				double newAmount = 0;
-				double amountToSpell = amount * Math.min(1.0, effectAmount(context));
+				double amountToSpell = amount * Math.min(1.0, modifyEffectAmount(context.getJewelry()));
 				double amountToPlayer = amount - amountToSpell;
 				// Treasure.logger.debug("amount to charm -> {}); amount to player -> {}", amountToCharm, amountToPlayer);
 				double cost = applyCost(world, random, coords, context, amountToSpell);
@@ -69,7 +67,6 @@ public class WitherResistanceSpell extends Spell {
 					newAmount = amountToPlayer;
 //				}
 				((LivingDamageEvent)event).setAmount((float) newAmount);
-				SpellEffects.burst(world, context.getPlayer(), MagicTreasuresParticles.SPARK_ASH.get(), 5);
 				result = true;
 			}    
 		}
@@ -80,11 +77,6 @@ public class WitherResistanceSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.wither_resistance.rate"),
 				LangUtil.asPercentString(Math.min(100, getEffectAmount() * 100)));
-	}
-
-	@Override
-	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("wither_resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 {
   "parent": "magictreasures:item/jewelry",
   "textures": {
-    "layer0": "magictreasures:item/jewelry/journeyman_bands"
+    "layer0": "magictreasures:item/jewelry/great_gold_jadeite_bracelet"
   }
 }

@@ -20,6 +20,7 @@ package mod.gottsch.forge.magic_treasures;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import mod.gottsch.forge.magic_treasures.core.config.Config;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
+import mod.gottsch.forge.magic_treasures.core.network.MagicTreasuresNetworking;
 import mod.gottsch.forge.magic_treasures.core.setup.CommonSetup;
 import mod.gottsch.forge.magic_treasures.core.setup.Registration;
 import mod.gottsch.forge.magic_treasures.core.spell.MagicTreasuresSpells;
@@ -34,7 +35,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
-import mod.gottsch.forge.magic_treasures.core.advancement.MagicTreasuresCriteria;
 
 /**
  * 
@@ -55,10 +55,6 @@ public class MagicTreasures {
 		// TODO change to the new Echelons style of config setup
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.SERVER_CONFIG);
-		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.CLIENT_CONFIG);
-
-		// advancement triggers register into vanilla's trigger map, which must happen before advancements load
-		MagicTreasuresCriteria.init();
 
 		// force load of static blocks
 		MagicTreasuresSpells.init();
@@ -69,6 +65,7 @@ public class MagicTreasures {
 		// register the deferred registries
 		Registration.init(eventBus);
 
+		eventBus.addListener(MagicTreasuresNetworking::common);
 		// TODO anything that is registering magic things only, like jewelry material tiers, in common setup can and needs to be called before Registration.init()
 		eventBus.addListener(CommonSetup::init);
 		eventBus.addListener(this::config);

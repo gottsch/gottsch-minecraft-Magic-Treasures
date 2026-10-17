@@ -4,7 +4,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -17,10 +17,6 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
-import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import java.util.List;
 
 /**
  * 
@@ -60,16 +56,16 @@ public class CheatDeathSpell extends CooldownSpell {
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
 		CooldownSpellEntity entity = (CooldownSpellEntity) context.getEntity();
-		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-		if (hasMana(handler, context) && player.isAlive()) {
+		if (handler.getMana() > 0 && player.isAlive()) {
 			if (((LivingDamageEvent)event).getEntity() instanceof Player) {
 				// get the source and amount
 				double damage = ((LivingDamageEvent)event).getAmount();
 				if (damage > 0D && damage > player.getHealth()) {
 
 					// set player's health to amount
-					player.setHealth((float) effectAmount(context));
+					player.setHealth((float) handler.modifyEffectAmount(getEffectAmount()));
 
 					// cost eval
 					double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
@@ -77,8 +73,6 @@ public class CheatDeathSpell extends CooldownSpell {
 					// reduce damage to 0
 					((LivingDamageEvent)event).setAmount(0F);
 
-					SpellEffects.burst(world, SpellEffects.chest(player), MagicTreasuresParticles.SPARK_GOLD.get(), 30, 0.8);
-					world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, 1.0F, 1.0F);
 					result = true;
 				}
 			}
@@ -90,11 +84,6 @@ public class CheatDeathSpell extends CooldownSpell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.cheat_death.rate"),
 				MathUtil.r1d(getCooldown()/20.0));
-	}
-
-	@Override
-	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

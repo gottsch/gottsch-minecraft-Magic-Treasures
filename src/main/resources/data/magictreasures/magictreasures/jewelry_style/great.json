@@ -1,9 +1,0 @@
-{
-  "mana_multiplier": 1.5,
-  "max_level": 1,
-  "name": "jewelry_style.magictreasures.great",
-  "rarity_steps": 1,
-  "repairs": 1,
-  "texture_fallback": "magictreasures:regular",
-  "uses_multiplier": 2.0
-}

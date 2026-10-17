@@ -31,8 +31,8 @@ import net.minecraftforge.fml.common.Mod;
  * Created by Mark Gottschling on 6/1/2023
  */
 public class MagicTreasuresCapabilities {
-    /** a 1.x jewelry stack's saved state, on the legacy items only (see JewelryCapability) */
-    public static final Capability<JewelryCapability> LEGACY_JEWELRY = CapabilityManager.get(new CapabilityToken<>() {});
+    public static Capability<IJewelryHandler> JEWELRY_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {	});
+    public static Capability<IJewelryHandler> MANA_WELL_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {	});
 
     /**
      *
@@ -42,4 +42,21 @@ public class MagicTreasuresCapabilities {
         JewelryCapability.register(event);
     }
 
+    /**
+     * Forge Bus Event Subscriber class
+     */
+    @Mod.EventBusSubscriber(modid = MagicTreasures.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ForgeBusSubscriber {
+        /*
+         * NOTE called before entity is spawned in world
+         */
+        @SubscribeEvent
+        public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+            Entity entity = event.getObject();
+                // TODO ref the JewelryRegistry when ready
+//            if (EchelonManager.isValidEntity(entity)) {
+//                event.addCapability(JewelryCapability.ID, new JewelryCapability());
+//            }
+        }
+    }
 }

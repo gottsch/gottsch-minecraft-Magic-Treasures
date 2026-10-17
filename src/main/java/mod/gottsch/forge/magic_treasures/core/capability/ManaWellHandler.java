@@ -1,6 +1,6 @@
 /*
  * This file is part of  Magic Treasures.
- * Copyright (c) 2026 Mark Gottschling (gottsch)
+ * Copyright (c) 2024 Mark Gottschling (gottsch)
  *
  * Magic Treasures is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,72 +17,91 @@
  */
 package mod.gottsch.forge.magic_treasures.core.capability;
 
-import mod.gottsch.forge.magic_treasures.core.item.ManaWell;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.INBTSerializable;
 
-import java.util.Optional;
+import java.util.List;
 
 /**
- * A view over a mana well stack's NBT. The state lives in the stack tag (not a capability) so vanilla and
- * Curios sync it to the client whenever it changes. Missing values fall back to the item's defaults (full).
- *
- * @author Mark Gottschling on 10/9/2026
+ * Created by Mark Gottschling on 5/17/2024
  */
-public class ManaWellHandler implements IManaWellHandler {
-    private static final String TAG = "magictreasures_mana_well";
+public class ManaWellHandler implements IManaWellHandler, INBTSerializable<Tag> {
+    private static final String MAX_MANA = "maxMana";
     private static final String MANA = "mana";
-    private static final String RECHARGES = "recharges";
+     private static final String RECHARGES = "recharges";
 
-    private final ItemStack stack;
-    private final ManaWell well;
 
-    private ManaWellHandler(ItemStack stack, ManaWell well) {
-        this.stack = stack;
-        this.well = well;
+    private double maxMana;
+    private double mana;
+    private int recharges;
+
+    public ManaWellHandler(double mana, int recharges) {
+        this.mana = mana;
+        this.recharges = recharges;
     }
 
-    public static Optional<IManaWellHandler> get(ItemStack stack) {
-        if (stack != null && !stack.isEmpty() && stack.getItem() instanceof ManaWell well) {
-            return Optional.of(new ManaWellHandler(stack, well));
+    @Override
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+
+    }
+
+    @Override
+    public Tag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+        tag.putDouble(MAX_MANA, getMaxMana());
+        tag.putDouble(MANA, getMana());
+        tag.putInt(RECHARGES, getRecharges());
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(Tag tag) {
+        if (tag instanceof CompoundTag compound) {
+            if (compound.contains(MAX_MANA)) {
+                this.maxMana = compound.getDouble(MAX_MANA);
+            }
+            if (compound.contains(MANA)) {
+                this.mana = compound.getDouble(MANA);
+            }
+            if (compound.contains(RECHARGES)) {
+                this.recharges = compound.getInt(RECHARGES);
+            }
+
         }
-        return Optional.empty();
-    }
-
-    private CompoundTag read() {
-        CompoundTag tag = stack.getTagElement(TAG);
-        return tag == null ? new CompoundTag() : tag;
     }
 
     @Override
     public double getMaxMana() {
-        return well.getMaxMana();
+        return maxMana;
+    }
+
+    @Override
+    public void setMaxMana(double maxMana) {
+        this.maxMana = maxMana;
     }
 
     @Override
     public double getMana() {
-        CompoundTag tag = read();
-        return tag.contains(MANA) ? tag.getDouble(MANA) : getMaxMana();
+        return mana;
     }
 
     @Override
     public void setMana(double mana) {
-        stack.getOrCreateTagElement(TAG).putDouble(MANA, Math.max(0, Math.min(mana, getMaxMana())));
-    }
-
-    @Override
-    public int getMaxRecharges() {
-        return well.getMaxRecharges();
+        this.mana = mana;
     }
 
     @Override
     public int getRecharges() {
-        CompoundTag tag = read();
-        return tag.contains(RECHARGES) ? tag.getInt(RECHARGES) : getMaxRecharges();
+        return recharges;
     }
 
     @Override
     public void setRecharges(int recharges) {
-        stack.getOrCreateTagElement(TAG).putInt(RECHARGES, Math.max(0, recharges));
+        this.recharges = recharges;
     }
 }

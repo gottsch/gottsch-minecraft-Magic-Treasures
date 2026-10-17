@@ -7,7 +7,7 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:ring",
+          "name": "magictreasures:silver_ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
@@ -40,7 +40,7 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:ring",
+          "name": "magictreasures:copper_ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
@@ -75,7 +75,7 @@
               "function": "magictreasures:random_gemstone",
               "count": 1,
               "gemstones": [
-                "minecraft:diamond",
+                "diamond",
                 "jadeite",
                 "ruby"
               ]

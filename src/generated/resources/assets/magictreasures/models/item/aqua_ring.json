@@ -1,6 +1,6 @@
 {
   "parent": "magictreasures:item/jewelry",
   "textures": {
-    "layer0": "magictreasures:item/jewelry/aqua_ring"
+    "layer0": "magictreasures:item/jewelry/silver_topaz_ring"
   }
 }

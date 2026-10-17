@@ -20,7 +20,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -33,14 +33,11 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
-import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
-import net.minecraft.core.particles.ParticleTypes;
-import java.util.List;
 
 /**
  *
  */
-public class HealingSpell extends CooldownSpell {
+public class HealingSpell extends Spell {
     public static String HEALING_TYPE = "healing";
     private static final Class<?> REGISTERED_EVENT = LivingEvent.LivingTickEvent.class;
 
@@ -73,17 +70,18 @@ public class HealingSpell extends CooldownSpell {
      */
 
     @Override
-    public boolean execute(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
+    public boolean serverUpdate(Level level, Random random, ICoords coords, Event event, ICastSpellContext context) {
         boolean result = false;
-        IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
-        if (hasMana(handler, context) && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
+        IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+        if (level.getGameTime() % handler.modifyFrequency(getFrequency()) == 0) {
+            if (handler.getMana() > 0 && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {
 
-            // determine the actual amount of health (0.0 -> getAmount())
-            float amount = Math.min((float)effectAmount(context), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
-            context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
-            applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
-            SpellEffects.burst(level, context.getPlayer(), ParticleTypes.HEART, 2);
-            result = true;
+                // determine the actual amount of health (0.0 -> getAmount())
+                float amount = Math.min((float)handler.modifyEffectAmount(getEffectAmount()), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
+                context.getPlayer().setHealth(Mth.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
+                applyCost(level, random, coords, context, handler.modifySpellCost(getSpellCost()));
+                result = true;
+            }
         }
         return result;
     }
@@ -92,20 +90,14 @@ public class HealingSpell extends CooldownSpell {
     public Component getSpellDesc() {
         return Component.translatable(LangUtil.tooltip("spell.healing.rate"),
                 MathUtil.r1d(getEffectAmount()),
-                MathUtil.r1d(getCooldown()/20.0));
-    }
-
-    @Override
-    public List<Component> getStatChips(ItemStack jewelry) {
-        return List.of(chip("heal", number(tooltipEffectAmount(jewelry)), ChatFormatting.GREEN),
-            chip("every", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
+                MathUtil.r1d(getFrequency()/20.0));
     }
 
     @Override
     public Component getSpellDesc(ItemStack jewelry) {
         return Component.translatable(LangUtil.tooltip("spell.healing.rate"),
                 MathUtil.r1d(modifyEffectAmount(jewelry)),
-                MathUtil.r1d(modifyCooldown(jewelry)/20.0));
+                MathUtil.r1d(modifyFrequency(jewelry)/20.0));
     }
 
     @Override

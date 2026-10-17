@@ -33,16 +33,8 @@ import java.util.List;
  */
 public class JewelryRecipeScroll extends Item {
 
-    /** the generic jewelry type this scroll crafts (2.0 {@code magictreasures:jewelry} recipe) */
-    private final String jewelryType;
-
-    public JewelryRecipeScroll(String jewelryType, Properties properties) {
+    public JewelryRecipeScroll(Properties properties) {
         super(properties);
-        this.jewelryType = jewelryType;
-    }
-
-    public String getJewelryType() {
-        return jewelryType;
     }
 
     @Override

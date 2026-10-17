@@ -1,6 +1,6 @@
 package mod.gottsch.forge.magic_treasures.core.spell;
 
-import mod.gottsch.forge.magic_treasures.core.component.SpellData;
+import net.minecraft.nbt.CompoundTag;
 
 /**
  *
@@ -8,6 +8,7 @@ import mod.gottsch.forge.magic_treasures.core.component.SpellData;
  *
  */
 public class CooldownSpellEntity extends SpellEntity {
+    public static final String COOLDOWN_EXPIRE_TIME = "cooldownExpireTime";
 
     private double cooldownExpireTime;
 
@@ -21,22 +22,21 @@ public class CooldownSpellEntity extends SpellEntity {
         return cooldownExpireTime;
     }
 
-    /**
-     * also writes the new expire time back to the jewelry stack this entity is bound to
-     */
     public void setCooldownExpireTime(double cooldownExpireTime) {
         this.cooldownExpireTime = cooldownExpireTime;
-        writeBack();
     }
 
-    @Override
-    public SpellData toData() {
-        return super.toData().withCooldownExpireTime(cooldownExpireTime);
+    public CompoundTag save(CompoundTag tag) {
+        super.save(tag);
+        tag.putDouble(COOLDOWN_EXPIRE_TIME, cooldownExpireTime);
+        return tag;
     }
 
-    @Override
-    public void load(SpellData data) {
-        super.load(data);
-        this.cooldownExpireTime = data.cooldownExpireTime();
+    public boolean load(CompoundTag tag) {
+        super.load(tag);
+        if (tag.contains(COOLDOWN_EXPIRE_TIME)) {
+            setCooldownExpireTime(tag.getDouble(COOLDOWN_EXPIRE_TIME));
+        }
+        return true;
     }
 }

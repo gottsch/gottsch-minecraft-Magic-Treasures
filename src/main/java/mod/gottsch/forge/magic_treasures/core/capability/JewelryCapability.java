@@ -18,6 +18,9 @@
 package mod.gottsch.forge.magic_treasures.core.capability;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.forge.magic_treasures.core.item.JewelryType;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryMaterials;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -29,41 +32,49 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Since 2.0 only the 1.x legacy items carry this: it keeps a 1.x stack's saved jewelry state (uses, mana, stone,
- * spells...) as it was, so {@code LegacyConversion} can read it. 1.x kept that state in this item capability, saved
- * under the stack's {@code ForgeCaps.Parent}, which is only loaded while an item provides a capability. Nothing here
- * interprets the data; it is handed back unchanged on save, so an unconverted stack loses nothing.
- * <p>
- * (2.0 jewelry keeps its state on the stack's NBT, see {@code StackData}.)
+ * Created by Mark Gottschling on 6/1/2023
  */
 public class JewelryCapability implements ICapabilitySerializable<CompoundTag> {
-    public static final ResourceLocation ID = new ResourceLocation(MagicTreasures.MOD_ID, "jewelry");
+        public static final ResourceLocation ID = new ResourceLocation(MagicTreasures.MOD_ID, "jewelry");
 
-    private CompoundTag data = new CompoundTag();
-    private final LazyOptional<JewelryCapability> optional = LazyOptional.of(() -> this);
+    // reference of handler/data for easy access
+    private final IJewelryHandler handler;// = new JewelryHandler();
+    // holder of the handler/data
+    private final LazyOptional<IJewelryHandler> optional;// = LazyOptional.of(() -> handler);
 
-    /** the 1.x handler's saved state; empty for a stack that never had one */
-    public CompoundTag data() {
-        return data;
+    public JewelryCapability() {
+        this(new JewelryHandler.Builder(JewelryType.UNKNOWN, JewelryMaterials.NONE, JewelrySizeTier.UNKNOWN).build());
+    }
+
+    public JewelryCapability(IJewelryHandler handler) {
+        this.handler = handler;
+        optional = LazyOptional.of(() -> handler);
     }
 
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return cap == MagicTreasuresCapabilities.LEGACY_JEWELRY ? optional.cast() : LazyOptional.empty();
+        if (cap == MagicTreasuresCapabilities.JEWELRY_CAPABILITY) {
+            return optional.cast();
+        }
+        return LazyOptional.empty();
     }
 
     @Override
     public CompoundTag serializeNBT() {
-        return data.copy();
+        return (CompoundTag)handler.serializeNBT();
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-        data = tag.copy();
+        handler.deserializeNBT(tag);
     }
 
+    /**
+     *
+     * @param event
+     */
     public static void register(RegisterCapabilitiesEvent event) {
-        event.register(JewelryCapability.class);
+        event.register(IJewelryHandler.class);
     }
 }

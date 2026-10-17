@@ -31,8 +31,6 @@ public class MagicTreasuresSpells {
     public static final String SPEED = "speed";
     public static final String NIGHT_VISION = "night_vision";
     public static final String WATER_BREATHING = "water_breathing";
-    public static final String RING_OF_SWORDS = "ring_of_swords";
-    public static final String GREATER_RING_OF_SWORDS = "greater_ring_of_swords";
 
     // TODO need to change variable name
     // default spell
@@ -40,7 +38,7 @@ public class MagicTreasuresSpells {
             .with($ -> {
                 $.spellCost = 2.0;
                 $.effectAmount = 1.0;
-                $.cooldown = 200; // 10 seconds
+                $.frequency = 200; // 10 seconds
                 $.effectStackable = true;
             }).build());
 
@@ -67,21 +65,21 @@ public class MagicTreasuresSpells {
         SpellRegistry.register(new HealingSpell.Builder(ModUtil.asLocation("healing"), 3, MagicTreasuresRarity.UNCOMMON).with($ -> {
             $.spellCost = 3.0;
             $.effectAmount = 2.0;
-            $.cooldown = 180; // 9 seconds
+            $.frequency = 180; // 9 seconds
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HealingSpell.Builder(ModUtil.asLocation("greater_healing"), 5, MagicTreasuresRarity.SCARCE).with($ -> {
             $.spellCost = 4;
             $.effectAmount = 3.0;
-            $.cooldown = 160; // 8 seconds
+            $.frequency = 160; // 8 seconds
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HealingSpell.Builder(ModUtil.asLocation("regeneration"), 8, MagicTreasuresRarity.RARE).with($ -> {
             $.spellCost = 5.0;
             $.effectAmount = 5.0;
-            $.cooldown = 140; // 7 seconds
+            $.frequency = 140; // 7 seconds
             $.effectStackable = true;
         })	.build());
 
@@ -156,7 +154,7 @@ public class MagicTreasuresSpells {
                 .with($ -> {
                     $.spellCost = 2.0;
                     $.effectAmount = 2.0;
-                    $.cooldown = 180; // 9 seconds
+                    $.frequency = 180; // 9 seconds
                     $.range = 2.0;
                     $.effectStackable = true;
                 })	.build());
@@ -165,7 +163,7 @@ public class MagicTreasuresSpells {
                 .with($ -> {
                     $.spellCost = 3.0;
                     $.effectAmount = 4.0;
-                    $.cooldown = 150; // 7.5 seconds
+                    $.frequency = 150; // 7.5 seconds
                     $.range = 4.0;
                     $.effectStackable = true;
                 })	.build());
@@ -174,7 +172,7 @@ public class MagicTreasuresSpells {
                 .with($ -> {
                     $.spellCost = 4.0;
                     $.effectAmount = 6.0;
-                    $.cooldown = 120; // 6 seconds
+                    $.frequency = 120; // 6 seconds
                     $.range = 6.0;
                     $.effectStackable = true;
                 })	.build());
@@ -183,7 +181,7 @@ public class MagicTreasuresSpells {
 //                .with($ -> {
 //                    $.spellCost = 4.0;
 //                    $.effectAmount = 0;
-//                    $.cooldown = 100; // 6 seconds
+//                    $.frequency = 100; // 6 seconds
 //                    $.range = 6.0;
 //                    $.effectStackable = false;
 //                })	.build());
@@ -258,7 +256,7 @@ public class MagicTreasuresSpells {
         SpellRegistry.register(new SatietySpell.Builder(ModUtil.asLocation(SATIETY), 2, MagicTreasuresRarity.COMMON).with($ -> {
             $.spellCost = 3.0;
             $.effectAmount = 1.0;
-            $.cooldown = 100; // 5 seconds
+            $.frequency = 100; // 5 seconds
             $.effectStackable = true;
             $.priority = 1;
         })	.build());
@@ -310,56 +308,27 @@ public class MagicTreasuresSpells {
         // harm spells
         SpellRegistry.register(new HarmSpell.Builder(ModUtil.asLocation(HARM), 2, MagicTreasuresRarity.COMMON).with($ -> {
             $.spellCost = 2; // cost = min(spellCost, reflected amount)
-            $.effectAmount = 3.0;
+            $.effectAmount = 2.0;
             $.cooldown = 200; // 10 seconds
-            $.range = 4.0;
+            $.range = 2.0;
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HarmSpell.Builder(ModUtil.asLocation("mind_jab"), 4, MagicTreasuresRarity.UNCOMMON).with($ -> {
             $.spellCost = 4; // cost = min(spellCost, reflected amount)
-            $.effectAmount = 4.5;
+            $.effectAmount = 3.0;
             $.cooldown = 180;
-            $.range = 5.0;
+            $.range = 2.5;
             $.effectStackable = true;
         })	.build());
 
         SpellRegistry.register(new HarmSpell.Builder(ModUtil.asLocation("mind_fist"), 6, MagicTreasuresRarity.RARE).with($ -> {
             $.spellCost = 5; // cost = min(spellCost, reflected amount)
-            $.effectAmount = 6.0;
+            $.effectAmount = 4.0;
             $.cooldown = 160;
-            $.range = 6.0;
+            $.range = 3.0;
             $.effectStackable = true;
         })	.build());
-
-        // ring of swords (#5): swords circle the wearer when a mob comes within range. a sword loses hp equal to the
-        // damage it lands and shatters at 0. cooldown from the summon, longer than the duration, so a ring never
-        // replaces a live one
-        // 4 swords x 2 hits x 4 dmg = 32 damage a ring
-        SpellRegistry.register(new RingOfSwordsSpell.Builder(ModUtil.asLocation(RING_OF_SWORDS), 5, MagicTreasuresRarity.SCARCE)
-                .withSwords(4)
-                .withSwordHp(8.0)
-                .with($ -> {
-                    $.spellCost = 10;
-                    $.effectAmount = 4.0; // damage per hit
-                    $.duration = 400; // 20 seconds
-                    $.cooldown = 600; // 30 seconds
-                    $.range = 6.0; // trigger range
-                    $.effectStackable = false;
-                })	.build());
-
-        // 6 swords x 3 hits x 6 dmg = 108 damage a ring
-        SpellRegistry.register(new RingOfSwordsSpell.Builder(ModUtil.asLocation(GREATER_RING_OF_SWORDS), 9, MagicTreasuresRarity.LEGENDARY)
-                .withSwords(6)
-                .withSwordHp(18.0)
-                .with($ -> {
-                    $.spellCost = 20;
-                    $.effectAmount = 6.0; // damage per hit
-                    $.duration = 500; // 25 seconds
-                    $.cooldown = 800; // 40 seconds
-                    $.range = 6.0; // trigger range
-                    $.effectStackable = false;
-                })	.build());
 
         // strength spells
         SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation(QUICK_STRENGTH), 1, MagicTreasuresRarity.COMMON)

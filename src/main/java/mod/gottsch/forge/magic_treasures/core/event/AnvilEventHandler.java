@@ -17,12 +17,8 @@
  */
 package mod.gottsch.forge.magic_treasures.core.event;
 
-import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.gottschcore.nbt.StackData;
-import mod.gottsch.forge.magic_treasures.core.item.GenericJewelry;
-import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryDataIndex;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
-import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.item.generator.JewelryGenerator;
 import mod.gottsch.forge.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +28,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import mod.gottsch.forge.magic_treasures.core.capability.ManaWellHandler;
 
 /**
  * 
@@ -56,14 +51,21 @@ public class AnvilEventHandler {
 			AtomicReference<ItemStack> resultOutStack = new AtomicReference<>(ItemStack.EMPTY);
 			ItemStack outStack = ItemStack.EMPTY;
 
-			JewelryHandler.get(leftStack).ifPresent(handler -> {
+			leftStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
 				event.setMaterialCost(1);
 				event.setCost(1);
 
-				// a gem is any enabled gemstone's item (the gemstone registry, not a tag)
-				boolean gem = JewelryDataIndex.isGemstone(rightStack);
 				// add a stone to jewelry
-				if (!handler.hasStone() && gem) {
+				if (!handler.hasStone() && rightStack.is(MagicTreasuresTags.Items.STONES)) {
+					/*
+					 TODO need a better way of constructing a new jewelry item than using its registry name.
+					 When using items from different mods, following the naming structure may not work.
+					 ie. this ONLY works for items that use Magic Treasures naming convention AND don't
+					 overlap in the tiers. What if 2 items have the same make-up ex copper, topaz, ring
+					 */
+
+					// TODO somehow interrogate leftStack to determine if it is a standard naming or not. - might end up being a capability property OR a tag??
+					// TODO addStone should return an Optional
 					resultOutStack.set(generator.addStone(leftStack, rightStack));
 				}
 				// remove a stone from jewelry
@@ -81,26 +83,10 @@ public class AnvilEventHandler {
 					Optional<ItemStack> resultStack = generator.recharge(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
 				}
-				// repair jewelry: sacrifice another piece of jewelry
-				else if ((handler.getRepairs() > 0 || StackData.has(leftStack, MagicTreasuresDataComponents.TEMPERED))
-						&& JewelryHandler.get(rightStack).isPresent()) {
+				// repair jewelry
+				else if (handler.getRepairs() > 0 && rightStack.is(MagicTreasuresTags.Items.JEWELRY)) {
 					Optional<ItemStack> resultStack = generator.repair(leftStack);
 					resultStack.ifPresent(resultOutStack::set);
-				}
-			});
-
-			// recharge a mana well (it has no jewelry handler, so it is handled on its own)
-			ManaWellHandler.get(leftStack).ifPresent(wellHandler -> {
-				if (wellHandler.getRecharges() > 0 && wellHandler.getMana() < wellHandler.getMaxMana()
-						&& rightStack.is(MagicTreasuresTags.Items.RECHARGERS)) {
-					ItemStack recharged = leftStack.copy();
-					ManaWellHandler.get(recharged).ifPresent(h -> {
-						h.setMana(h.getMaxMana());
-						h.setRecharges(h.getRecharges() - 1);
-					});
-					event.setMaterialCost(1);
-					event.setCost(1);
-					resultOutStack.set(recharged);
 				}
 			});
 			event.setOutput(resultOutStack.get());

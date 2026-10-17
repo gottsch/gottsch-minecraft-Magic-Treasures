@@ -19,117 +19,63 @@ package mod.gottsch.forge.magic_treasures.api;
 
 import mod.gottsch.forge.gottschcore.enums.IEnum;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
-import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.component.JewelryIdentity;
-import mod.gottsch.forge.magic_treasures.core.component.MagicTreasuresDataComponents;
-import mod.gottsch.forge.gottschcore.nbt.StackData;
-import mod.gottsch.forge.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.forge.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.forge.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryDataIndex;
-import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryPresetDef;
-import mod.gottsch.forge.magic_treasures.core.jewelry.data.JewelryRules;
-import mod.gottsch.forge.magic_treasures.core.registry.EnumRegistry;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryMaterial;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryStoneHandler;
+import mod.gottsch.forge.magic_treasures.core.jewelry.JewelryStoneTier;
+import mod.gottsch.forge.magic_treasures.core.registry.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Magic Treasures' API for other mods.
- * <p>
- * Since 2.0, jewelry is data: materials, styles, stone tiers, gemstones and presets are datapack registries (keys in
- * {@link MagicTreasuresRegistries}), and a piece of jewelry is one of three generic items (ring, necklace,
- * bracelet) whose {@link JewelryIdentity} component says what it is. Add content with JSON, not code; use the stack
- * helpers here to make, recognise and read jewelry. The registries are only filled once a world's data is loaded, so
- * the helpers that check them return empty before that.
- *
  * Created by Mark Gottschling on 5/4/2023
  */
 public class MagicTreasuresApi {
     public static final String RARITY = "rarity";
 
-    /** @deprecated 2.0: jewelry types are the generic items' types; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static final String JEWELRY_TYPE = "jewelryType";
-    /** @deprecated 2.0: sizes are {@code magictreasures:jewelry_style} entries; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static final String JEWELRY_SIZE = "jewelrySize";
-    /** @deprecated 2.0: unused; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static final String JEWELRY_STONE = "jewelryStone";
-    /** @deprecated 2.0: unused; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static final String JEWELRY_MATERIAL = "jewelryMaterial";
 
-    /*
-     * jewelry stacks
-     */
-
-    /** whether the stack is Magic Treasures jewelry (a generic item with an identity) */
-    public static boolean isJewelry(ItemStack stack) {
-        return stack != null && !stack.isEmpty() && StackData.has(stack, MagicTreasuresDataComponents.JEWELRY_IDENTITY);
+    // TODO this has to be renamed to the specific rarity ie for Stone, Material, Jewelry
+    public static void registerStoneRarityTag(IRarity rarity, TagKey<Item> tagKey) {
+        TagRegistry.registerStoneRarity(rarity, tagKey);
     }
 
-    /** what a piece of jewelry is: type, material, gem, style and preset */
-    public static Optional<JewelryIdentity> getIdentity(ItemStack stack) {
-        return isJewelry(stack) ? Optional.of(StackData.get(stack, MagicTreasuresDataComponents.JEWELRY_IDENTITY)) : Optional.empty();
+    public static void registerJewelryRarityTag(IRarity rarity, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelryRarity(rarity, tagKey);
     }
 
-    /** a write-through view of a piece of jewelry: its stats, uses, mana, gem and spells */
-    public static Optional<IJewelryHandler> getJewelry(ItemStack stack) {
-        return JewelryHandler.get(stack);
-    }
-
-    /**
-     * A new piece of jewelry. Empty if the type has no generic item, or the material, gem or style isn't loaded (or is
-     * disabled). It doesn't check the rules (which combinations crafting and loot make); see {@link #isAllowed}.
-     *
-     * @param type     {@code "ring"}, {@code "necklace"} or {@code "bracelet"}
-     * @param material a {@code magictreasures:jewelry_material} id
-     * @param gem      a {@code magictreasures:gemstone} id, or empty for no gem
-     * @param style    a {@code magictreasures:jewelry_style} id ({@code magictreasures:regular} for plain jewelry)
-     */
-    public static Optional<ItemStack> createJewelry(String type, ResourceLocation material, Optional<ResourceLocation> gem,
-            ResourceLocation style) {
-        if (JewelryDataIndex.material(material).isEmpty() || JewelryDataIndex.style(style).isEmpty()
-                || gem.map(id -> JewelryDataIndex.gemstone(id).isEmpty()).orElse(false)) {
+    public static Optional<TagKey<Item>> getJewelryRarityTag(IRarity rarity) {
+        TagKey<Item> key = TagRegistry.getJewelryRarityTag(rarity);
+        if (key == null) {
             return Optional.empty();
         }
-        return create(new JewelryIdentity(type, material, gem, style, Optional.empty()));
-    }
-
-    /** A named piece from a {@code magictreasures:jewelry_preset}, with its spells. Empty if the preset isn't loaded. */
-    public static Optional<ItemStack> createPreset(ResourceLocation preset) {
-        return JewelryDataIndex.preset(preset).flatMap(holder -> {
-            JewelryPresetDef def = holder.value();
-            return create(new JewelryIdentity(def.type(), def.material(), def.gem(), def.style(), Optional.of(preset)));
-        });
-    }
-
-    /** whether the rules allow this combination, i.e. whether crafting, loot and the creative tab would make it */
-    public static boolean isAllowed(String type, ResourceLocation material, Optional<ResourceLocation> gem, ResourceLocation style) {
-        var materialDef = JewelryDataIndex.material(material);
-        var styleDef = JewelryDataIndex.style(style);
-        var gemDef = gem.flatMap(JewelryDataIndex::gemstone);
-        if (materialDef.isEmpty() || styleDef.isEmpty() || (gem.isPresent() && gemDef.isEmpty())) {
-            return false;
+        else {
+            return Optional.of(key);
         }
-        return JewelryRules.allows(type, materialDef.get(), styleDef.get(), gemDef.map(g -> g));
     }
 
-    /** uses, mana, repairs and recharges start full the first time the stack is read */
-    private static Optional<ItemStack> create(JewelryIdentity identity) {
-        return GenericJewelry.forType(identity.type()).map(item -> item.stack(identity));
+	public static void registerJewerlyTypeTag(IJewelryType type, TagKey<Item> tagKey) {
+		TagRegistry.registerJewelryType(type, tagKey);
+	}
+
+//    @Deprecated
+//	public static void registerJewerlyStoneTierTag(IJewelryStoneTier tier, TagKey<Item> tierTagKey) {
+////		TagRegistry.registerJewelryStoneTier(tier, tierTagKey);
+//	}
+
+    public static void registerJewerlyStoneTierTag(JewelryStoneTier tier, TagKey<Item> tierTagKey) {
+        TagRegistry.registerJewelryStoneTier(tier, tierTagKey);
     }
-
-    /*
-     * rarity
-     */
-
+	
     /**
      * TODO how to integrate with Treasure2 rarity and API.
      * @param rarity
@@ -138,6 +84,11 @@ public class MagicTreasuresApi {
         EnumRegistry.register(RARITY, rarity);
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     public static Optional<IRarity> getRarity(String key) {
         IEnum ienum = EnumRegistry.get(RARITY, key);
         if (ienum == null) {
@@ -157,29 +108,19 @@ public class MagicTreasuresApi {
         return rarities;
     }
 
-    /*
-     * 1.x jewelry types and sizes
-     */
-
-    /** @deprecated 2.0: a type is a generic jewelry item; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static void registerJewelryType(IJewelryType jewelryType) {
         EnumRegistry.register(JEWELRY_TYPE, jewelryType);
     }
 
-    /** @deprecated 2.0: see {@link IJewelryHandler#getType()}; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
-    public static List<IJewelryType> getJewelryTypes() {
-        List<IEnum> enums = EnumRegistry.getValues(JEWELRY_TYPE);
-        ArrayList<IJewelryType> types = new ArrayList<>();
-        if (!enums.isEmpty()) {
-            types.addAll(enums.stream().map(e -> (IJewelryType)e).toList());
-        }
-        return types;
-    }
-
-    /** @deprecated 2.0: see {@link IJewelryHandler#getType()}; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
+	public static List<IJewelryType> getJewelryTypes() {
+		List<IEnum> enums = EnumRegistry.getValues(JEWELRY_TYPE);
+		ArrayList<IJewelryType> types = new ArrayList<>();
+		if (!enums.isEmpty()) {
+			types.addAll(enums.stream().map(e -> (IJewelryType)e).toList());
+		}
+		return types;
+	}
+	
     public static Optional<IJewelryType> getJewelryType(String key) {
         IEnum ienum = EnumRegistry.get(JEWELRY_TYPE, key);
         if (ienum == null) {
@@ -190,14 +131,10 @@ public class MagicTreasuresApi {
         }
     }
 
-    /** @deprecated 2.0: sizes are {@code magictreasures:jewelry_style} JSON; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static void registerJewelrySize(IJewelrySizeTier size) {
         EnumRegistry.register(JEWELRY_SIZE, size);
     }
 
-    /** @deprecated 2.0: see {@link IJewelryHandler#getStyle()}; removed in 2.1 */
-    @Deprecated(since = "2.0", forRemoval = true)
     public static Optional<IJewelrySizeTier> getJewelrySize(String key) {
         IEnum ienum = EnumRegistry.get(JEWELRY_SIZE, key);
         if (ienum == null) {
@@ -206,5 +143,29 @@ public class MagicTreasuresApi {
         else {
             return Optional.of((IJewelrySizeTier) ienum);
         }
+    }
+
+    public static void registerJewelryStoneTier(mod.gottsch.forge.magic_treasures.core.jewelry.JewelryStoneTier tier) {
+        JewelryStoneTierRegistry.register(tier);
+    }
+
+    public static List<JewelryStoneTier> getJewelryStoneTiers() {
+        return JewelryStoneTierRegistry.getStoneTiers();
+    }
+
+    public static void registerJewelryMaterial(JewelryMaterial material) {
+        JewelryMaterialRegistry.register(material);
+    }
+
+    public static Optional<JewelryMaterial> getJewelryMaterial(ResourceLocation name) {
+        return JewelryMaterialRegistry.get(name);
+    }
+
+    public static Optional<Item> registerJewelryStone(Item item) {
+        return StoneRegistry.register(item);
+    }
+
+    public static Optional<JewelryStoneHandler> registerJewelryStoneHandler(Item item, JewelryStoneHandler standard) {
+        return StoneRegistry.register(item, standard);
     }
 }

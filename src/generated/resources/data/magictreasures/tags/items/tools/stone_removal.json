@@ -1,5 +1,9 @@
 {
   "values": [
-    "#forge:shears"
+    "#forge:shears",
+    "minecraft:stone_axe",
+    "minecraft:iron_axe",
+    "minecraft:diamond_axe",
+    "minecraft:netherite_axe"
   ]
 }

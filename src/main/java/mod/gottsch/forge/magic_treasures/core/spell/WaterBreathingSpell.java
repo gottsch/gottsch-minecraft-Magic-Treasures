@@ -4,7 +4,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
+import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -18,7 +18,6 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
-import java.util.List;
 
 /**
  * @author Mark Gottschling on June 17, 2024
@@ -52,11 +51,11 @@ public class WaterBreathingSpell extends CooldownSpell {
 	public boolean execute(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 
-		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
 
-		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
+		if (handler.getMana() > 0 && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.WATER_BREATHING)) {
-				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, duration(context), getAmplifier()));
+				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, handler.modifyDuration(getDuration()), getAmplifier()));
 			}
 			applyCost(world, random, coords, context, handler.modifySpellCost(getSpellCost()));
        		result = true;
@@ -69,12 +68,6 @@ public class WaterBreathingSpell extends CooldownSpell {
 		return Component.translatable(LangUtil.tooltip("spell.water_breathing.rate"),
 				MathUtil.r1d(getDuration() / 20.0),
 				MathUtil.r1d(getCooldown() / 20.0));
-	}
-
-	@Override
-	public List<Component> getStatChips(ItemStack jewelry) {
-		return List.of(chip("duration", seconds(tooltipDuration(jewelry)), ChatFormatting.AQUA),
-			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

@@ -7,15 +7,13 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:ring",
+          "name": "magictreasures:wood_ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": [
-                "common"
-              ]
+              "rarities": ["common"]
             }
-          ]
+          ]          
         },
         {
           "entryName": "random_spell",
@@ -39,10 +37,7 @@
             {
               "function": "magictreasures:random_gemstone",
               "count": 1,
-              "gemstones": [
-                "topaz",
-                "onyx"
-              ]
+              "gemstones": ["topaz", "onyx"]
             }
           ]
         }

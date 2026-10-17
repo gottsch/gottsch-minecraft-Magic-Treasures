@@ -22,8 +22,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.player.Player;
 
 /**
  *
@@ -32,33 +30,4 @@ import net.minecraft.world.entity.player.Player;
 public interface IEquipmentSpellHandler {
 
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player);
-
-	/**
-	 * Whether the player is wearing jewelry in every main jewelry slot (ring, necklace and bracelet) and a belt at
-	 * once (Dressed to the Nines).
-	 */
-	default boolean isDressed(ServerPlayer player) {
-		return false;
-	}
-
-	/**
-	 * Every jewelry piece and mana well that counts as worn in this handler's slots (not hands or armor), for sets.
-	 * Works on either side: the client uses it for set tooltips.
-	 */
-	default List<ItemStack> getWornJewelry(Player player) {
-		return List.of();
-	}
-
-	/**
-	 * One context per jewelry piece with a spell in this handler's slots (its first spell), with the slot it sits in.
-	 * For changes made outside a cast (siphon, Take Root): the server sends the jewelry's new state with it.
-	 */
-	default List<SpellContext> getWornJewelryContexts(ServerPlayer player) {
-		return List.of();
-	}
-
-	/** Mana wells the player is wearing in this equipment mod's slots. */
-	default List<ItemStack> getManaWells(ServerPlayer player) {
-		return List.of();
-	}
 }

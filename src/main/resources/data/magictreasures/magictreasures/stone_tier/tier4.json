@@ -1,9 +1,0 @@
-{
-  "factors": {
-    "cooldown": 0.96,
-    "cost": 0.96,
-    "effect": 1.03
-  },
-  "mana": 100,
-  "recharges": 2
-}

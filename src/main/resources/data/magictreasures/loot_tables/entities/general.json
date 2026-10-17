@@ -7,17 +7,13 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:ring",
+          "name": "magictreasures:copper_ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": [
-                "common",
-                "uncommon",
-                "scarce"
-              ]
+              "rarities": ["common", "uncommon", "scarce"]
             }
-          ]
+          ]          
         },
         {
           "entryName": "random_spell",
@@ -41,12 +37,7 @@
             {
               "function": "magictreasures:random_gemstone",
               "count": 1,
-              "gemstones": [
-                "topaz",
-                "onyx",
-                "minecraft:diamond",
-                "jadeite"
-              ]
+              "gemstones": ["topaz", "onyx", "diamond", "jadeite"]
             }
           ]
         }

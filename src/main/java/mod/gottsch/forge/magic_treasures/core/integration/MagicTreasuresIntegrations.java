@@ -19,7 +19,6 @@ package mod.gottsch.forge.magic_treasures.core.integration;
 
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.config.Config;
-import mod.gottsch.forge.magic_treasures.core.event.CuriosBoundPossessions;
 import mod.gottsch.forge.magic_treasures.core.event.HotbarEquipmentSpellHandler;
 import mod.gottsch.forge.magic_treasures.core.event.IEquipmentSpellHandler;
 import mod.gottsch.forge.magic_treasures.core.event.SpellEventHandler;
@@ -35,17 +34,6 @@ import net.minecraftforge.fml.ModList;
 public class MagicTreasuresIntegrations {
 	private static final String className = "mod.gottsch.forge.magic_treasures.core.event.CuriosEquipmentSpellHandler";
 
-	/** the handler chosen at setup: Curios when it's installed, else the hotbar */
-	private static IEquipmentSpellHandler equipmentHandler;
-
-	/** Which slots count as worn. Falls back to the hotbar if asked before setup has run. */
-	public static IEquipmentSpellHandler getEquipmentHandler() {
-		if (equipmentHandler == null) {
-			equipmentHandler = new HotbarEquipmentSpellHandler();
-		}
-		return equipmentHandler;
-	}
-
 	public static void registerCuriosIntegration() {
 		IEquipmentSpellHandler equipmentSpellHandler = null;
 		if (ModList.get().isLoaded("curios")) {
@@ -56,13 +44,11 @@ public class MagicTreasuresIntegrations {
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
 				MagicTreasures.LOGGER.warn("Unable to load Curios compatibility class -> {}", className);
 			}
-			CuriosBoundPossessions.register();
 		}
 		if (equipmentSpellHandler == null) {
 			MagicTreasures.LOGGER.debug("equipmentHandler is null");
 			equipmentSpellHandler = new HotbarEquipmentSpellHandler();
 		}
-		equipmentHandler = equipmentSpellHandler;
 		// TODO might have to register this earlier and set the spell handler here
 		MinecraftForge.EVENT_BUS.register(new SpellEventHandler(equipmentSpellHandler));
 	}
