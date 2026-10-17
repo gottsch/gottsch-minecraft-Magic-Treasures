@@ -1,15 +1,19 @@
 {
   "rarity": "legendary",
-  "pages": 5,
+  "pages": 6,
   "character": "maldritch",
   "texture": "magictreasures:item/lore_book/maldritchs_notes_1",
   "illustrations": [
     {
       "after": 3,
-      "item": "magictreasures:lichs_mask"
+      "item": "magictreasures:bone_scythe"
     },
     {
       "after": 4,
+      "item": "magictreasures:lichs_mask"
+    },
+    {
+      "after": 5,
       "preset": "magictreasures:ring_of_life_death"
     }
   ]

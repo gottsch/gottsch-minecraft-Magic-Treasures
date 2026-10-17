@@ -1,5 +1,47 @@
 {
   "rarity": "uncommon",
-  "pages": 6,
-  "character": "salandaar"
+  "pages": 16,
+  "character": "salandaar",
+  "illustrations": [
+    {
+      "after": 2,
+      "preset": "magictreasures:peasants_fortune"
+    },
+    {
+      "after": 3,
+      "item": "magictreasures:stonemark_hammer"
+    },
+    {
+      "after": 5,
+      "preset": "magictreasures:smiths_cuff"
+    },
+    {
+      "after": 6,
+      "preset": "magictreasures:silver_castle_ring"
+    },
+    {
+      "after": 8,
+      "preset": "magictreasures:amulet_of_defence"
+    },
+    {
+      "after": 9,
+      "preset": "magictreasures:angels_ring"
+    },
+    {
+      "after": 10,
+      "preset": "magictreasures:medics_token"
+    },
+    {
+      "after": 12,
+      "preset": "magictreasures:salandaars_ward"
+    },
+    {
+      "after": 14,
+      "preset": "magictreasures:ring_of_fortitude"
+    },
+    {
+      "after": 15,
+      "item": "magictreasures:anvil_shield"
+    }
+  ]
 }
