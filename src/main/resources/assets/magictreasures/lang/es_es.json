@@ -615,7 +615,7 @@
   "tooltip.magictreasures.gemstone.recharges": "Recargas: %s",
   "tooltip.magictreasures.gemstone.tier": "Nivel: %s",
   "tooltip.magictreasures.gemstone.usage": "Colócala en un yunque junto con una joya de Magic Treasures para combinarlas.",
-  "tooltip.magictreasures.hold_shift": "Mantén [SHIFT] para ampliar",
+  "tooltip.magictreasures.hold_shift": "Mantén [SHIFT] para ver detalles",
   "tooltip.magictreasures.infinite": "Infinito",
   "tooltip.magictreasures.jewelry.bar.durability": "Durabilidad",
   "tooltip.magictreasures.jewelry.bar.mana": "Maná",

@@ -651,7 +651,7 @@
   "tooltip.magictreasures.gemstone.recharges": "Recharges: %s",
   "tooltip.magictreasures.gemstone.tier": "Tier: %s",
   "tooltip.magictreasures.gemstone.usage": "Place on an anvil with Magic Treasures jewelry to combine.",
-  "tooltip.magictreasures.hold_shift": "Hold [SHIFT] to expand",
+  "tooltip.magictreasures.hold_shift": "Hold [SHIFT] for details",
   "tooltip.magictreasures.infinite": "Infinite",
   "tooltip.magictreasures.jewelry.bar.durability": "Durability",
   "tooltip.magictreasures.jewelry.bar.mana": "Mana",

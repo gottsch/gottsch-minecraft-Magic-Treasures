@@ -615,7 +615,7 @@
   "tooltip.magictreasures.gemstone.recharges": "Перезарядок: %s",
   "tooltip.magictreasures.gemstone.tier": "Ранг: %s",
   "tooltip.magictreasures.gemstone.usage": "Положите на наковальню с магической бижутерией чтобы соединить их.",
-  "tooltip.magictreasures.hold_shift": "Удерживайте нажатой клавишу [SHIFT] чтобы развернуть",
+  "tooltip.magictreasures.hold_shift": "Удерживайте [SHIFT] для подробностей",
   "tooltip.magictreasures.infinite": "Бесконечный",
   "tooltip.magictreasures.jewelry.bar.durability": "Прочность",
   "tooltip.magictreasures.jewelry.bar.mana": "Мана",

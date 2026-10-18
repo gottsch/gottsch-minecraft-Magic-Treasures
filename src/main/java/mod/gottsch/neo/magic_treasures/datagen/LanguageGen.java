@@ -201,7 +201,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("boolean.yes"), "Yes");
         add(LangUtil.tooltip("boolean.no"), "No");
         add(LangUtil.tooltip("infinite"), "Infinite");
-        add(LangUtil.tooltip("hold_shift"), "Hold [SHIFT] to expand");
+        add(LangUtil.tooltip("hold_shift"), "Hold [SHIFT] for details");
         add(LangUtil.tooltip("divider"), "--------------------");
 
         // tools
