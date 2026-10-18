@@ -18,6 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTextTooltip;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
@@ -83,6 +84,39 @@ public final class RichTooltips {
         }
     }
 
+    /**
+     * Like {@link #apply}, but a tooltip taller than the screen wraps wider, {@code step} pixels at a time, until it
+     * fits or reaches the room beside the mouse. A wider tooltip is shorter, so it keeps its top on screen.
+     */
+    public static void applyFitting(RenderTooltipEvent.GatherComponents event, String namespace, int maxWidth, int step) {
+        List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+        List<Either<FormattedText, TooltipComponent>> gathered = new ArrayList<>(elements);
+        apply(event, namespace, maxWidth);
+        if (event.getMaxWidth() != maxWidth) {
+            return; // no markers: not one of ours
+        }
+        int room = roomBesideMouse(event.getScreenWidth());
+        int width = maxWidth;
+        while (width < room && !IconTitleTooltips.fitsScreen(event)) {
+            width = Math.min(width + step, room);
+            // chips wrap when they are made, so make everything again at the new width
+            elements.clear();
+            elements.addAll(gathered);
+            apply(event, namespace, width);
+        }
+    }
+
+    /**
+     * The widest a tooltip's text can be where the mouse is now. A tooltip too wide for either side of the mouse
+     * wraps to the room on one side, chosen as Forge does ({@code ForgeHooksClient.gatherTooltipComponents}).
+     */
+    private static int roomBesideMouse(int screenWidth) {
+        Minecraft minecraft = Minecraft.getInstance();
+        int mouseX = (int) (minecraft.mouseHandler.xpos() * minecraft.getWindow().getGuiScaledWidth()
+                / minecraft.getWindow().getScreenWidth());
+        return mouseX > screenWidth / 2 ? mouseX - 12 - 8 : screenWidth - 16 - mouseX;
+    }
+
     /** Call from {@code RenderTooltipEvent.Pre}: widens every {@link FullWidthTooltip} to the widest other component. */
     public static void stretch(RenderTooltipEvent.Pre event) {
         int width = 0;
@@ -140,6 +174,28 @@ public final class RichTooltips {
         int lowest = event.getScreenHeight() - height - 3 - margin + 12;
         if (event.getY() > lowest) {
             event.setY(Math.max(lowest, 4 + 12));
+        }
+    }
+
+    /**
+     * Call from {@code RenderTooltipEvent.Pre}: a rich tooltip that just fits right of the mouse is moved left so its
+     * border shows too. Vanilla keeps it there while {@code x + width <= screen width}, but the border reaches
+     * {@code border} pixels further, past the edge.
+     */
+    public static void keepBorderOnScreen(RenderTooltipEvent.Pre event, int border) {
+        int width = 0;
+        boolean ours = false;
+        for (ClientTooltipComponent component : event.getComponents()) {
+            ours |= component instanceof FullWidthTooltip;
+            width = Math.max(width, component.getWidth(event.getFont()));
+        }
+        if (!ours) {
+            return;
+        }
+        // vanilla draws the tooltip at mouse x + 12, and flips it left of the mouse only if it overflows
+        int right = event.getX() + 12 + width;
+        if (right <= event.getScreenWidth() && right + border > event.getScreenWidth()) {
+            event.setX(event.getScreenWidth() - border - width - 12);
         }
     }
 

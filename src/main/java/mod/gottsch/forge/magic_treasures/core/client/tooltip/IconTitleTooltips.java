@@ -74,6 +74,21 @@ public final class IconTitleTooltips {
         if (elements.isEmpty() || !(elements.get(0).right().orElse(null) instanceof IconTitleTooltip header)) {
             return;
         }
+        if (fitsScreen(event)) {
+            return;
+        }
+        elements.set(0, Either.left(header.title()));
+        if (header.subtitle() != null) {
+            elements.add(1, Either.left(header.subtitle()));
+        }
+    }
+
+    /**
+     * Whether the tooltip, as gathered so far, fits the screen's height. Adds the height up as vanilla will: text
+     * lines wrapped at the event's max width, 10px each; components by their own height.
+     */
+    public static boolean fitsScreen(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
         Font font = Minecraft.getInstance().font;
         int wrap = event.getMaxWidth() > 0 ? event.getMaxWidth() : Integer.MAX_VALUE;
         int height = elements.size() == 1 ? -2 : 0;
@@ -83,13 +98,7 @@ public final class IconTitleTooltips {
                     component -> heightOf(component, font));
         }
         // the background reaches 3px past the contents on both sides
-        if (height + 6 <= event.getScreenHeight()) {
-            return;
-        }
-        elements.set(0, Either.left(header.title()));
-        if (header.subtitle() != null) {
-            elements.add(1, Either.left(header.subtitle()));
-        }
+        return height + 6 <= event.getScreenHeight();
     }
 
     private static int heightOf(TooltipComponent component, Font font) {

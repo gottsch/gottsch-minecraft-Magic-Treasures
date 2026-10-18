@@ -92,6 +92,7 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.LICHS_MASK.get(), "Lich's Mask");
         add(MagicTreasuresItems.MOONGLAIVE.get(), "Moonglaive");
         add(MagicTreasuresItems.LORE_BOOK.get(), "Lore Book");
+        add(MagicTreasuresItems.MANUAL.get(), "Magic Treasures Manual");
         add(LangUtil.tooltip("lore_book.author"), "by %s");
         // lore books: title and author, for the item name and tooltip; the text is assets/magictreasures/books/<id>/<locale>/text.md
         add("lore_book.magictreasures.silbros_journal_1.title", "Silbro's Journal, I");
@@ -200,7 +201,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("boolean.yes"), "Yes");
         add(LangUtil.tooltip("boolean.no"), "No");
         add(LangUtil.tooltip("infinite"), "Infinite");
-        add(LangUtil.tooltip("hold_shift"), "Hold [SHIFT] to expand");
+        add(LangUtil.tooltip("hold_shift"), "Hold [SHIFT] for details");
         add(LangUtil.tooltip("divider"), "--------------------");
 
         // tools

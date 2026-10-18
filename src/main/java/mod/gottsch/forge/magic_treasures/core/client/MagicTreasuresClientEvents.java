@@ -34,6 +34,7 @@ import mod.gottsch.forge.magic_treasures.core.set.JewelrySets;
 import mod.gottsch.forge.magic_treasures.core.set.SetEquipment;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
@@ -53,8 +54,12 @@ public class MagicTreasuresClientEvents {
 	private static final float TOOLTIP_ICON_SCALE = 2.0F;
 	/** text wraps here, and chips start a new row */
 	private static final int TOOLTIP_MAX_WIDTH = 200;
+	/** a tooltip taller than the screen wraps this much wider at a time until it fits */
+	private static final int TOOLTIP_WIDTH_STEP = 40;
 	/** room left under a tall tooltip, so its end doesn't look cut off */
 	private static final int TOOLTIP_BOTTOM_MARGIN = 16;
+	/** how far a tooltip's border reaches past its contents, plus a pixel of screen */
+	private static final int TOOLTIP_BORDER = 4;
 
 	/**
 	 * Obscure Tooltips draws its own icon, name and rarity header from the tooltip's first text line. With our icon
@@ -74,21 +79,23 @@ public class MagicTreasuresClientEvents {
 		if (Config.CLIENT.showTooltipIcon.get() && !HAS_OWN_ICON_HEADER) {
 			IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 		}
-		RichTooltips.apply(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH);
-		// a tooltip taller than the screen loses its top: drop the icon header if that's what tips it over
+		RichTooltips.applyFitting(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH, TOOLTIP_WIDTH_STEP);
+		// a tooltip taller than the screen loses its top: if it's still too tall, drop the icon header
 		IconTitleTooltips.fitToScreen(event);
 	}
 
-	/** Widen dividers and bars to the finished tooltip, and keep it off the bottom of the screen. */
+	/** Widen dividers and bars to the finished tooltip, and keep it off the bottom and right edges of the screen. */
 	@SubscribeEvent
 	public static void onRenderTooltipPre(RenderTooltipEvent.Pre event) {
 		RichTooltips.stretch(event);
 		RichTooltips.lift(event, TOOLTIP_BOTTOM_MARGIN);
+		RichTooltips.keepBorderOnScreen(event, TOOLTIP_BORDER);
 	}
 
 	/**
-	 * Adds the set block to the tooltip of any set piece: the set's name with how many pieces are worn, each piece
-	 * (worn ones lit), and each bonus tier (active ones lit). Goes above "Hold [SHIFT] to expand" when that's shown.
+	 * Adds the set block to the tooltip of any set piece: the set's name with how many pieces are worn and, while
+	 * SHIFT is held, each piece (worn ones lit) and each bonus tier (active ones lit). Goes above "Hold [SHIFT] for
+	 * details" when that's shown.
 	 */
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event) {
@@ -101,14 +108,17 @@ public class MagicTreasuresClientEvents {
 			lines.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
 			lines.add(Component.translatable(LangUtil.tooltip("set.header"), set.getName(), count, set.size())
 					.withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
-			for (JewelrySet.Piece piece : set.getPieces()) {
-				boolean isWorn = worn.stream().anyMatch(piece::matches);
-				lines.add(Component.literal(LangUtil.INDENT2).append(piece.name())
-						.withStyle(isWorn ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
-			}
-			for (int pieces : set.getTiers().keySet()) {
-				lines.add(Component.translatable(LangUtil.tooltip("set.bonus"), pieces, set.getBonusDescription(pieces))
-						.withStyle(count >= pieces ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+			// the full block is long, so it's in the SHIFT view, which leaves out the spells to make room
+			if (Screen.hasShiftDown()) {
+				for (JewelrySet.Piece piece : set.getPieces()) {
+					boolean isWorn = worn.stream().anyMatch(piece::matches);
+					lines.add(Component.literal(LangUtil.INDENT2).append(piece.name())
+							.withStyle(isWorn ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
+				}
+				for (int pieces : set.getTiers().keySet()) {
+					lines.add(Component.translatable(LangUtil.tooltip("set.bonus"), pieces, set.getBonusDescription(pieces))
+							.withStyle(count >= pieces ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				}
 			}
 
 			List<Component> tooltip = event.getToolTip();

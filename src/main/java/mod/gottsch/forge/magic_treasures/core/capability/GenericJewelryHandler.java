@@ -20,6 +20,7 @@ import mod.gottsch.forge.magic_treasures.core.spell.SpellEntity;
 import mod.gottsch.forge.magic_treasures.core.spell.SpellRegistry;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -383,9 +384,10 @@ public class GenericJewelryHandler implements IJewelryHandler {
             tooltip.add(Component.translatable(LangUtil.tooltip("jewelry.tempered")).withStyle(ChatFormatting.GOLD));
         }
 
-        // spells: name, flavor line and stat chips each, with a blank line between spells
+        // spells: name, flavor line and stat chips each, with a blank line between spells. Holding SHIFT shows the
+        // details and the full set block instead; with the spells too, the tooltip is taller than the screen
         List<SpellEntity> spells = getSpells();
-        if (!spells.isEmpty()) {
+        if (!spells.isEmpty() && !Screen.hasShiftDown()) {
             tooltip.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
             for (int i = 0; i < spells.size(); i++) {
                 if (i > 0) {

@@ -18,6 +18,7 @@
 package mod.gottsch.forge.magic_treasures.core.item;
 
 import com.google.common.collect.Lists;
+import mod.gottsch.forge.gottschbooks.api.BookItem;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.forge.magic_treasures.core.item.set.SetArmor;
@@ -116,6 +117,9 @@ public class MagicTreasuresItems {
 	// a mana well: 250 mana, 2 recharges
 	// one item for every lore book; which story is on the stack (see LoreBook)
 	public static RegistryObject<Item> LORE_BOOK = Registration.ITEMS.register("lore_book", () -> new LoreBook(MAGIC_TREASURES_PROPS_SUPPLIER.get()));
+	// the Magic Treasures manual (Gottsch Books: assets/magictreasures/books/manual)
+	public static RegistryObject<Item> MANUAL = Registration.ITEMS.register("manual", () -> new BookItem(MAGIC_TREASURES_PROPS_SUPPLIER.get(),
+			new ResourceLocation(MagicTreasures.MOD_ID, "manual")));
 
 	public static RegistryObject<Item> SKULL_BELT = Registration.ITEMS.register("skull_belt", () -> new ManaWell(MAGIC_TREASURES_PROPS_SUPPLIER.get(), 250, 2));
 
