@@ -1,11 +1,11 @@
-# Changelog
+# Changelog for Magic Treasures (Forge 1.20.1)
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - Unreleased
+## [2.0.0] - 2026-10-25
 
 **Breaking: jewelry is now data.** Every ring, necklace and bracelet is one of three items (`magictreasures:ring`, `magictreasures:necklace`, `magictreasures:bracelet`); what a piece is (material, gem, style, named piece) is stored on the item. Your 1.x jewelry converts on its own, keeping its name, enchantments, gem, spells, mana and uses. Datapacks and modpacks that name the old jewelry items (`magictreasures:gold_ruby_ring` and so on) need updating; see Changed.
 
