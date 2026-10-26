@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "magictreasures:gold_ruby_ring"
+      "item": "magictreasures:ring",
+      "nbt": "{\"magictreasures:jewelry_identity\":{type:\"ring\",material:\"magictreasures:gold\",gem:\"magictreasures:ruby\"}}"
     },
     "title": {
       "translate": "advancements.magictreasures.root.title"
@@ -25,6 +26,26 @@
           }
         ]
       }
+    },
+    "has_generic_jewelry": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "magictreasures:ring",
+              "magictreasures:necklace",
+              "magictreasures:bracelet"
+            ]
+          }
+        ]
+      }
     }
-  }
+  },
+  "requirements": [
+    [
+      "has_jewelry",
+      "has_generic_jewelry"
+    ]
+  ]
 }

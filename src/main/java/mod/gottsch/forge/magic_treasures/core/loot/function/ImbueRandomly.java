@@ -22,7 +22,7 @@ import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.magic_treasures.MagicTreasures;
 import mod.gottsch.forge.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.forge.magic_treasures.core.loot.MagicTreasuresLootFunctions;
 import mod.gottsch.forge.magic_treasures.core.rarity.MagicTreasuresRarity;
@@ -89,7 +89,7 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 
 		MagicTreasures.LOGGER.debug("rarity -> {}", rarity);
 
-		int stackMaxLevel = stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).map(IJewelryHandler::getMaxLevel).orElse(0);
+		int stackMaxLevel = JewelryHandler.get(stack).map(IJewelryHandler::getMaxLevel).orElse(0);
 
 		spell = MagicTreasuresSpells.DEFAULT_HEALING;
 		if (rarity != null && rarity != MagicTreasuresRarity.NONE) {
@@ -123,8 +123,8 @@ public class ImbueRandomly extends LootItemConditionalFunction {
 		MagicTreasures.LOGGER.debug("selected spell -> {}", spell.getName());
 
 		SpellEntity spellEntity = spell.entity();
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
-			handler.getSpells().add(spellEntity);
+		JewelryHandler.get(stack).ifPresent(handler -> {
+			handler.addSpell(spellEntity);
 		});
 
 		return stack;

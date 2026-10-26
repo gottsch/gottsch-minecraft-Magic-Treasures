@@ -30,9 +30,21 @@ public class MagicTreasuresCriteria {
     public static final String IMBUE = "imbue";
     public static final String RECHARGE = "recharge";
     public static final String EXTRACT_GEM = "extract_gem";
+    /** a gem removed on the anvil with shears (the gem is lost, the jewelry kept) */
+    public static final String REMOVE_GEM = "remove_gem";
+    /** one of each main jewelry type worn: ring, necklace, bracelet, and a belt (Dressed to the Nines) */
+    public static final String DRESSED = "dressed";
+    /** every piece of a named set worn; reports the set (Fully Adorned, the per-set advancements) */
     public static final String FULL_SET = "full_set";
+    /** jewelry repaired on the anvil with another piece */
+    public static final String REPAIR = "repair";
+    /** a spell's cost drew on a mana well because its jewelry ran short */
+    public static final String MANA_WELL = "mana_well";
+    /** a 2.0 jewelry piece carried (inventory or Curios); reports its style and rarity */
+    public static final String CARRY = "carry";
 
     public static final JewelryTrigger JEWELRY = CriteriaTriggers.register(new JewelryTrigger());
+
 
     /** Loads the class, registering the triggers. Call from the mod constructor, before advancements load. */
     public static void init() {

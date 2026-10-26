@@ -1,0 +1,40 @@
+{
+  "parent": "magictreasures:gem_collector",
+  "display": {
+    "icon": {
+      "item": "minecraft:chest"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.treasure_hunter.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.treasure_hunter.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "legendary": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "carry",
+        "rarity": "legendary"
+      }
+    },
+    "mythical": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "carry",
+        "rarity": "mythical"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "legendary",
+      "mythical"
+    ]
+  ]
+}

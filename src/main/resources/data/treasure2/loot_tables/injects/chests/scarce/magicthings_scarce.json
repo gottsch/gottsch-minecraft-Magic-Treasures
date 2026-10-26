@@ -7,7 +7,7 @@
         {
           "entryName": "jewelry0",
           "type": "item",
-          "name": "magictreasures:silver_ring",
+          "name": "magictreasures:ring",
           "weight": 5,
           "conditions": [
             {
@@ -31,7 +31,7 @@
         {
           "entryName": "jewelry1",
           "type": "item",
-          "name": "magictreasures:silver_ring",
+          "name": "magictreasures:ring",
           "weight": 5,
           "conditions": [
             {
@@ -43,7 +43,11 @@
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["common", "uncommon","scarce"]
+              "rarities": [
+                "common",
+                "uncommon",
+                "scarce"
+              ]
             },
             {
               "function": "magictreasures:imbue_randomly",
@@ -57,7 +61,7 @@
         {
           "entryName": "jewelry2",
           "type": "item",
-          "name": "magictreasures:copper_ring",
+          "name": "magictreasures:ring",
           "weight": 10,
           "conditions": [
             {
@@ -69,7 +73,10 @@
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["uncommon","scarce"]
+              "rarities": [
+                "uncommon",
+                "scarce"
+              ]
             }
           ]
         },
@@ -82,8 +89,14 @@
         {
           "entryName": "silver_castle_ring",
           "type": "item",
-          "name": "magictreasures:silver_castle_ring",
+          "name": "magictreasures:ring",
           "weight": 1,
+          "functions": [
+            {
+              "function": "magictreasures:set_jewelry_preset",
+              "preset": "magictreasures:silver_castle_ring"
+            }
+          ],
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
@@ -119,11 +132,13 @@
           "type": "minecraft:item",
           "name": "magictreasures:recharge_scroll",
           "weight": 3,
-          "conditions": [{
-            "condition": "minecraft:random_chance_with_looting",
-            "chance": 0.85,
-            "looting_multiplier": 0.15
-          }]
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.85,
+              "looting_multiplier": 0.15
+            }
+          ]
         }
       ]
     },

@@ -15,6 +15,9 @@ base {
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
+// nests Gottsch Books (see the jarJar dependency); the jarJar task's jar is the one to ship
+jarJar.enable()
+
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
     mappings channel: mapping_channel, version: mapping_version
@@ -58,11 +61,17 @@ minecraft {
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
+            // Curios is on the runtime classpath, so its mixins need the same remapping as the client run
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             args '--nogui'
         }
 
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id
+            // Curios is on the runtime classpath, so its mixins need the same remapping as the client run
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
         }
 
         data {
@@ -109,7 +118,13 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     //minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation fg.deobf("gottsch:gottschcore:1.20.1-2.6.0")
+    implementation fg.deobf("gottsch:gottschcore:1.20.1-2.10.0")
+
+    // Gottsch Books, nested in the jar: Forge loads the highest nested/installed copy that fits every range
+    implementation fg.deobf("gottsch:gottschbooks-forge-1.20.1:${gottschbooks_version}")
+    jarJar(group: 'gottsch', name: 'gottschbooks-forge-1.20.1', version: gottschbooks_version_range) {
+        jarJar.pin(it, gottschbooks_version)
+    }
 
 //    implementation fg.deobf("someguyssoftware.gottschcore:GottschCore:mc1.19.2-f43.2.0-v2.1.0")
     // Treasure2 4.x discovers inject loot tables from datapacks (3.8.x only reads them from a jar, so injects never load in dev)
@@ -122,8 +137,6 @@ dependencies {
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.9.1+1.20.1:api")
 
 
-    compileOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE:api")
-    runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:1.20.1-84-FORGE")
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -137,6 +150,7 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
+            gottschbooks_version_range: gottschbooks_version_range,
     ]
     inputs.properties replaceProperties
 
@@ -161,6 +175,17 @@ tasks.named('jar', Jar).configure {
 
     // This is the preferred method to reobfuscate your jar file
     finalizedBy 'reobfJar'
+    // the jar without the nested library; the shipped one is jarJar's
+    archiveClassifier = 'slim'
+}
+
+// the jar to ship: the mod with Gottsch Books nested in META-INF/jarjar, reobfuscated
+tasks.named('jarJar').configure {
+    archiveClassifier = ''
+    finalizedBy 'reobfJarJar'
+}
+tasks.named('build').configure {
+    dependsOn 'jarJar'
 }
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing

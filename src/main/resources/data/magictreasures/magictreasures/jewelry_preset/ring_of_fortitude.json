@@ -1,0 +1,21 @@
+{
+  "type": "ring",
+  "gem": "magictreasures:sapphire",
+  "gems": "#magictreasures:castle_ring_gems",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.ring_of_fortitude",
+  "overrides": {
+    "infinite": true,
+    "max_level": 7,
+    "max_mana": 350.0,
+    "max_recharges": 3
+  },
+  "rarity": "rare",
+  "spells": [
+    "magictreasures:shadow_armor"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/ring_of_fortitude",
+  "vanishing_curse": true
+}

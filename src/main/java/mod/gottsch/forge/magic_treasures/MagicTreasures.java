@@ -17,10 +17,10 @@
  */
 package mod.gottsch.forge.magic_treasures;
 
+import mod.gottsch.forge.magic_treasures.core.lore.JewelryIllustrations;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import mod.gottsch.forge.magic_treasures.core.config.Config;
 import mod.gottsch.forge.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
-import mod.gottsch.forge.magic_treasures.core.network.MagicTreasuresNetworking;
 import mod.gottsch.forge.magic_treasures.core.setup.CommonSetup;
 import mod.gottsch.forge.magic_treasures.core.setup.Registration;
 import mod.gottsch.forge.magic_treasures.core.spell.MagicTreasuresSpells;
@@ -70,7 +70,9 @@ public class MagicTreasures {
 		// register the deferred registries
 		Registration.init(eventBus);
 
-		eventBus.addListener(MagicTreasuresNetworking::common);
+		// pictures of jewelry for the lore books and the manual (preset: and jewelry:)
+		JewelryIllustrations.register();
+
 		// TODO anything that is registering magic things only, like jewelry material tiers, in common setup can and needs to be called before Registration.init()
 		eventBus.addListener(CommonSetup::init);
 		eventBus.addListener(this::config);

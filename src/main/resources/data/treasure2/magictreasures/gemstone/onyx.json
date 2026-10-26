@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "treasure2:onyx"
+    }
+  ],
+  "color": "#373B3B",
+  "item": "treasure2:onyx",
+  "rarity": "uncommon",
+  "tier": "magictreasures:tier2"
+}

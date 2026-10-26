@@ -88,9 +88,6 @@ public class SpellScroll extends Item {
             if (spell.getCooldown() > 0) {
                 tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("spell.cooldown"), ChatFormatting.BLUE + MathUtil.r1d(getSpell().getCooldown()/20.0))));
             }
-            if (spell.getFrequency() > 0) {
-                tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("spell.frequency"), ChatFormatting.GREEN + MathUtil.r1d(getSpell().getFrequency()/20.0))));
-            }
             if (spell.getRange() > 0) {
                 tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("spell.range"), ChatFormatting.AQUA + MathUtil.r1d(getSpell().getRange()))));
             }

@@ -1,5 +1,5 @@
 {
-  "parent": "magictreasures:root",
+  "parent": "magictreasures:apprentice_jeweler",
   "display": {
     "icon": {
       "item": "magictreasures:ruby"

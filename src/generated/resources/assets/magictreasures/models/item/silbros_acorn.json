@@ -1,0 +1,6 @@
+{
+  "parent": "magictreasures:item/jewelry",
+  "textures": {
+    "layer0": "magictreasures:item/jewelry/silbros_acorn"
+  }
+}

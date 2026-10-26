@@ -1,0 +1,19 @@
+{
+  "type": "bracelet",
+  "gem": "magictreasures:jadeite",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.adephagias_bounty",
+  "overrides": {
+    "infinite": true,
+    "max_level": 6,
+    "max_mana": 300.0,
+    "max_recharges": 1
+  },
+  "rarity": "scarce",
+  "spells": [
+    "magictreasures:satiety"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/adephagias_bounty"
+}

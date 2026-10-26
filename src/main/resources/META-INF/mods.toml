@@ -61,15 +61,23 @@ description=""
     modId="gottschcore"
     mandatory=true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-    versionRange="[2.6.0,)"
-    ordering="BEFORE"
+    versionRange="[2.10.0,)"
+    ordering="AFTER"
     side="BOTH"
+# the lore book reader; nested by Jar-in-Jar
+[[dependencies.magictreasures]]
+    modId="gottschbooks"
+    mandatory=true
+    versionRange="${gottschbooks_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+
 [[dependencies.magictreasures]]
     modId="treasure2"
     mandatory=false
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="[3.8.1,)"
-    ordering="BEFORE"
+    ordering="AFTER"
     side="BOTH"
 [[dependencies.magictreasures]]
     modId="configured"

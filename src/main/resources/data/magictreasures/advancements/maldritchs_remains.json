@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:fully_adorned",
+  "display": {
+    "icon": {
+      "item": "magictreasures:skull_belt"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.maldritchs_remains.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.maldritchs_remains.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "full_set": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "full_set",
+        "set": "magictreasures:maldritchs_remains"
+      }
+    }
+  }
+}

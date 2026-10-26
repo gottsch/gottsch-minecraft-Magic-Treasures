@@ -1,7 +1,0 @@
-{
-  "name": "Magic Treasures",
-  "landing_text": "Magic Treasures is a mod that adds wearable items that can be enhanced with various spells.",
-  "version": 1.2,
-  "creative_tab": "magictreasures:magic_treasures_tab",
-  "use_resource_pack": true
-}

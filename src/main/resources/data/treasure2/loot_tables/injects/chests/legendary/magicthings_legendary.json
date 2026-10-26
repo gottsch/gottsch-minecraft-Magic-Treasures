@@ -7,7 +7,7 @@
         {
           "entryName": "jewelry0",
           "type": "item",
-          "name": "magictreasures:bone_ring",
+          "name": "magictreasures:ring",
           "weight": 5,
           "conditions": [
             {
@@ -31,12 +31,16 @@
         {
           "entryName": "jewelry0",
           "type": "item",
-          "name": "magictreasures:bone_ring",
+          "name": "magictreasures:ring",
           "weight": 5,
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["rare", "epic", "legendary"]
+              "rarities": [
+                "rare",
+                "epic",
+                "legendary"
+              ]
             },
             {
               "function": "magictreasures:imbue_randomly",
@@ -50,12 +54,15 @@
         {
           "entryName": "jewelry1",
           "type": "item",
-          "name": "magictreasures:bone_ring",
+          "name": "magictreasures:ring",
           "weight": 10,
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["epic", "legendary"]
+              "rarities": [
+                "epic",
+                "legendary"
+              ]
             },
             {
               "function": "magictreasures:imbue_randomly",
@@ -69,12 +76,15 @@
         {
           "entryName": "jewelry2",
           "type": "item",
-          "name": "magictreasures:bone_ring",
+          "name": "magictreasures:ring",
           "weight": 10,
           "functions": [
             {
               "function": "magictreasures:random_jewelry",
-              "rarities": ["rare", "epic"]
+              "rarities": [
+                "rare",
+                "epic"
+              ]
             }
           ]
         },

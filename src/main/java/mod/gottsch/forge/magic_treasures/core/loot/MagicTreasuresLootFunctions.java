@@ -22,6 +22,7 @@ import mod.gottsch.forge.magic_treasures.core.loot.function.ImbueRandomly;
 import mod.gottsch.forge.magic_treasures.core.loot.function.RandomGemstone;
 import mod.gottsch.forge.magic_treasures.core.loot.function.RandomJewelry;
 import mod.gottsch.forge.magic_treasures.core.loot.function.RandomSpell;
+import mod.gottsch.forge.magic_treasures.core.loot.function.SetJewelryPreset;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -45,6 +46,8 @@ public class MagicTreasuresLootFunctions {
 			LOOT_FUNCTIONS.register("random_spell", () -> new LootItemFunctionType(new RandomSpell.Serializer()));
 	public static final RegistryObject<LootItemFunctionType> IMBUE_RANDOMLY =
 			LOOT_FUNCTIONS.register("imbue_randomly", () -> new LootItemFunctionType(new ImbueRandomly.Serializer()));
+	public static final RegistryObject<LootItemFunctionType> SET_JEWELRY_PRESET =
+			LOOT_FUNCTIONS.register("set_jewelry_preset", () -> new LootItemFunctionType(new SetJewelryPreset.Serializer()));
 
 	public static void register(IEventBus bus) {
 		LOOT_FUNCTIONS.register(bus);

@@ -4,7 +4,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -20,6 +20,7 @@ import java.util.Random;
 import mod.gottsch.forge.magic_treasures.core.particle.MagicTreasuresParticles;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import java.util.List;
 
 /**
  * 
@@ -59,7 +60,7 @@ public class CheatDeathSpell extends CooldownSpell {
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
 		CooldownSpellEntity entity = (CooldownSpellEntity) context.getEntity();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (hasMana(handler, context) && player.isAlive()) {
 			if (((LivingDamageEvent)event).getEntity() instanceof Player) {
@@ -68,7 +69,7 @@ public class CheatDeathSpell extends CooldownSpell {
 				if (damage > 0D && damage > player.getHealth()) {
 
 					// set player's health to amount
-					player.setHealth((float) handler.modifyEffectAmount(getEffectAmount()));
+					player.setHealth((float) effectAmount(context));
 
 					// cost eval
 					double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
@@ -89,6 +90,11 @@ public class CheatDeathSpell extends CooldownSpell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.cheat_death.rate"),
 				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

@@ -53,7 +53,7 @@ public class ArcaneSparkParticle extends TextureSheetParticle {
 	private final SpriteSet sprites;
 
 	protected ArcaneSparkParticle(ClientLevel level, double x, double y, double z,
-									double dx, double dy, double dz, SpriteSet sprites) {
+									double dx, double dy, double dz, SpriteSet sprites, float scale) {
 		super(level, x, y, z, 0.0D, 0.0D, 0.0D);
 		this.sprites = sprites;
 		this.gravity = 0.0F;
@@ -62,7 +62,7 @@ public class ArcaneSparkParticle extends TextureSheetParticle {
 		// long enough to actually register the bolt (a too-short flash was invisible mid-swing),
 		// still snappy enough to read as lightning rather than a lingering mote
 		this.lifetime = 10 + this.random.nextInt(8);  // 10–17 ticks (~0.5–0.85s)
-		this.quadSize = 0.22F + this.random.nextFloat() * 0.10F;  // ~70% of GMM's spark: spell sparks sit close to the player
+		this.quadSize = (0.22F + this.random.nextFloat() * 0.10F) * scale;  // ~70% of GMM's spark: spell sparks sit close to the player
 		// a tiny crackle of motion around the spawn point (plus whatever tiny seed velocity was passed)
 		this.xd = dx + (this.random.nextDouble() - 0.5D) * 0.02D;
 		this.yd = dy + (this.random.nextDouble() - 0.5D) * 0.02D;
@@ -122,9 +122,16 @@ public class ArcaneSparkParticle extends TextureSheetParticle {
 	@OnlyIn(Dist.CLIENT)
 	public static class Provider implements ParticleProvider<SimpleParticleType> {
 		private final SpriteSet sprites;
+		private final float scale;
 
 		public Provider(SpriteSet sprites) {
+			this(sprites, 1.0F);
+		}
+
+		/** {@code scale} sizes the spark: a mote is a small one */
+		public Provider(SpriteSet sprites, float scale) {
 			this.sprites = sprites;
+			this.scale = scale;
 		}
 
 		@Override
@@ -135,7 +142,7 @@ public class ArcaneSparkParticle extends TextureSheetParticle {
 			if (!Config.CLIENT.enableSpellParticles.get()) {
 				return null;
 			}
-			return new ArcaneSparkParticle(level, x, y, z, dx, dy, dz, this.sprites);
+			return new ArcaneSparkParticle(level, x, y, z, dx, dy, dz, this.sprites, this.scale);
 		}
 	}
 }

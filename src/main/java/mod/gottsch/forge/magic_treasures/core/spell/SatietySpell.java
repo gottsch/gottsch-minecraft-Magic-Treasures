@@ -22,7 +22,7 @@ package mod.gottsch.forge.magic_treasures.core.spell;
 import mod.gottsch.forge.gottschcore.enums.IRarity;
 import mod.gottsch.forge.gottschcore.spatial.ICoords;
 import mod.gottsch.forge.magic_treasures.core.capability.IJewelryHandler;
-import mod.gottsch.forge.magic_treasures.core.capability.MagicTreasuresCapabilities;
+import mod.gottsch.forge.magic_treasures.core.capability.JewelryHandler;
 import mod.gottsch.forge.magic_treasures.core.util.LangUtil;
 import mod.gottsch.forge.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
@@ -35,13 +35,14 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.Event;
 
 import java.util.Random;
+import java.util.List;
 
 /**
  *
  * @author Mark Gottschling on May 2, 2020
  *
  */
-public class SatietySpell extends Spell {
+public class SatietySpell extends CooldownSpell {
 	public static final int MAX_FOOD_LEVEL = 20;
 	public static final String SATIETY_TYPE = "satiety";
 
@@ -61,19 +62,17 @@ public class SatietySpell extends Spell {
 	}
 
 	@Override
-	public boolean serverUpdate(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
+	public boolean execute(Level world, Random random, ICoords coords, Event event, ICastSpellContext context) {
 		boolean result = false;
 		ItemStack jewelry = context.getJewelry();
 		Player player = context.getPlayer();
-		IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+		IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
 
-		if (world.getGameTime() % modifyFrequency(jewelry) == 0) {
-			if (player.isAlive() && hasMana(handler, context) && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
-				double amount = modifyEffectAmount(jewelry);
-				player.getFoodData().eat((int)amount, (float) amount);
-				applyCost(world, random, coords, context, modifySpellCost(jewelry));
-				result = true;
-			}
+		if (player.isAlive() && hasMana(handler, context) && player.getFoodData().getFoodLevel() < MAX_FOOD_LEVEL) {
+			double amount = effectAmount(context);
+			player.getFoodData().eat((int)amount, (float) amount);
+			applyCost(world, random, coords, context, modifySpellCost(jewelry));
+			result = true;
 		}
 		return result;
 	}
@@ -82,14 +81,20 @@ public class SatietySpell extends Spell {
 	public Component getSpellDesc() {
 		// "Restores 0.5 hunger every %s seconds."
 		return Component.translatable(LangUtil.tooltip("spell.satiety.rate"),
-				MathUtil.r1d(getFrequency()/20.0));
+				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("hunger", "0.5", ChatFormatting.GOLD),
+			chip("every", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		// "Restores 0.5 hunger every %s seconds."
 		return Component.translatable(LangUtil.tooltip("spell.satiety.rate"),
-				MathUtil.r1d(modifyFrequency(jewelry)/20.0));
+				MathUtil.r1d(modifyCooldown(jewelry)/20.0));
 	}
 
 	@Override
