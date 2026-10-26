@@ -67,9 +67,6 @@ public interface ISpell {
     int getDuration();
     void setDuration(int duration);
 
-    long getFrequency();
-    void setFrequency(long frequency);
-
     double getRange();
     void setRange(double range);
 

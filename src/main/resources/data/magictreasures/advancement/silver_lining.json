@@ -1,0 +1,30 @@
+{
+  "parent": "magictreasures:apprentice_jeweler",
+  "display": {
+    "icon": {
+      "id": "magictreasures:silver_ingot"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.silver_lining.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.silver_lining.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "silver_ingot": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "magictreasures:silver_ingot"
+          }
+        ]
+      }
+    }
+  }
+}

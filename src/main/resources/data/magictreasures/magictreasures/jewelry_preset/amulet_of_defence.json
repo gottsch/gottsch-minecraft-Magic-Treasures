@@ -1,0 +1,16 @@
+{
+  "type": "necklace",
+  "gem": "magictreasures:topaz",
+  "loot": {},
+  "material": "magictreasures:copper",
+  "name": "item.magictreasures.amulet_of_defence",
+  "overrides": {
+    "infinite": true,
+    "max_mana": 100.0
+  },
+  "rarity": "uncommon",
+  "spells": [
+    "magictreasures:magic_resistance"
+  ],
+  "texture": "magictreasures:item/jewelry/copper_topaz_necklace"
+}

@@ -17,8 +17,12 @@
  */
 package mod.gottsch.neo.magic_treasures.datagen;
 
+import mod.gottsch.neo.magic_treasures.core.entity.MagicTreasuresEntities;
+import java.util.List;
+import java.util.Map;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
+import mod.gottsch.neo.magic_treasures.core.item.GenericJewelry;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
@@ -58,28 +62,76 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.BLACK_PEARL.get(), "Black Pearl");
 //        add(MagicTreasuresItems.SKELETONS_HEART.get(), "Skeleton's Heart");
 
-        // regular jewelry
-		MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
-			add(item.get(), WordUtils.capitalizeFully(item.getId().getPath().replace("_", " ")));
-		});
+        // the 418 1.x item ids (M9: legacy items, converted when carried). Their names are also what 2.0 generic
+        // jewelry and the named presets use (GenericJewelry.name; preset "name": item.magictreasures.<id>)
+        Map<String, String> namedPieces = Map.ofEntries(
+                Map.entry("silbros_ring_of_vitality", WordUtils.capitalizeFully("Silbro's Ring of Vitality")),
+                Map.entry("strongmans_bracers", WordUtils.capitalizeFully("Strongman's Bracers")),
+                Map.entry("silbros_acorn", "Silbro's Acorn"),
+                Map.entry("maldritchs_first_amulet", WordUtils.capitalizeFully("Maldritch's First Amulet")),
+                Map.entry("peasants_fortune", WordUtils.capitalizeFully("Peasant's Fortune")),
+                Map.entry("aqua_ring", WordUtils.capitalizeFully("Aqua Ring")),
+                Map.entry("amulet_of_defence", WordUtils.capitalizeFully("Amulet of Defence")),
+                Map.entry("journeyman_bands", WordUtils.capitalizeFully("Journeyman's Bands")),
+                Map.entry("medics_token", WordUtils.capitalizeFully("Medic's Token")),
+                Map.entry("adephagias_bounty", WordUtils.capitalizeFully("Adephagia's Bounty")),
+                Map.entry("angels_ring", WordUtils.capitalizeFully("Ring of Angels")),
+                Map.entry("salandaars_ward", WordUtils.capitalizeFully("Sal'andaar's Ward")),
+                Map.entry("ring_of_fortitude", WordUtils.capitalizeFully("Ring of Fortitude")),
+                Map.entry("eye_of_the_phoenix", WordUtils.capitalizeFully("Eye of the Phoenix")),
+                Map.entry("ring_of_life_death", WordUtils.capitalizeFully("Ring of Life and Death")));
+        MagicTreasuresItems.LEGACY_JEWELRY.forEach((id, item) -> add(item.get(),
+                namedPieces.getOrDefault(id.getPath(), WordUtils.capitalizeFully(id.getPath().replace("_", " ")))));
+        add(LangUtil.tooltip("legacy_jewelry"), "Magic Treasures 1.x jewelry: becomes 2.0 jewelry when carried");
 
-        // special jewelry
-        add(MagicTreasuresItems.SILBROS_RING_OF_VITALITY.get(), WordUtils.capitalizeFully("Silbro's Ring of Vitality"));
-        add(MagicTreasuresItems.STRONGMANS_BRACERS.get(), WordUtils.capitalizeFully("Strongman's Bracers"));
-        add(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET.get(), WordUtils.capitalizeFully("Maldritch's First Amulet"));
+        // other special items
+        add(MagicTreasuresItems.ROOTSTAFF.get(), "Rootstaff");
+        add(MagicTreasuresItems.BARKSKIN_VEST.get(), "Barkskin Vest");
+        add(MagicTreasuresItems.STONEMARK_HAMMER.get(), "Stonemark Hammer");
+        add(MagicTreasuresItems.BONE_SCYTHE.get(), "Bone Scythe");
+        add(MagicTreasuresItems.LICHS_MASK.get(), "Lich's Mask");
+        add(MagicTreasuresItems.MOONGLAIVE.get(), "Moonglaive");
+        add(MagicTreasuresItems.LORE_BOOK.get(), "Lore Book");
+        add(MagicTreasuresItems.MANUAL.get(), "Magic Treasures Manual");
+        add(LangUtil.tooltip("lore_book.author"), "by %s");
+        // lore books: title and author, for the item name and tooltip; the text is assets/magictreasures/books/<id>/<locale>/text.md
+        add("lore_book.magictreasures.silbros_journal_1.title", "Silbro's Journal, I");
+        add("lore_book.magictreasures.silbros_journal_1.author", "Silbro");
+        add("lore_book.magictreasures.smiths_ledger.title", "The Runesmith's Ledger");
+        add("lore_book.magictreasures.smiths_ledger.author", "Sal'andaar");
+        add("lore_book.magictreasures.maldritchs_notes_1.title", "Maldritch's Notes, I");
+        add("lore_book.magictreasures.maldritchs_notes_1.author", "Maldritch");
+        add("lore_book.magictreasures.selenes_account.title", "Selene's Account");
+        add("lore_book.magictreasures.selenes_account.author", "Selene Tidewalker");
+        add("lore_book.magictreasures.silbros_journal_2.title", "Silbro's Journal, II");
+        add("lore_book.magictreasures.silbros_journal_2.author", "Silbro");
+        add("lore_book.magictreasures.letters_across_the_valley_1.title", "Letters Across the Valley, I");
+        add("lore_book.magictreasures.letters_across_the_valley_1.author", "Sal'andaar and Silbro");
+        add("lore_book.magictreasures.market_warning.title", "A Warning, Posted in the Market");
+        add("lore_book.magictreasures.market_warning.author", "The Reeve");
+        add("lore_book.magictreasures.letters_across_the_valley_2.title", "Letters Across the Valley, II");
+        add("lore_book.magictreasures.letters_across_the_valley_2.author", "Sal'andaar and Silbro");
+        add("lore_book.magictreasures.maldritchs_notes_2.title", "Maldritch's Notes, II");
+        add("lore_book.magictreasures.maldritchs_notes_2.author", "Maldritch");
+        add("lore_book.magictreasures.silbros_journal_3.title", "Silbro's Journal, III");
+        add("lore_book.magictreasures.silbros_journal_3.author", "Silbro");
+        add("lore_book.magictreasures.maldritchs_notes_3.title", "Maldritch's Notes, III");
+        add("lore_book.magictreasures.maldritchs_notes_3.author", "Maldritch");
+        add("lore_book.magictreasures.ledgers_last_page.title", "The Ledger's Last Page");
+        add("lore_book.magictreasures.ledgers_last_page.author", "Sal'andaar");
+        add("lore_book.magictreasures.tidewalkers_log.title", "The Tidewalker's Log");
+        add("lore_book.magictreasures.tidewalkers_log.author", "Selene Tidewalker");
+        add("lore_book.magictreasures.couriers_letter.title", "A Courier's Letter");
+        add("lore_book.magictreasures.couriers_letter.author", "Tam, a courier");
+        add("lore_book.magictreasures.selenes_last_page.title", "Selene's Last Page");
+        add("lore_book.magictreasures.selenes_last_page.author", "Selene Tidewalker");
+        add(MagicTreasuresItems.PEARL_CIRCLET.get(), "Pearl Circlet");
+        add(MagicTreasuresItems.SMITHS_HELM.get(), "Runesmith's Helm");
+        add(MagicTreasuresItems.ANVIL_SHIELD.get(), "Anvil Shield");
+        // a 2.0-only preset (no 1.x item id, so not in the legacy names above)
+        add("item.magictreasures.smiths_cuff", "Runesmith's Cuff");
 
-        add(MagicTreasuresItems.PEASANTS_FORTUNE.get(), WordUtils.capitalizeFully("Peasant's Fortune"));
-        add(MagicTreasuresItems.AQUA_RING.get(), WordUtils.capitalizeFully("Aqua Ring"));
-        add(MagicTreasuresItems.AMULET_OF_DEFENCE.get(), WordUtils.capitalizeFully("Amulet of Defence"));
-        add(MagicTreasuresItems.JOURNEYMANS_BANDS.get(), WordUtils.capitalizeFully("Journeyman's Bands"));
 
-        add(MagicTreasuresItems.MEDICS_TOKEN.get(), WordUtils.capitalizeFully("Medic's Token"));
-        add(MagicTreasuresItems.ADEPHAGIAS_BOUNTY.get(), WordUtils.capitalizeFully("Adephagia's Bounty"));
-        add(MagicTreasuresItems.ANGELS_RING.get(), WordUtils.capitalizeFully("Ring of Angels"));
-        add(MagicTreasuresItems.SALANDAARS_WARD.get(), WordUtils.capitalizeFully("Sal'andaar's Ward"));
-        add(MagicTreasuresItems.RING_OF_FORTITUDE.get(), WordUtils.capitalizeFully("Ring of Fortitude"));
-        add(MagicTreasuresItems.EYE_OF_THE_PHOENIX.get(), WordUtils.capitalizeFully("Eye of the Phoenix"));
-        add(MagicTreasuresItems.RING_LIFE_DEATH.get(), WordUtils.capitalizeFully("Ring of Life and Death"));
 
          // GOTTSCHS_AMULET_OF_HEAVENS
         // GOTTSCHS_RING_OF_MOON
@@ -87,6 +139,8 @@ public class LanguageGen extends LanguageProvider {
 
         // belts
         add(MagicTreasuresItems.SKULL_BELT.get(), WordUtils.capitalizeFully("Skull Belt"));
+        add(MagicTreasuresItems.SPECTRAL_SWORD.get(), "Spectral Sword");
+        add(MagicTreasuresEntities.ORBITING_SWORD.get(), "Spectral Sword");
 
         // scrolls
         Registration.ITEMS.getEntries().forEach(o -> {
@@ -99,6 +153,27 @@ public class LanguageGen extends LanguageProvider {
         add(MagicTreasuresItems.RING_RECIPE.get(), "Ring Recipe");
         add(MagicTreasuresItems.NECKLACE_RECIPE.get(), "Necklace Recipe");
         add(MagicTreasuresItems.BRACELET_RECIPE.get(), "Bracelet Recipe");
+
+        // 2.0 generic jewelry: the bare item names, then the parts a combination's name is composed from. A combination
+        // that was a 1.x item uses that item's name key instead (GenericJewelry.name)
+        add(MagicTreasuresItems.RING.get(), "Ring");
+        add(MagicTreasuresItems.NECKLACE.get(), "Necklace");
+        add(MagicTreasuresItems.BRACELET.get(), "Bracelet");
+        // arguments: (style, material, gem, type)
+        add(GenericJewelry.NAME_KEY, "%2$s %4$s");
+        add(GenericJewelry.NAME_KEY + ".gem", "%2$s %3$s %4$s");
+        add(GenericJewelry.NAME_KEY + ".style", "%1$s %2$s %4$s");
+        add(GenericJewelry.NAME_KEY + ".style.gem", "%1$s %2$s %3$s %4$s");
+        add("jewelry_style.magictreasures.carved", "Carved");
+        add("jewelry_style.magictreasures.fine", "Fine");
+        add("jewelry_style.magictreasures.great", "Great");
+        add("jewelry_style.magictreasures.lords", "Lords");
+        add("jewelry_style.magictreasures.wreathed", "Wreathed");
+        for (String material : List.of("wood", "iron", "copper", "silver", "gold", "bone", "blood", "shadow", "atium")) {
+            add("material.magictreasures." + material, WordUtils.capitalizeFully(material));
+        }
+        add(LangUtil.tooltip("jewelry.unknown"), "Unknown material or style: %s (is a datapack missing?)");
+        add(LangUtil.tooltip("jewelry.unknown_gem"), "Unknown gem %s: it has no effect");
 
         // recharge scroll
         add(MagicTreasuresItems.RECHARGE_SCROLL.get(), "Recharge Scroll");
@@ -126,7 +201,7 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("boolean.yes"), "Yes");
         add(LangUtil.tooltip("boolean.no"), "No");
         add(LangUtil.tooltip("infinite"), "Infinite");
-        add(LangUtil.tooltip("hold_shift"), "Hold [SHIFT] to expand");
+        add(LangUtil.tooltip("hold_shift"), "Hold [SHIFT] for details");
         add(LangUtil.tooltip("divider"), "--------------------");
 
         // tools
@@ -144,8 +219,56 @@ public class LanguageGen extends LanguageProvider {
         add("advancements.magictreasures.second_wind.description", "Recharge jewelry at an anvil");
         add("advancements.magictreasures.delicate_work.title", "Delicate Work");
         add("advancements.magictreasures.delicate_work.description", "Pull a gem out of jewelry with Jewelry Pliers");
+        add("advancements.magictreasures.second_thoughts.title", "Second Thoughts");
+        add("advancements.magictreasures.second_thoughts.description", "Remove a gem from jewelry with shears on an anvil (the gem is lost)");
+        add("advancements.magictreasures.apprentice_jeweler.title", "Apprentice Jeweler");
+        add("advancements.magictreasures.apprentice_jeweler.description", "Craft jewelry from a recipe scroll");
+        add("advancements.magictreasures.good_as_new.title", "Good as New");
+        add("advancements.magictreasures.good_as_new.description", "Repair jewelry at an anvil with another piece of jewelry");
+        add("advancements.magictreasures.silver_lining.title", "Silver Lining");
+        add("advancements.magictreasures.silver_lining.description", "Obtain a silver ingot");
+        add("advancements.magictreasures.journeyman_enchanter.title", "Journeyman Enchanter");
+        add("advancements.magictreasures.journeyman_enchanter.description", "Imbue jewelry with a spell of level 3 or higher");
+        add("advancements.magictreasures.adept_enchanter.title", "Adept Enchanter");
+        add("advancements.magictreasures.adept_enchanter.description", "Imbue jewelry with a spell of level 5 or higher");
+        add("advancements.magictreasures.master_enchanter.title", "Master Enchanter");
+        add("advancements.magictreasures.master_enchanter.description", "Imbue jewelry with a spell of level 7 or higher");
+        add("advancements.magictreasures.archmage.title", "Archmage");
+        add("advancements.magictreasures.archmage.description", "Imbue jewelry with a spell of level 9 or higher");
+        add("advancements.magictreasures.running_on_empty.title", "Running on Empty");
+        add("advancements.magictreasures.running_on_empty.description", "Cast a spell that draws on a mana well when its jewelry runs dry");
+        add("advancements.magictreasures.gem_collector.title", "Gem Collector");
+        add("advancements.magictreasures.gem_collector.description", "Hold every kind of Magic Treasures gem");
+        add("advancements.magictreasures.lords_ransom.title", "Lord's Ransom");
+        add("advancements.magictreasures.lords_ransom.description", "Carry a piece of Lord's jewelry");
+        add("advancements.magictreasures.treasure_hunter.title", "Treasure Hunter");
+        add("advancements.magictreasures.treasure_hunter.description", "Carry a piece of legendary or mythical jewelry");
+        add("advancements.magictreasures.dressed_to_the_nines.title", "Dressed to the Nines");
+        add("advancements.magictreasures.dressed_to_the_nines.description", "Wear a magic ring, necklace and bracelet and a belt at once");
         add("advancements.magictreasures.fully_adorned.title", "Fully Adorned");
-        add("advancements.magictreasures.fully_adorned.description", "Wear a magic ring, necklace and bracelet at once");
+        add("advancements.magictreasures.fully_adorned.description", "Wear every piece of a named set at once");
+        add("advancements.magictreasures.silbros_grove.title", "Silbro's Grove");
+        add("advancements.magictreasures.silbros_grove.description", "Wear every piece of Silbro's Grove at once");
+        add("advancements.magictreasures.salandaars_anvilwork.title", "Sal'andaar's Anvilwork");
+        add("advancements.magictreasures.salandaars_anvilwork.description", "Wear every piece of Sal'andaar's Anvilwork at once");
+        add("advancements.magictreasures.maldritchs_remains.title", "Maldritch's Remains");
+        add("advancements.magictreasures.maldritchs_remains.description", "Wear every piece of Maldritch's Remains at once");
+        add("advancements.magictreasures.selenes_tides.title", "Selene's Tides");
+        add("advancements.magictreasures.selenes_tides.description", "Wear every piece of Selene's Tides at once");
+        add("advancements.magictreasures.first_pages.title", "First Pages");
+        add("advancements.magictreasures.first_pages.description", "Read a lore book");
+        add("advancements.magictreasures.archivist.title", "Archivist");
+        add("advancements.magictreasures.archivist.description", "Read every lore book");
+        add("advancements.magictreasures.silbros_seasons.title", "Silbro's Seasons");
+        add("advancements.magictreasures.silbros_seasons.description", "Read all of Silbro's journals");
+        add("advancements.magictreasures.the_smiths_hand.title", "The Runesmith's Hand");
+        add("advancements.magictreasures.the_smiths_hand.description", "Read everything Sal'andaar wrote");
+        add("advancements.magictreasures.maldritchs_descent.title", "Maldritch's Descent");
+        add("advancements.magictreasures.maldritchs_descent.description", "Read all of Maldritch's notes");
+        add("advancements.magictreasures.the_tidewalkers_tale.title", "The Tidewalker's Tale");
+        add("advancements.magictreasures.the_tidewalkers_tale.description", "Read everything Selene wrote");
+        add("advancements.magictreasures.collector_of_legends.title", "Collector of Legends");
+        add("advancements.magictreasures.collector_of_legends.description", "Wear each of the four named sets whole");
         add(LangUtil.tooltip("tools.jewelry_pliers"), "Craft with jewelry to remove its gem. The jewelry is destroyed.");
 
         // gemstones
@@ -158,8 +281,9 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("gemstone.cost_factor"), "Mana Cost: %s");
         add(LangUtil.tooltip("gemstone.cooldown_factor"), "Cooldown Time: %s");
         add(LangUtil.tooltip("gemstone.effect_amount_factor"), "Effect Amount: %s");
-        add(LangUtil.tooltip("gemstone.frequency_factor"), "Frequency: %s");
         add(LangUtil.tooltip("gemstone.range_factor"), "Range: %s");
+        add(LangUtil.tooltip("gemstone.duration_factor"), "Duration: %s");
+        add(LangUtil.tooltip("gemstone.affixes_to"), "Only fits: %s");
 
         // gemstone tier names
 //        add(LangUtil.tooltip("gemstone.tier.tier1.name"), "Tier 1");
@@ -182,10 +306,113 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("jewelry.mana.gauge"), "[%s/%s]");
         add(LangUtil.tooltip("jewelry.spells"), "Spells:");
 
+        // 2.0.0 tooltip redesign
+        add(LangUtil.tooltip("jewelry.bar.mana"), "Mana");
+        add(LangUtil.tooltip("jewelry.bar.durability"), "Durability");
+        add(LangUtil.tooltip("jewelry.level"), "Lvl %s");
+        add(LangUtil.tooltip("jewelry.type.ring"), "Ring");
+        add(LangUtil.tooltip("jewelry.type.necklace"), "Necklace");
+        add(LangUtil.tooltip("jewelry.type.bracelet"), "Bracelet");
+        add(LangUtil.tooltip("jewelry.type.pocket"), "Pocket");
+        add(LangUtil.tooltip("jewelry.type.earring"), "Earring");
+        add(LangUtil.tooltip("jewelry.type.unknown"), "Jewelry");
+        add(LangUtil.tooltip("jewelry.modifier.cost"), "Cost %s");
+        add(LangUtil.tooltip("jewelry.modifier.cooldown"), "Cooldown %s");
+        add(LangUtil.tooltip("jewelry.modifier.effect"), "Effect %s");
+        add(LangUtil.tooltip("jewelry.modifier.duration"), "Duration %s");
+        add(LangUtil.tooltip("jewelry.modifier.range"), "Range %s");
+        add(LangUtil.tooltip("spell.stat.absorb"), "%s absorb");
+        add(LangUtil.tooltip("spell.stat.armor"), "%s armor");
+        add(LangUtil.tooltip("spell.stat.cooldown"), "%s cooldown");
+        add(LangUtil.tooltip("spell.stat.damage"), "%s dmg");
+        add(LangUtil.tooltip("spell.stat.drain"), "%s drain");
+        add(LangUtil.tooltip("spell.stat.duration"), "%s duration");
+        add(LangUtil.tooltip("spell.stat.every"), "every %s");
+        add(LangUtil.tooltip("spell.stat.heal"), "%s heal");
+        add(LangUtil.tooltip("spell.stat.hunger"), "%s hunger");
+        add(LangUtil.tooltip("spell.stat.life"), "%s life");
+        add(LangUtil.tooltip("spell.stat.mana"), "%s mana");
+        add(LangUtil.tooltip("spell.stat.range"), "%s range");
+        add(LangUtil.tooltip("spell.stat.reflect"), "%s reflect");
+        add(LangUtil.tooltip("spell.stat.swords"), "%s swords");
+        add(LangUtil.tooltip("spell.stat.fire_resist"), "%s fire resist");
+        add(LangUtil.tooltip("spell.stat.magic_resist"), "%s magic resist");
+        add(LangUtil.tooltip("spell.stat.wither_resist"), "%s wither resist");
+        add(LangUtil.tooltip("spell.stat.stacks"), "stacks");
+        add(LangUtil.tooltip("spell.stat.seconds"), "%ss");
+        // sets
+        add("tooltip.magictreasures.set.header", "%s (%s/%s)");
+        add("tooltip.magictreasures.set.bonus", "(%s) %s");
+        add(LangUtil.tooltip("set_piece.siphon"), "Siphon: full-strength hits restore %s mana to your worn jewelry");
+        add(LangUtil.tooltip("set_piece.resonance"), "Resonance: +%s%% effect to this set's jewelry spells");
+        add("set.magictreasures.salandaars_anvilwork", "Sal'andaar's Anvilwork");
+        add("set.magictreasures.salandaars_anvilwork.bonus.2", "Ward spells cost 10%% less mana");
+        add("set.magictreasures.salandaars_anvilwork.bonus.4", "Ward spells recover 15%% faster");
+        add("set.magictreasures.salandaars_anvilwork.bonus.6", "Tempered: worn set jewelry's next anvil repair is free");
+        add("set.magictreasures.silbros_grove", "Silbro's Grove");
+        add("set.magictreasures.silbros_grove.bonus.2", "Healing spells heal 15%% more, 25%% more often");
+        add("set.magictreasures.silbros_grove.bonus.4", "Standing on grass, moss or leaves slowly heals you");
+        add("set.magictreasures.silbros_grove.bonus.5", "Take Root: in sunlight, worn set pieces slowly mend");
+        add("set.magictreasures.maldritchs_remains", "Maldritch's Remains");
+        add("set.magictreasures.maldritchs_remains.bonus.2", "Drain spells reach 1 block further");
+        add("set.magictreasures.maldritchs_remains.bonus.4", "Drained life also refills the casting jewelry's mana");
+        add("set.magictreasures.maldritchs_remains.bonus.5", "Bound possessions: the set's worn pieces stay with you when you die");
+        add("set.magictreasures.selenes_tides", "Selene's Tides");
+        add("set.magictreasures.selenes_tides.bonus.2", "Water Breathing and Night Vision last 50%% longer");
+        add("set.magictreasures.selenes_tides.bonus.4", "Tidewalker: in water, swim with Dolphin's Grace and the tide refills your set jewelry's mana");
+        add("set.magictreasures.selenes_tides.bonus.5", "Moonlit: spells cost 25%% less at night");
+        add(LangUtil.tooltip("spell.flavor.blessing_of_the_phoenix"), "Rise unburnt from the flames, as the phoenix does.");
+        add(LangUtil.tooltip("spell.flavor.cat_sight"), "See in the dark as clearly as a cat.");
+        add(LangUtil.tooltip("spell.flavor.cheat_death"), "Turns aside one killing blow.");
+        add(LangUtil.tooltip("spell.flavor.crushing_response"), "Every blow you take is repaid in kind.");
+        add(LangUtil.tooltip("spell.flavor.desiccate"), "Withers the life from all who stand near.");
+        add(LangUtil.tooltip("spell.flavor.disembodied_armor"), "An armor of spirit that turns aside claws and blades.");
+        add(LangUtil.tooltip("spell.flavor.drain"), "Sips the life from nearby foes.");
+        add(LangUtil.tooltip("spell.flavor.fire_resistance"), "A cool ward against flame and ember.");
+        add(LangUtil.tooltip("spell.flavor.fire_ward"), "A stronger ward against flame and ember.");
+        add(LangUtil.tooltip("spell.flavor.ghostly_armor"), "A faint, ghostly shell against mob attacks.");
+        add(LangUtil.tooltip("spell.flavor.giant_strength"), "The strength of a giant, for a time.");
+        add(LangUtil.tooltip("spell.flavor.greater_drain"), "Draws deeply from the life of nearby foes.");
+        add(LangUtil.tooltip("spell.flavor.greater_healing"), "A deep, steady mending of wounds.");
+        add(LangUtil.tooltip("spell.flavor.greater_invisibility"), "Vanish from sight for longer.");
+        add(LangUtil.tooltip("spell.flavor.greater_night_vision"), "Night is no darker than day.");
+        add(LangUtil.tooltip("spell.flavor.greater_ring_of_swords"), "A whirl of spirit blades that cut down all who come near.");
+        add(LangUtil.tooltip("spell.flavor.greater_speed"), "Your feet barely touch the ground.");
+        add(LangUtil.tooltip("spell.flavor.greater_strength"), "Your blows land with greater force.");
+        add(LangUtil.tooltip("spell.flavor.greater_water_breathing"), "Breathe beneath the waves for a long while.");
+        add(LangUtil.tooltip("spell.flavor.harm"), "A bolt of force at the nearest mob.");
+        add(LangUtil.tooltip("spell.flavor.healing"), "Mends your wounds over time.");
+        add(LangUtil.tooltip("spell.flavor.horse_power"), "Run like a horse at full gallop.");
+        add(LangUtil.tooltip("spell.flavor.invisibility"), "Fade from sight for a moment.");
+        add(LangUtil.tooltip("spell.flavor.lesser_healing"), "Slowly knits small wounds closed.");
+        add(LangUtil.tooltip("spell.flavor.magic_resistance"), "Dulls the bite of hostile magic.");
+        add(LangUtil.tooltip("spell.flavor.magic_ward"), "A firm ward against hostile magic.");
+        add(LangUtil.tooltip("spell.flavor.mana_buckler"), "Your mana takes part of the blow.");
+        add(LangUtil.tooltip("spell.flavor.mana_pavise_shield"), "A great wall of mana between you and harm.");
+        add(LangUtil.tooltip("spell.flavor.mana_shield"), "Your mana takes the blow before you do.");
+        add(LangUtil.tooltip("spell.flavor.mana_tower_shield"), "A towering shield of mana that blocks most blows.");
+        add(LangUtil.tooltip("spell.flavor.mind_fist"), "A crushing blow of pure will.");
+        add(LangUtil.tooltip("spell.flavor.mind_jab"), "A quick jab of mental force.");
+        add(LangUtil.tooltip("spell.flavor.night_vision"), "Lets you see in the dark.");
+        add(LangUtil.tooltip("spell.flavor.paladin_smite"), "Your life fuels a holy smite.");
+        add(LangUtil.tooltip("spell.flavor.paladin_strike"), "Trade a little of your life for a harder strike.");
+        add(LangUtil.tooltip("spell.flavor.quick_strength"), "A short burst of strength.");
+        add(LangUtil.tooltip("spell.flavor.reflection"), "Turns part of each blow back on the attacker.");
+        add(LangUtil.tooltip("spell.flavor.regeneration"), "Your wounds close almost as fast as they open.");
+        add(LangUtil.tooltip("spell.flavor.ring_of_swords"), "Blades of spirit wheel about you when foes draw near.");
+        add(LangUtil.tooltip("spell.flavor.salandaars_magic_coat"), "Sal'andaar's own coat against hostile magic.");
+        add(LangUtil.tooltip("spell.flavor.satiety"), "Keeps hunger at bay.");
+        add(LangUtil.tooltip("spell.flavor.shadow_armor"), "Shadows gather to soften each blow.");
+        add(LangUtil.tooltip("spell.flavor.spectral_armor"), "A spectral shell that softens mob attacks.");
+        add(LangUtil.tooltip("spell.flavor.speed"), "Quickens your step.");
+        add(LangUtil.tooltip("spell.flavor.strength"), "Lends your arm more force.");
+        add(LangUtil.tooltip("spell.flavor.water_breathing"), "Breathe underwater for a while.");
+        add(LangUtil.tooltip("spell.flavor.wither_resistance"), "Slows the creeping rot of wither.");
+        add(LangUtil.tooltip("spell.flavor.wither_ward"), "A firm ward against wither.");
+        add(LangUtil.tooltip("spell.flavor.withers_skin"), "Skin as tough as the Wither's own.");
         add(LangUtil.tooltip("jewelry.stats.cost_factor"), "C:%s");
         add(LangUtil.tooltip("jewelry.stats.cooldown_factor"), "Cd:%s");
         add(LangUtil.tooltip("jewelry.stats.effect_amount_factor"), "E:%s");
-        add(LangUtil.tooltip("jewelry.stats.frequency_factor"), "Fq:%s");
         add(LangUtil.tooltip("jewelry.stats.range_factor"), "R:%s");
 
         /*
@@ -194,7 +421,20 @@ public class LanguageGen extends LanguageProvider {
         // lore
         add(LangUtil.tooltip("jewelry.castle_ring.lore"), "Castle rings contain an abundance of mana and durability.~Can only be affixed with Rubies & Sapphires.");
         add(LangUtil.tooltip("jewelry.hawk_ring.lore"), "Hawk rings contain an abundance of mana and a higher max spell level.~Cannot be affixed with any gems.");
-        add(LangUtil.tooltip("jewelry.silbros_ring_of_vitality.lore"), "Silbro was a master Naturalist mage.~He was able to give organic jewelry the power of metals.");
+        add(LangUtil.tooltip("jewelry.silbros_ring_of_vitality.lore"), "Silbro grew this ring into shape.~Living wood holds mana as well as any metal.");
+        add(LangUtil.tooltip("jewelry.strongmans_bracers.lore"), "Silbro grew these for a woodcutter who wore out every axe.~Living wood holds strength as well as mana.");
+        add(LangUtil.tooltip("jewelry.silbros_acorn.lore"), "Silbro gave an acorn from his oldest oak to anyone who went hungry.~Planted, it feeds a village; worn, it feeds you.");
+        add(LangUtil.tooltip("set_piece.rootstaff.lore"), "Silbro never cut a staff; he asked a root to grow straight.~Every blow it lands sends a little mana home.");
+        add(LangUtil.tooltip("jewelry.smiths_cuff.lore"), "Smiths wear a cuff to keep sparks off the wrist.~Sal'andaar's sends the blow back to whoever struck it.");
+        add(LangUtil.tooltip("set_piece.stonemark_hammer.lore"), "Every piece Sal'andaar forged bears this hammer's mark.~Each blow it lands sends a little mana home.");
+        add(LangUtil.tooltip("set_piece.bone_scythe.lore"), "Maldritch cut it from his own bones, so it would never leave him.~Every blow it lands draws mana out of the wound.");
+        add(LangUtil.tooltip("set_piece.moonglaive.lore"), "Selene's blade waxes and wanes, but never dulls.~Every blow it lands draws the tide of mana home.");
+        add(LangUtil.tooltip("set_piece.pearl_circlet.lore"), "The pearls were her first, and her best.~They catch the light of her other work, as the sea catches the moon.");
+        add(LangUtil.tooltip("set_piece.lichs_mask.lore"), "He wears it so the living see a man, not what he became.~It whispers when his other bones are near.");
+        add(LangUtil.tooltip("set_piece.smiths_helm.lore"), "Hammered from the last of the good steel, in one night.~It rings softly when his other work is near.");
+        add(LangUtil.tooltip("set_piece.anvil_shield.lore"), "Cut from a cracked anvil he couldn't bear to scrap.~It still takes a blow better than anything else he made.");
+        add(LangUtil.tooltip("jewelry.tempered"), "Tempered: next anvil repair is free");
+        add(LangUtil.tooltip("set_piece.barkskin_vest.lore"), "Bark from a living tree, which grew it back the next spring.~It hums when Silbro's other pieces are near.");
         add(LangUtil.tooltip("jewelry.maldritchs_first_amulet.lore"), "Maldritch is a powerful lich, but he wasn't always one.~This is his first amulet when he was a mere apprentice.");
 
         /*
@@ -209,7 +449,6 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.cost.varies"), "Cost: Varies");
         add(LangUtil.tooltip("spell.effect_amount"), "Effect Amount: %s");
         add(LangUtil.tooltip("spell.cooldown"), "Cooldown Time: %s seconds.");
-        add(LangUtil.tooltip("spell.frequency"), "Frequency: Every %s seconds.");
         add(LangUtil.tooltip("spell.range"), "Range: %s blocks.");
 
         ///// healing /////
@@ -235,6 +474,11 @@ public class LanguageGen extends LanguageProvider {
         add(LangUtil.tooltip("spell.name.disembodied_armor"), "Disembodied Armor");
 
         add(LangUtil.tooltip("spell.spectral_armor.rate"), "Reduces %s mob damage.");
+
+        ///// ring of swords /////
+        add(LangUtil.tooltip("spell.name.ring_of_swords"), "Ring of Swords");
+        add(LangUtil.tooltip("spell.name.greater_ring_of_swords"), "Greater Ring of Swords");
+        add(LangUtil.tooltip("spell.ring_of_swords.rate"), "Summons %s swords that circle you, %s dmg a hit, for %s seconds.");
 
         ///// drain /////
         add(LangUtil.tooltip("spell.name.drain"), "Drain");

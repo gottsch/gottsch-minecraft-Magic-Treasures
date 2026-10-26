@@ -18,6 +18,8 @@
 package mod.gottsch.neo.magic_treasures.core.client.tooltip;
 
 import com.mojang.datafixers.util.Either;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
@@ -55,5 +57,57 @@ public final class IconTitleTooltips {
         }
         elements.get(0).left().ifPresent(title ->
                 elements.set(0, Either.right(new IconTitleTooltip(stack, title, scale))));
+    }
+
+    /**
+     * Gives the icon header back its plain title (and the subtitle as the next line) when the header would make the
+     * tooltip taller than the screen. Vanilla moves a tall tooltip up to {@code screen height - height - 3} with no
+     * floor, so one taller than the screen starts above the top and loses its title; the plain header is shorter.
+     * Call last in {@code GatherComponents}, after markers became components ({@link RichTooltips#apply}).
+     * <p>
+     * The height is added up as vanilla will (text lines wrapped at the event's max width, 10px each; components by
+     * their own height). Vanilla may wrap narrower near a screen edge, which only adds lines, so near an edge this can
+     * still miss by a line or two.
+     */
+    public static void fitToScreen(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+        if (elements.isEmpty() || !(elements.get(0).right().orElse(null) instanceof IconTitleTooltip header)) {
+            return;
+        }
+        if (fitsScreen(event)) {
+            return;
+        }
+        elements.set(0, Either.left(header.title()));
+        if (header.subtitle() != null) {
+            elements.add(1, Either.left(header.subtitle()));
+        }
+    }
+
+    /**
+     * Whether the tooltip, as gathered so far, fits the screen's height. Adds the height up as vanilla will: text
+     * lines wrapped at the event's max width, 10px each; components by their own height.
+     */
+    public static boolean fitsScreen(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+        Font font = Minecraft.getInstance().font;
+        int wrap = event.getMaxWidth() > 0 ? event.getMaxWidth() : Integer.MAX_VALUE;
+        int height = elements.size() == 1 ? -2 : 0;
+        for (Either<FormattedText, TooltipComponent> element : elements) {
+            height += element.map(
+                    text -> Math.max(1, font.split(text, wrap).size()) * font.lineHeight,
+                    component -> heightOf(component, font));
+        }
+        // the background reaches 3px past the contents on both sides
+        return height + 6 <= event.getScreenHeight();
+    }
+
+    private static int heightOf(TooltipComponent component, Font font) {
+        if (component instanceof IconTitleTooltip header) {
+            return new ClientIconTitleTooltip(header).getHeight();
+        }
+        if (component instanceof RenderedTooltip rendered) {
+            return rendered.component().getHeight();
+        }
+        return font.lineHeight; // another mod's component: assume one line
     }
 }

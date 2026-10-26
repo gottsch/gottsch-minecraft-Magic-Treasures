@@ -22,6 +22,7 @@ import mod.gottsch.neo.magic_treasures.core.loot.function.ImbueRandomly;
 import mod.gottsch.neo.magic_treasures.core.loot.function.RandomGemstone;
 import mod.gottsch.neo.magic_treasures.core.loot.function.RandomJewelry;
 import mod.gottsch.neo.magic_treasures.core.loot.function.RandomSpell;
+import mod.gottsch.neo.magic_treasures.core.loot.function.SetJewelryPreset;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -44,4 +45,6 @@ public class MagicTreasuresLootFunctions {
 			LOOT_FUNCTIONS.register("random_spell", () -> new LootItemFunctionType<>(RandomSpell.CODEC));
 	public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<ImbueRandomly>> IMBUE_RANDOMLY =
 			LOOT_FUNCTIONS.register("imbue_randomly", () -> new LootItemFunctionType<>(ImbueRandomly.CODEC));
+	public static final DeferredHolder<LootItemFunctionType<?>, LootItemFunctionType<SetJewelryPreset>> SET_JEWELRY_PRESET =
+			LOOT_FUNCTIONS.register("set_jewelry_preset", () -> new LootItemFunctionType<>(SetJewelryPreset.CODEC));
 }

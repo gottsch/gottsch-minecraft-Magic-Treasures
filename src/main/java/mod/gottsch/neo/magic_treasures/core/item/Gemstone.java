@@ -17,11 +17,16 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item;
 
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.GemstoneDef;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.JewelryDataIndex;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.StoneTierDef;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -30,6 +35,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Mark Gottschling on 7/4/2023
@@ -56,60 +62,58 @@ public class Gemstone extends Item {
         addHoverText(itemStack, level, tooltip, flag);
     }
 
-    public static void addHoverText(ItemStack itemStack, TooltipContext level, List<Component>tooltip, TooltipFlag flag) {
+    /**
+     * The gem part of a tooltip, from the gem's {@code gemstone} registry entry: usage, and with shift its rarity,
+     * its stone tier's mana, recharges and factors, and the materials it is limited to. Shown for any item that is an
+     * enabled gemstone, MT's or not (ItemEventHandler adds it to other mods' items); nothing for a disabled gem.
+     */
+    public static void addHoverText(ItemStack itemStack, TooltipContext level, List<Component> tooltip, TooltipFlag flag) {
+        Optional<GemstoneDef> gem = JewelryDataIndex.gemstone(itemStack.getItem()).map(Holder::value);
+        if (gem.isEmpty()) {
+            return;
+        }
         tooltip.add(Component.translatable(LangUtil.tooltip("gemstone.usage")).withStyle(ChatFormatting.GOLD).withStyle(ChatFormatting.ITALIC));
         tooltip.add(Component.translatable(LangUtil.NEWLINE));
 
-        // TODO all this needs to be added to TooltipEvent
         LangUtil.appendAdvancedHoverText(tooltip, tt -> {
-
-            StoneRegistry.getStoneTier(itemStack.getItem()).ifPresent(tier -> {
-//                tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("divider")).withStyle(ChatFormatting.GRAY)));
-//                tt.add(Component.translatable(LangUtil.NEWLINE));
-
-                StoneRegistry.getRarity(itemStack.getItem()).ifPresent(r -> {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.rarity"), ChatFormatting.GOLD + WordUtils.capitalizeFully(r.getName()))));
+            StoneTierDef tier = gem.get().tier().value();
+            gem.get().rarity().ifPresent(r -> line(tt, "gemstone.rarity", ChatFormatting.GOLD + WordUtils.capitalizeFully(r.getValue())));
+            line(tt, "gemstone.mana", ChatFormatting.BLUE + String.valueOf(tier.mana()));
+            line(tt, "gemstone.recharges", ChatFormatting.GREEN + String.valueOf(tier.recharges()));
+            factor(tt, "gemstone.cost_factor", tier.factors().cost());
+            factor(tt, "gemstone.cooldown_factor", tier.factors().cooldown());
+            factor(tt, "gemstone.effect_amount_factor", tier.factors().effect());
+            factor(tt, "gemstone.duration_factor", tier.factors().duration());
+            factor(tt, "gemstone.range_factor", tier.factors().range());
+            gem.get().affixesTo().ifPresent(materials -> {
+                MutableComponent names = Component.empty();
+                materials.stream().forEach(material -> {
+                    ResourceLocation id = material.unwrapKey().map(ResourceKey::location).orElse(null);
+                    if (id != null) {
+                        if (!names.getSiblings().isEmpty()) {
+                            names.append(", ");
+                        }
+                        names.append(Component.translatableWithFallback("material." + id.getNamespace() + "." + id.getPath(),
+                                WordUtils.capitalizeFully(id.getPath().replace('_', ' '))));
+                    }
                 });
-//                tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.tier"), ChatFormatting.GOLD + WordUtils.capitalizeFully(tier.getName().getPath()))));
-                tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.mana"), ChatFormatting.BLUE + String.valueOf(tier.getMana()))));
-                tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.recharges"), ChatFormatting.GREEN + String.valueOf(tier.getRecharges()))));
-
-                if (tier.getSpellCostFactor() < 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.cost_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(tier.getSpellCostFactor()))));
-                } else if (tier.getSpellCostFactor() > 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.cost_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(tier.getSpellCostFactor()))));
-                }
-
-                if (tier.getSpellCooldownFactor() < 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.cooldown_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(tier.getSpellCooldownFactor()))));
-                } else if (tier.getSpellCooldownFactor() > 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.cooldown_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(tier.getSpellCooldownFactor()))));
-                }
-
-                if (tier.getSpellEffectAmountFactor() < 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.effect_amount_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(tier.getSpellEffectAmountFactor()))));
-                } else if (tier.getSpellEffectAmountFactor() > 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.effect_amount_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(tier.getSpellEffectAmountFactor()))));
-                }
-
-                // frequency
-                // NOTE the sign changes, is different than the others
-                double ff = 1.0 + (1.0 - tier.getSpellFrequencyFactor());
-                if (ff < 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.frequency_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(ff))));
-                } else if (ff > 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.frequency_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(ff))));
-                }
-
-                // range
-                if (tier.getSpellRangeFactor() < 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.range_factor"), ChatFormatting.AQUA + LangUtil.negativePercent(tier.getSpellRangeFactor()))));
-                } else if (tier.getSpellRangeFactor() > 1.0) {
-                    tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.range_factor"), ChatFormatting.AQUA + LangUtil.positivePercent(tier.getSpellRangeFactor()))));
-                }
-
-                tt.add(Component.translatable(LangUtil.NEWLINE));
+                tt.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip("gemstone.affixes_to"),
+                        names.withStyle(ChatFormatting.YELLOW))));
             });
+            tt.add(Component.translatable(LangUtil.NEWLINE));
         });
+    }
+
+    private static void line(List<Component> tooltip, String key, String value) {
+        tooltip.add(Component.translatable(LangUtil.INDENT2).append(Component.translatable(LangUtil.tooltip(key), value)));
+    }
+
+    /** a factor's line, only when it changes something */
+    private static void factor(List<Component> tooltip, String key, double factor) {
+        if (factor < 1.0) {
+            line(tooltip, key, ChatFormatting.AQUA + LangUtil.negativePercent(factor));
+        } else if (factor > 1.0) {
+            line(tooltip, key, ChatFormatting.AQUA + LangUtil.positivePercent(factor));
+        }
     }
 }

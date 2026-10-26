@@ -47,6 +47,8 @@ public class DataGenerators {
             generator.addProvider(true, new MagicTreasuresItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), event.getExistingFileHelper()));
             generator.addProvider(true, new MagicTreasuresBiomeTagsProvider(output, lookupProvider, event.getExistingFileHelper()));
             generator.addProvider(true, MagicTreasuresLootTableProvider.create(output, lookupProvider));
+            // the built-in 2.0 jewelry data (materials, styles, stone tiers, gemstones, presets) is hand-kept JSON in
+            // src/main/resources, written in the same form a datapack uses
         }
         if (event.includeClient()) {
             generator.addProvider(true, new MagicTreasuresBlockStateProvider(output, event.getExistingFileHelper()));

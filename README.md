@@ -2,19 +2,20 @@
   <img src="https://raw.githubusercontent.com/wiki/gottsch/gottsch-minecraft-Magic-Treasures/images/curseforge/headings/magic_treasures_title_stacked.png" alt="Magic Treasures">
 </p>
 
-Magic Treasures adds magic jewelry and wearable items, gems and spells. There are 300+ items and 30+ spells.
+Magic Treasures adds magic jewelry, gems and spells: 40+ spells, named jewelry, four jewelry sets and fifteen lore books. Find or craft rings, necklaces and bracelets, set gems in them, imbue them with spells at an anvil, and wear them to have the spells cast for you.
 
-[CurseForge](https://www.curseforge.com/minecraft/mc-mods/magic-treasures) · [Issues](https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/issues) · [Changelog](CHANGELOG.md)
+[CurseForge](https://www.curseforge.com/minecraft/mc-mods/magic-treasures) · [Wiki](https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/wiki) · [Issues](https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/issues) · [Changelog](CHANGELOG.md)
 
 ## Requirements
 
 - [GottschCore](https://www.curseforge.com/minecraft/mc-mods/gottschcore) (required)
+- Gottsch Books, the reader for the manual and lore books, comes inside Magic Treasures. Nothing extra to install.
 
 Magic Treasures is a stand-alone mod, but it's highly recommended to play it with [Treasure2](https://www.curseforge.com/minecraft/mc-mods/treasure2).
 
 ## How jewelry works
 
-To activate jewelry, hold it in your hand and/or keep it in your hotbar. Only the first 4 jewelry items in your hotbar are used.
+Jewelry casts its spells while it's in your hotbar (including the slot in your hand). Only the first 4 jewelry items in your hotbar are used.
 
 If [Curios](https://www.curseforge.com/minecraft/mc-mods/curios) is installed, wear jewelry in the matching Curios slot (ring, necklace, bracelet or belt) instead. The hotbar is then disabled for jewelry.
 
@@ -22,7 +23,9 @@ If [Curios](https://www.curseforge.com/minecraft/mc-mods/curios) is installed, w
 
 ![Jewelry](https://raw.githubusercontent.com/wiki/gottsch/gottsch-minecraft-Magic-Treasures/images/curseforge/jewelry.png)
 
-300+ jewelry items to discover or craft. Each piece of jewelry has its own mana and can be imbued with magic spells. Jewelry is made of different materials and sizes, each with its own set of attributes that affect its spells. Gems can be affixed for added mana, recharges and spell buffs.
+Rings, necklaces and bracelets to discover or craft. Each piece has its own mana and can be imbued with magic spells. Its material and style (Regular, Great or Lord's) set its mana, durability and spell level, and how its spells perform. Gems can be affixed for added mana, recharges and spell buffs.
+
+Named jewelry are unique pieces that come with their own spells. Some belong to one of four **sets**: wear more pieces of a set for set bonuses.
 
 ## Gems
 
@@ -34,7 +37,7 @@ Most gems can be combined with jewelry to increase mana and the number of rechar
 
 ![Spell Scrolls](https://raw.githubusercontent.com/wiki/gottsch/gottsch-minecraft-Magic-Treasures/images/curseforge/spell_scrolls.png)
 
-30+ spells to discover, from simple Healing to Paladin's Strike to Cheat Death. Each spell scroll's color shows its level:
+40+ spells to discover, from simple Healing to Paladin's Strike to Cheat Death. Each spell scroll's color shows its level:
 
 | Color | Level |
 |---|---|
@@ -50,7 +53,11 @@ To imbue jewelry with a spell, place the jewelry and the spell scroll in an anvi
 
 ![Recipe Scrolls](https://raw.githubusercontent.com/wiki/gottsch/gottsch-minecraft-Magic-Treasures/images/curseforge/recipe_scrolls.png)
 
-Recipe Scrolls are one-time-use scrolls for crafting a jewelry item from materials you mine or find: Wood, Iron, Copper, Silver, Gold, Bone and more.
+Recipe Scrolls are one-time-use scrolls for crafting a ring, necklace or bracelet from 4 iron, copper, silver or gold ingots, or 4 bones.
+
+## Lore Books
+
+Fifteen books tell the story behind the named jewelry and sets: the journals, ledgers and letters of Silbro, Sal'andaar, Maldritch and Selene. Find them in chests, and read them in their own book reader.
 
 ## Ores
 
@@ -67,7 +74,8 @@ Note: Silver ingots are only used to make jewelry. There are no Silver swords or
 - **[Treasure2](https://www.curseforge.com/minecraft/mc-mods/treasure2):** integrated by default. Treasure chests are filled with Magic Treasures' gems, jewelry, spells and recipes. Magic Treasures' gems can be used in Treasure2's wishing wells, and Treasure2's gems can be used to make jewelry.
 - **[Curios](https://www.curseforge.com/minecraft/mc-mods/curios):** wear jewelry in the Ring, Necklace, Bracelet and Belt slots. When Curios is loaded, it replaces the default hotbar setup.
 - **[Diamethysts!](https://www.curseforge.com/minecraft/mc-mods/diamethysts):** use its crystals and shards to recharge magic jewelry.
-- **[Patchouli](https://www.curseforge.com/minecraft/mc-mods/patchouli):** an in-game guide book.
+
+The in-game **Magic Treasures Manual** (in the Magic Treasures creative tab) no longer needs Patchouli.
 
 ---
 
@@ -75,16 +83,19 @@ Note: Silver ingots are only used to make jewelry. There are no Silver swords or
 
 | Minecraft | Loader | Magic Treasures | Branch | GottschCore | Treasure2 (optional) |
 |---|---|---|---|---|---|
-| 1.21.1 | NeoForge 21.1.117+ | 1.3.2+ | `neoforge-1.21.1-main` | 2.7.0+ | 5.0.0+ |
-| 1.20.1 | Forge 47+ | 1.3.x | `1.20.1-main` | 2.6.0+ | 3.8.1+ |
+| 1.21.1 | NeoForge 21.1.117+ | 2.0.0+ | `neoforge-1.21.1-main` | 2.7.0+ | 5.0.0+ |
+| 1.20.1 | Forge 47+ | 2.0.0+ | `1.20.1-main` | 2.10.0+ | 3.8.1+ |
 
 Jewelry from a 1.20.1 world doesn't keep its Magic Treasures data in 1.21.1. See the [changelog](CHANGELOG.md).
 
 ## For modpack and datapack makers
 
+- **Jewelry from datapacks:** materials, gems, styles and named pieces are JSON in `data/<namespace>/magictreasures/`. A datapack can add its own or change the built-in ones. See [Jewelry Datapacks](https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/wiki/Jewelry-Datapacks) on the wiki.
 - **Curios slots:** registered by datapack in `data/magictreasures/curios/`. Players get 1 ring slot. To add more, ship your own `curios/slots/ring.json` with a larger `size` (Curios uses the largest one).
 - **Loot:** Magic Treasures adds its loot through global loot modifiers (`data/neoforge/loot_modifiers/` on 1.21.1, `data/forge/loot_modifiers/` on 1.20.1). Each modifier can be turned off in the config.
 - **Tags:** silver and gem items use the common tags: `c:` on 1.21.1 (ex. `c:ingots/silver`), `forge:` on 1.20.1.
+
+More on the [wiki](https://github.com/gottsch/gottsch-minecraft-Magic-Treasures/wiki/Modpacks-and-Datapacks).
 
 ## Building
 

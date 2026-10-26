@@ -17,6 +17,7 @@
  */
 package mod.gottsch.neo.magic_treasures;
 
+import mod.gottsch.neo.magic_treasures.core.lore.JewelryIllustrations;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
 import mod.gottsch.neo.magic_treasures.core.setup.CommonSetup;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
@@ -55,6 +56,9 @@ public class MagicTreasures {
 
 		// register the deferred registries
 		Registration.init(eventBus);
+
+		// pictures of jewelry for the lore books and the manual (preset: and jewelry:)
+		JewelryIllustrations.register();
 
 		// TODO anything that is registering magic things only, like jewelry material tiers, in common setup can and needs to be called before Registration.init()
 		eventBus.addListener(CommonSetup::init);

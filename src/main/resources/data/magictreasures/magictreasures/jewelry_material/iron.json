@@ -1,0 +1,20 @@
+{
+  "color": "#7C7C7C",
+  "factors": {
+    "duration": 1.25
+  },
+  "ingredient": {
+    "tag": "c:ingots/iron"
+  },
+  "mana": 50,
+  "max_level": 3,
+  "rarity": "common",
+  "repairs": 3,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords",
+    "magictreasures:fine"
+  ],
+  "uses": 200
+}

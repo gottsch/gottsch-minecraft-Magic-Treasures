@@ -40,8 +40,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import mod.gottsch.neo.magic_treasures.core.advancement.JewelryTrigger;
 import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.neo.magic_treasures.core.item.ManaWell;
+import mod.gottsch.neo.magic_treasures.core.set.JewelrySet;
+import mod.gottsch.neo.magic_treasures.core.set.JewelrySets;
+import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
 
 /**
  * 
@@ -81,16 +85,31 @@ public class SpellEventHandler {
 		// do something to player every update tick:
 		if (event.getEntity() instanceof ServerPlayer player) {
 			processSpells(event, player);
+			if (player.tickCount % 20 == 0) {
+				SetEquipment.tick(player);
+			}
 			// once a second is plenty for an advancement; the trigger is a no-op once it is granted
-			if (player.tickCount % 20 == 0 && getEquipmentSpellHandler() != null
-					&& getEquipmentSpellHandler().isWearingFullSet(player)) {
-				MagicTreasuresCriteria.JEWELRY.get().trigger(player, MagicTreasuresCriteria.FULL_SET);
+			if (player.tickCount % 20 == 0) {
+				checkWornAdvancements(player);
+			}
+		}
+	}
+
+	/** Dressed to the Nines, and every named set worn whole (Fully Adorned, the per-set advancements). */
+	private void checkWornAdvancements(ServerPlayer player) {
+		if (getEquipmentSpellHandler() != null && getEquipmentSpellHandler().isDressed(player)) {
+			MagicTreasuresCriteria.JEWELRY.get().trigger(player, MagicTreasuresCriteria.DRESSED);
+		}
+		for (JewelrySet set : JewelrySets.getAll()) {
+			if (SetEquipment.countWorn(player, set) >= set.size()) {
+				MagicTreasuresCriteria.JEWELRY.get().trigger(player, MagicTreasuresCriteria.FULL_SET,
+						JewelryTrigger.Details.set(set.getId()));
 			}
 		}
 	}
 
 	/**
-	 * 
+	 *
 	 * @param event
 	 */
 	@SubscribeEvent

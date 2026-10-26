@@ -1,0 +1,27 @@
+{
+  "parent": "magictreasures:master_enchanter",
+  "display": {
+    "icon": {
+      "id": "magictreasures:desiccate_scroll"
+    },
+    "title": {
+      "translate": "advancements.magictreasures.archmage.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.archmage.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "imbue": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "imbue",
+        "min_level": 9
+      }
+    }
+  }
+}

@@ -26,6 +26,7 @@ import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.neo.magic_treasures.core.spell.cost.CostEvaluator;
 import mod.gottsch.neo.magic_treasures.core.spell.cost.ICostEvaluator;
 import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
+import mod.gottsch.neo.magic_treasures.core.util.MathUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -42,6 +43,11 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Consumer;
 import mod.gottsch.neo.magic_treasures.core.capability.ManaWellHandler;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
+import net.minecraft.locale.Language;
+import java.util.ArrayList;
+import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
+import mod.gottsch.neo.magic_treasures.core.set.SpellStat;
 
 /**
  * Spells are a single instance within the mod like Blocks and Items.
@@ -64,8 +70,6 @@ public abstract class Spell implements ISpell {
     private double spellCost;
     private double effectAmount;
     private int duration;
-    // TODO frequency and cooldown are mutually exclusive, so make classes for each of them
-    private long frequency;
     private double range;
     private long cooldown;
     private boolean effectStackable;
@@ -85,7 +89,6 @@ public abstract class Spell implements ISpell {
         this.spellCost = builder.spellCost;
         this.effectAmount = builder.effectAmount;
         this.duration = builder.duration;
-        this.frequency = builder.frequency;
         this.range = builder.range;
         this.cooldown = builder.cooldown;
         this.effectStackable = builder.effectStackable;
@@ -136,6 +139,25 @@ public abstract class Spell implements ISpell {
         return amount;
     }
 
+    // cast-time numbers: the jewelry's modifiers, then the wearer's set bonuses. Tooltips use the modify* methods
+    // below (jewelry only), since a tooltip has no cast.
+
+    protected double effectAmount(ICastSpellContext context) {
+        return SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.EFFECT, modifyEffectAmount(context.getJewelry()));
+    }
+
+    protected double range(ICastSpellContext context) {
+        return SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.RANGE, modifyRange(context.getJewelry()));
+    }
+
+    protected int duration(ICastSpellContext context) {
+        return (int) Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.DURATION, modifyDuration(context.getJewelry())));
+    }
+
+    protected long cooldown(ICastSpellContext context) {
+        return Math.round(SetEquipment.modify(context.getPlayer(), context.getJewelry(), this, SpellStat.COOLDOWN, modifyCooldown(context.getJewelry())));
+    }
+
     public double modifySpellCost(ItemStack jewelry) {
         IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifySpellCost(getSpellCost());
@@ -156,15 +178,37 @@ public abstract class Spell implements ISpell {
         return handler.modifyDuration(getDuration());
     }
 
-    public long modifyFrequency(ItemStack jewelry) {
-        IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
-        return handler.modifyFrequency(getFrequency());
-   }
-
     public double modifyRange(ItemStack jewelry) {
         IJewelryHandler handler = JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
         return handler.modifyRange(getRange());
    }
+
+    // tooltip numbers: the jewelry's modifiers, plus the set bonuses of the client's player when it wears the
+    // jewelry, so the chips show what a cast will use
+
+    private double withSetBonus(ItemStack jewelry, SpellStat stat, double value) {
+        return SetEquipment.modify(SetEquipment.getTooltipWearer(jewelry), jewelry, this, stat, value);
+    }
+
+    protected double tooltipEffectAmount(ItemStack jewelry) {
+        return withSetBonus(jewelry, SpellStat.EFFECT, modifyEffectAmount(jewelry));
+    }
+
+    protected double tooltipRange(ItemStack jewelry) {
+        return withSetBonus(jewelry, SpellStat.RANGE, modifyRange(jewelry));
+    }
+
+    protected long tooltipDuration(ItemStack jewelry) {
+        return Math.round(withSetBonus(jewelry, SpellStat.DURATION, modifyDuration(jewelry)));
+    }
+
+    protected long tooltipCooldown(ItemStack jewelry) {
+        return Math.round(withSetBonus(jewelry, SpellStat.COOLDOWN, modifyCooldown(jewelry)));
+    }
+
+    protected double tooltipSpellCost(ItemStack jewelry) {
+        return withSetBonus(jewelry, SpellStat.COST, modifySpellCost(jewelry));
+    }
 
     private IJewelryHandler getHandler(ItemStack jewelry) {
         return  JewelryHandler.get(jewelry).orElseThrow(IllegalStateException::new);
@@ -174,13 +218,66 @@ public abstract class Spell implements ISpell {
     @Override
     public void addInformation(ItemStack stack, Item.TooltipContext level, List<Component> tooltip, TooltipFlag flagIn, SpellEntity entity) {
         tooltip.add(getLabel());
-        getDesc(stack).ifPresent(tooltip::add);
+        String flavorKey = LangUtil.tooltip("spell.flavor." + getName().getPath());
+        if (Language.getInstance().has(flavorKey)) {
+            tooltip.add(TooltipMarkers.space(MagicTreasures.MOD_ID, 2));
+            tooltip.add(Component.translatable(flavorKey).withStyle(getSpellDescColor(), ChatFormatting.ITALIC));
+        }
+        tooltip.add(TooltipMarkers.space(MagicTreasures.MOD_ID, 3));
+        List<Component> chips = new ArrayList<>(getStatChips(stack));
+        chips.add(getCostChip(stack));
+        if (isEffectStackable()) {
+            // the effect adds up with the same spell on other worn jewelry
+            chips.add(Component.translatable(LangUtil.tooltip("spell.stat.stacks")).withStyle(ChatFormatting.GREEN));
+        }
+        tooltip.add(TooltipMarkers.chips(MagicTreasures.MOD_ID, chips));
+    }
+
+    /**
+     * Every number this spell has, as tooltip chips, already modified by the jewelry. Leave out the mana cost:
+     * {@link #addInformation} adds that chip for every spell.
+     */
+    public List<Component> getStatChips(ItemStack jewelry) {
+        return List.of();
+    }
+
+    private Component getCostChip(ItemStack jewelry) {
+        // spells without a set cost pay a share of the damage they handle, so it varies; every cast costs at least 1
+        String value = getSpellCost() > 0 ? number(Math.max(1.0, tooltipSpellCost(jewelry))) : "1+";
+        return chip("mana", value, ChatFormatting.BLUE);
+    }
+
+    /** A chip such as "4 dmg": {@code stat} picks the lang key, and {@code value} is drawn in {@code color}. */
+    protected static Component chip(String stat, String value, ChatFormatting color) {
+        return chip(stat, Component.literal(value), color);
+    }
+
+    protected static Component chip(String stat, MutableComponent value, ChatFormatting color) {
+        return Component.translatable(LangUtil.tooltip("spell.stat." + stat), value.withStyle(color))
+                .withStyle(ChatFormatting.GRAY);
+    }
+
+    /** One decimal place at most, and none for whole numbers: 4.0 -> "4", 4.46 -> "4.5". */
+    /** up to two decimals, so a 15% bonus shows (1.15, not 1.1); trailing zeros dropped (8, not 8.00) */
+    protected static String number(double value) {
+        DecimalFormat format = new DecimalFormat("0.##");
+        format.setRoundingMode(java.math.RoundingMode.HALF_UP);
+        return format.format(value);
+    }
+
+    /** "9s", with the unit from the lang file */
+    protected static MutableComponent seconds(long ticks) {
+        return Component.translatable(LangUtil.tooltip("spell.stat.seconds"), number(ticks / 20.0));
+    }
+
+    /** 0.3 -> "30%" */
+    protected static String percent(double fraction) {
+        return number(fraction * 100) + "%";
     }
 
     private Component getLabel() {
         MutableComponent label = Component.translatable(LangUtil.tooltip("spell.name.") + getName().getPath().toLowerCase());
-        label.append(" ").append((this.effectStackable ? "+" : ""));
-        return Component.translatable(LangUtil.INDENT2).append(label.withStyle(getSpellLabelColor()).withStyle(ChatFormatting.BOLD));
+        return label.withStyle(getSpellLabelColor()).withStyle(ChatFormatting.BOLD);
     }
 
     // a short desc of its effect ex "Heals 1hp / 10 sec"
@@ -224,7 +321,6 @@ public abstract class Spell implements ISpell {
         public double spellCost;
         public double effectAmount;
         public int duration;
-        public long frequency;
         public double range;
         public long cooldown;
         public boolean effectStackable;
@@ -307,16 +403,6 @@ public abstract class Spell implements ISpell {
     }
 
     @Override
-    public long getFrequency() {
-        return frequency;
-    }
-
-    @Override
-    public void setFrequency(long frequency) {
-        this.frequency = frequency;
-    }
-
-    @Override
     public double getRange() {
         return range;
     }
@@ -384,7 +470,6 @@ public abstract class Spell implements ISpell {
                 ", effectStackable=" + effectStackable +
                 ", cooldown=" + cooldown +
                 ", range=" + range +
-                ", frequency=" + frequency +
                 ", duration=" + duration +
                 ", effectAmount=" + effectAmount +
                 ", spellCost=" + spellCost +

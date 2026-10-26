@@ -20,11 +20,15 @@ package mod.gottsch.neo.magic_treasures.core.loot.function;
 import mod.gottsch.neo.gottschcore.enums.IRarity;
 import mod.gottsch.neo.magic_treasures.api.MagicTreasuresApi;
 import mod.gottsch.neo.magic_treasures.core.rarity.MagicTreasuresRarity;
-import mod.gottsch.neo.magic_treasures.core.registry.JewelryMaterialRegistry;
 import mod.gottsch.neo.magic_treasures.core.util.ModUtil;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Resolves the raw JSON values of the loot functions the same way the 1.20.1 Gson serializers did.
@@ -57,10 +61,22 @@ public final class LootFunctionHelper {
     }
 
     /**
-     * unregistered materials are dropped
+     * A filter over a 2.0 registry from loot JSON: each name is an id or a {@code #tag} of that registry (a bare name
+     * defaults to the magictreasures namespace). An empty list lets everything through.
      */
-    public static List<ResourceLocation> materials(List<String> names) {
-        return locations(names).stream().filter(JewelryMaterialRegistry::has).toList();
+    public static <T> Predicate<Holder<T>> holders(ResourceKey<? extends Registry<T>> registry, List<String> names) {
+        if (names.isEmpty()) {
+            return holder -> true;
+        }
+        List<Predicate<Holder<T>>> tests = names.stream().<Predicate<Holder<T>>>map(name -> {
+            if (name.startsWith("#")) {
+                TagKey<T> tag = TagKey.create(registry, ModUtil.asLocation(name.substring(1)));
+                return holder -> holder.is(tag);
+            }
+            ResourceLocation id = ModUtil.asLocation(name);
+            return holder -> holder.is(id);
+        }).toList();
+        return holder -> tests.stream().anyMatch(test -> test.test(holder));
     }
 
     public static List<String> names(List<ResourceLocation> locations) {

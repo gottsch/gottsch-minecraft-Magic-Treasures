@@ -17,8 +17,11 @@
  */
 package mod.gottsch.neo.magic_treasures.core.item;
 
+import mod.gottsch.neo.magic_treasures.core.lore.LoreBookDef;
+import mod.gottsch.neo.magic_treasures.api.MagicTreasuresRegistries;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.setup.Registration;
+import mod.gottsch.neo.magic_treasures.core.jewelry.data.LegacyConversion;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
@@ -47,10 +50,24 @@ public class MagicTreasuresCreativeModeTabs {
 			.displayItems((displayParams, output) -> {
 				// add all items
 				Registration.ITEMS.getEntries().forEach(item -> {
-				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB)) {
+				// the generic jewelry items are listed per combination below, never bare
+				// M9: the 418 1.x jewelry items stay registered (old stacks must load) but leave the tab; generic ones replace them
+				if (!item.equals(MagicTreasuresItems.MAGIC_TREASURES_TAB) && !MagicTreasuresItems.GENERIC_JEWELRY.contains(item)
+						&& !item.equals(MagicTreasuresItems.LORE_BOOK)
+						&& !item.equals(MagicTreasuresItems.SPECTRAL_SWORD)
+						&& !LegacyConversion.isLegacy(item.get())) {
 						output.accept(item.get(), TabVisibility.PARENT_AND_SEARCH_TABS);
 					}
 				});
+				// 2.0 generic jewelry, from the registries the client has
+				JewelryCreativeStacks.build(displayParams.holders()).forEach(entry -> output.accept(entry.stack(), entry.visibility()));
+				// one lore book per story, from the registry the client has
+				displayParams.holders().lookup(MagicTreasuresRegistries.LORE_BOOK).ifPresent(books -> books.listElements()
+						.filter(book -> LoreBook.enabled(book.key().location(), displayParams.holders()))
+						.sorted(java.util.Comparator.comparing((net.minecraft.core.Holder.Reference<LoreBookDef> book) -> book.value().rarity().getCode())
+								.thenComparing(book -> book.key().location().toString()))
+						.forEach(book -> output.accept(LoreBook.of(MagicTreasuresItems.LORE_BOOK.get(), book.key().location()),
+								TabVisibility.PARENT_AND_SEARCH_TABS)));
 			})
 			.build()
 			);

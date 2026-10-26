@@ -1,0 +1,29 @@
+{
+  "parent": "magictreasures:first_pages",
+  "display": {
+    "icon": {
+      "id": "magictreasures:lore_book",
+      "components": {
+        "magictreasures:lore_book": "magictreasures:maldritchs_notes_1"
+      }
+    },
+    "title": {
+      "translate": "advancements.magictreasures.maldritchs_descent.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.maldritchs_descent.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "read": {
+      "trigger": "gottschbooks:book_read",
+      "conditions": {
+        "books": "#magictreasures:books/maldritch"
+      }
+    }
+  }
+}

@@ -17,6 +17,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * This is essentially the same as Mana Shield except it resists fire damage only and doesn't have a cooldown.
@@ -59,7 +60,7 @@ public class FireResistanceSpell extends Spell {
 			double amount = ((LivingDamageEvent.Pre)event).getNewDamage();
 			// calculate the new amount
 			double newAmount = 0;
-			double amountToSpell = amount * Math.min(1.0, modifyEffectAmount(context.getJewelry()));
+			double amountToSpell = amount * Math.min(1.0, effectAmount(context));
 			double amountToPlayer = amount - amountToSpell;
 			// Treasure.logger.debug("amount to charm -> {}); amount to player -> {}", amountToCharm, amountToPlayer);
 			double cost = applyCost(world, random, coords, context, amountToSpell);
@@ -80,6 +81,11 @@ public class FireResistanceSpell extends Spell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.fire_resistance.rate"),
 				LangUtil.asPercentString(Math.min(100, getEffectAmount() * 100)));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("fire_resist", percent(Math.min(1.0, tooltipEffectAmount(jewelry))), ChatFormatting.RED));
 	}
 
 	@Override

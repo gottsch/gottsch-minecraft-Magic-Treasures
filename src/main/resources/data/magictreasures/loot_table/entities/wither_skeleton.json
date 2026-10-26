@@ -7,7 +7,7 @@
         {
           "entryName": "random_jewelry",
           "type": "minecraft:item",
-          "name": "magictreasures:bone_ring",
+          "name": "magictreasures:ring",
           "functions": [
             {
               "function": "magictreasures:random_jewelry",

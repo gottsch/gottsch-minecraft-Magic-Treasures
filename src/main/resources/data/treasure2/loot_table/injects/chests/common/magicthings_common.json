@@ -7,7 +7,7 @@
         {
           "entryName": "jewelry0",
           "type": "item",
-          "name": "magictreasures:iron_ring",
+          "name": "magictreasures:ring",
           "weight": 5,
           "conditions": [
             {
@@ -25,7 +25,7 @@
         {
           "entryName": "jewelry1",
           "type": "item",
-          "name": "magictreasures:iron_ring",
+          "name": "magictreasures:ring",
           "weight": 10,
           "conditions": [
             {

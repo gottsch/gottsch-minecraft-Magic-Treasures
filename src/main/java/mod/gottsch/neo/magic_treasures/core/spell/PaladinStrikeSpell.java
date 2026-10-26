@@ -22,6 +22,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
+import java.util.List;
 
 /**
  * @author Mark Gottschling on May 16, 2024
@@ -71,7 +72,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 					// calculate lifeCost
 					double lifeCost = Math.min(getLifeCost(), player.getHealth() - (player.getMaxHealth() / 2));
 					// calculate the damage amount based on lifeCost and modifiers
-					double damageAmount = sourceAmount + (lifeCost * modifyEffectAmount(jewelry));
+					double damageAmount = sourceAmount + (lifeCost * effectAmount(context));
 
 					// increase damage amount
 					((LivingIncomingDamageEvent)event).setAmount((float) damageAmount);
@@ -94,6 +95,13 @@ public class PaladinStrikeSpell extends CooldownSpell {
 				MathUtil.r1d(getCooldown()/20.0),
 				MathUtil.r1d(getSpellCost()),
 				MathUtil.r1d(getLifeCost()));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("damage", number(getLifeCost() * tooltipEffectAmount(jewelry)), ChatFormatting.RED),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA),
+			chip("life", number(getLifeCost()), ChatFormatting.RED));
 	}
 
 	@Override

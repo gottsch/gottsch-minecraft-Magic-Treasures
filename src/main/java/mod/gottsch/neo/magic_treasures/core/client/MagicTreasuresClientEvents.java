@@ -19,13 +19,29 @@ package mod.gottsch.neo.magic_treasures.core.client;
 
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.client.tooltip.IconTitleTooltips;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.RichTooltips;
 import mod.gottsch.neo.magic_treasures.core.config.Config;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
+import mod.gottsch.neo.magic_treasures.core.client.tooltip.TooltipMarkers;
+import mod.gottsch.neo.magic_treasures.core.set.JewelrySet;
+import mod.gottsch.neo.magic_treasures.core.set.JewelrySets;
+import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
+import mod.gottsch.neo.magic_treasures.core.util.LangUtil;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.contents.TranslatableContents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Client-only game-bus events.
@@ -36,14 +52,87 @@ import net.neoforged.neoforge.client.event.RenderTooltipEvent;
 public class MagicTreasuresClientEvents {
 	/** icon scale for the tooltip header: 2 = 32px */
 	private static final float TOOLTIP_ICON_SCALE = 2.0F;
+	/** text wraps here, and chips start a new row */
+	private static final int TOOLTIP_MAX_WIDTH = 200;
+	/** a tooltip taller than the screen wraps this much wider at a time until it fits */
+	private static final int TOOLTIP_WIDTH_STEP = 40;
+	/** room left under a tall tooltip, so its end doesn't look cut off */
+	private static final int TOOLTIP_BOTTOM_MARGIN = 16;
+	/** how far a tooltip's border reaches past its contents, plus a pixel of screen */
+	private static final int TOOLTIP_BORDER = 4;
 
-	/** Show the item's icon beside its name in every Magic Treasures tooltip. */
+	/**
+	 * Obscure Tooltips draws its own icon, name and rarity header from the tooltip's first text line. With our icon
+	 * header in place of the name, it takes the next line (Curios' "Slot: Ring") as the title and both headers show.
+	 */
+	private static final boolean HAS_OWN_ICON_HEADER = ModList.get().isLoaded("obscure_tooltips");
+
+	/**
+	 * Show the item's icon beside its name in every Magic Treasures tooltip, then swap the tooltip's marker lines
+	 * (dividers, bars, chips, grids) for drawn components.
+	 * <p>
+	 * The marker swap runs for every tooltip, not only Magic Treasures items: some screens (Curios slots) draw an
+	 * item's tooltip lines without passing the stack, so the event's stack is empty. Only the icon needs the stack.
+	 */
 	@SubscribeEvent
 	public static void onGatherTooltipComponents(RenderTooltipEvent.GatherComponents event) {
-		if (!Config.CLIENT.showTooltipIcon.get()) {
-			return;
+		if (Config.CLIENT.showTooltipIcon.get() && !HAS_OWN_ICON_HEADER) {
+			IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
 		}
-		IconTitleTooltips.apply(event, MagicTreasuresClientEvents::isMagicTreasuresItem, TOOLTIP_ICON_SCALE);
+		RichTooltips.applyFitting(event, MagicTreasures.MOD_ID, TOOLTIP_MAX_WIDTH, TOOLTIP_WIDTH_STEP);
+		// a tooltip taller than the screen loses its top: if it's still too tall, drop the icon header
+		IconTitleTooltips.fitToScreen(event);
+	}
+
+	/** Widen dividers and bars to the finished tooltip, and keep it off the bottom and right edges of the screen. */
+	@SubscribeEvent
+	public static void onRenderTooltipPre(RenderTooltipEvent.Pre event) {
+		RichTooltips.stretch(event);
+		RichTooltips.lift(event, TOOLTIP_BOTTOM_MARGIN);
+		RichTooltips.keepBorderOnScreen(event, TOOLTIP_BORDER);
+	}
+
+	/**
+	 * Adds the set block to the tooltip of any set piece: the set's name with how many pieces are worn and, while
+	 * SHIFT is held, each piece (worn ones lit) and each bonus tier (active ones lit). Goes above "Hold [SHIFT] for
+	 * details" when that's shown.
+	 */
+	@SubscribeEvent
+	public static void onItemTooltip(ItemTooltipEvent event) {
+		JewelrySets.get(event.getItemStack()).ifPresent(set -> {
+			Player player = event.getEntity();
+			List<ItemStack> worn = player == null ? List.of() : SetEquipment.getWornItems(player);
+			int count = set.countWorn(worn);
+
+			List<Component> lines = new ArrayList<>();
+			lines.add(TooltipMarkers.divider(MagicTreasures.MOD_ID));
+			lines.add(Component.translatable(LangUtil.tooltip("set.header"), set.getName(), count, set.size())
+					.withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD));
+			// the full block is long, so it's in the SHIFT view, which leaves out the spells to make room
+			if (Screen.hasShiftDown()) {
+				for (JewelrySet.Piece piece : set.getPieces()) {
+					boolean isWorn = worn.stream().anyMatch(piece::matches);
+					lines.add(Component.literal(LangUtil.INDENT2).append(piece.name())
+							.withStyle(isWorn ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
+				}
+				for (int pieces : set.getTiers().keySet()) {
+					lines.add(Component.translatable(LangUtil.tooltip("set.bonus"), pieces, set.getBonusDescription(pieces))
+							.withStyle(count >= pieces ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				}
+			}
+
+			List<Component> tooltip = event.getToolTip();
+			int at = tooltip.size();
+			for (int i = 0; i < tooltip.size(); i++) {
+				if (tooltip.get(i).getContents() instanceof TranslatableContents contents
+						&& contents.getKey().equals(LangUtil.tooltip("hold_shift"))) {
+					// keep the blank line above "Hold [SHIFT]" between it and the set block
+					at = i > 0 ? i - 1 : i;
+					break;
+				}
+			}
+			tooltip.addAll(at, lines);
+		});
 	}
 
 	private static boolean isMagicTreasuresItem(ItemStack stack) {

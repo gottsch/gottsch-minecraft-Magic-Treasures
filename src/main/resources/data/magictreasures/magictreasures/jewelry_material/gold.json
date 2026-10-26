@@ -1,0 +1,21 @@
+{
+  "color": "#D49821",
+  "factors": {
+    "cooldown": 0.96,
+    "cost": 0.925
+  },
+  "ingredient": {
+    "tag": "c:ingots/gold"
+  },
+  "mana": 100,
+  "max_level": 6,
+  "rarity": "rare",
+  "repairs": 2,
+  "styles": [
+    "magictreasures:regular",
+    "magictreasures:great",
+    "magictreasures:lords",
+    "magictreasures:fine"
+  ],
+  "uses": 150
+}

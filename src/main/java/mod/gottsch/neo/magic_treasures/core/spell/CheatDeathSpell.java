@@ -20,6 +20,7 @@ import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import java.util.List;
 
 /**
  * 
@@ -68,7 +69,7 @@ public class CheatDeathSpell extends CooldownSpell {
 				if (damage > 0D && damage > player.getHealth()) {
 
 					// set player's health to amount
-					player.setHealth((float) handler.modifyEffectAmount(getEffectAmount()));
+					player.setHealth((float) effectAmount(context));
 
 					// cost eval
 					double cost = applyCost(world, random, coords, context, modifySpellCost(jewelry));
@@ -89,6 +90,11 @@ public class CheatDeathSpell extends CooldownSpell {
 	public Component getSpellDesc() {
 		return Component.translatable(LangUtil.tooltip("spell.cheat_death.rate"),
 				MathUtil.r1d(getCooldown()/20.0));
+	}
+
+	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
 	}
 
 	@Override

@@ -1,0 +1,35 @@
+{
+  "parent": "magictreasures:gem_collector",
+  "display": {
+    "icon": {
+      "id": "magictreasures:ring",
+      "components": {
+        "magictreasures:jewelry_identity": {
+          "type": "ring",
+          "material": "magictreasures:gold",
+          "style": "magictreasures:lords",
+          "preset": "magictreasures:lords_gold_hawk_ring"
+        }
+      }
+    },
+    "title": {
+      "translate": "advancements.magictreasures.lords_ransom.title"
+    },
+    "description": {
+      "translate": "advancements.magictreasures.lords_ransom.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "lords": {
+      "trigger": "magictreasures:jewelry",
+      "conditions": {
+        "action": "carry",
+        "style": "magictreasures:lords"
+      }
+    }
+  }
+}

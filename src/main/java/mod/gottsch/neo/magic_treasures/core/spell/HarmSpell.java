@@ -62,7 +62,7 @@ public class HarmSpell extends CooldownSpell {
             double px = player.getX();
             double py = player.getY();
             double pz = player.getZ();
-            double range = handler.modifyRange(getRange());
+            double range = range(context);
 
             // only target mobs that are not in their post-hit invulnerability ticks (vanilla rejects most damage while
             // invulnerableTime > 10). if every mob in range was just hit, don't cast - no cost, no cooldown - and try next tick.
@@ -76,7 +76,7 @@ public class HarmSpell extends CooldownSpell {
 
             // target the nearest mob. only 1 mob is affected - an area spell would be an Aura spell.
             Monster mob = mobs.stream().min(Comparator.comparingDouble(m -> m.distanceToSqr(player))).get();
-            double effectAmount = handler.modifyEffectAmount(getEffectAmount());
+            double effectAmount = effectAmount(context);
             boolean flag = mob.hurt(level.damageSources().magic(), (float) effectAmount);
             if (flag) {
                 MagicTreasures.LOGGER.debug("inflict {} hp of damage. resulting health -> {}", effectAmount, mob.getHealth());
@@ -110,6 +110,13 @@ public class HarmSpell extends CooldownSpell {
                 MathUtil.r1d(getEffectAmount()),
                 MathUtil.r1d(getRange()),
                 MathUtil.r1d(getCooldown() / 20.0));
+    }
+
+    @Override
+    public List<Component> getStatChips(ItemStack jewelry) {
+        return List.of(chip("damage", number(tooltipEffectAmount(jewelry)), ChatFormatting.RED),
+            chip("range", number(tooltipRange(jewelry)), ChatFormatting.AQUA),
+            chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
     }
 
     @Override

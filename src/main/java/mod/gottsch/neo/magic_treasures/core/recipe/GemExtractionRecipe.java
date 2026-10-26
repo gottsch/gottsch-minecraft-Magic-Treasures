@@ -82,6 +82,8 @@ public class GemExtractionRecipe extends CustomRecipe {
         // read a copy: JewelryHandler.get writes default jewelry data onto a stack that has none yet
         return JewelryHandler.get(jewelry.copy())
                 .filter(IJewelryHandler::hasStone)
+                // a 2.0 preset can say "extractable": false
+                .filter(IJewelryHandler::gemExtractable)
                 .map(handler -> BuiltInRegistries.ITEM.get(handler.getStone()))
                 .filter(item -> item != Items.AIR)
                 .map(ItemStack::new)

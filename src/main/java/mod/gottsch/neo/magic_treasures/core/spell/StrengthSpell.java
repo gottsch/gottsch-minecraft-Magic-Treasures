@@ -18,6 +18,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.bus.api.Event;
 
 import java.util.Random;
+import java.util.List;
 
 /**
  * @author Mark Gottschling on June 4, 2024
@@ -55,7 +56,7 @@ public class StrengthSpell extends CooldownSpell {
 
 		if (hasMana(handler, context) && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasEffect(MobEffects.DAMAGE_BOOST)) {
-				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, handler.modifyDuration(getDuration()), getAmplifier()));
+				context.getPlayer().addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, duration(context), getAmplifier()));
 			}
 			applyCost(world, random, coords, context, handler.modifySpellCost(getSpellCost()));
        		result = true;
@@ -71,9 +72,15 @@ public class StrengthSpell extends CooldownSpell {
 	}
 
 	@Override
+	public List<Component> getStatChips(ItemStack jewelry) {
+		return List.of(chip("duration", seconds(tooltipDuration(jewelry)), ChatFormatting.AQUA),
+			chip("cooldown", seconds(tooltipCooldown(jewelry)), ChatFormatting.AQUA));
+	}
+
+	@Override
 	public Component getSpellDesc(ItemStack jewelry) {
 		return Component.translatable(LangUtil.tooltip("spell.strength.rate"),
-				MathUtil.r1d(modifyCooldown(jewelry) / 20.0),
+				MathUtil.r1d(modifyDuration(jewelry) / 20.0),
 				MathUtil.r1d(modifyCooldown(jewelry) / 20.0));
 	}
 

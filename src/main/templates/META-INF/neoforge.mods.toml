@@ -35,6 +35,14 @@ description='''${mod_description}'''
     ordering="AFTER"
     side="BOTH"
 
+# the lore book reader; nested by Jar-in-Jar
+[[dependencies.${mod_id}]]
+    modId="gottschbooks"
+    type="required"
+    versionRange="${gottschbooks_version_range}"
+    ordering="AFTER"
+    side="BOTH"
+
 [[dependencies.${mod_id}]]
     modId="treasure2"
     type="optional"
@@ -46,14 +54,6 @@ description='''${mod_description}'''
     modId="curios"
     type="optional"
     versionRange="${curios_version_range}"
-    ordering="NONE"
-    side="BOTH"
-
-# provides the Magic Treasures Guide book
-[[dependencies.${mod_id}]]
-    modId="patchouli"
-    type="optional"
-    versionRange="*"
     ordering="NONE"
     side="BOTH"
 

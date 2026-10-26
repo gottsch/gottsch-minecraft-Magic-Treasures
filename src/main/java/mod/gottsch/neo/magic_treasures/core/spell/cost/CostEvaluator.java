@@ -2,13 +2,12 @@ package mod.gottsch.neo.magic_treasures.core.spell.cost;
 
 import mod.gottsch.neo.gottschcore.spatial.ICoords;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
+import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 import mod.gottsch.neo.magic_treasures.core.capability.IJewelryHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.JewelryHandler;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.neo.magic_treasures.core.jewelry.JewelryStoneTiers;
-import mod.gottsch.neo.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.neo.magic_treasures.core.spell.ICastSpellContext;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -19,6 +18,8 @@ import java.util.Random;
 import mod.gottsch.neo.magic_treasures.core.capability.IManaWellHandler;
 import mod.gottsch.neo.magic_treasures.core.capability.ManaWellHandler;
 import net.minecraft.world.item.ItemStack;
+import mod.gottsch.neo.magic_treasures.core.set.SetEquipment;
+import mod.gottsch.neo.magic_treasures.core.set.SpellStat;
 
 /*
  * Generic cost evaluator
@@ -33,12 +34,10 @@ public class CostEvaluator implements ICostEvaluator {
 	public double apply(Level level, Random random, ICoords coords, ICastSpellContext context, double amount) {
 		IJewelryHandler handler = JewelryHandler.get(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
-		Optional<Item> stone = StoneRegistry.get(handler.getStone());
-		JewelryStoneTier stoneTier = StoneRegistry.getStoneTier(stone.orElseGet(() -> Items.AIR)).orElse(JewelryStoneTiers.NONE);
-
 		// calculate the new amount for cost
-		double newAmount = amount * handler.getMaterial().getSpellCostFactor()
-				* stoneTier.getSpellCostFactor();
+		// the computed cost factor: material x stone tier, or a preset's override
+		double newAmount = amount * handler.getSpellCostFactor();
+		newAmount = SetEquipment.modify(context.getPlayer(), context.getJewelry(), context.getEntity().getSpell(), SpellStat.COST, newAmount);
 		newAmount = Math.max(MIN_COST, newAmount);
 
 		double cost = 0;
@@ -61,6 +60,9 @@ public class CostEvaluator implements ICostEvaluator {
 						double drawn = Math.min(shortfall, wellHandler.get().getMana());
 						wellHandler.get().setMana(wellHandler.get().getMana() - drawn);
 						cost += drawn;
+						if (context.getPlayer() instanceof ServerPlayer player) {
+							MagicTreasuresCriteria.JEWELRY.get().trigger(player, MagicTreasuresCriteria.MANA_WELL);
+						}
 					}
 				}
 			}

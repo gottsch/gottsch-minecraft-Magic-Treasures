@@ -1,0 +1,13 @@
+{
+  "type": "ring",
+  "accepts_gems": false,
+  "base_name": "hawk_ring",
+  "loot": {},
+  "lore": "tooltip.magictreasures.jewelry.hawk_ring.lore",
+  "material": "magictreasures:copper",
+  "overrides": {
+    "max_level": 5,
+    "max_mana": 300.0
+  },
+  "style": "magictreasures:great"
+}

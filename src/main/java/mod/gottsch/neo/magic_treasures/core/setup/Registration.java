@@ -20,6 +20,7 @@ package mod.gottsch.neo.magic_treasures.core.setup;
 import mod.gottsch.neo.magic_treasures.MagicTreasures;
 import mod.gottsch.neo.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.neo.magic_treasures.core.component.MagicTreasuresDataComponents;
+import mod.gottsch.neo.magic_treasures.core.entity.MagicTreasuresEntities;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresCreativeModeTabs;
 import mod.gottsch.neo.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.neo.magic_treasures.core.loot.MagicTreasuresLootFunctions;
@@ -28,6 +29,7 @@ import mod.gottsch.neo.magic_treasures.core.particle.MagicTreasuresParticles;
 import mod.gottsch.neo.magic_treasures.core.world.feature.MagicTreasuresConfiguredFeatures;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import mod.gottsch.neo.magic_treasures.core.item.set.SetMaterials;
 import mod.gottsch.neo.magic_treasures.core.recipe.MagicTreasuresRecipes;
 import mod.gottsch.neo.magic_treasures.core.advancement.MagicTreasuresCriteria;
 
@@ -51,7 +53,9 @@ public class Registration {
 
         MagicTreasuresDataComponents.DATA_COMPONENTS.register(eventBus);
         BLOCKS.register(eventBus);
+        SetMaterials.register(eventBus);
         ITEMS.register(eventBus);
+        MagicTreasuresEntities.register(eventBus);
         MagicTreasuresConfiguredFeatures.FEATURES.register(eventBus);
         MagicTreasuresLootModifiers.LOOT_MODIFIER_SERIALIZERS.register(eventBus);
         MagicTreasuresLootFunctions.LOOT_FUNCTIONS.register(eventBus);

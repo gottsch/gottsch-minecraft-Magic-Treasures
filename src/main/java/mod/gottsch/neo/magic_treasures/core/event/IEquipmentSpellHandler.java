@@ -23,6 +23,7 @@ import net.neoforged.bus.api.Event;
 
 import java.util.List;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 
 /**
  *
@@ -33,11 +34,19 @@ public interface IEquipmentSpellHandler {
 	public List<SpellContext> handleEquipmentSpells(Event event, ServerPlayer player);
 
 	/**
-	 * Whether the player is wearing jewelry in every main jewelry slot (ring, necklace and bracelet) at once.
-	 * Only equipment mods with those slots can answer yes.
+	 * Whether the player is wearing jewelry in every main jewelry slot (ring, necklace and bracelet) and a belt at
+	 * once (Dressed to the Nines).
 	 */
-	default boolean isWearingFullSet(ServerPlayer player) {
+	default boolean isDressed(ServerPlayer player) {
 		return false;
+	}
+
+	/**
+	 * Every jewelry piece and mana well that counts as worn in this handler's slots (not hands or armor), for sets.
+	 * Works on either side: the client uses it for set tooltips.
+	 */
+	default List<ItemStack> getWornJewelry(Player player) {
+		return List.of();
 	}
 
 	/** Mana wells the player is wearing in this equipment mod's slots. */

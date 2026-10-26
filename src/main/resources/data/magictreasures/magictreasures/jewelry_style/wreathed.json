@@ -1,0 +1,9 @@
+{
+  "mana_multiplier": 1.25,
+  "max_level": 1,
+  "name": "jewelry_style.magictreasures.wreathed",
+  "rarity_steps": 1,
+  "types": [
+    "ring"
+  ]
+}

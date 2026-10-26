@@ -45,6 +45,9 @@ public class MagicTreasuresParticles {
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPARK_GOLD = spark("gold");
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPARK_ORANGE = spark("orange");
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> SPARK_ASH = spark("ash");
+	/** a small cyan spark, for trails: the Ring of Swords' swords */
+	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> MOTE_CYAN =
+			PARTICLES.register("mote_cyan", () -> new SimpleParticleType(false) {});
 
 	private static DeferredHolder<ParticleType<?>, SimpleParticleType> spark(String color) {
 		return PARTICLES.register("spark_" + color, () -> new SimpleParticleType(false) {});

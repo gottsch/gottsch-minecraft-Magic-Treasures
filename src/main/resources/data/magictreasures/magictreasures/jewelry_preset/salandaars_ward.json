@@ -1,0 +1,18 @@
+{
+  "type": "necklace",
+  "gem": "magictreasures:ruby",
+  "loot": {},
+  "material": "magictreasures:gold",
+  "name": "item.magictreasures.salandaars_ward",
+  "overrides": {
+    "max_level": 7,
+    "max_mana": 350.0,
+    "max_recharges": 3
+  },
+  "rarity": "rare",
+  "spells": [
+    "magictreasures:mana_tower_shield"
+  ],
+  "style": "magictreasures:great",
+  "texture": "magictreasures:item/jewelry/salandaars_ward"
+}
